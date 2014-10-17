@@ -1,10 +1,11 @@
 
 cimport cseabreeze as csb
+import numpy as np
 cimport numpy as cnp
+cnp.import_array()
 
 DEF SBMAXBUFLEN = 32
-DEF SBMAXCALLEN = 256
-DEF SBMAXSPECLEN = 2**14
+DEF SBMAXDPXLEN = 128  # We'll just assume that there are never more than 128 dark pixels
 
 class SeaBreezeError(Exception):
     def __init__(self, message=None, error_code=None):
@@ -135,19 +136,16 @@ cpdef _write_eeprom_slot(int index, int slot_number, buffer_):
         raise SeaBreezeError(error_code=error_code)
     return bytes_written
 
-cpdef read_irrad_calibration(int index):
+cpdef read_irrad_calibration(int index, cnp.ndarray[cnp.float32_t, ndim=1, mode="c"] out):
     assert index >= 0
+    assert out.dtype == np.float32
     cdef int error_code
-    cdef int floats_written
-    cdef float fbuffer[SBMAXCALLEN]
-    cdef cnp.ndarray[cnp.float32_t, mode="c"] irrad_cal
-    floats_written = csb.seabreeze_read_irrad_calibration(index, &error_code, fbuffer, SBMAXCALLEN)
+    cdef int bytes_written
+    cdef int out_length = len(out)
+    bytes_written = csb.seabreeze_read_irrad_calibration(index, &error_code, &out[0], out_length)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    irrad_cal = cnp.empty((floats_written,), dtype=cnp.float32)
-    for i in range(floats_written):
-        irrad_cal[i] = fbuffer[i]
-    return irrad_cal
+    return
 
 
 # TODO:
@@ -210,6 +208,7 @@ cpdef set_tec_fan_enable(int index, bint tec_fan_enable):
 
 cpdef get_unformatted_spectrum(int index, cnp.ndarray[cnp.uint8_t, ndim=1, mode="c"] out):
     assert index >= 0
+    assert out.dtype == np.ubyte
     cdef int error_code
     cdef int bytes_written
     cdef int out_length = len(out)
@@ -220,6 +219,7 @@ cpdef get_unformatted_spectrum(int index, cnp.ndarray[cnp.uint8_t, ndim=1, mode=
 
 cpdef get_formatted_spectrum(int index, cnp.ndarray[cnp.double_t, ndim=1, mode="c"] out):
     assert index >= 0
+    assert out.dtype == np.double
     cdef int error_code
     cdef int bytes_written
     cdef int out_length = len(out)
@@ -246,19 +246,16 @@ cpdef get_formatted_spectrum_length(int index):
         raise SeaBreezeError(error_code=error_code)
     return spec_length
 
-cpdef get_wavelengths(int index):
+cpdef get_wavelengths(int index, cnp.ndarray[cnp.double_t, ndim=1, mode="c"] out):
     assert index >= 0
+    assert out.dtype == np.double
     cdef int error_code
-    cdef int doubles_written
-    cdef double dbuffer[SBMAXCALLEN]
-    cdef cnp.ndarray[cnp.float32_t, mode="c"] wavelengths
-    doubles_written = csb.seabreeze_get_wavelengths(index, &error_code, dbuffer, SBMAXCALLEN)
+    cdef int bytes_written
+    cdef int out_length = len(out)
+    bytes_written = csb.seabreeze_get_wavelengths(index, &error_code, &out[0], out_length)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    wavelengths = cnp.empty((doubles_written,), dtype=cnp.double)
-    for i in range(doubles_written):
-        wavelengths[i] = dbuffer[i]
-    return wavelengths
+    return
 
 cpdef get_serial_number(int index):
     assert index >= 0
@@ -274,12 +271,12 @@ cpdef get_electric_dark_pixel_indices(int index):
     assert index >= 0
     cdef int error_code
     cdef int ints_written
-    cdef int ibuffer[SBMAXCALLEN]
+    cdef int ibuffer[SBMAXDPXLEN]
     cdef cnp.ndarray[cnp.int_t, mode="c"] indices
-    ints_written = csb.seabreeze_get_electric_dark_pixel_indices(index, &error_code, ibuffer, SBMAXCALLEN)
+    ints_written = csb.seabreeze_get_electric_dark_pixel_indices(index, &error_code, ibuffer, SBMAXDPXLEN)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    indices = cnp.empty((ints_written,), dtype=cnp.int)
+    indices = np.empty((ints_written,), dtype=np.int)
     for i in range(ints_written):
         indices[i] = ibuffer[i]
     return indices

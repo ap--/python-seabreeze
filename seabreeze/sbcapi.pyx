@@ -265,7 +265,8 @@ cpdef get_serial_number(int index):
     bytes_written = csb.seabreeze_get_serial_number(index, &error_code, buffer_, SBMAXBUFLEN)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    return buffer_[:bytes_written]
+    serial = buffer_[:bytes_written]
+    return serial.rstrip('\x00')
 
 cpdef get_electric_dark_pixel_indices(int index):
     assert index >= 0

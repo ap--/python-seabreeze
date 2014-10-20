@@ -1,8 +1,10 @@
 
-COMPL=-I./SeaBreeze/include -lseabreeze \
+COMPL=-I./seabreeze-3.0.0/include \
       -I/usr/include/python2.7 -lpython2.7 \
-      -lusb -shared -fPIC 
+      -L/usr/local/lib -lseabreeze \
+      -lusb -shared -fPIC -Wl,-rpath=/usr/local/lib
 
 all:
-	cython seabreeze/seabreezecapi.pyx -o seabreeze/seabreezecapi.c
-	gcc seabreeze/seabreezecapi.c $(COMPL) -o seabreeze/seabreezecapi.so
+	cython seabreeze/sbcapi.pyx -o seabreeze/sbcapi.c
+	gcc seabreeze/sbcapi.c $(COMPL) -o seabreeze/sbcapi.so
+

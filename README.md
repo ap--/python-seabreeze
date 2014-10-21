@@ -29,7 +29,7 @@ can handle:
 
 ## How to install ##
 
-**This should only work on linux!**
+**This should only work on linux! (at least for now...)**
 
 Install seabreeze C-library:
 ```

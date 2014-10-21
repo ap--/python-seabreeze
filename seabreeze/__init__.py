@@ -1,2 +1,2 @@
 
-from seabreeze.sbpyapi import open_spectrometer, list_spectrometers, Spectrometer
+from seabreeze.sbpyapi import list_spectrometers, Spectrometer

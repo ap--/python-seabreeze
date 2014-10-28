@@ -1,5 +1,7 @@
 **This software is not associated with Ocean Optics. Use it at your own risk.**
 
+**Info:** If this is not working for you, checkout [python-oceanoptics](https://github.com/ap--/python-oceanoptics).
+
 ## SeaBreeze python module ##
 
 This is a cython wrapper for the [SeaBreeze](http://oceanoptics.com/product/seabreeze/)

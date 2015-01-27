@@ -1,0 +1,57 @@
+# udev rules file for Ocean Optics, Inc. spectrometers
+# Only USB spectrometers are supported.
+
+SUBSYSTEM!="usb_device", ACTION!="add", GOTO="oceanoptics_rules_end"
+
+# Ocean Optics Inc. USB2000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1002", SYMLINK+="usb2000-%n", GROUP="plugdev"
+# Ocean Optics Inc. ADC1000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1004", SYMLINK+="adc1000usb-%n", GROUP="plugdev"
+# Ocean Optics Inc. SAS spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1006", SYMLINK+="sas-%n", GROUP="plugdev"
+# Ocean Optics Inc. HR2000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="100a", SYMLINK+="hr2000-%n", GROUP="plugdev"
+# Ocean Optics Inc. NIR512 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="100c", SYMLINK+="nir512-%n", GROUP="plugdev"
+# Ocean Optics Inc. NIR256 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1010", SYMLINK+="nir256-%n", GROUP="plugdev"
+# Ocean Optics Inc. HR4000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1012", SYMLINK+="hr4000-%n", GROUP="plugdev"
+# Ocean Optics Inc. USB650 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1014", SYMLINK+="usb650-%n", GROUP="plugdev"
+# Ocean Optics Inc. HR2000+ spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1016", SYMLINK+="hr2000+-%n", GROUP="plugdev"
+# Ocean Optics Inc. QE65000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1018", SYMLINK+="qe65000+-%n", GROUP="plugdev"
+# Ocean Optics Inc. USB2000+ spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="101e", SYMLINK+="usb2000+-%n", GROUP="plugdev"
+# Ocean Optics Inc. USB4000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1022", SYMLINK+="usb4000-%n", GROUP="plugdev"
+# Ocean Optics Inc. USB325 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1024", SYMLINK+="usb320-%n", GROUP="plugdev"
+# Ocean Optics Inc. USB250 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1030", SYMLINK+="usb250-%n", GROUP="plugdev"
+# Ocean Optics Inc. NIRQuest-256 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1028", SYMLINK+="nirquest256-%n", GROUP="plugdev"
+# Ocean Optics Inc. NIRQuest-512 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1026", SYMLINK+="nirquest512-%n", GROUP="plugdev"
+# Ocean Optics Inc. Maya 2000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102C", SYMLINK+="maya2000-%n", GROUP="plugdev"
+# Ocean Optics Inc. Maya Pro 2000 spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="102A", SYMLINK+="mayapro2000-%n", GROUP="plugdev"
+# Ocean Optics Inc. Torus spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="1040", SYMLINK+="torus-%n", GROUP="plugdev"
+# Ocean Optics Inc. Jaz spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="2000", SYMLINK+="jaz-%n", GROUP="plugdev"
+# Ocean Optics Inc. STS spectrometer
+ATTRS{idVendor}=="2457", ATTRS{idProduct}=="4000", SYMLINK+="sts-%n", GROUP="plugdev"
+# Ocean Optics Inc. Centice Clear Shot II spectrometer
+ATTRS{idVendor}=="184c", ATTRS{idProduct}=="0000", SYMLINK+="clearshot2-%n", GROUP="plugdev"
+# unprogrammed EzUSB
+ATTRS{idVendor}=="0547", ATTRS{idProduct}=="2131", SYMLINK+="ezUSB-%n", GROUP="plugdev"
+# unprogrammed EzUSB-FX
+ATTRS{idVendor}=="0547", ATTRS{idProduct}=="2235", SYMLINK+="ezUSB-FX-%n", GROUP="plugdev"
+# unprogrammed EzUSB-FX2
+ATTRS{idVendor}=="04b4", ATTRS{idProduct}=="8613", SYMLINK+="ezUSB-FX2-%n", GROUP="plugdev"
+
+LABEL="oceanoptics_rules_end"

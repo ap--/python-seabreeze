@@ -1,5 +1,7 @@
+# distutils: libraries = seabreeze usb
+# distutils: include_dirs = /usr/local/lib
 
-cdef extern from "api/SeaBreezeWrapper.h":
+cdef extern:
     bint seabreeze_open_spectrometer(int index, int *error_code)
     bint seabreeze_close_spectrometer(int index, int *error_code)
     int seabreeze_get_error_string(int error_code, char *buffer, int buffer_length)

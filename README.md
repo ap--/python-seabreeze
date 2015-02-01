@@ -4,12 +4,11 @@
 
 ## SeaBreeze python module ##
 
-This is a cython wrapper for the [SeaBreeze](http://oceanoptics.com/product/seabreeze/)
-library for [OceanOptics](http://www.oceanoptics.com/) spectrometers.
+This is a python module for [OceanOptics](http://www.oceanoptics.com/) spectrometers. It has two different backends. One is using the [SeaBreeze](http://oceanoptics.com/product/seabreeze/) library, and the other one is going to emulate the seabreeze behaviour using **pyusb**
 
-It's missing a _setup.py_ and some stuff that [python-oceanoptics](https://github.com/ap--/python-oceanoptics)
-can do, but at least it should support all spectrometers that [SeaBreeze](http://oceanoptics.com/product/seabreeze/)
-can handle:
+In the longrun all code from [python-oceanoptics](https://github.com/ap--/python-oceanoptics) will be merged into the pyusb seabreeze backend.
+
+But right now, this is all work in progress.
 
 ## Should work with: ##
 
@@ -31,27 +30,65 @@ can handle:
 
 ## How to install ##
 
-**This should only work on linux! (at least for now...)**
+This is tested under ubuntu 12.04.
 
-Install seabreeze C-library:
+To install seabreeze C-library run:
 ```
-./install_libseabreeze.sh
-```
-
-Create the python module:
-```
-make
+./misc/install_libseabreeze.sh
 ```
 
-Test it (test.py, requires matplotlib):
+To install the udev rules run:
 ```
-python test/testcapi.py
-python test/test.py
+./misc/install_udev_rules.sh
+```
+
+To install the python module run:
+```
+python setup.py install
 ```
 
 ## Requirements ##
 
-I am using _Cython 0.20.2_.
+You'll need numpy, pyusb, cython. I am using _Cython 0.20.2_.
+
+Under Ubuntu
+```
+apt-get install build-essential python-numpy python-pip cython libusb-1.0-0
+pip install pyusb
+```
+
+## Usage ##
+
+With seabreeze C backend:
+
+```{python}
+>>> import seabreeze.spectrometers as sbs
+>>> devices = sbs.list_spectrometers()
+>>> print devices
+[<SeaBreezeDevice USB2000PLUS:USB2+H02749>, <SeaBreezeDevice USB2000PLUS:USB2+H02751>]
+>>> spec = sbs.Spectrometer(devices[0])
+>>> spec.serial
+'USB2+H02751'
+>>> spec.model
+'USB2000PLUS'
+>>> spec.integration_time_microsec(12000)
+>>> spec.wavelengths()
+array([  340.32581   ,   340.70321186,   341.08058305, ...,  1024.84940994,
+        1025.1300678 ,  1025.4106617 ])
+>>> spec.intensities()
+array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
+         6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
+>>>
+```
+
+For the pyusb seabreeze backend, you only need to run **use** before importing **seabreeze.spectrometers** (this is WIP):
+
+```{python}
+>>> import seabreeze
+>>> seabreeze.use('pyseabreeze')
+>>> import seabreeze.spectrometers as sbs
+>>>
+```
 
 ## License ##
 

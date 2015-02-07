@@ -2,3 +2,4 @@
 *.c
 *.tar.bz2
 *.pyc
+*.cpp

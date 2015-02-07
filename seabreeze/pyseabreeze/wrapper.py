@@ -24,29 +24,36 @@ class SeaBreezeDevice(object):
         return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial)
 
 
-def reset_spectrometers():
-    # get all matching devices
+def initialize():
+    # reset all devices on load
     match = lambda dev: (dev.idVendor == defines.VendorId and
                          dev.idProduct in defines.ProductIds)
     devices = usb.core.find(find_all=True, custom_match=match)
-    devices = list(devices)  # some pyusb versions return a generator
     # create the handles and associate protocols
-    out = []
     for dev in devices:
         try:
             dev.reset()
             usb.util.dispose_resources(dev)
         except:
             pass
-    return
+
+def shutdown():
+    # dispose usb resources
+    match = lambda dev: (dev.idVendor == defines.VendorId and
+                         dev.idProduct in defines.ProductIds)
+    devices = usb.core.find(find_all=True, custom_match=match)
+    for dev in devices:
+        try:
+            usb.util.dispose_resources(dev)
+        except:
+            pass
 
 
-def list_spectrometers():
+def device_list_devices():
     # get all matching devices
     match = lambda dev: (dev.idVendor == defines.VendorId and
                          dev.idProduct in defines.ProductIds)
     devices = usb.core.find(find_all=True, custom_match=match)
-    devices = list(devices)  # some pyusb versions return a generator
     # create the handles and associate protocols
     out = []
     for dev in devices:
@@ -54,114 +61,231 @@ def list_spectrometers():
         interface = USBInterfaces[dev.idProduct]()
         # open the device and get the serial and model numbers
         try:
-            interface.open_device(dev)  # Ignore device if already opened
-        except usb.core.USBError:
-            continue
+            interface.open_device(dev)
+        except usb.USBError:
+            wasopen = True
+        else:
+            wasopen = False
         model = interface.get_model()
         serial = interface.get_serial_number()
         # close and create list of SeaBreezeDevices
-        interface.close_device()
+        if not wasopen:
+            interface.close_device()
         out.append(SeaBreezeDevice(dev, model, serial, interface))
     return out
 
-# SPECTROMETERFEATURE
-def open_spectrometer(device):
-    return device.interface.open_spectrometer(device)
+def device_open(device):
+    return device.interface.open(device)
 
-def close_spectrometer(device):
-    return device.interface.close_spectrometer()
+def device_is_open(device):
+    return device.interface.is_open()
 
-def get_model(device):
+def device_close(device):
+    return device.interface.close()
+
+def device_get_model(device):
     return device.interface.get_model()
 
-def set_trigger_mode(device, mode):
-    return device.interface.set_trigger_mode(mode)
-
-def set_integration_time_microsec(device, integration_time_micros):
-    return device.interface.set_integration_time_microsec(integration_time_micros)
-
-def get_min_integration_time_microsec(device):
-    return device.interface.get_min_integration_time_microsec()
-
-# SHUTTERFEATURE
-def set_shutter_open(device, opened):
-    return device.interface.set_shutter_open(opened)
-
-# STROBE...
-def set_strobe_enable(device, strobe_enable):
-    return device.interface.set_strobe_enable(strobe_enable)
-
-# LIGHTSOURCEFEATURE
-def get_light_source_count(device):
-    return device.interface.get_light_source_count()
-
-def set_light_source_enable(device, light_index, enable):
-    return device.interface.set_light_source_enable(light_index, enable)
-
-def set_light_source_intensity(device, light_index, intensity):
-    return device.interface.set_light_source_intensity(light_index, intensity)
-
-# EEPROMFEATURE
-def read_eeprom_slot(device, slot_number):
-    return device.interface.read_eeprom_slot(slot_number)
-
-def write_eeprom_slot(device, slot_number, data):
-    return device.interface.write_eeprom_slot(slot_number, data)
-
-# IRRADCALFEATURE
-def read_irrad_calibration(device):
-    return device.interface.read_irrad_calibration()
-
-def write_irrad_calibration(device, data):
-    return device.interface.write_irrad_calibration(data)
-
-def has_irrad_collection_area(device):
-    return device.interface.has_irrad_collection_area()
-
-def read_irrad_collection_area(device):
-    return device.interface.read_irrad_collection_area()
-
-def write_irrad_collection_area(device, area):
-    return device.interface.write_irrad_collection_area(area)
-
-# TECFEATURE
-def read_tec_temperature(device):
-    return device.interface.read_tec_temperature()
-
-def set_tec_temperature(device, temperature_degrees_celsius):
-    return device.interface.set_tec_temperature(temperature_degrees_celsius)
-
-def set_tec_enable(device, tec_enable):
-    return device.interface.set_tec_enable(tec_enable)
-
-def set_tec_fan_enable(device, tec_fan_enable):
-    return device.interface.set_tec_fan_enable(tec_fan_enable)
-
-# SPECTROMETERFEATURE
-def get_unformatted_spectrum(device, out):
-    return device.interface.get_unformatted_spectrum(out)
-
-def get_formatted_spectrum(device, out):
-    return device.interface.get_formatted_spectrum(out)
-
-def get_unformatted_spectrum_length(device):
-    return device.interface.get_unformatted_spectrum_length()
-
-def get_formatted_spectrum_length(device):
-    return device.interface.get_formatted_spectrum_length()
-
-def get_wavelengths(device, out):
-    return device.interface.get_wavelengths(out)
-
-# SERIALNUMBERFEATURE
-def get_serial_number(device):
+def device_get_serial_number(device):
     return device.interface.get_serial_number()
 
+
 # SPECTROMETERFEATURE
-def get_electric_dark_pixel_indices(device):
+def device_get_spectrometer_feature_id(device):
+    return device.interface.has_spectrometer_feature()
+
+def spectrometer_set_trigger_mode(device, has_feature, mode):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_trigger_mode(mode)
+
+def spectrometer_set_integration_time_micros(device, has_feature, integration_time_micros):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_integration_time_microsec(integration_time_micros)
+
+def spectrometer_get_minimum_integration_time_micros(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_min_integration_time_microsec()
+
+def spectrometer_get_formatted_spectrum_length(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_formatted_spectrum_length()
+
+def spectrometer_get_formatted_spectrum(device, has_feature, out):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_formatted_spectrum(out)
+
+def spectrometer_get_unformatted_spectrum_length(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_unformatted_spectrum_length()
+
+def spectrometer_get_unformatted_spectrum(device, has_feature, out):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_unformatted_spectrum(out)
+
+def spectrometer_get_wavelengths(device, has_feature, out):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_wavelengths(out)
+
+def spectrometer_get_electric_dark_pixel_indices(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
     return device.interface.get_electric_dark_pixel_indices()
 
-# CONTINOUSSTROBEFEATURE
-def set_continuous_strobe_period_microsec(device, strobe_id, period_usec):
-    return device.interface.set_continuous_strobe_period_microsec(strobe_id, period_usec)
+
+# SHUTTERFEATURE
+def device_get_shutter_feature_id(device):
+    return device.interface.has_shutter_feature()
+
+def shutter_set_shutter_open(device, has_feature, opened):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_shutter_open(opened)
+
+
+# LIGHTSOURCEFEATURE
+def device_get_light_source_feature_id(device):
+    return device.interface.has_light_source_feature()
+
+def light_source_get_count(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_light_source_count()
+
+def light_source_has_enable(device, has_feature, light_index):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    raise NotImplementedError
+
+def light_source_is_enabled(device, has_feature, light_index):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    raise NotImplementedError
+
+def light_source_set_enable(device, has_feature, light_index, enable):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_light_source_enable(light_index, enable)
+
+def light_source_has_variable_intensity(device, has_feature, light_index):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    raise NotImplementedError
+
+def light_source_get_intensity(device, has_feature, light_index):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    raise NotImplementedError
+
+def light_source_set_intensity(device, has_feature, light_index, intensity):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_light_source_intensity(light_index, intensity)
+
+# STROBE...
+def device_get_continuous_strobe_feature_id(device):
+    return device.interface.has_continuous_strobe_feature()
+
+def continuous_strobe_set_enable(device, has_feature, strobe_enable):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_strobe_enable(strobe_enable)
+
+def continuous_strobe_set_period_micros(device, has_feature, period_micros):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_continuous_strobe_period_microsec(period_micros)
+
+# EEPROMFEATURE
+def device_get_eeprom_feature_id(device):
+    return device.interface.has_eeprom_feature()
+
+def eeprom_read_slot(device, has_feature, slot_number):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.read_eeprom_slot(slot_number)
+
+# IRRADCALFEATURE
+def device_get_irrad_calibration_feature_id(device):
+    return device.interface.has_irrad_calibration_feature()
+
+def irrad_calibration_read(device, has_feature, out):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.read_irrad_calibration(out)
+
+def irrad_calibration_write(device, has_feature, data):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.write_irrad_calibration(data)
+
+def irrad_calibration_has_collection_area(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.has_irrad_collection_area()
+
+def irrad_calibration_read_collection_area(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.read_irrad_collection_area()
+
+def irrad_calibration_write_collection_area(device, has_feature, area):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.write_irrad_collection_area(area)
+
+
+# TECFEATURE
+def device_get_tec_feature_id(device):
+    return device.interface.has_tec_feature()
+
+def tec_read_temperature_degrees_C(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.read_tec_temperature()
+
+def tec_set_temperature_setpoint_degrees_C(device, has_feature, temperature_degrees_celsius):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_tec_temperature(temperature_degrees_celsius)
+
+def tec_set_enable(device, has_feature, tec_enable):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.set_tec_enable(tec_enable)
+
+
+# LAMPFEATURE
+def device_get_lamp_feature_id(device):
+    return device.interface.has_lamp_feature()
+
+def lamp_set_lamp_enable(device, has_feature, lamp_enable):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    raise NotImplementedError
+
+# NONLINEARITY COEFFS FEATURE
+def device_get_nonlinearity_coeffs_feature_id(device):
+    return device.interface.has_nonlinearity_coeffs_feature()
+
+def nonlinearity_coeffs_get(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    return device.interface.get_nonlinearity_coeffs()
+
+# STRAYLIGHT COEFFS FEATURE
+def device_get_stray_light_coeffs_feature_id(device):
+    return device.interface.has_stray_light_feature()
+
+def stray_light_coeffs_get(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
+    raise NotImplementedError
 

@@ -2,56 +2,82 @@
 
 To have the exact same interface, and minimize code duplication, we'll implement the seabreeze interface in pyseabreeze. This requires implementing the following Features:
 
-**Note:** In the SpectrometerFeature, get_wavelengths relies on the EEPromFeature for all spectrometers, that support the EEPromFeature. That's why we'll diverge from the seabreeze structure a little bit and seperate the WavelengthFeature from the SpectrometerFeature too.
+## Features
 
+Feel free to implement any of the missing ones! Or if you have one of the untested spectrometers report back if it works.
+
+### Library specific
+  [x] initialize
+  [x] shutdown
+
+### DeviceFeatures
+  [x] device_list_devices
+  [x] device_open
+  [x] device_is_open
+  [x] device_close
+  [x] device_get_model
+  [x] device_get_serial_number
+  [x] device_get_spectrometer_feature_id
+  [x] device_get_shutter_feature_id
+  [x] device_get_light_source_feature_id
+  [x] device_get_continuous_strobe_feature_id
+  [x] device_get_eeprom_feature_id
+  [x] device_get_irrad_calibration_feature_id
+  [x] device_get_tec_feature_id
+  [x] device_get_lamp_feature_id
+  [x] device_get_nonlinearity_coeffs_feature_id
+  [x] device_get_stray_light_coeffs_feature_id
 
 ### SpectrometerFeature
-[ ] open_spectrometer(handle)
-[ ] close_spectrometer(handle)
-[ ] get_model(handle)
-[ ] set_trigger_mode(handle, mode)
-[ ] set_integration_time_microsec(handle, integration_time_micros)
-[ ] get_min_integration_time_microsec(handle)
-[ ] get_unformatted_spectrum(handle)
-[ ] get_formatted_spectrum(handle)
-[ ] get_unformatted_spectrum_length(handle)
-[ ] get_formatted_spectrum_length(handle)
-[ ] get_electric_dark_pixel_indices(handle)
+  [x] spectrometer_set_trigger_mode
+  [x] spectrometer_set_integration_time_micros
+  [x] spectrometer_get_minimum_integration_time_micros
+  [x] spectrometer_get_formatted_spectrum_length
+  [x] spectrometer_get_formatted_spectrum
+  [x] spectrometer_get_unformatted_spectrum_length
+  [x] spectrometer_get_unformatted_spectrum
+  [x] spectrometer_get_wavelengths
+  [x] spectrometer_get_electric_dark_pixel_indices
 
-### SerialNumberFeature
-[ ] get_serial_number(handle)
-
-### WavelengthFeature
-[ ] get_wavelength_coefficients(handle)
-
-### ShutterFeature
-[ ] set_shutter_open(handle, opened)
+### ShutterFeature (this seems obsolete)
+  [ ] shutter_set_shutter_open
 
 ### LightsourceFeature
-[ ] get_light_source_count(handle)
-[ ] set_light_source_enable(handle, light_index, enable)
-[ ] set_light_source_intensity(handle, light_index, intensity)
+  [ ] light_source_get_count
+  [ ] light_source_has_enable
+  [ ] light_source_is_enabled
+  [ ] light_source_set_enable
+  [ ] light_source_has_variable_intensity
+  [ ] light_source_get_intensity
+  [ ] light_source_set_intensity
 
 ### EEPROMFeature
-[ ] read_eeprom_slot(handle, slot_number)
-[ ] write_eeprom_slot(handle, slot_number, data)
+  [x] eeprom_read_slot
 
 ### IrradCalFeature
-[ ] read_irrad_calibration(handle)
-[ ] write_irrad_calibration(handle, data)
-[ ] has_irrad_collection_area(handle)
-[ ] read_irrad_collection_area(handle)
-[ ] write_irrad_collection_area(handle, area)
+  [ ] irrad_calibration_read
+  [ ] irrad_calibration_write
+  [ ] irrad_calibration_has_collection_area
+  [ ] irrad_calibration_read_collection_area
+  [ ] irrad_calibration_write_collection_area
 
 ### TecFeature
-[ ] read_tec_temperature(handle)
-[ ] set_tec_temperature(handle, temperature_degrees_celsius)
-[ ] set_tec_enable(handle, tec_enable)
-[ ] set_tec_fan_enable(handle, tec_fan_enable)
+  [x] tec_read_temperature_degrees_C
+  [x] tec_set_temperature_setpoint_degrees_C
+  [x] tec_set_enable
 
 ### ContinousStrobeFeature
-[ ] set_continuous_strobe_period_microsec(handle, strobe_id, period_usec)
+  [ ] continuous_strobe_set_enable
+  [ ] continuous_strobe_set_period_micros
 
+### LampFeature
+  [ ] lamp_set_lamp_enable
+
+### NonlinearityFeature
+  [ ] nonlinearity_coeffs_get
+
+### StrayLightFeature
+  [ ] stray_light_coeffs_get
 
 
 # Feature Table
@@ -64,29 +90,26 @@ To have the exact same interface, and minimize code duplication, we'll implement
 - **X** not supported
 - **?** don't know
 
-| Device      | SpF | SNF | ShF | LSF | EEF | ICF | TeF | CSF |
-|:------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| USB2000     |  Pt |  It |  X  |  N  |  Pt |  N  |  X  |  X  |
-| HR2000      |  N  |  N  |  X  |  N  |  N  |  X  |  X  |  X  |
-| HR4000      |  N  |  N  |  X  |  N  |  N  |  N  |  X  |  N  |
-| HR2000PLUS  |  N  |  N  |  X  |  N  |  N  |  N  |  X  |  N  |
-| QE65000     |  N  |  N  |  X  |  N  |  N  |  N  |  N  |  N  |
-| USB2000PLUS |  N  |  N  |  X  |  N  |  N  |  N  |  X  |  N  |
-| USB4000     |  N  |  N  |  X  |  N  |  N  |  N  |  X  |  N  |
-| NIRQUEST512 |  N  |  N  |  X  |  N  |  N  |  N  |  N  |  N  |
-| NIRQUEST256 |  N  |  N  |  X  |  N  |  N  |  N  |  N  |  N  |
-| MAYA2000PRO |  N  |  N  |  X  |  N  |  N  |  N  |  X  |  X  |
-| MAYA2000    |  N  |  N  |  X  |  N  |  N  |  N  |  X  |  N  |
-| TORUS       |  N  |  N  |  X  |  N  |  N  |  N  |  X  |  N  |
-| APEX        |  N  |  N  |  X  |  X  |  N  |  N  |  X  |  X  |
-| JAZ         |  N  |  N  |  X  |  N  |  N  |  X  |  X  |  X  |
-| STS         |  N  |  N  |  N  |  X  |  X  |  N  |  X  |  N  |
-| QEPRO       |  N  |  N  |  N  |  X  |  N  |  N  |  N  |  N  |
-| VENTANA     |  N  |  N  |  X  |  N  |  X  |  X  |  N  |  X  |
-| USB650      |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |
-
-
-
-
+| Device      | Dev | Spec| Shut| LS  | EE  | IC  | Tec | CS  | Lamp|  NL |  SL |
+|:------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| USB2000     |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  X  |  X  |  Iu |  X  |
+| HR2000      |  Iu |  Iu |  X  |  N  |  Iu |  X  |  X  |  X  |  X  |  Iu |  X  |
+| HR4000      |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  N  |  X  |  Iu |  X  |
+| USB650      |  Iu |  Iu |  ?  |  ?  |  Iu |  ?  |  ?  |  ?  |  ?  |  Iu |  ?  |
+| HR2000PLUS  |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  N  |  X  |  Iu |  X  |
+| QE65000     |  Iu |  Iu |  X  |  N  |  Iu |  N  |  Iu |  N  |  X  |  Iu |  X  |
+| USB2000PLUS |  It |  It |  X  |  N  |  It |  N  |  X  |  N  |  X  |  It |  X  |
+| USB4000     |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  N  |  X  |  Iu |  X  |
+| NIRQUEST512 |  Iu |  Iu |  X  |  N  |  Iu |  N  |  Iu |  N  |  X  |  Iu |  X  |
+| NIRQUEST256 |  Iu |  Iu |  X  |  N  |  Iu |  N  |  Iu |  N  |  X  |  Iu |  X  |
+| MAYA2000PRO |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  X  |  X  |  Iu |  X  |
+| MAYA2000    |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  N  |  X  |  Iu |  X  |
+| TORUS       |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  N  |  X  |  Iu |  X  |
+| APEX        |  Iu |  Iu |  X  |  X  |  Iu |  N  |  X  |  X  |  X  |  Iu |  X  |
+| MAYALSL     |  Iu |  Iu |  X  |  N  |  Iu |  N  |  X  |  N  |  X  |  Iu |  X  |
+| JAZ         |  Iu |  Iu |  X  |  N  |  Iu |  X  |  X  |  X  |  X  |  Iu |  X  |
+| STS         |  Iu |  Iu |  x  |  X  |  X  |  N  |  X  |  N  |  x  |  Iu |  x  |
+| QEPRO       |  Iu |  Iu |  X  |  X  |  x  |  N  |  Iu |  N  |  X  |  Iu |  X  |
+| VENTANA     |  Iu |  Iu |  X  |  N  |  X  |  X  |  Iu |  X  |  X  |  Iu |  X  |
 
 

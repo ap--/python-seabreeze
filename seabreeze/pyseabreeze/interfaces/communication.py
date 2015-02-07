@@ -20,33 +20,41 @@ class USBCommBase(object):
 
     _ENDPOINT_MAP = None
     _device = None
-    usbtimeout = 0.0
+    usbtimeout_ms = 0.0
     _mode = 'lowspeed'
 
     def open_device(self, device):
         # device.reset()
         device.set_configuration()
-        self.usbtimeout = device.default_timeout * 1e-3
+        self.usbtimeout_ms = device.default_timeout
         self._device = device
         self.usb_read = self.usb_read_lowspeed
+        self._opened = True
+
+    def is_open(self):
+        try:
+            return self._opened
+        except AttributeError:
+            return False
 
     def close_device(self):
         usb.util.dispose_resources(self._device)
         self._device.reset()
         self._device = None
-        self.usbtimeout = 0.0
+        self.usbtimeout_ms = 0.0
+        self._opened = False
 
     def usb_send(self, data):
         self._device.write(self._ENDPOINT_MAP.ep_out, data)
 
-    def usb_read_lowspeed(self, size=64):
-        return self._device.read(self._ENDPOINT_MAP.lowspeed_in, size, timeout=3000)
+    def usb_read_lowspeed(self, size=64, timeout=None):
+        return self._device.read(self._ENDPOINT_MAP.lowspeed_in, size, timeout=timeout)
 
-    def usb_read_highspeed(self, size=512):
-        return self._device.read(self._ENDPOINT_MAP.highspeed_in, size)
+    def usb_read_highspeed(self, size=512, timeout=None):
+        return self._device.read(self._ENDPOINT_MAP.highspeed_in, size, timeout=timeout)
 
-    def usb_read_highspeed_alt(self, size=512):
-        return self._device.read(self._ENDPOINT_MAP.highspeed_in2, size)
+    def usb_read_highspeed_alt(self, size=512, timeout=None):
+        return self._device.read(self._ENDPOINT_MAP.highspeed_in2, size, timeout=timeout)
 
     def set_default_read(self, mode):
         if mode == "highspeed":
@@ -141,11 +149,12 @@ class USBCommOBP(USBCommBase):
                      )
 
 
-    def send_command(self, msgtype, payload):
+    def send_command(self, msgtype, payload, timeout=None):
         """OBP command function"""
         # Constructing message and querying usb.
         msg = self._construct_outgoing_message(msgtype, payload, requestACK=True)
-        ret = self.usb_query(msg)
+        self.usb_send(msg)
+        ret = self.usb_read(timeout=timeout)
 
         _, checksumtype = self._check_incoming_message_header(ret[:44])
 
@@ -160,22 +169,17 @@ class USBCommOBP(USBCommBase):
         msg = self._construct_outgoing_message(msgtype, payload, requestACK=False)
         self.usb_send(msg)
 
-    def receive_query(self):
+    def receive_query(self, timeout=None):
         """receive_query needs to be called after innitiate_query"""
-        ret = self.usb_read()
+        ret = self.usb_read(size=64, timeout=timeout)
 
         remaining_bytes, checksumtype = self._check_incoming_message_header(ret[:44])
         length_payload_footer = remaining_bytes
 
         # we already received some data
         remaining_bytes -= len(ret[44:])
-        while True:
-            if remaining_bytes <= 0:
-                break
-            # TODO FIXME
-            N_bytes = min(remaining_bytes, self._EPin0_size)
-            ret += self._usb_read(epi_size=N_bytes)
-            remaining_bytes -= N_bytes
+        if remaining_bytes > 0:
+            ret += self.usb_read(size=remaining_bytes, timeout=timeout)
 
         if length_payload_footer != len(ret[44:]):
             raise SeaBreezeError("remaining packet length mismatch: %d != %d" %
@@ -190,23 +194,10 @@ class USBCommOBP(USBCommBase):
         return data
 
 
-    def query(self, msgtype, payload):
+    def query(self, msgtype, payload, timeout=None):
         """OBP query function"""
-        msg = self._construct_outgoing_message(msgtype, payload, requestACK=False)
-        ret = self.usb_query(msg)
-
-        remaining_bytes, checksumtype = self._check_incoming_message_header(ret[:44])
-        if remaining_bytes != len(ret[44:]):
-            raise SeaBreezeError("remaining packet length mismatch: %d != %d" %
-                                 (remaining_bytes, len(ret[44:])))
-
-        checksum = self._check_incoming_message_footer(ret[-20:])
-        if ((checksumtype == self.OBP.CHECKSUM_TYPE_MD5) and
-            (checksum != hashlib.md5(ret[:-20]).digest())):
-            # TODO: raise Error
-            warnings.warn("WARNING OBP: The checksums differ, but we ignore this for now.")
-        data = self._extract_message_data(ret)
-        return data
+        self.innitiate_query(msgtype, payload)
+        return self.receive_query(timeout)
 
 
     def _construct_outgoing_message(self, msgtype, payload, requestACK=False, regarding=None):

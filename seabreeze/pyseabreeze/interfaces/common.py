@@ -32,6 +32,29 @@ class SeaBreezeError(Exception):
 
 class NotImplementedWrapper(object):
 
+    def has_spectrometer_feature(self):
+        return [False]
+    def has_shutter_feature(self):
+        return [False]
+    def has_light_source_feature(self):
+        return [False]
+    def has_continuous_strobe_feature(self):
+        return [False]
+    def has_eeprom_feature(self):
+        return [False]
+    def has_irrad_calibration_feature(self):
+        return [False]
+    def has_irrad_collection_area(self):
+        return [False]
+    def has_tec_feature(self):
+        return [False]
+    def has_lamp_feature(self):
+        return [False]
+    def has_nonlinearity_coeffs_feature(self):
+        return [False]
+    def has_stray_light_feature(self):
+        return [False]
+
     def open_spectrometer(self):
         raise NotImplementedError
 
@@ -118,111 +141,40 @@ class NotImplementedWrapper(object):
 
     def set_continuous_strobe_period_microsec(self, strobe_id, period_usec):
         raise NotImplementedError
-
-
-class NoSpectrometerFeature(object):
-
-    def open_spectrometer(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def close_spectrometer(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_model(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def set_trigger_mode(self, mode):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def set_integration_time_microsec(self, integration_time_micros):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_min_integration_time_microsec(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_unformatted_spectrum(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_formatted_spectrum(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_unformatted_spectrum_length(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_formatted_spectrum_length(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_wavelengths(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_electric_dark_pixel_indices(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def get_serial_number(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
 
 
 class NoShutterFeature(object):
-
-    def set_shutter_open(self, opened):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
+    def has_shutter_feature(self):
+        return [False]
 
 class NoIrradCalFeature(object):
-
-    def read_irrad_calibration(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def write_irrad_calibration(self, data):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def has_irrad_collection_area(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def read_irrad_collection_area(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def write_irrad_collection_area(self, area):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
+    def has_irrad_calibration_feature(self):
+        return [False]
 
 class NoLightSourceFeature(object):
-
-    def get_light_source_count(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def set_light_source_enable(self, light_index, enable):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def set_light_source_intensity(self, light_index, intensity):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
+    def has_light_source_feature(self):
+        return [False]
 
 class NoEEPromFeature(object):
-
-    def read_eeprom_slot(self, slot_number):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def write_eeprom_slot(self, slot_number, data):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
+    def has_eeprom_feature(self):
+        return [False]
 
 class NoTecFeature(object):
-
-    def read_tec_temperature(self):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def set_tec_temperature(self, temperature_degrees_celsius):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def set_tec_enable(self, tec_enable):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
-
-    def set_tec_fan_enable(self, tec_fan_enable):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
+    def has_tec_feature(self):
+        return [False]
 
 class NoContinousStrobeFeature(object):
+    def has_continuous_strobe_feature(self):
+        return [False]
 
-    def set_continuous_strobe_period_microsec(self, strobe_id, period_usec):
-        raise SeaBreezeError("Feature not supported by spectrometer model")
+class NoLampFeature(object):
+    def has_lamp_feature(self):
+        return [False]
 
+class NoNonlinearityCoeffsFeature(object):
+    def has_nonlinearity_coeffs_feature(self):
+        return [False]
+
+class NoStraylightFeature(object):
+    def has_stray_light_feature(self):
+        return [False]

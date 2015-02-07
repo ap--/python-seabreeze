@@ -74,7 +74,7 @@ Feel free to implement any of the missing ones! Or if you have one of the untest
 - [ ] lamp_set_lamp_enable
 
 ### NonlinearityFeature
-- [ ] nonlinearity_coeffs_get
+- [x] nonlinearity_coeffs_get
 
 ### StrayLightFeature
 - [ ] stray_light_coeffs_get

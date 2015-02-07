@@ -30,6 +30,7 @@ def _use_cseabreeze():
         warnings.warn("Can't load seabreeze c library wrapper. Falling back to pyseabreeze")
         return None
     else:
+        sbb.initialize()
         return sbb
 
 def _use_pyseabreeze():
@@ -40,6 +41,7 @@ def _use_pyseabreeze():
         warnings.warn("Can't load pyusb wrapper. Falling back to cseabreeze")
         return None
     else:
+        sbb.initialize()
         return sbb
 
 

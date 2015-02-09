@@ -100,9 +100,6 @@ class NotImplementedWrapper(object):
     def write_irrad_calibration(self, data):
         raise NotImplementedError
 
-    def has_irrad_collection_area(self):
-        raise NotImplementedError
-
     def read_irrad_collection_area(self):
         raise NotImplementedError
 

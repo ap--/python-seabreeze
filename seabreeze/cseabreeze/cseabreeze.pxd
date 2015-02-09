@@ -23,16 +23,16 @@ cdef extern:
 
     int sbapi_get_number_of_spectrometer_features(long deviceID, int *error_code)
     int sbapi_get_spectrometer_features(long deviceID, int *error_code, long *features, int max_features)
-    void sbapi_spectrometer_set_trigger_mode(long deviceID, long featureID, int *error_code, int mode)
-    void sbapi_spectrometer_set_integration_time_micros(long deviceID, long featureID, int *error_code, unsigned long integration_time_micros)
-    long sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID, long featureID, int *error_code)
-    int sbapi_spectrometer_get_formatted_spectrum_length(long deviceID, long featureID, int *error_code)
-    int sbapi_spectrometer_get_formatted_spectrum(long deviceID, long featureID, int *error_code, double* buffer, int buffer_length)
-    int sbapi_spectrometer_get_unformatted_spectrum_length(long deviceID, long featureID, int *error_code)
-    int sbapi_spectrometer_get_unformatted_spectrum(long deviceID, long featureID, int *error_code, unsigned char *buffer, int buffer_length)
-    int sbapi_spectrometer_get_wavelengths(long deviceID, long featureID, int *error_code, double *wavelengths, int length)
-    int sbapi_spectrometer_get_electric_dark_pixel_count(long deviceID, long featureID, int *error_code)
-    int sbapi_spectrometer_get_electric_dark_pixel_indices(long deviceID, long featureID, int *error_code, int *indices, int length)
+    void sbapi_spectrometer_set_trigger_mode(long deviceID, long featureID, int *error_code, int mode) nogil
+    void sbapi_spectrometer_set_integration_time_micros(long deviceID, long featureID, int *error_code, unsigned long integration_time_micros) nogil
+    long sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID, long featureID, int *error_code) nogil
+    int sbapi_spectrometer_get_formatted_spectrum_length(long deviceID, long featureID, int *error_code) nogil
+    int sbapi_spectrometer_get_formatted_spectrum(long deviceID, long featureID, int *error_code, double* buffer, int buffer_length) nogil
+    int sbapi_spectrometer_get_unformatted_spectrum_length(long deviceID, long featureID, int *error_code) nogil
+    int sbapi_spectrometer_get_unformatted_spectrum(long deviceID, long featureID, int *error_code, unsigned char *buffer, int buffer_length) nogil
+    int sbapi_spectrometer_get_wavelengths(long deviceID, long featureID, int *error_code, double *wavelengths, int length) nogil
+    int sbapi_spectrometer_get_electric_dark_pixel_count(long deviceID, long featureID, int *error_code) nogil
+    int sbapi_spectrometer_get_electric_dark_pixel_indices(long deviceID, long featureID, int *error_code, int *indices, int length) nogil
 
     int sbapi_get_number_of_shutter_features(long deviceID, int *error_code)
     int sbapi_get_shutter_features(long deviceID, int *error_code, long *features, int max_features)

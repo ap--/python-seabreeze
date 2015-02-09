@@ -5,6 +5,7 @@ Author: Andreas Poehlmann
 """
 cimport cseabreeze as csb
 
+import cython
 import ctypes
 import numpy as np
 cimport numpy as cnp
@@ -165,20 +166,23 @@ def device_get_spectrometer_feature_id(SeaBreezeDevice device not None):
 
 def spectrometer_set_trigger_mode(SeaBreezeDevice device not None, long featureID, int mode):
     cdef int error_code
-    csb.sbapi_spectrometer_set_trigger_mode(device.handle, featureID, &error_code, mode)
+    with nogil:
+        csb.sbapi_spectrometer_set_trigger_mode(device.handle, featureID, &error_code, mode)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
 
 def spectrometer_set_integration_time_micros(SeaBreezeDevice device not None, long featureID, unsigned long integration_time_micros):
     cdef int error_code
-    csb.sbapi_spectrometer_set_integration_time_micros(device.handle, featureID, &error_code, integration_time_micros)
+    with nogil:
+        csb.sbapi_spectrometer_set_integration_time_micros(device.handle, featureID, &error_code, integration_time_micros)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
 
 def spectrometer_get_minimum_integration_time_micros(SeaBreezeDevice device not None, long featureID):
     cdef long min_integration_time
     cdef int error_code
-    min_integration_time = csb.sbapi_spectrometer_get_minimum_integration_time_micros(device.handle, featureID, &error_code)
+    with nogil:
+        min_integration_time = csb.sbapi_spectrometer_get_minimum_integration_time_micros(device.handle, featureID, &error_code)
     if min_integration_time < 0:
         raise SeaBreezeError(error_code=error_code)
     return min_integration_time
@@ -186,17 +190,20 @@ def spectrometer_get_minimum_integration_time_micros(SeaBreezeDevice device not 
 def spectrometer_get_formatted_spectrum_length(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef int spec_length
-    spec_length = csb.sbapi_spectrometer_get_formatted_spectrum_length(device.handle, featureID, &error_code)
+    with nogil:
+        spec_length = csb.sbapi_spectrometer_get_formatted_spectrum_length(device.handle, featureID, &error_code)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     return spec_length
 
+@cython.boundscheck(False)
 def spectrometer_get_formatted_spectrum(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.double_t, ndim=1, mode="c"] out):
     assert out.dtype == np.double
     cdef int error_code
     cdef int bytes_written
     cdef int out_length = len(out)
-    bytes_written = csb.sbapi_spectrometer_get_formatted_spectrum(device.handle, featureID, &error_code, &out[0], out_length)
+    with nogil:
+        bytes_written = csb.sbapi_spectrometer_get_formatted_spectrum(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     return bytes_written
@@ -204,27 +211,32 @@ def spectrometer_get_formatted_spectrum(SeaBreezeDevice device not None, long fe
 def spectrometer_get_unformatted_spectrum_length(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef int spec_length
-    spec_length = csb.sbapi_spectrometer_get_unformatted_spectrum_length(device.handle, featureID, &error_code)
+    with nogil:
+        spec_length = csb.sbapi_spectrometer_get_unformatted_spectrum_length(device.handle, featureID, &error_code)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     return spec_length
 
+@cython.boundscheck(False)
 def spectrometer_get_unformatted_spectrum(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.uint8_t, ndim=1, mode="c"] out):
     assert out.dtype == np.ubyte
     cdef int error_code
     cdef int bytes_written
     cdef int out_length = len(out)
-    bytes_written = csb.sbapi_spectrometer_get_unformatted_spectrum(device.handle, featureID, &error_code, &out[0], out_length)
+    with nogil:
+        bytes_written = csb.sbapi_spectrometer_get_unformatted_spectrum(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     return bytes_written
 
+@cython.boundscheck(False)
 def spectrometer_get_wavelengths(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.double_t, ndim=1, mode="c"] out):
     assert out.dtype == np.double
     cdef int error_code
     cdef int bytes_written
     cdef int out_length = len(out)
-    bytes_written = csb.sbapi_spectrometer_get_wavelengths(device.handle, featureID, &error_code, &out[0], out_length)
+    with nogil:
+        bytes_written = csb.sbapi_spectrometer_get_wavelengths(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     return
@@ -233,14 +245,16 @@ def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None
     assert device.handle >= 0
     cdef int error_code
     cdef int dp_count
-    dp_count = csb.sbapi_spectrometer_get_electric_dark_pixel_count(device.handle, featureID, &error_code)
+    with nogil:
+        dp_count = csb.sbapi_spectrometer_get_electric_dark_pixel_count(device.handle, featureID, &error_code)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     if dp_count == 0:
         return np.array([], dtype=np.int)
     cdef cnp.ndarray[int, ndim=1, mode="c"] indices
     indices = np.empty((dp_count,), dtype=ctypes.c_int)
-    csb.sbapi_spectrometer_get_electric_dark_pixel_indices(device.handle, featureID, &error_code, &indices[0], dp_count)
+    with nogil:
+        csb.sbapi_spectrometer_get_electric_dark_pixel_indices(device.handle, featureID, &error_code, &indices[0], dp_count)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     return indices

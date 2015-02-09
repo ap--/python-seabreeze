@@ -35,7 +35,7 @@ class ThermoElectricFeatureOOI(USBCommOOI):
 class ThermoElectricFeatureOBP(USBCommOBP):
 
     def has_tec_feature(self):
-        return True
+        return [True]
 
     @convert_exceptions("Error tec temperature read.")
     def read_tec_temperature(self):

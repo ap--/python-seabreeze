@@ -341,7 +341,7 @@ class SpectrometerFeatureOBP(USBCommOBP):
     @convert_exceptions("Is the spectrometer initialized?")
     def get_electric_dark_pixel_indices(self):
         # return model name with lookuptable
-        return DarkPixels[self.get_model()]
+        return numpy.array(DarkPixels[self.get_model()])
 
     @convert_exceptions("Error when reading serial number.")
     def get_serial_number(self):

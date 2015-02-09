@@ -3,6 +3,8 @@ from .common import SeaBreezeError, get_pyseabreeze_decorator
 from .eeprom import EEPromFeature
 from .communication import USBCommOBP
 
+import struct
+
 convert_exceptions = get_pyseabreeze_decorator('interfaces.nonlinearity')
 
 

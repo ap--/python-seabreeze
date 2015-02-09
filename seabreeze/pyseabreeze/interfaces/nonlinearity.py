@@ -16,10 +16,10 @@ class NonlinearityCoefficientsEEPromFeature(EEPromFeature):
     @convert_exceptions("Error when reading nonlinearity coeffs.")
     def get_nonlinearity_coeffs(self):
         # The spectrometers store the wavelength calibration in slots 6..13
-        coeff = []
+        coeffs = []
         for i in range(6, 14):
-            coeff.append(float(self.read_eeprom_slot(i)))
-        return coeff
+            coeffs.append(float(self.read_eeprom_slot(i)))
+        return coeffs
 
 
 class NonlinearityCoefficientsOBPFeature(USBCommOBP):
@@ -37,4 +37,4 @@ class NonlinearityCoefficientsOBPFeature(USBCommOBP):
         for i in range(N):
             data = self.query(0x00181101, struct.pack("<B", i))
             coeffs.append(struct.unpack("<f", data)[0])
-        return coeff
+        return coeffs

@@ -10,8 +10,8 @@ class WavelengthCoefficientsEEPromFeature(EEPromFeature):
     @convert_exceptions("")
     def get_wavelength_coefficients(self):
         # The spectrometers store the wavelength calibration in slots 1,2,3,4
-        coeff = []
+        coeffs = []
         for i in range(1, 5):
-            coeff.append(float(self.read_eeprom_slot(i)))
-        return coeff
+            coeffs.append(float(self.read_eeprom_slot(i)))
+        return coeffs
 

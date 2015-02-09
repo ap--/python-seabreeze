@@ -305,8 +305,9 @@ class SpectrometerFeatureOBP(USBCommOBP):
 
     @convert_exceptions("Error while reading raw spectrum.")
     def get_unformatted_spectrum(self, out):
-        out[:] = self.query(0x00101100, "",
+        datastring = self.query(0x00101100, "",
                     timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
+        out[:] = numpy.fromstring(datastring, dtype=numpy.uint8)
         return self._RAW_SPECTRUM_LEN  # compatibility
 
     @convert_exceptions("Error while reading formatted spectrum.")
@@ -476,8 +477,9 @@ class SpectrometerFeatureQEPRO(SpectrometerFeatureOBP):
 
     @convert_exceptions("Error while reading raw spectrum.")
     def get_unformatted_spectrum(self, out):
-        out[:] = self.query(0x00100928, "",
+        datastring = self.query(0x00100928, "",
                     timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
+        out[:] = numpy.fromstring(datastring, dtype=numpy.uint8)
         return self._RAW_SPECTRUM_LEN  # compatibility
 
     @convert_exceptions("Error while reading formatted spectrum.")

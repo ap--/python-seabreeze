@@ -69,6 +69,9 @@ apt-get install build-essential python-numpy python-pip cython libusb-1.0-0
 pip install pyusb
 ```
 
+**I test everything with python 2.7. But in theory it should work now with python 3.**
+
+
 ## Usage ##
 
 With seabreeze C backend:
@@ -110,7 +113,7 @@ class Spectrometer(object):
     def from_serial_number(cls, serial=None):
     def wavelengths(self):
     def intensities(self, correct_dark_counts=False, correct_nonlinearity=False):
-    def spectrum(self):
+    def spectrum(self, correct_dark_counts=False, correct_nonlinearity=False):
     def integration_time_micros(self, integration_time_micros):
     def trigger_mode(self, mode):
     def serial_number(self):
@@ -131,6 +134,10 @@ class Spectrometer(object):
     def continuous_strobe_set_period_micros(self, period_micros):
     def close(self):
 ```
+
+## Contributing ##
+
+If you own any of the spectrometers, run on a different setup (Windows, MacOS, different Linux distribution, or a different Architecture) and it works for you, or doesn't: feel free to write me a mail, so that I can update the supported list or help. Also feel free to file issues or pull requests on github.
 
 ## License ##
 

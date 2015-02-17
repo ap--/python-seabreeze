@@ -14,7 +14,7 @@ else:
 
 setup(
     name='seabreeze',
-    version='0.3.0',
+    version='0.3.3',
     author='Andreas Poehlmann',
     author_email='mail@andreaspoehlmann.de',
     packages=['seabreeze',

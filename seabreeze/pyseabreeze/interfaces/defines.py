@@ -27,28 +27,28 @@ ModelNames = {
     0x4004: 'QEPRO',
     0x5000: 'VENTANA',
 }
-ProductIds = ModelNames.keys()
-SpectrometerClasses = ModelNames.values()
+ProductIds = list(ModelNames.keys())
+SpectrometerClasses = list(ModelNames.values())
 
 DarkPixels = {
-    'USB2000'	  : range(2, 24),
-    'HR2000'	  : range(2, 24),
-    'HR4000'	  : range(2, 13),
+    'USB2000'	  : list(range(2, 24)),
+    'HR2000'	  : list(range(2, 24)),
+    'HR4000'	  : list(range(2, 13)),
     'USB650'	  : [],  # ??? unkown
-    'HR2000PLUS'  : range(2, 24),
-    'QE65000'	  : range(0, 4) + range(1040, 1044),  # as in seabreeze-3.0.5
-    'USB2000PLUS' : range(2, 24),
-    'USB4000'	  : range(2, 13),
+    'HR2000PLUS'  : list(range(2, 24)),
+    'QE65000'	  : list(range(0, 4)) + list(range(1040, 1044)),  # as in seabreeze-3.0.5
+    'USB2000PLUS' : list(range(2, 24)),
+    'USB4000'	  : list(range(2, 13)),
     'NIRQUEST512' : [],
     'NIRQUEST256' : [],
-    'MAYA2000PRO' : range(0, 4) + range(2064, 2068),
-    'MAYA2000'	  : range(0, 8) + range(2072, 2080),
+    'MAYA2000PRO' : list(range(0, 4)) + list(range(2064, 2068)),
+    'MAYA2000'	  : list(range(0, 8)) + list(range(2072, 2080)),
     'TORUS'	  : [],
-    'APEX'	  : range(0, 4) + range(2064, 2068),
-    'MAYALSL'     : range(0, 4) + range(2064, 2068),
-    'JAZ'	  : range(2, 24),
+    'APEX'	  : list(range(0, 4)) + list(range(2064, 2068)),
+    'MAYALSL'     : list(range(0, 4)) + list(range(2064, 2068)),
+    'JAZ'	  : list(range(2, 24)),
     'STS'	  : [],
-    'QEPRO'	  : range(0, 4) + range(1040, 1044),
+    'QEPRO'	  : list(range(0, 4)) + list(range(1040, 1044)),
     'VENTANA'	  : [],
 }
 

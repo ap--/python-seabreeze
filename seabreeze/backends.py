@@ -37,7 +37,6 @@ def _use_pyseabreeze():
     try:
         import seabreeze.pyseabreeze as sbb
     except ImportError as e:
-        print e.message
         warnings.warn("Can't load pyusb wrapper. Falling back to cseabreeze")
         return None
     else:

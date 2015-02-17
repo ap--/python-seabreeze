@@ -62,10 +62,10 @@ class SpectrometerFeatureOOI(WavelengthCoefficientsEEPromFeature,
 
     @convert_exceptions("Trigger mode error.")
     def set_trigger_mode(self, mode):
-        if mode in TriggerModes[self.get_model()].values():
+        if mode in list(TriggerModes[self.get_model()].values()):
             self.usb_send(struct.pack("<BH", 0x0A, mode))
         else:
-            raise SeaBreezeError("Only supports: %s" % TriggerModes[self.get_model()].keys())
+            raise SeaBreezeError("Only supports: %s" % list(TriggerModes[self.get_model()].keys()))
 
     @convert_exceptions("Integration time error.")
     def set_integration_time_microsec(self, integration_time_micros):
@@ -285,10 +285,10 @@ class SpectrometerFeatureOBP(USBCommOBP):
 
     @convert_exceptions("Trigger mode error.")
     def set_trigger_mode(self, mode):
-        if mode in TriggerModes[self.get_model()].values():
+        if mode in list(TriggerModes[self.get_model()].values()):
             self.send_command(0x00110110, struct.pack("<B", mode))
         else:
-            raise SeaBreezeError("Only supports: %s" % TriggerModes[self.get_model()].keys())
+            raise SeaBreezeError("Only supports: %s" % list(TriggerModes[self.get_model()].keys()))
 
     @convert_exceptions("Integration time error.")
     def set_integration_time_microsec(self, integration_time_micros):

@@ -16,7 +16,7 @@ def get_pyseabreeze_decorator(name):
                     raise
                 except Exception as e:
                     # logger.debug(traceback.format_exc())
-                    print traceback.format_exc()
+                    traceback.print_exc()
                     if isinstance(e, SeaBreezeError):
                         raise
                     else:

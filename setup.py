@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
+import warnings
 try:
     from Cython.Build import cythonize
     USE_CYTHON = True
@@ -10,7 +11,7 @@ if USE_CYTHON:
     ext_modules = cythonize('./seabreeze/cseabreeze/wrapper.pyx')
 else:
     ext_modules = []
-    print "WARNING: Cython not found! Not compiling seabreeze C/C++ library wrapper!"
+    warnings.warn("WARNING: Cython not found! Not compiling seabreeze C/C++ library wrapper!")
 
 setup(
     name='seabreeze',

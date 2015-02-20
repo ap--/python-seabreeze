@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
-from distutils.core import setup
-import warnings
-try:
-    from Cython.Build import cythonize
-    USE_CYTHON = True
-except ImportError:
-    USE_CYTHON = False
+from setuptools import setup
+from distutils.extension import Extension
+from Cython.Build import cythonize
 
-if USE_CYTHON:
-    ext_modules = cythonize('./seabreeze/cseabreeze/wrapper.pyx')
+import platform
+import numpy
+
+if platform.system() == "Windows":
+    libs = ['seabreeze', 'winusb']
 else:
-    ext_modules = []
-    warnings.warn("WARNING: Cython not found! Not compiling seabreeze C/C++ library wrapper!")
+    libs = ['seabreeze', 'usb']
+
+extensions = [Extension('seabreeze.cseabreeze.wrapper',
+                                    ['./seabreeze/cseabreeze/wrapper.pyx'],
+                        include_dirs=[numpy.get_include()],
+                        libraries=libs,
+                      )]
 
 setup(
     name='seabreeze',
@@ -28,5 +32,5 @@ setup(
                  'Use it at your own risk.'),
     long_description=open('README.md').read(),
     requires=['python (>= 2.7)', 'pyusb (>= 1.0)', 'numpy'],
-    ext_modules=ext_modules
+    ext_modules=cythonize(extensions),
 )

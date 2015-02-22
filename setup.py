@@ -19,7 +19,7 @@ extensions = [Extension('seabreeze.cseabreeze.wrapper',
 
 setup(
     name='seabreeze',
-    version='0.3.3',
+    version='0.3.4',
     author='Andreas Poehlmann',
     author_email='mail@andreaspoehlmann.de',
     packages=['seabreeze',

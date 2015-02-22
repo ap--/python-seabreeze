@@ -126,7 +126,7 @@ artifacts:
     name: lib
 
 deploy:
-  release: python-seabreeze-$(appveyor_repo_tag_name)
+  release: $(appveyor_repo_tag_name)
   provider: GitHub
   auth_token:
     secure: 2jmPAIr0bDr/Aak6PsCtd5nRPQpHEKwjKN13k4fDp4f6fbibuLmGEkQspQguQwFe

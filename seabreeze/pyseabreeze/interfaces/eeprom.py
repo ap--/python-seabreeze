@@ -16,7 +16,7 @@ class EEPromFeature(USBCommOOI):
     def read_eeprom_slot(self, slot_number):
         """reads data from an eeprom slot"""
         ret = self.read_eeprom_slot_raw(slot_number)
-        data = ret[2:ret[2:].index(0)+2].tostring()
+        data = ret[2:ret[2:].index(0)+2].tostring().decode('utf-8')
         return data.rstrip('\x00')
 
     def write_eeprom_slot(self, slot_number, data):

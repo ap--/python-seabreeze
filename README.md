@@ -2,6 +2,8 @@
 
 **Info:** If this is not working for you, checkout [python-oceanoptics](https://github.com/ap--/python-oceanoptics).
 
+windows wheels: [![Build status](https://ci.appveyor.com/api/projects/status/xxoqwq9nnl1if9rr?svg=true)](https://ci.appveyor.com/project/ap--/python-seabreeze)
+
 ## SeaBreeze python module ##
 
 This is a python module for [OceanOptics](http://www.oceanoptics.com/) spectrometers. It has two different backends. One is using the [SeaBreeze](http://oceanoptics.com/product/seabreeze/) library, and the other one is going to emulate the seabreeze behaviour using **pyusb**.

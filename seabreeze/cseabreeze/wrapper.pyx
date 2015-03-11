@@ -40,8 +40,14 @@ cdef class SeaBreezeDevice(object):
 
     def __init__(self, handle, model, serial):
         self.handle = handle
-        self.model = model
-        self.serial = serial
+        try:
+            self.model = model
+        except TypeError:
+            self.model = model.encode("utf-8")
+        try:
+            self.serial = serial
+        except TypeError:
+            self.serial = serial.encode("utf-8")
 
     def __repr__(self):
         return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial)
@@ -119,7 +125,7 @@ def device_get_model(SeaBreezeDevice device not None):
     model = cbuf[:bytes_written]
     if model == "NONE":
         raise SeaBreezeError(error_code=error_code)
-    return model
+    return model.decode("utf-8")
 
 def device_get_serial_number(SeaBreezeDevice device not None):
     cdef int error_code
@@ -142,7 +148,7 @@ def device_get_serial_number(SeaBreezeDevice device not None):
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     serial = cbuf[:bytes_written]
-    return serial.rstrip('\x00')
+    return serial.decode("utf-8").rstrip('\x00')
 
 
 def device_get_spectrometer_feature_id(SeaBreezeDevice device not None):

@@ -5,13 +5,15 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     WITH_COMPILER: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_compiler.cmd"
+    SEABREEZE_VERSION: "3.0.6"
 
   matrix:
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "32"
       WINDOWS_SDK_VERSION: "v7.0"
-      SEABREEZE_ARCH: "Win32"
+      SEABREEZE_ARCH: "x86"
+      SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library"
       PYTHON_WHEEL_ARCH: "cp27‑none‑win32.whl"
       PYTHON_WHEEL_BASE: "https://gist.github.com/2de38fa61a615b24a570.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
@@ -20,7 +22,8 @@ environment:
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "32"
       WINDOWS_SDK_VERSION: "v7.1"
-      SEABREEZE_ARCH: "Win32"
+      SEABREEZE_ARCH: "x86"
+      SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library"
       PYTHON_WHEEL_ARCH: "cp33‑none‑win32.whl"
       PYTHON_WHEEL_BASE: "https://gist.github.com/2542285a145b63ec04d8.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
@@ -29,7 +32,8 @@ environment:
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "32"
       WINDOWS_SDK_VERSION: "v7.1"
-      SEABREEZE_ARCH: "Win32"
+      SEABREEZE_ARCH: "x86"
+      SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library"
       PYTHON_WHEEL_ARCH: "cp34‑none‑win32.whl"
       PYTHON_WHEEL_BASE: "https://gist.github.com/0e821e058f299584fbf8.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
@@ -39,6 +43,7 @@ environment:
       PYTHON_ARCH: "64"
       WINDOWS_SDK_VERSION: "v7.0"
       SEABREEZE_ARCH: "x64"
+      SEABREEZE_PATH: "C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
       PYTHON_WHEEL_ARCH: "cp27‑none‑win_amd64.whl"
       PYTHON_WHEEL_BASE: "https://gist.github.com/861fa89f0c5ea7531ccb.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
@@ -48,6 +53,7 @@ environment:
       PYTHON_ARCH: "64"
       WINDOWS_SDK_VERSION: "v7.1"
       SEABREEZE_ARCH: "x64"
+      SEABREEZE_PATH: "C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
       PYTHON_WHEEL_ARCH: "cp33‑none‑win_amd64.whl"
       PYTHON_WHEEL_BASE: "https://gist.github.com/63f99ecba309a8880dce.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
@@ -57,6 +63,7 @@ environment:
       PYTHON_ARCH: "64"
       WINDOWS_SDK_VERSION: "v7.1"
       SEABREEZE_ARCH: "x64"
+      SEABREEZE_PATH: "C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
       PYTHON_WHEEL_ARCH: "cp34‑none‑win_amd64.whl"
       PYTHON_WHEEL_BASE: "https://gist.github.com/666d9a09d2e0df596ab3.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
@@ -74,34 +81,8 @@ install:
   - cmd: "%PYTHON%/Scripts/pip.exe install numpy-1.8.2+mkl-%PYTHON_WHEEL_ARCH%"
   - cmd: "cd .."
 
-  - ps: Start-FileDownload "http://sourceforge.net/projects/seabreeze/files/SeaBreeze/seabreeze-3.0.3.tar.bz2"
-  - cmd: 7z x "seabreeze-3.0.3.tar.bz2"
-  - cmd: 7z x "seabreeze-3.0.3.tar"
-  - cmd: cd "seabreeze-3.0.3"
-  - ps: 'cat os-support\\windows\\VisualStudio2010\\VSProj\\SeaBreeze.rc | % { $_ -replace "afxres.h","windows.h" } > SeaBreeze.rc.new'
-  - ps: 'cat SeaBreeze.rc.new | select-string -pattern "afxres.rc" -notmatch > SeaBreeze.rc.new2'
-  - cmd: "MOVE /Y SeaBreeze.rc.new2 os-support\\windows\\VisualStudio2010\\VSProj\\SeaBreeze.rc"
-  - cmd: msbuild.exe /p:Configuration=Release /p:Platform=%SEABREEZE_ARCH% "os-support\\windows\\VisualStudio2010\\SeaBreeze.sln"
-  - cmd: "cd .."
-
-  - cmd: "mkdir sbdist"
-  - cmd: "mkdir sbdist\\API"
-  - cmd: "mkdir sbdist\\Drivers"
-  - cmd: "mkdir sbdist\\Library"
-  - cmd: "XCOPY seabreeze-3.0.3\\lib\\SeaBreeze.dll sbdist\\Library"
-  - cmd: "XCOPY seabreeze-3.0.3\\lib\\SeaBreeze.lib sbdist\\Library"
-  - cmd: "XCOPY seabreeze-3.0.3\\lib\\SeaBreeze.exp sbdist\\Library"
-  - cmd: "XCOPY seabreeze-3.0.3\\include\\api\\* sbdist\\API /s /i"
-  - cmd: "XCOPY seabreeze-3.0.3\\os-support\\windows\\FilesToInstall\\windows-support\\* sbdist\\Drivers /s /i"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\winusb\\x86\\winusbcoinstaller2.dll sbdist\\Drivers\\i386"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\wdf\\x86\\WdfCoInstaller01009.dll sbdist\\Drivers\\i386"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\wdf\\x86\\WUDFUpdate_01009.dll sbdist\\Drivers\\i386"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\DIFx\\dpinst\\MultiLin\\x86\\dpinst.exe sbdist\\Drivers\\i386 /Y"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\winusb\\amd64\\winusbcoinstaller2.dll sbdist\\Drivers\\amd64"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\wdf\\amd64\\WdfCoInstaller01009.dll sbdist\\Drivers\\amd64"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\wdf\\amd64\\WUDFUpdate_01009.dll sbdist\\Drivers\\amd64"
-  - cmd: "XCOPY C:\\WinDDK\\7600.16385.1\\redist\\DIFx\\dpinst\\MultiLin\\amd64\\dpinst.exe sbdist\\Drivers\\amd64 /Y"
-  - cmd: "7z a -tzip libseabreeze-3.0.3-win-sdk%WINDOWS_SDK_VERSION%-%PYTHON_ARCH%bit.zip sbdist"
+  - 'appveyor DownloadFile https://github.com/ap--/libseabreeze/releases/download/libseabreeze-%SEABREEZE_VERSION%/SeaBreezeSetup-%SEABREEZE_ARCH%bit-v%SEABREEZE_VERSION%.msi -FileName sbsetup.msi'
+  - cmd: msiexec /i sbsetup.msi /quiet /qn /norestart
 
 build: off
 
@@ -109,7 +90,7 @@ test_script:
   - "%WITH_COMPILER% %PYTHON%/python setup.py test"
 
 after_test:
-  - "%WITH_COMPILER% %PYTHON%/python setup.py build_ext --library-dirs=.\\seabreeze-3.0.3\\lib;%WDDK_LIB_PATH%"
+  - '%WITH_COMPILER% %PYTHON%/python setup.py build_ext --library-dirs="%SEABREEZE_PATH%";%WDDK_LIB_PATH%'
   - "%WITH_COMPILER% %PYTHON%/python setup.py build"
   - "%WITH_COMPILER% %PYTHON%/python setup.py sdist"
   - "%WITH_COMPILER% %PYTHON%/python setup.py bdist_wheel"
@@ -121,15 +102,12 @@ artifacts:
   - path: dist\*.tar.gz
     name: source
 
-  - path: libseabreeze-3.0.3-win-*
-    name: lib
-
 deploy:
   release: $(appveyor_repo_tag_name)
   provider: GitHub
   auth_token:
     secure: 2jmPAIr0bDr/Aak6PsCtd5nRPQpHEKwjKN13k4fDp4f6fbibuLmGEkQspQguQwFe
-  artifact: wheel,lib
+  artifact: wheel
   draft: false
   prerelease: false
   on:

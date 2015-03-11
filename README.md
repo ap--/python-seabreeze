@@ -46,7 +46,15 @@ It supports all basic spectrometer features (check [this list](seabreeze/pyseabr
 
 ## How to install ##
 
-This is tested under ubuntu 12.04. To install seabreeze C-library run:
+### Ubuntu 12.04 (and probably all other debian based distros) ###
+
+You'll need numpy, pyusb, cython. I am using _Cython 0.20.2_.
+```
+apt-get install build-essential python-numpy python-pip cython libusb-1.0-0
+pip install pyusb
+```
+
+To install seabreeze C-library run:
 ```
 ./misc/install_libseabreeze.sh
 ```
@@ -61,18 +69,17 @@ To install the python module run:
 python setup.py install
 ```
 
-## Requirements ##
+### Windows ###
 
-You'll need numpy, pyusb, cython. I am using _Cython 0.20.2_.
+Download and install the correct prebuilt libseabreeze installer from [here](https://github.com/ap--/libseabreeze/releases).
+**These installers are UNOFFICIAL!**
 
-Under Ubuntu
+Then download the correct python-seabreeze wheel from this repository ([here](https://github.com/ap--/python-seabreeze/releases)) and install via
 ```
-apt-get install build-essential python-numpy python-pip cython libusb-1.0-0
-pip install pyusb
+pip install <filename of downloaded wheel>
 ```
 
-**I test everything with python 2.7. But in theory it should work now with python 3.**
-
+([how-to-install-pip-on-windows](http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows))
 
 ## Usage ##
 

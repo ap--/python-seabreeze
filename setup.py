@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 from distutils.extension import Extension
-from Cython.Build import cythonize
+
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    cythonize = lambda x: x
+    fn_ext = "c"
+else:
+    fn_ext = "pyx"
 
 import platform
 import numpy
@@ -12,7 +19,7 @@ else:
     libs = ['seabreeze', 'usb']
 
 extensions = [Extension('seabreeze.cseabreeze.wrapper',
-                                    ['./seabreeze/cseabreeze/wrapper.pyx'],
+                        ['./seabreeze/cseabreeze/wrapper.%s' % fn_ext],
                         include_dirs=[numpy.get_include()],
                         libraries=libs,
                       )]

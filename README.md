@@ -69,6 +69,12 @@ To install the python module run:
 python setup.py install
 ```
 
+If you don't want to install the C-library and the cseabreeze backend:
+```
+python setup.py install --without-cseabreeze
+```
+
+
 ### Windows ###
 
 Download and install the correct prebuilt libseabreeze installer from [here](https://github.com/ap--/libseabreeze/releases).

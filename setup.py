@@ -1,32 +1,49 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 from distutils.extension import Extension
-
-try:
-    from Cython.Build import cythonize
-except ImportError:
-    cythonize = lambda x: x
-    fn_ext = "c"
-else:
-    fn_ext = "pyx"
-
 import platform
-import numpy
+import sys
+import warnings
 
-if platform.system() == "Windows":
-    libs = ['seabreeze', 'winusb']
+if "--without-cseabreeze" in sys.argv:
+    sys.argv.remove("--without-cseabreeze")  # this is a hack...
+    # user requests to not install cython wrapper
+    _extensions = []
 else:
-    libs = ['seabreeze', 'usb']
+    # default to building the cython wrapper
+    try:
+        # try to import cython
+        from Cython.Build import cythonize
+    except ImportError:
+        # if cython is not installed fall back to the provided C file
+        cythonize = lambda x: x
+        fn_ext = "c"
+    else:
+        fn_ext = "pyx"
 
-extensions = [Extension('seabreeze.cseabreeze.wrapper',
+    # The windows version of the cython wrapper depends on winusb
+    if platform.system() == "Windows":
+        libs = ['seabreeze', 'winusb']
+    else:
+        libs = ['seabreeze', 'usb']
+
+    # define extension
+    try:
+        import numpy
+    except ImportError:
+        warnings.warn("Installation of cseabreeze backend requires numpy.")
+        exit(1)
+
+    extensions = [Extension('seabreeze.cseabreeze.wrapper',
                         ['./seabreeze/cseabreeze/wrapper.%s' % fn_ext],
                         include_dirs=[numpy.get_include()],
                         libraries=libs,
                       )]
+    _extensions = cythonize(extensions)
 
 setup(
     name='seabreeze',
-    version='0.4.0',
+    version='0.4.1',
     author='Andreas Poehlmann',
     author_email='mail@andreaspoehlmann.de',
     packages=['seabreeze',
@@ -39,5 +56,5 @@ setup(
                  'Use it at your own risk.'),
     long_description=open('README.md').read(),
     requires=['python (>= 2.7)', 'pyusb (>= 1.0)', 'numpy'],
-    ext_modules=cythonize(extensions),
+    ext_modules=_extensions,
 )

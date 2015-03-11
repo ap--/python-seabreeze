@@ -66,7 +66,6 @@ init:
 
 install:
   - "powershell appveyor\\install.ps1"
-  - cinst wget
  
   - cmd: git clone %PYTHON_WHEEL_BASE% binblob
   - cmd: cd binblob
@@ -75,7 +74,7 @@ install:
   - cmd: "%PYTHON%/Scripts/pip.exe install numpy-1.8.2+mkl-%PYTHON_WHEEL_ARCH%"
   - cmd: "cd .."
 
-  - cmd: wget -nv -nc "http://sourceforge.net/projects/seabreeze/files/SeaBreeze/seabreeze-3.0.3.tar.bz2"
+  - ps: Start-FileDownload "http://sourceforge.net/projects/seabreeze/files/SeaBreeze/seabreeze-3.0.3.tar.bz2"
   - cmd: 7z x "seabreeze-3.0.3.tar.bz2"
   - cmd: 7z x "seabreeze-3.0.3.tar"
   - cmd: cd "seabreeze-3.0.3"

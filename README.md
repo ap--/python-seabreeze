@@ -44,50 +44,59 @@ It supports all basic spectrometer features (check [this list](seabreeze/pyseabr
 | USB4000      |     x      |      x      |
 | USB650       |            |      x      |
 
-## How to install ##
+# Installation #
 
 ### Ubuntu 12.04 (and probably all other debian based distros) ###
 
-You'll need numpy, pyusb, cython. I am using _Cython 0.20.2_.
-```
-apt-get install build-essential python-numpy python-pip cython libusb-1.0-0
-pip install pyusb
-```
+If you know which backend you want to use, you can skip the installation of the other. cseabreeze is the recommended backend.
 
-To install seabreeze C-library run:
-```
-./misc/install_libseabreeze.sh
-```
+1. **cseabreeze backend** requires _(cython is optional, the provided C file was generated with 0.21.2)_:
+   ```
+   apt-get install build-essential python-numpy libusb-0.1-4 cython
+   ```
+   
+   install seabreeze C-library:
+   ```
+   ./misc/install_libseabreeze.sh
+   ```
 
-To install the udev rules run:
-```
-./misc/install_udev_rules.sh
-```
+2. **pyseabreeze backend** requires _(libusb-0.1-4, or anything supported by pyusb should also work)_:
+   ```
+   apt-get install python-numpy python-pip libusb-1.0-0
+   pip install pyusb==1.0.0b1
+   ```
 
-To install the python module run:
-```
-python setup.py install
-```
 
-If you don't want to install the C-library and the cseabreeze backend:
-```
-python setup.py install --without-cseabreeze
-```
+3. **both** need the udev rules:
+   ```
+   ./misc/install_udev_rules.sh
+   ```
+
+4. **To install the python module**:
+   ```
+   python setup.py install
+   ```
+
+   Or if you don't want to install the C-library and the cseabreeze backend:
+   ```
+   python setup.py install --without-cseabreeze
+   ```
 
 
 ### Windows ###
 
-Download and install the correct prebuilt libseabreeze installer from [here](https://github.com/ap--/libseabreeze/releases).
-**These installers are UNOFFICIAL!**
+On windows you need to install the compiled C library and the python wheel. The wheels are compiled with Cython-0.22 against numpy-1.8.2.
 
-Then download the correct python-seabreeze wheel from this repository ([here](https://github.com/ap--/python-seabreeze/releases)) and install via
-```
-pip install <filename of downloaded wheel>
-```
+1. Download and install the correct prebuilt libseabreeze installer from [here](https://github.com/ap--/libseabreeze/releases). **These installers are UNOFFICIAL!**
 
-([how-to-install-pip-on-windows](http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows))
+2. Make sure you have pip installed: ([how-to-install-pip-on-windows](http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows))
 
-## Usage ##
+3. Then download the correct python-seabreeze wheel from this repository ([here](https://github.com/ap--/python-seabreeze/releases)) and install via
+   ```
+   pip install <filename of downloaded wheel>
+   ```
+
+# Usage #
 
 With seabreeze C backend:
 
@@ -120,21 +129,29 @@ For the pyusb seabreeze backend, you only need to run **use** before importing *
 >>>
 ```
 
-Interface:
+### Interface: ###
+
+Currently there is almost no documentation of the module, sorry... Look at the Spectrometer class in [spectrometers.py](seabreeze/spectrometers.py). This is the class interface for any spectrometer:
 ```{python}
 
 class Spectrometer(object):
     def __init__(self, device):
+    @classmethod
     def from_serial_number(cls, serial=None):
     def wavelengths(self):
     def intensities(self, correct_dark_counts=False, correct_nonlinearity=False):
     def spectrum(self, correct_dark_counts=False, correct_nonlinearity=False):
     def integration_time_micros(self, integration_time_micros):
     def trigger_mode(self, mode):
+    @property
     def serial_number(self):
+    @property
     def model(self):
+    @property
     def pixels(self):
+    @property
     def minimum_integration_time_micros(self):
+    @property
     def light_sources(self):
     def eeprom_read_slot(self, slot):
     def tec_set_enable(self, enable):
@@ -150,10 +167,10 @@ class Spectrometer(object):
     def close(self):
 ```
 
-## Contributing ##
+# Contributing #
 
 If you own any of the spectrometers, run on a different setup (Windows, MacOS, different Linux distribution, or a different Architecture) and it works for you, or doesn't: feel free to write me a mail, so that I can update the supported list or help. Also feel free to file issues or pull requests on github.
 
-## License ##
+# License #
 
 Files in this repository are released under the [MIT license](LICENSE.md).

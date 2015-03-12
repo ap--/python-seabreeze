@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 from distutils.extension import Extension
+from distutils.version import LooseVersion
 import platform
 import sys
 import warnings
@@ -13,12 +14,16 @@ else:
     # default to building the cython wrapper
     try:
         # try to import cython
-        from Cython.Build import cythonize
+        import Cython
+        # We require at least version 0.18
+        if LooseVersion(Cython.__version__) < LooseVersion("0.18"):
+            raise ImportError("Cython version < 0.18")
     except ImportError:
-        # if cython is not installed fall back to the provided C file
+        # if not installed or too old fall back to the provided C file
         cythonize = lambda x: x
         fn_ext = "c"
     else:
+        from Cython.Build import cythonize
         fn_ext = "pyx"
 
     # The windows version of the cython wrapper depends on winusb

@@ -29,6 +29,8 @@ else:
     # The windows version of the cython wrapper depends on winusb
     if platform.system() == "Windows":
         libs = ['seabreeze', 'winusb']
+    elif platform.system() == "Darwin":
+        libs = ['seabreeze']
     else:
         libs = ['seabreeze', 'usb']
 

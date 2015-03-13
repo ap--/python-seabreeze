@@ -1,0 +1,23 @@
+language:
+- objective-c
+env:
+  global:
+    - NUMPY_VERSION="1.8.2" SEABREEZE_VERSION="3.0.6"
+  matrix:
+    - PYTHON_VERSION="2.7" 
+    - PYTHON_VERSION="3.3"
+    - PYTHON_VERSION="3.4"
+install: source travis/build_wheel.sh
+script:
+- echo "done."
+deploy:
+  provider: releases
+  skip_cleanup: true
+  file_glob: true
+  file:
+      - dist/*.whl
+  on:
+    all_branches: true
+    tags: true
+  api-key:
+    secure: OkvQCnZAtWvXtmiR2uyy5GCo7LXXHAB0TDrUSxbg9cylc72zeUGEgPjgdAbRSNygLimNDMzuAWCdNvXBABrB5USPjb5eAheWI7E7loVPN0kAuBj+DDwD2N5QV0dO0+GQerRyxoMLks90FrPwhVLbke0rLxr8eM9roP7Ouo4wYBc=

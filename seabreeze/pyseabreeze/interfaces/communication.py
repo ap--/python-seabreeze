@@ -25,11 +25,19 @@ class USBCommBase(object):
 
     def open_device(self, device):
         # device.reset()
-        device.set_configuration()
         self.usbtimeout_ms = device.default_timeout
         self._device = device
         self.usb_read = self.usb_read_lowspeed
-        self._opened = True
+        if device.is_kernel_driver_active(0):
+            device.detach_kernel_driver(0)
+        try:
+            device.set_configuration()
+        except usb.USBError as usberr:
+            if usberr.errno == 16:
+                self._opened = True
+            raise
+        else:
+            self._opened = True
 
     def is_open(self):
         try:

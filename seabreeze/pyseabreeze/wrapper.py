@@ -62,8 +62,11 @@ def device_list_devices():
         # open the device and get the serial and model numbers
         try:
             interface.open_device(dev)
-        except usb.USBError:
-            wasopen = True
+        except usb.USBError as usberr:
+            if usberr.errno == 16:
+                wasopen = True
+            else:
+                raise
         else:
             wasopen = False
         model = interface.get_model()

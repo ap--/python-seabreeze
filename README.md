@@ -2,7 +2,9 @@
 
 **Info:** This python-module replaces [python-oceanoptics](https://github.com/ap--/python-oceanoptics).
 
-windows wheels: [![Build status](https://ci.appveyor.com/api/projects/status/xxoqwq9nnl1if9rr?svg=true)](https://ci.appveyor.com/project/ap--/python-seabreeze)
+| windows wheels | osx wheels |
+|:--------------:|:----------:|
+| [![Build status](https://ci.appveyor.com/api/projects/status/xxoqwq9nnl1if9rr?svg=true)](https://ci.appveyor.com/project/ap--/python-seabreeze) | [![Build Status](https://travis-ci.org/ap--/python-seabreeze.svg?branch=master)](https://travis-ci.org/ap--/python-seabreeze) |
 
 ## SeaBreeze python module ##
 

@@ -1,6 +1,6 @@
 **This software is not associated with Ocean Optics. Use it at your own risk.**
 
-**Info:** If this is not working for you, checkout [python-oceanoptics](https://github.com/ap--/python-oceanoptics).
+**Info:** This python-module replaces [python-oceanoptics](https://github.com/ap--/python-oceanoptics).
 
 windows wheels: [![Build status](https://ci.appveyor.com/api/projects/status/xxoqwq9nnl1if9rr?svg=true)](https://ci.appveyor.com/project/ap--/python-seabreeze)
 

@@ -82,6 +82,47 @@ If you know which backend you want to use, you can skip the installation of the 
    python setup.py install --without-cseabreeze
    ```
 
+### RHEL related distros ###
+
+If you know which backend you want to use, you can skip the installation of the other. cseabreeze is the recommended backend.
+
+1. **cseabreeze backend** requires:
+   ```
+   yum install gcc gcc-c++ make libusb libusb-devel 
+   ```
+   
+   install seabreeze C-library:
+   ```
+   ./misc/install_libseabreeze.sh
+   ```
+
+   Note: this install the library into /usr/local/lib. If cseabreeze can't be loaded try running your python with
+   ```
+   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib python
+   ```
+   if this works, google "add path ldconfig"
+
+2. **pyseabreeze backend** requires _(libusb-0.1-4, or anything supported by pyusb should also work)_:
+   ```
+   yum install python-numpy python-pip
+   pip install pyusb==1.0.0b1
+   ```
+
+3. **both** need the udev rules:
+   ```
+   ./misc/install_udev_rules.sh
+   ```
+
+4. **To install the python module**:
+   ```
+   python setup.py install
+   ```
+
+   Or if you don't want to install the C-library and the cseabreeze backend:
+   ```
+   python setup.py install --without-cseabreeze
+   ```
+
 
 ### Windows ###
 

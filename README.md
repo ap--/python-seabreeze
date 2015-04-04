@@ -96,6 +96,15 @@ On windows you need to install the compiled C library and the python wheel. The 
    pip install <filename of downloaded wheel>
    ```
 
+### OSX ###
+
+Just make sure you have pip installed. Then download the right binary wheel from the releases page and install via:
+
+```
+pip install <filename of downloaded wheel>
+```
+
+
 # Usage #
 
 With seabreeze C backend:

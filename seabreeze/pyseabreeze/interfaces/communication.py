@@ -28,8 +28,11 @@ class USBCommBase(object):
         self.usbtimeout_ms = device.default_timeout
         self._device = device
         self.usb_read = self.usb_read_lowspeed
-        if device.is_kernel_driver_active(0):
-            device.detach_kernel_driver(0)
+        try:  # unavailable on some systems/backends
+            if device.is_kernel_driver_active(0):
+                device.detach_kernel_driver(0)
+        except NotImplementedError:
+            pass
         try:
             device.set_configuration()
         except usb.USBError as usberr:

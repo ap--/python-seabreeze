@@ -126,6 +126,53 @@ If you know which backend you want to use, you can skip the installation of the 
    ```
 
 
+### Archlinux ###
+
+If you know which backend you want to use, you can skip the installation of the other. cseabreeze is the recommended backend.
+
+1. **cseabreeze backend** requires:
+   ```
+   sudo pacman -S base-devel libusb libusb-devel 
+   ```
+   
+   install seabreeze C-library:
+   ```
+   ./misc/install_libseabreeze.sh
+   ```
+
+   Note: this install the library into /usr/local/lib. 
+   Archlinux doesn't include /usr/local/lib into it's searchpath by default, so you have to add it manually:
+   ```
+   sudo echo "/usr/local/lib" > /etc/ld.so.cond.d/seabreeze.conf
+   ```
+
+2. **pyseabreeze backend** requires _pyusb_. It can be installed manually from AUR or by:
+   ```
+    yaourt -S python-pyusb
+   ```
+
+3. **both** need the udev rules:
+   ```
+   ./misc/install_udev_rules.sh
+   ```
+   Also you need to create the _plugdev_ group and add your user to it:
+   ```
+   sudo groupadd plugdev
+   sudo gpasswd -a username plugdev
+   ```
+   
+
+4. **To install the python module**:
+   ```
+   python setup.py install
+   ```
+
+   Or if you don't want to install the C-library and the cseabreeze backend:
+   ```
+   python setup.py install --without-cseabreeze
+   ```
+
+
 ### Windows ###
 
 On windows you need to install the compiled C library and the python wheel. The wheels are compiled with Cython-0.22 against numpy-1.8.2.

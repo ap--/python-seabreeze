@@ -108,6 +108,7 @@ class SpectrometerFeatureOOI(WavelengthCoefficientsEEPromFeature,
         indices = numpy.arange(self._PIXELS, dtype=numpy.float64)
         wlcoeff = self.get_wavelength_coefficients()
         out[:] = sum( wl * (indices**i) for i, wl in enumerate(wlcoeff) )
+        return self._PIXELS
 
     @convert_exceptions("Is the spectrometer initialized?")
     def get_electric_dark_pixel_indices(self):
@@ -338,6 +339,7 @@ class SpectrometerFeatureOBP(USBCommOBP):
         # and generate the wavelength array
         indices = numpy.arange(self._PIXELS, dtype=numpy.float64)
         out[:] = sum( wl * (indices**i) for i, wl in enumerate(coeffs) )
+        return self._PIXELS
 
     @convert_exceptions("Is the spectrometer initialized?")
     def get_electric_dark_pixel_indices(self):
@@ -395,6 +397,7 @@ class SpectrometerFeatureQE65000(SpectrometerFeatureOOIFPGA):
         indices = numpy.arange(-10, self._PIXELS - 10, dtype=numpy.float64)
         wlcoeff = self.get_wavelength_coefficients()
         out[:] = sum( wl * (indices**i) for i, wl in enumerate(wlcoeff) )
+        return self._PIXELS
 
     @convert_exceptions("Error while reading formatted spectrum.")
     def get_formatted_spectrum(self, out):

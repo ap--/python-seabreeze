@@ -245,7 +245,7 @@ def spectrometer_get_wavelengths(SeaBreezeDevice device not None, long featureID
         bytes_written = csb.sbapi_spectrometer_get_wavelengths(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    return
+    return bytes_written
 
 def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None, long featureID):
     assert device.handle >= 0

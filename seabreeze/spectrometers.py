@@ -108,7 +108,12 @@ class Spectrometer(object):
                 lib.spectrometer_get_minimum_integration_time_micros(self._dev, self._fidsp))
         # get wavelengths
         self._wavelengths = numpy.zeros((self._pixels,), dtype=numpy.double)
-        lib.spectrometer_get_wavelengths(self._dev, self._fidsp, self._wavelengths)
+        transfered_N = 0
+        while True:
+            transfered_N += lib.spectrometer_get_wavelengths(self._dev, self._fidsp,
+                                                            self._wavelengths[transfered_N:])
+            if transfered_N >= self._pixels:
+                break
         # get dark pixel indices
         self._dark = lib.spectrometer_get_electric_dark_pixel_indices(self._dev, self._fidsp)
         self._has_dark_pixels = True if self._dark.size > 0 else False

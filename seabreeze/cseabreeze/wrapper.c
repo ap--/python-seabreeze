@@ -6063,7 +6063,7 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_33spectrometer_get_wa
 
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_32spectrometer_get_wavelengths(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, PyArrayObject *__pyx_v_out) {
   int __pyx_v_error_code;
-  CYTHON_UNUSED int __pyx_v_bytes_written;
+  int __pyx_v_bytes_written;
   int __pyx_v_out_length;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_out;
   __Pyx_Buffer __pyx_pybuffer_out;
@@ -6176,7 +6176,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_32spectrometer_get_wa
  *         bytes_written = csb.sbapi_spectrometer_get_wavelengths(device.handle, featureID, &error_code, &out[0], out_length)
  *     if error_code != 0:             # <<<<<<<<<<<<<<
  *         raise SeaBreezeError(error_code=error_code)
- *     return
+ *     return bytes_written
  */
   __pyx_t_4 = ((__pyx_v_error_code != 0) != 0);
   if (__pyx_t_4) {
@@ -6185,7 +6185,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_32spectrometer_get_wa
  *         bytes_written = csb.sbapi_spectrometer_get_wavelengths(device.handle, featureID, &error_code, &out[0], out_length)
  *     if error_code != 0:
  *         raise SeaBreezeError(error_code=error_code)             # <<<<<<<<<<<<<<
- *     return
+ *     return bytes_written
  * 
  */
     __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 247; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -6208,12 +6208,15 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_32spectrometer_get_wa
   /* "seabreeze/cseabreeze/wrapper.pyx":248
  *     if error_code != 0:
  *         raise SeaBreezeError(error_code=error_code)
- *     return             # <<<<<<<<<<<<<<
+ *     return bytes_written             # <<<<<<<<<<<<<<
  * 
  * def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None, long featureID):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_bytes_written); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 248; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
   goto __pyx_L0;
 
   /* "seabreeze/cseabreeze/wrapper.pyx":239
@@ -6245,7 +6248,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_32spectrometer_get_wa
 }
 
 /* "seabreeze/cseabreeze/wrapper.pyx":250
- *     return
+ *     return bytes_written
  * 
  * def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     assert device.handle >= 0
@@ -6654,7 +6657,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_34spectrometer_get_el
   goto __pyx_L0;
 
   /* "seabreeze/cseabreeze/wrapper.pyx":250
- *     return
+ *     return bytes_written
  * 
  * def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     assert device.handle >= 0
@@ -15860,7 +15863,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_codeobj__49 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__48, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_poehlmann_dev_python_seabr, __pyx_n_s_spectrometer_get_wavelengths, 239, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__49)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 239; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "seabreeze/cseabreeze/wrapper.pyx":250
- *     return
+ *     return bytes_written
  * 
  * def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     assert device.handle >= 0
@@ -16623,7 +16626,7 @@ PyMODINIT_FUNC PyInit_wrapper(void)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "seabreeze/cseabreeze/wrapper.pyx":250
- *     return
+ *     return bytes_written
  * 
  * def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     assert device.handle >= 0

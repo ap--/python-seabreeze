@@ -54,7 +54,7 @@ If you know which backend you want to use, you can skip the installation of the 
 
 1. **cseabreeze backend** requires _(cython is optional, the provided C file was generated with 0.21.2)_:
    ```
-   apt-get install build-essential python-numpy libusb-0.1-4 cython
+   apt-get install build-essential python-numpy libusb-0.1-4 libusb-dev cython
    ```
    
    install seabreeze C-library:

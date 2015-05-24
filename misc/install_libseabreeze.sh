@@ -1,7 +1,7 @@
 #!/bin/bash
-SEABREEZE_FILE="seabreeze-3.0.3.tar.bz2"
+SEABREEZE_FILE="seabreeze-3.0.7.zip"
 
-SEABREEZE_FOLDER=$(basename $SEABREEZE_FILE .tar.bz2)
+SEABREEZE_FOLDER=$(basename $SEABREEZE_FILE .zip)
 SEABREEZE_URL="http://sourceforge.net/projects/seabreeze/files/SeaBreeze"
 
 if [ ! -f $SEABREEZE_FILE ]; then
@@ -12,7 +12,7 @@ else
 fi
 
 echo -e "# SEABREEZE: extracting $SEABREEZE_FILE"
-if ! tar xjf $SEABREEZE_FILE; then
+if ! unzip -n $SEABREEZE_FILE; then
     exit 1
 fi
 

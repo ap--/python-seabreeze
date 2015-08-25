@@ -14,11 +14,13 @@ def get_backend():
     if __SEABREEZE_BACKEND == 'cseabreeze':
         b = _use_cseabreeze()
         if b: return b
+        warnings.warn("Falling back to 'pyseabreeze'.")
         b = _use_pyseabreeze()
         if b: return b
     if __SEABREEZE_BACKEND == 'pyseabreeze':
         b = _use_pyseabreeze()
         if b: return b
+        warnings.warn("Falling back to 'cseabreeze'.")
         b = _use_cseabreeze()
         if b: return b
     raise ImportError('Could not import any backends. Wanted "%s"' % __SEABREEZE_BACKEND)
@@ -26,8 +28,8 @@ def get_backend():
 def _use_cseabreeze():
     try:
         import seabreeze.cseabreeze as sbb
-    except ImportError:
-        warnings.warn("Can't load seabreeze c library wrapper. Falling back to pyseabreeze")
+    except ImportError as err:
+        warnings.warn("Can't load seabreeze c library wrapper, because:\n'%s'\n" % err.message )
         return None
     else:
         sbb.initialize()
@@ -36,8 +38,8 @@ def _use_cseabreeze():
 def _use_pyseabreeze():
     try:
         import seabreeze.pyseabreeze as sbb
-    except ImportError as e:
-        warnings.warn("Can't load pyusb wrapper. Falling back to cseabreeze")
+    except ImportError as err:
+        warnings.warn("Can't load pyusb wrapper, because:\n'%s'\n" % err.message )
         return None
     else:
         sbb.initialize()

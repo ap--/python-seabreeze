@@ -45,6 +45,7 @@ It supports all basic spectrometer features (check [this list](seabreeze/pyseabr
 | USB2000PLUS  |     x      |      x      |
 | USB4000      |     x      |      x      |
 | USB650       |            |      x      |
+| SPARK        |     x      |             |
 
 # Installation #
 

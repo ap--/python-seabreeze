@@ -1,8 +1,8 @@
 #!/bin/bash
-SEABREEZE_FILE="seabreeze-3.0.7.zip"
+SEABREEZE_FILE="seabreeze-3.0.10.zip"
 
 SEABREEZE_FOLDER=$(basename $SEABREEZE_FILE .zip)
-SEABREEZE_URL="http://sourceforge.net/projects/seabreeze/files/SeaBreeze"
+SEABREEZE_URL="http://sourceforge.net/projects/seabreeze/files/SeaBreeze/source"
 
 if [ ! -f $SEABREEZE_FILE ]; then
     echo -e "# SEABREEZE: downloading $SEABREEZE_FILE"

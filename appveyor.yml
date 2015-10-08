@@ -5,7 +5,7 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     WITH_COMPILER: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_compiler.cmd"
-    SEABREEZE_VERSION: "3.0.6"
+    SEABREEZE_VERSION: "3.0.10"
 
   matrix:
     - PYTHON: "C:\\Python27"

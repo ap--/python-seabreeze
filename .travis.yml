@@ -2,7 +2,7 @@ language:
 - objective-c
 env:
   global:
-    - NUMPY_VERSION="1.8.2" SEABREEZE_VERSION="3.0.6"
+    - NUMPY_VERSION="1.8.2" SEABREEZE_VERSION="3.0.10"
   matrix:
     - PYTHON_VERSION="2.7" 
     - PYTHON_VERSION="3.3"

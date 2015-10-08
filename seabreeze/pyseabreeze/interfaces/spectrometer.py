@@ -129,9 +129,8 @@ class SpectrometerFeatureOOI2K(SpectrometerFeatureOOI):
         self.get_unformatted_spectrum(tmp)
         # The byte order is different for some models
         tsorted = numpy.empty((self._RAW_SPECTRUM_LEN - 1), dtype=numpy.uint8)
-        N = len(tmp) - 1
-        idx = [(i//2)%64 + (i%2)*64 + (i//(128))*(128) for i in range(N)]
-        tsorted = tmp[idx] & numpy.array((0xFF, 0x0F)*(N/2))  # high nibble not guaranteed to be pulled low
+        idx = [(i//2)%64 + (i%2)*64 + (i//(128))*(128) for i in range(self._RAW_SPECTRUM_LEN-1)]
+        tsorted = tmp[idx] & numpy.array((0xFF, 0x0F)*(self._PIXELS), dtype=numpy.uint8)  # high nibble not guaranteed to be pulled low
         ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tsorted), dtype=numpy.double)
         # sorted and parsed
         out[:] = ret * self._NORMALIZATION_VALUE

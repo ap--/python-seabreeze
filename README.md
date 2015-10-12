@@ -195,6 +195,7 @@ Just make sure you have pip installed. Then download the right binary wheel from
 pip install <filename of downloaded wheel>
 ```
 
+The shared library for the cseabreeze backend is included in this python wheel. No need to compile it yourself.
 
 # Usage #
 

@@ -37,8 +37,8 @@ DarkPixels = {
     'USB650'	  : [],  # ??? unkown
     'HR2000PLUS'  : list(range(2, 24)),
     'QE65000'	  : list(range(0, 4)) + list(range(1040, 1044)),  # as in seabreeze-3.0.5
-    'USB2000PLUS' : list(range(2, 24)),
-    'USB4000'	  : list(range(2, 13)),
+    'USB2000PLUS' : list(range(6, 21)),  # as in seabreeze-3.0.9
+    'USB4000'	  : list(range(5, 16)),  # as in seabreeze-3.0.9
     'NIRQUEST512' : [],
     'NIRQUEST256' : [],
     'MAYA2000PRO' : list(range(0, 4)) + list(range(2064, 2068)),

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install seabreeze lib
-wget https://github.com/ap--/libseabreeze/releases/download/libseabreeze-${SEABREEZE_VERSION}/libseabreeze-libseabreeze-${SEABREEZE_VERSION}.dmg
-hdiutil attach libseabreeze-libseabreeze-${SEABREEZE_VERSION}.dmg
+wget https://github.com/ap--/libseabreeze/releases/download/libseabreeze-${SEABREEZE_VERSION}/libseabreeze-${SEABREEZE_VERSION}.dmg
+hdiutil attach libseabreeze-${SEABREEZE_VERSION}.dmg
 cp /Volumes/lib/libseabreeze.dylib /usr/local/lib
 
 # Install miniconda 
@@ -21,11 +21,11 @@ python --version
 
 # build the wheel
 echo "Building seabreeze-wheel for Python: $PYTHON_VERSION"
-pip install wheel
-pip install delocate
-python setup.py bdist_wheel
+pip install --upgrade wheel
+pip install --upgrade delocate
+ARCHFLAGS="-arch i386 -arch x86_64" python setup.py bdist_wheel
 wfn=$(echo dist/*.whl)
-delocate-wheel --require-archs=intel $wfn
+delocate-wheel --require-archs=intel -v $wfn
 
 # clean up
 source deactivate

@@ -1,106 +1,68 @@
 environment:
 
   global:
-    # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
-    # /E:ON and /V:ON options are not enabled in the batch script intepreter
-    # See: http://stackoverflow.com/a/13751649/163740
-    WITH_COMPILER: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_compiler.cmd"
-    SEABREEZE_VERSION: "3.0.10.2"
+    SEABREEZE: "3.0.10.2"
+    SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library;C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
 
   matrix:
+
+    # For Python versions available on Appveyor, see
+    # http://www.appveyor.com/docs/installed-software#python
+
     - PYTHON: "C:\\Python27"
-      PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "32"
-      WINDOWS_SDK_VERSION: "v7.0"
-      SEABREEZE_ARCH: "x86"
-      SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library"
-      PYTHON_WHEEL_ARCH: "cp27‑none‑win32.whl"
-      PYTHON_WHEEL_BASE: "https://gist.github.com/2de38fa61a615b24a570.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
-
     - PYTHON: "C:\\Python33"
-      PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "32"
-      WINDOWS_SDK_VERSION: "v7.1"
-      SEABREEZE_ARCH: "x86"
-      SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library"
-      PYTHON_WHEEL_ARCH: "cp33‑none‑win32.whl"
-      PYTHON_WHEEL_BASE: "https://gist.github.com/2542285a145b63ec04d8.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
-
     - PYTHON: "C:\\Python34"
-      PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "32"
-      WINDOWS_SDK_VERSION: "v7.1"
-      SEABREEZE_ARCH: "x86"
-      SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library"
-      PYTHON_WHEEL_ARCH: "cp34‑none‑win32.whl"
-      PYTHON_WHEEL_BASE: "https://gist.github.com/0e821e058f299584fbf8.git" 
+      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
+    - PYTHON: "C:\\Python35"
+      PYTHON_ARCH: "32"
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
 
     - PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "64"
-      WINDOWS_SDK_VERSION: "v7.0"
-      SEABREEZE_ARCH: "x64"
-      SEABREEZE_PATH: "C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
-      PYTHON_WHEEL_ARCH: "cp27‑none‑win_amd64.whl"
-      PYTHON_WHEEL_BASE: "https://gist.github.com/861fa89f0c5ea7531ccb.git" 
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
-
     - PYTHON: "C:\\Python33-x64"
-      PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "64"
-      WINDOWS_SDK_VERSION: "v7.1"
-      SEABREEZE_ARCH: "x64"
-      SEABREEZE_PATH: "C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
-      PYTHON_WHEEL_ARCH: "cp33‑none‑win_amd64.whl"
-      PYTHON_WHEEL_BASE: "https://gist.github.com/63f99ecba309a8880dce.git" 
+      DISTUTILS_USE_SDK: "1"
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
-
     - PYTHON: "C:\\Python34-x64"
-      PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "64"
-      WINDOWS_SDK_VERSION: "v7.1"
-      SEABREEZE_ARCH: "x64"
-      SEABREEZE_PATH: "C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
-      PYTHON_WHEEL_ARCH: "cp34‑none‑win_amd64.whl"
-      PYTHON_WHEEL_BASE: "https://gist.github.com/666d9a09d2e0df596ab3.git" 
+      DISTUTILS_USE_SDK: "1"
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
-
-init:
-  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
+    - PYTHON: "C:\\Python35-x64"
+      PYTHON_ARCH: "64"
+      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
 
 install:
-  - "powershell appveyor\\install.ps1"
- 
-  - cmd: git clone %PYTHON_WHEEL_BASE% binblob
-  - cmd: cd binblob
-  - cmd: 7z x binary-wheels.zip
-  - cmd: "%PYTHON%/Scripts/pip.exe install Cython-0.22-%PYTHON_WHEEL_ARCH%"
-  - cmd: "%PYTHON%/Scripts/pip.exe install numpy-1.8.2+mkl-%PYTHON_WHEEL_ARCH%"
-  - cmd: "cd .."
+  # Setup the build environment
+  - "%PYTHON%\\python.exe -m pip install --disable-pip-version-check --user --upgrade pip"
+  - "%PYTHON%\\python.exe -m pip install wheel"
+  - "%PYTHON%\\python.exe -m pip install cython"
 
-  - 'appveyor DownloadFile https://github.com/ap--/libseabreeze/releases/download/libseabreeze-%SEABREEZE_VERSION%/seabreeze-%SEABREEZE_VERSION%-unofficial-Setup%PYTHON_ARCH%.msi -FileName sbsetup.msi'
+  # Install Seabreeze
+  - cmd: echo "Downloading seabreeze-%SEABREEZE%-unofficial-Setup%PYTHON_ARCH%.msi"
+  - "appveyor DownloadFile https://github.com/ap--/libseabreeze/releases/download/libseabreeze-%SEABREEZE%/seabreeze-%SEABREEZE%-unofficial-Setup%PYTHON_ARCH%.msi -FileName sbsetup.msi"
   - cmd: msiexec /i sbsetup.msi /quiet /qn /norestart
 
 build: off
 
 test_script:
-  - "echo 'test'"
+  - "echo 'starting'"
 
 after_test:
-  - '%WITH_COMPILER% %PYTHON%/python setup.py build_ext --library-dirs="%SEABREEZE_PATH%";%WDDK_LIB_PATH%'
-  - "%WITH_COMPILER% %PYTHON%/python setup.py build"
-  - "%WITH_COMPILER% %PYTHON%/python setup.py sdist"
-  - "%WITH_COMPILER% %PYTHON%/python setup.py bdist_wheel"
+  # build_cmd form http://python-packaging-user-guide.readthedocs.org/en/latest/appveyor/
+  - '.\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py build_ext --library-dirs="%SEABREEZE_PATH%;%WDDK_LIB_PATH%"'
+  - ".\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py build"
+  - ".\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py bdist_wheel"
+  - ".\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py bdist_msi"
 
 artifacts:
-  - path: dist\*.whl
+  - path: dist\*
     name: wheel
-
-  - path: dist\*.tar.gz
-    name: source
 
 deploy:
   release: $(appveyor_repo_tag_name)

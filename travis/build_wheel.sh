@@ -11,7 +11,6 @@ get_python_environment macpython $PYTHON_VERSION venv
 pip install --upgrade pip
 pip install --upgrade wheel
 pip install cython
-pip install numpy==$NUMPY_VERSION
 pip install delocate
 python --version
 

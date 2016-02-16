@@ -116,7 +116,7 @@ class Spectrometer(object):
                 break
         # get dark pixel indices
         self._dark = lib.spectrometer_get_electric_dark_pixel_indices(self._dev, self._fidsp)
-        self._has_dark_pixels = True if self._dark.size > 0 else False
+        self._has_dark_pixels = True if len(self._dark) > 0 else False
         # get nonlinearity coefficients
         try:
             sbnc = lib.nonlinearity_coeffs_get(self._dev, self._fidnc)

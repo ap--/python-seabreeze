@@ -35,15 +35,8 @@ else:
         libs = ['seabreeze', 'usb']
 
     # define extension
-    try:
-        import numpy
-    except ImportError:
-        warnings.warn("Installation of cseabreeze backend requires numpy.")
-        exit(1)
-
     extensions = [Extension('seabreeze.cseabreeze.wrapper',
                         ['./seabreeze/cseabreeze/wrapper.%s' % fn_ext],
-                        include_dirs=[numpy.get_include()],
                         libraries=libs,
                       )]
     _extensions = cythonize(extensions)

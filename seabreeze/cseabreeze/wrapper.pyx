@@ -6,10 +6,6 @@ Author: Andreas Poehlmann
 cimport cseabreeze as csb
 
 import cython
-import ctypes
-import numpy as np
-cimport numpy as cnp
-cnp.import_array()
 
 from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 
@@ -203,11 +199,10 @@ def spectrometer_get_formatted_spectrum_length(SeaBreezeDevice device not None, 
     return spec_length
 
 @cython.boundscheck(False)
-def spectrometer_get_formatted_spectrum(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.double_t, ndim=1, mode="c"] out):
-    assert out.dtype == np.double
+def spectrometer_get_formatted_spectrum(SeaBreezeDevice device not None, long featureID, double[::1] out):
     cdef int error_code
     cdef int bytes_written
-    cdef int out_length = len(out)
+    cdef int out_length = out.size
     with nogil:
         bytes_written = csb.sbapi_spectrometer_get_formatted_spectrum(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
@@ -224,11 +219,10 @@ def spectrometer_get_unformatted_spectrum_length(SeaBreezeDevice device not None
     return spec_length
 
 @cython.boundscheck(False)
-def spectrometer_get_unformatted_spectrum(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.uint8_t, ndim=1, mode="c"] out):
-    assert out.dtype == np.ubyte
+def spectrometer_get_unformatted_spectrum(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):
     cdef int error_code
     cdef int bytes_written
-    cdef int out_length = len(out)
+    cdef int out_length = out.size
     with nogil:
         bytes_written = csb.sbapi_spectrometer_get_unformatted_spectrum(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
@@ -236,11 +230,10 @@ def spectrometer_get_unformatted_spectrum(SeaBreezeDevice device not None, long 
     return bytes_written
 
 @cython.boundscheck(False)
-def spectrometer_get_wavelengths(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.double_t, ndim=1, mode="c"] out):
-    assert out.dtype == np.double
+def spectrometer_get_wavelengths(SeaBreezeDevice device not None, long featureID, double[::1] out):
     cdef int error_code
     cdef int bytes_written
-    cdef int out_length = len(out)
+    cdef int out_length = out.size
     with nogil:
         bytes_written = csb.sbapi_spectrometer_get_wavelengths(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
@@ -256,11 +249,12 @@ def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     if dp_count == 0:
-        return np.array([], dtype=np.int)
-    cdef cnp.ndarray[int, ndim=1, mode="c"] indices
-    indices = np.empty((dp_count,), dtype=ctypes.c_int)
+        return []
+    cindices = <int*> PyMem_Malloc(dp_count * sizeof(int))
     with nogil:
-        csb.sbapi_spectrometer_get_electric_dark_pixel_indices(device.handle, featureID, &error_code, &indices[0], dp_count)
+        csb.sbapi_spectrometer_get_electric_dark_pixel_indices(device.handle, featureID, &error_code, &cindices[0], dp_count)
+    indices = [int(cindices[i]) for i in range(dp_count)]
+    PyMem_Free(cindices)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
     return indices
@@ -447,21 +441,19 @@ def device_get_irrad_calibration_feature_id(SeaBreezeDevice device not None):
                 "%d irrad cal features. The code expects it to have 0 or 1. "
                 "Please file a bug report including a description of your device." % N)
 
-def irrad_calibration_read(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.float32_t, ndim=1, mode="c"] out):
-    assert out.dtype == np.float32
+def irrad_calibration_read(SeaBreezeDevice device not None, long featureID, float[::1] out):
     cdef int error_code
     cdef int bytes_written
-    cdef int out_length = len(out)
+    cdef int out_length = out.size
     bytes_written = csb.sbapi_irrad_calibration_read(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
          raise SeaBreezeError(error_code=error_code)
     return bytes_written
 
-def irrad_calibration_write(SeaBreezeDevice device not None, long featureID, cnp.ndarray[cnp.float32_t, ndim=1, mode="c"] out):
-    assert out.dtype == np.float32
+def irrad_calibration_write(SeaBreezeDevice device not None, long featureID, float[::1] out):
     cdef int error_code
     cdef int bytes_written
-    cdef int out_length = len(out)
+    cdef int out_length = out.size
     bytes_written = csb.sbapi_irrad_calibration_write(device.handle, featureID, &error_code, &out[0], out_length)
     if error_code != 0:
          raise SeaBreezeError(error_code=error_code)
@@ -578,12 +570,12 @@ def device_get_nonlinearity_coeffs_feature_id(SeaBreezeDevice device not None):
 def nonlinearity_coeffs_get(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef int values_written
-    cdef cnp.ndarray[cnp.double_t, mode="c"] coeffs
-    coeffs = np.empty((SBMAXBUFLEN,), dtype=np.double)
-    values_written = csb.sbapi_nonlinearity_coeffs_get(device.handle, featureID, &error_code, &coeffs[0], SBMAXBUFLEN)
+    cdef double[SBMAXBUFLEN] ccoeffs
+    values_written = csb.sbapi_nonlinearity_coeffs_get(device.handle, featureID, &error_code, &ccoeffs[0], SBMAXBUFLEN)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    return coeffs[:values_written]
+    coeffs = [float(ccoeffs[i]) for i in range(values_written)]
+    return coeffs
 
 
 def device_get_stray_light_coeffs_feature_id(SeaBreezeDevice device not None):
@@ -608,10 +600,10 @@ def device_get_stray_light_coeffs_feature_id(SeaBreezeDevice device not None):
 def stray_light_coeffs_get(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef int values_written
-    cdef cnp.ndarray[cnp.double_t, mode="c"] coeffs
-    coeffs = np.empty((SBMAXDBUFLEN,), dtype=np.double)
-    values_written = csb.sbapi_stray_light_coeffs_get(device.handle, featureID, &error_code, &coeffs[0], SBMAXDBUFLEN)
+    cdef double[SBMAXDBUFLEN] ccoeffs
+    values_written = csb.sbapi_stray_light_coeffs_get(device.handle, featureID, &error_code, &ccoeffs[0], SBMAXDBUFLEN)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    return coeffs[:values_written]
+    coeffs = [float(ccoeffs[i]) for i in range(values_written)]
+    return coeffs
 

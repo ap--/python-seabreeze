@@ -2,10 +2,11 @@
 import seabreeze.backends
 # get the backend and add some functions/classes to this module
 lib = seabreeze.backends.get_backend()
-# from . import cseabreeze as lib
+
 list_devices = lib.device_list_devices
 SeaBreezeError = lib.SeaBreezeError
 SeaBreezeDevice = lib.SeaBreezeDevice
+
 import numpy
 
 

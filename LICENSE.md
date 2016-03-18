@@ -1,4 +1,4 @@
-Copyright (C) 2012-2014 Andreas Poehlmann       
+Copyright (C) 2012-2016 Andreas Poehlmann       
 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

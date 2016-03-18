@@ -1,30 +1,81 @@
-**This software is not associated with Ocean Optics. Use it at your own risk.**
+# Python module for [OceanOptics](http://www.oceanoptics.com/) spectrometers
 
-**Info:** This python-module replaces [python-oceanoptics](https://github.com/ap--/python-oceanoptics).
+[![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=windows)](https://ci.appveyor.com/project/ap--/python-seabreeze)
+[![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=macosx)](https://travis-ci.org/ap--/python-seabreeze)
+[![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg)]()
+[![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](http://opensource.org/licenses/MIT)
+[![GitHub issues](https://img.shields.io/github/issues/ap--/python-seabreeze.svg)](https://github.com/ap--/python-seabreeze/issues)
+[![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4W26DFASSCE9A)
 
-| windows wheels | osx wheels |
-|:--------------:|:----------:|
-| [![Build status](https://ci.appveyor.com/api/projects/status/xxoqwq9nnl1if9rr?svg=true)](https://ci.appveyor.com/project/ap--/python-seabreeze) | [![Build Status](https://travis-ci.org/ap--/python-seabreeze.svg?branch=master)](https://travis-ci.org/ap--/python-seabreeze) |
+Python-seabreeze is the easy way to access your OceanOptics spectrometers from
+python. It wraps the [SeaBreeze](http://oceanoptics.com/product/seabreeze/)
+library provided by OceanOptics to communicate with the spectrometer. If
+SeaBreeze is not available it can fallback to a pyUSB based reimplementation.
+**This software is not associated with OceanOptics. Use it at your own risk.**
 
-## SeaBreeze python module ##
+## Requirements
 
-This is a python module for [OceanOptics](http://www.oceanoptics.com/) spectrometers. It has two different backends. One is using the [SeaBreeze](http://oceanoptics.com/product/seabreeze/) library, and the other one is going to emulate the seabreeze behaviour using **pyusb**.
+- [NumPy](http://www.numpy.org)
+- One of the backend libraries:
+  - [SeaBreeze - Embedded Open-Source Device Driver](http://oceanoptics.com/products/seabreeze/)
+  - [pyUSB==1.0.0b2](https://walac.github.io/pyusb/) 
 
-## Backends ##
+## Installation
 
-### cseabreeze ###
+Python-seabreeze is available for Python versions _2.7.x_, _3.3.x_, _3.4.x_ and
+_3.5.x_ on all platforms. Before installing the module, you need to decide
+which backend you want to use and install it. Your options are the cseabreeze
+backend (recommended) and the pyseabreeze backend (click
+[here](docs/BACKENDS.md) for more information on the backends).  Please follow
+the installation instructions for your platform.
 
-wraps the [SeaBreeze](http://oceanoptics.com/product/seabreeze/) library with [Cython](http://cython.org). It uses the _SeaBreeze 2.0 API_ ("SeaBreezeAPI.h" instead of "SeaBreezeWrapper.h"). If installed, it is the default backend for **python-seabreeze**.
+* [Linux](docs/LINUX_INSTALL.md)
+* [MacOSX](docs/MACOSX_INSTALL.md)
+* [Windows](docs/WINDOWS_INSTALL.md)
 
-Since the seabreeze-c-library is developed by OceanOptics, it should work nicely with all listed Spectrometers.
+I have confirmation from different people, that this module runs on several
+different Linux distributions, on different OSX versions and on Windows (from
+XP up to 8, I haven't heard from someone who uses 10 yet). It also runs on
+different architectures x86, x64 and arm. The installation instructions
+provided here are detailed enough to get the module up and running. If you
+think that you can't install this module because there is something wrong with
+it, read through the installation instructions again. Then try to look for a
+solution for your problem on the internet at least three times. If nothing
+helped, read the contributing guidelines, file an issue on github and be nice.
+Please note, that I am not an OceanOptics employee and am maintaining this
+module in my free time.
 
-### pyseabreeze ###
 
-is an implementation of **cseabreeze** using [pyusb](https://github.com/walac/pyusb) as a backend. It originated from [python-oceanoptics](https://github.com/ap--/python-oceanoptics). Since it doesn't require compilation, it's easily installable on any system.
+## Usage
 
-It supports all basic spectrometer features (check [this list](seabreeze/pyseabreeze/TODO.md) for what works and what doesn't.)
+The following example shows how simple it is to acquire a spectrum with
+python-seabreeze through the model independent _Spectrometer_ class. For a more
+detailed description read the [documentation](docs/DOCUMENTATION.md).:
 
-### Supported Devices: ###
+```{python}
+>>> import seabreeze.spectrometers as sb
+>>> devices = sb.list_devices()
+>>> print devices
+[<SeaBreezeDevice USB2000PLUS:USB2+H02749>, <SeaBreezeDevice USB2000PLUS:USB2+H02751>]
+>>> spec = sb.Spectrometer(devices[0])
+>>> spec.integration_time_micros(12000)
+>>> spec.wavelengths()
+array([  340.32581   ,   340.70321186,   341.08058305, ...,  1024.84940994,
+        1025.1300678 ,  1025.4106617 ])
+>>> spec.intensities()
+array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
+         6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
+```
+
+To use the pyseabreeze backend simply run this before importing seabreeze.spectrometers:
+
+```{python}
+>>> import seabreeze
+>>> seabreeze.use('pyseabreeze')
+>>> import seabreeze.spectrometers as sb
+```
+
+## Supported Devices
 
 | Spectrometer | cseabreeze | pyseabreeze |
 |:-------------|:----------:|:-----------:|
@@ -47,231 +98,23 @@ It supports all basic spectrometer features (check [this list](seabreeze/pyseabr
 | USB650       |            |      x      |
 | SPARK        |     x      |             |
 
-# Installation #
 
-### Ubuntu 12.04 (and probably all other debian based distros) ###
+## Contributing Guidelines
 
-If you know which backend you want to use, you can skip the installation of the other. cseabreeze is the recommended backend.
+If you run into any problems, file an issue and be sure to include the
+following in your report:
 
-1. **cseabreeze backend** requires _(cython is optional, the provided C file was generated with 0.21.2)_:
-   ```
-   apt-get install build-essential python-numpy libusb-0.1-4 libusb-dev cython
-   ```
-   
-   install seabreeze C-library:
-   ```
-   ./misc/install_libseabreeze.sh
-   ```
+- Operating system (Linux distribution, Windows version, OSX version) and
+  archictecture (32bit, 64bit, arm)
+- Python version and arch (i.e. Python 2.7.10 64bit)
+- python-seabreeze version
 
-2. **pyseabreeze backend** requires _(libusb-0.1-4, or anything supported by pyusb should also work)_:
-   ```
-   apt-get install python-numpy python-pip libusb-1.0-0
-   pip install pyusb==1.0.0b1
-   ```
+If you want a feature implemented, please file an issue, or create a pull
+request when you implement it yourself. And if you would like to support me via
+paypal, click on the paypal donate button on top of this README.
 
-
-3. **both** need the udev rules:
-   ```
-   ./misc/install_udev_rules.sh
-   ```
-
-4. **To install the python module**:
-   ```
-   python setup.py install
-   ```
-
-   Or if you don't want to install the C-library and the cseabreeze backend:
-   ```
-   python setup.py install --without-cseabreeze
-   ```
-
-### RHEL related distros ###
-
-If you know which backend you want to use, you can skip the installation of the other. cseabreeze is the recommended backend.
-
-1. **cseabreeze backend** requires:
-   ```
-   yum install gcc gcc-c++ make libusb libusb-devel 
-   ```
-   
-   install seabreeze C-library:
-   ```
-   ./misc/install_libseabreeze.sh
-   ```
-
-   Note: this install the library into /usr/local/lib. If cseabreeze can't be loaded try running your python with
-   ```
-   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib python
-   ```
-   if this works, google "add path ldconfig"
-
-2. **pyseabreeze backend** requires _(libusb-0.1-4, or anything supported by pyusb should also work)_:
-   ```
-   yum install python-numpy python-pip
-   pip install pyusb==1.0.0b1
-   ```
-
-3. **both** need the udev rules:
-   ```
-   ./misc/install_udev_rules.sh
-   ```
-
-4. **To install the python module**:
-   ```
-   python setup.py install
-   ```
-
-   Or if you don't want to install the C-library and the cseabreeze backend:
-   ```
-   python setup.py install --without-cseabreeze
-   ```
-
-
-### Archlinux ###
-
-If you know which backend you want to use, you can skip the installation of the other. cseabreeze is the recommended backend.
-
-1. **cseabreeze backend** requires:
-   ```
-   sudo pacman -S base-devel libusb libusb-devel 
-   ```
-   
-   install seabreeze C-library:
-   ```
-   ./misc/install_libseabreeze.sh
-   ```
-
-   Note: this install the library into /usr/local/lib. 
-   Archlinux doesn't include /usr/local/lib into it's searchpath by default, so you have to add it manually:
-   ```
-   sudo echo "/usr/local/lib" > /etc/ld.so.cond.d/seabreeze.conf
-   ```
-
-2. **pyseabreeze backend** requires _pyusb_. It can be installed manually from AUR or by:
-   ```
-    yaourt -S python-pyusb
-   ```
-
-3. **both** need the udev rules:
-   ```
-   ./misc/install_udev_rules.sh
-   ```
-   Also you need to create the _plugdev_ group and add your user to it:
-   ```
-   sudo groupadd plugdev
-   sudo gpasswd -a username plugdev
-   ```
-   
-
-4. **To install the python module**:
-   ```
-   python setup.py install
-   ```
-
-   Or if you don't want to install the C-library and the cseabreeze backend:
-   ```
-   python setup.py install --without-cseabreeze
-   ```
-
-
-### Windows ###
-
-On windows you need to install the compiled C library and the python wheel. The wheels are compiled with Cython-0.22 against numpy-1.8.2.
-
-1. Download and install the correct prebuilt libseabreeze installer from [here](https://github.com/ap--/libseabreeze/releases). **These installers are UNOFFICIAL!**
-
-2. Make sure you have pip installed: ([how-to-install-pip-on-windows](http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows))
-
-3. Then download the correct python-seabreeze wheel from this repository ([here](https://github.com/ap--/python-seabreeze/releases)) and install via
-   ```
-   pip install <filename of downloaded wheel>
-   ```
-
-### OSX ###
-
-Just make sure you have pip installed. Then download the right binary wheel from the releases page and install via:
-
-```
-pip install <filename of downloaded wheel>
-```
-
-The shared library for the cseabreeze backend is included in this python wheel. No need to compile it yourself.
-
-# Usage #
-
-With seabreeze C backend:
-
-```{python}
->>> import seabreeze.spectrometers as sb
->>> devices = sb.list_devices()
->>> print devices
-[<SeaBreezeDevice USB2000PLUS:USB2+H02749>, <SeaBreezeDevice USB2000PLUS:USB2+H02751>]
->>> spec = sb.Spectrometer(devices[0])
->>> spec.serial_number
-'USB2+H02751'
->>> spec.model
-'USB2000PLUS'
->>> spec.integration_time_microsec(12000)
->>> spec.wavelengths()
-array([  340.32581   ,   340.70321186,   341.08058305, ...,  1024.84940994,
-        1025.1300678 ,  1025.4106617 ])
->>> spec.intensities()
-array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
-         6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
->>>
-```
-
-For the pyusb seabreeze backend, you only need to run **use** before importing **seabreeze.spectrometers** (this is WIP):
-
-```{python}
->>> import seabreeze
->>> seabreeze.use('pyseabreeze')
->>> import seabreeze.spectrometers as sb
->>>
-```
-
-### Interface: ###
-
-Currently there is almost no documentation of the module, sorry... Look at the Spectrometer class in [spectrometers.py](seabreeze/spectrometers.py). This is the class interface for any spectrometer:
-```{python}
-
-class Spectrometer(object):
-    def __init__(self, device):
-    @classmethod
-    def from_serial_number(cls, serial=None):
-    def wavelengths(self):
-    def intensities(self, correct_dark_counts=False, correct_nonlinearity=False):
-    def spectrum(self, correct_dark_counts=False, correct_nonlinearity=False):
-    def integration_time_micros(self, integration_time_micros):
-    def trigger_mode(self, mode):
-    @property
-    def serial_number(self):
-    @property
-    def model(self):
-    @property
-    def pixels(self):
-    @property
-    def minimum_integration_time_micros(self):
-    @property
-    def light_sources(self):
-    def eeprom_read_slot(self, slot):
-    def tec_set_enable(self, enable):
-    def tec_set_temperature_C(self, set_point_C):
-    def tec_get_temperature_C(self):
-    def lamp_set_enable(self, enable):
-    def shutter_set_open(self, state):
-    def stray_light_coeffs(self):
-    def irrad_calibration(self):
-    def irrad_calibration_collection_area(self):
-    def continuous_strobe_set_enable(self, enable):
-    def continuous_strobe_set_period_micros(self, period_micros):
-    def close(self):
-```
-
-# Contributing #
-
-If you own any of the spectrometers, run on a different setup (Windows, MacOS, different Linux distribution, or a different Architecture) and it works for you, or doesn't: feel free to write me a mail, so that I can update the supported list or help. Also feel free to file issues or pull requests on github.
-
-# License #
+ 
+## License
 
 Files in this repository are released under the [MIT license](LICENSE.md).
+

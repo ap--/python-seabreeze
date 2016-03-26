@@ -41,7 +41,7 @@ install:
   # Setup the build environment
   - "%PYTHON%\\python.exe -m pip install --disable-pip-version-check --user --upgrade pip"
   - "%PYTHON%\\python.exe -m pip install wheel"
-  - "%PYTHON%\\python.exe -m pip install cython"
+  - "%PYTHON%\\python.exe -m pip install cython==0.23.4"
 
   # Install Seabreeze
   - cmd: echo "Downloading seabreeze-%SEABREEZE%-unofficial-Setup%PYTHON_ARCH%.msi"

@@ -88,7 +88,7 @@ pip install .
 or if you do not want to build the cseabreeze wrapper:
 
 ```
-python setup.py install --without-seabreeze
+python setup.py install --without-cseabreeze
 ```
 
 You made it. Congratulations.

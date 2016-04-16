@@ -52,7 +52,7 @@ You need to get pyUSB up and running. Check if your distributions package manage
 has a pyusb packaged first. If not:
 
 ```
-pip install pyusb==1.0.0b1
+pip install pyusb==1.0.0b2
 ```
 
 If it is correctly installed, you should be able to run

@@ -5,7 +5,7 @@ env:
     - NUMPY_VERSION="1.8.2" SEABREEZE_VERSION="3.0.10.2"
   matrix:
     - PYTHON_VERSION="2.7.11" 
-    - PYTHON_VERSION="3.3.6"
+    - PYTHON_VERSION="3.3.5"
     - PYTHON_VERSION="3.4.4"
     - PYTHON_VERSION="3.5.1"
 install: source travis/build_wheel.sh

@@ -29,7 +29,7 @@ def _use_cseabreeze():
     try:
         import seabreeze.cseabreeze as sbb
     except ImportError as err:
-        warnings.warn("Can't load seabreeze c library wrapper, because:\n'%s'\n" % err.message )
+        warnings.warn("Can't load seabreeze c library wrapper, because:\n'%s'\n" % str(err) )
         return None
     else:
         sbb.initialize()
@@ -39,7 +39,7 @@ def _use_pyseabreeze():
     try:
         import seabreeze.pyseabreeze as sbb
     except ImportError as err:
-        warnings.warn("Can't load pyusb wrapper, because:\n'%s'\n" % err.message )
+        warnings.warn("Can't load pyusb wrapper, because:\n'%s'\n" % str(err) )
         return None
     else:
         sbb.initialize()

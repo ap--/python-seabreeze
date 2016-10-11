@@ -5,7 +5,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg)]()
 [![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](http://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/ap--/python-seabreeze.svg)](https://github.com/ap--/python-seabreeze/issues)
-[![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4W26DFASSCE9A)
+[![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg)](https://paypal.me/apoehlmann)
 
 Python-seabreeze is the easy way to access your OceanOptics spectrometers from
 python. It wraps the [SeaBreeze](http://oceanoptics.com/product/seabreeze/)

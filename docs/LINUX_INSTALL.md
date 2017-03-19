@@ -98,7 +98,6 @@ Note: If you want to build cseabreeze，you should install Cython.
 ```
 pip install cython
 ```
-
 ## Common problems
 
 #### python-seabreeze can't find my spectrometer

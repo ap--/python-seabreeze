@@ -189,6 +189,7 @@ def spectrometer_get_minimum_integration_time_micros(SeaBreezeDevice device not 
         raise SeaBreezeError(error_code=error_code)
     return min_integration_time
 
+    
 def spectrometer_get_formatted_spectrum_length(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef int spec_length
@@ -607,3 +608,55 @@ def stray_light_coeffs_get(SeaBreezeDevice device not None, long featureID):
     coeffs = [float(ccoeffs[i]) for i in range(values_written)]
     return coeffs
 
+# wrapper for spectrum processing features
+
+def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
+    cdef int N
+    cdef int error_code
+    cdef long featureID
+    N = csb.sbapi_get_number_of_spectrum_processing_features(device.handle, &error_code)
+    if error_code != 0:
+        raise SeaBreezeError(error_code=error_code)
+    if N == 0:
+        return []
+    elif N == 1:
+        csb.sbapi_get_spectrum_processing_features(device.handle, &error_code, &featureID, 1)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return [featureID]
+    else:  
+        raise SeaBreezeError("This should not have happened. Apparently this device has "
+                "%d tec features. The code expects it to have 0 or 1. "
+                "Please file a bug report including a description of your device." % N)
+
+def spectrometer_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
+    cdef int error_code
+    with nogil:
+        csb.sbapi_spectrum_processing_boxcar_width_set(device.handle, featureID, &error_code, boxcar_width)
+    if error_code != 0:
+        raise SeaBreezeError(error_code=error_code)
+    
+def spectrometer_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
+    cdef int error_code
+    with nogil:
+        csb.sbapi_spectrum_processing_scans_to_average_set(device.handle, featureID, &error_code, scans_to_average)
+    if error_code != 0:
+        raise SeaBreezeError(error_code=error_code)
+
+def spectrometer_get_boxcar_width(SeaBreezeDevice device not None, long featureID):
+    cdef unsigned char boxcar_width
+    cdef int error_code
+    with nogil:
+        boxcar_width = csb.sbapi_spectrum_processing_boxcar_width_get(device.handle, featureID, &error_code)
+    if boxcar_width < 0:
+        raise SeaBreezeError(error_code=error_code)
+    return boxcar_width   
+
+def spectrometer_get_scans_to_average(SeaBreezeDevice device not None, long featureID):
+    cdef unsigned short int scans_to_average
+    cdef int error_code
+    with nogil:
+        scans_to_average = csb.sbapi_spectrum_processing_scans_to_average_get(device.handle, featureID, &error_code)
+    if scans_to_average < 1:
+        raise SeaBreezeError(error_code=error_code)
+    return scans_to_average

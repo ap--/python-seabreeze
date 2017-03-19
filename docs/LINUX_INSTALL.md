@@ -93,7 +93,11 @@ python setup.py install --without-cseabreeze
 
 You made it. Congratulations.
 
+Note: If you want to build cseabreeze，you should install Cython.
 
+```
+pip install cython
+```
 ## Common problems
 
 #### python-seabreeze can't find my spectrometer

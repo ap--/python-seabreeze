@@ -168,12 +168,14 @@ class Spectrometer(object):
         lib.spectrometer_set_integration_time_micros(self._dev,
                                                      self._fidsp, integration_time_micros)
 
+    def trigger_mode(self, mode):
+        lib.spectrometer_set_trigger_mode(self._dev, self._fidsp, mode)
+        
     def boxcar_width(self, boxcar_width):
         lib.spectrometer_set_boxcar_width(self._dev, self._fidspp, boxcar_width)
 
     def scans_to_average(self, scans_to_average):
         lib.spectrometer_set_scans_to_average(self._dev, self._fidspp, scans_to_average)
-
 
     @property
     def serial_number(self):

@@ -103,7 +103,7 @@ class Spectrometer(object):
         self._fidte = feature.add('tec')
         self._fidnc = feature.add('nonlinearity_coeffs')  # Added
         self._fidsl = feature.add('stray_light_coeffs')
-        self._fidspp = feature.add('spectrum_processing')
+        self._fidspp = feature.add('spectrum_processing') # Not implemented in pyseabreeze
         # get additional information
         self._pixels = lib.spectrometer_get_formatted_spectrum_length(self._dev, self._fidsp)
         self._minimum_integration_time_micros = (
@@ -170,12 +170,19 @@ class Spectrometer(object):
 
     def trigger_mode(self, mode):
         lib.spectrometer_set_trigger_mode(self._dev, self._fidsp, mode)
-        
+
     def boxcar_width(self, boxcar_width):
-        lib.spectrometer_set_boxcar_width(self._dev, self._fidspp, boxcar_width)
+        lib.spectrum_processing_set_boxcar_width(self._dev, self._fidspp, boxcar_width) # Not implemented in pyseabreeze
 
     def scans_to_average(self, scans_to_average):
-        lib.spectrometer_set_scans_to_average(self._dev, self._fidspp, scans_to_average)
+        lib.spectrum_processing_set_scans_to_average(self._dev, self._fidspp, scans_to_average) # Not implemented in pyseabreeze
+
+    def get_boxcar_width(self):
+        lib.spectrum_processing_get_boxcar_width(self._dev, self._fidspp) # Not implemented in pyseabreeze
+
+    def get_scans_to_average(self):
+        lib.spectrum_processing_get_scans_to_average(self._dev, self._fidspp) # Not implemented in pyseabreeze
+
 
     @property
     def serial_number(self):

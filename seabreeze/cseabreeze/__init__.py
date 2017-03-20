@@ -54,7 +54,7 @@ from .wrapper import (SeaBreezeError,
                       nonlinearity_coeffs_get,
                       stray_light_coeffs_get,
                       device_get_spectrum_processing_feature_id,
-                      spectrometer_set_boxcar_width,
-                      spectrometer_set_scans_to_average,
-                      spectrometer_get_boxcar_width,
-                      spectrometer_get_scans_to_average)
+                      spectrum_processing_set_boxcar_width,
+                      spectrum_processing_set_scans_to_average,
+                      spectrum_processing_get_boxcar_width,
+                      spectrum_processing_get_scans_to_average)

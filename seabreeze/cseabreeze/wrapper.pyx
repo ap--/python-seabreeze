@@ -624,7 +624,7 @@ def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
         return [featureID]
     else:
         raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d tec features. The code expects it to have 0 or 1. "
+                "%d spectrum_processing features. The code expects it to have 0 or 1. "
                 "Please file a bug report including a description of your device." % N)
 
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):

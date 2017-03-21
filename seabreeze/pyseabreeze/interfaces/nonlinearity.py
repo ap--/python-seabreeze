@@ -17,7 +17,8 @@ class NonlinearityCoefficientsEEPromFeature(EEPromFeature):
     def get_nonlinearity_coeffs(self):
         # The spectrometers store the wavelength calibration in slots 6..13
         coeffs = []
-        for i in range(6, 14):
+        order = int(float(self.read_eeprom_slot(14)))
+        for i in range(6, 6 + order + 1):
             coeffs.append(float(self.read_eeprom_slot(i)))
         return coeffs
 

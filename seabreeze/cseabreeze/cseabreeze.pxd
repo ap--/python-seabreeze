@@ -25,8 +25,6 @@ cdef extern:
     void sbapi_spectrometer_set_trigger_mode(long deviceID, long featureID, int *error_code, int mode) nogil
     void sbapi_spectrometer_set_integration_time_micros(long deviceID, long featureID, int *error_code, unsigned long integration_time_micros) nogil
     long sbapi_spectrometer_get_minimum_integration_time_micros(long deviceID, long featureID, int *error_code) nogil
-
-
     int sbapi_spectrometer_get_formatted_spectrum_length(long deviceID, long featureID, int *error_code) nogil
     int sbapi_spectrometer_get_formatted_spectrum(long deviceID, long featureID, int *error_code, double* buffer, int buffer_length) nogil
     int sbapi_spectrometer_get_unformatted_spectrum_length(long deviceID, long featureID, int *error_code) nogil
@@ -83,8 +81,6 @@ cdef extern:
     int sbapi_get_number_of_stray_light_coeffs_features(long deviceID, int *error_code)
     int sbapi_get_stray_light_coeffs_features(long deviceID, int *error_code, long *features, int max_features)
     int sbapi_stray_light_coeffs_get(long deviceID, long featureID, int *error_code, double *buffer, int max_length)
-
-    # wrapper for spectrum processing features
 
     int sbapi_get_number_of_spectrum_processing_features(long deviceID, int *error_code)
     int sbapi_get_spectrum_processing_features(long deviceID, int *error_code, long *features, int max_features)

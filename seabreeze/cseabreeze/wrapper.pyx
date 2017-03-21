@@ -189,7 +189,6 @@ def spectrometer_get_minimum_integration_time_micros(SeaBreezeDevice device not 
         raise SeaBreezeError(error_code=error_code)
     return min_integration_time
 
-    
 def spectrometer_get_formatted_spectrum_length(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef int spec_length
@@ -608,7 +607,6 @@ def stray_light_coeffs_get(SeaBreezeDevice device not None, long featureID):
     coeffs = [float(ccoeffs[i]) for i in range(values_written)]
     return coeffs
 
-# wrapper for spectrum processing features
 
 def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
     cdef int N
@@ -624,7 +622,7 @@ def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return [featureID]
-    else:  
+    else:
         raise SeaBreezeError("This should not have happened. Apparently this device has "
                 "%d tec features. The code expects it to have 0 or 1. "
                 "Please file a bug report including a description of your device." % N)
@@ -635,7 +633,7 @@ def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long f
         csb.sbapi_spectrum_processing_boxcar_width_set(device.handle, featureID, &error_code, boxcar_width)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-    
+
 def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
     cdef int error_code
     with nogil:
@@ -650,7 +648,7 @@ def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long f
         boxcar_width = csb.sbapi_spectrum_processing_boxcar_width_get(device.handle, featureID, &error_code)
     if boxcar_width < 0:
         raise SeaBreezeError(error_code=error_code)
-    return boxcar_width   
+    return boxcar_width
 
 def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):
     cdef unsigned short int scans_to_average

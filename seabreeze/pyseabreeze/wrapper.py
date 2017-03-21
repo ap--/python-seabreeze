@@ -293,18 +293,17 @@ def stray_light_coeffs_get(device, has_feature):
     raise NotImplementedError
 
 # SPECTRUM PROCESSING
-
 def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
     raise NotImplementedError
 
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
     raise NotImplementedError
-    
+
 def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
     raise NotImplementedError
 
 def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):
-    raise NotImplementedError  
+    raise NotImplementedError
 
 def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):
     raise NotImplementedError

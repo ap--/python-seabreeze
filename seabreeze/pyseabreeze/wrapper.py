@@ -294,7 +294,7 @@ def stray_light_coeffs_get(device, has_feature):
 
 # SPECTRUM PROCESSING
 def device_get_spectrum_processing_feature_id(device):
-    raise device.interface.has_spectrum_processing_feature()
+    return device.interface.has_spectrum_processing_feature()
 
 def spectrum_processing_set_boxcar_width(device, has_feature, boxcar_width):
     if not has_feature:

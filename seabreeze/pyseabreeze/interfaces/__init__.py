@@ -25,6 +25,7 @@ from .wavelength import WavelengthCoefficientsEEPromFeature
 from .eeprom import EEPromFeature
 from .thermoelectric import ThermoElectricFeatureOOI, ThermoElectricFeatureOBP
 from .nonlinearity import NonlinearityCoefficientsEEPromFeature, NonlinearityCoefficientsOBPFeature
+from .spectrumprocessing import SpectrumProcessingFeatureOBP
 from .defines import EndPoints
 from .common import (
                       NotImplementedWrapper,
@@ -276,6 +277,7 @@ class JAZ(SpectrometerFeatureJAZ,
 
 class STS(SpectrometerFeatureSTS,
              NonlinearityCoefficientsOBPFeature,
+             SpectrumProcessingFeatureOBP,
              NoEEPromFeature,
              NoShutterFeature,
              NoTecFeature,

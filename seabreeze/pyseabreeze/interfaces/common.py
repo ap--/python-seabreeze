@@ -54,6 +54,8 @@ class NotImplementedWrapper(object):
         return [False]
     def has_stray_light_feature(self):
         return [False]
+    def has_spectrum_processing_feature(self):
+        return [False]
 
     def open_spectrometer(self):
         raise NotImplementedError

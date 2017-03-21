@@ -293,17 +293,25 @@ def stray_light_coeffs_get(device, has_feature):
     raise NotImplementedError
 
 # SPECTRUM PROCESSING
-def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
+def device_get_spectrum_processing_feature_id(device):
+    raise device.interface.has_spectrum_processing_feature()
+
+def spectrum_processing_set_boxcar_width(device, has_feature, boxcar_width):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
     raise NotImplementedError
 
-def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
+def spectrum_processing_set_scans_to_average(device, has_feature, scans_to_average):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
     raise NotImplementedError
 
-def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
+def spectrum_processing_get_boxcar_width(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
     raise NotImplementedError
 
-def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):
-    raise NotImplementedError
-
-def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):
+def spectrum_processing_get_scans_to_average(device, has_feature):
+    if not has_feature:
+        raise SeaBreezeError("Error: No such feature on device")
     raise NotImplementedError

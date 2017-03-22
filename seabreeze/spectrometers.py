@@ -165,8 +165,18 @@ class Spectrometer(object):
                              self.intensities(correct_dark_counts, correct_nonlinearity)))
 
     def integration_time_micros(self, integration_time_micros):
-        lib.spectrometer_set_integration_time_micros(self._dev,
-                                                     self._fidsp, integration_time_micros)
+        # Protect against a bug in libseabreeze:
+        # If integration time is out of bounds, libseabreeze returns Undefined Error
+        # (Probably only for devices with a non micro second time base...)
+        try:
+            lib.spectrometer_set_integration_time_micros(self._dev,
+                                                         self._fidsp, integration_time_micros)
+        except SeaBreezeError as e:
+            if getattr(e, 'error_code', None) == 1:
+                # Only replace if 'Undefined Error'
+                raise SeaBreezeError("FIX: Specified integration time is out of range.")
+            else:
+                raise e
 
     def trigger_mode(self, mode):
         lib.spectrometer_set_trigger_mode(self._dev, self._fidsp, mode)

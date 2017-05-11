@@ -1830,9 +1830,9 @@ static const char __pyx_k_continuous_strobe_set_period_mic[] = "continuous_strob
 static const char __pyx_k_device_get_continuous_strobe_fea[] = "device_get_continuous_strobe_feature_id";
 static const char __pyx_k_device_get_irrad_calibration_fea[] = "device_get_irrad_calibration_feature_id";
 static const char __pyx_k_device_get_nonlinearity_coeffs_f[] = "device_get_nonlinearity_coeffs_feature_id";
+static const char __pyx_k_device_get_raw_usb_bus_access_fe[] = "device_get_raw_usb_bus_access_feature_id";
 static const char __pyx_k_device_get_spectrum_processing_f[] = "device_get_spectrum_processing_feature_id";
 static const char __pyx_k_device_get_stray_light_coeffs_fe[] = "device_get_stray_light_coeffs_feature_id";
-static const char __pyx_k_device_get_usb_bus_access_featur[] = "device_get_usb_bus_access_feature_id";
 static const char __pyx_k_got_differing_extents_in_dimensi[] = "got differing extents in dimension %d (got %d and %d)";
 static const char __pyx_k_irrad_calibration_has_collection[] = "irrad_calibration_has_collection_area";
 static const char __pyx_k_irrad_calibration_read_collectio[] = "irrad_calibration_read_collection_area";
@@ -1930,13 +1930,13 @@ static PyObject *__pyx_n_s_device_get_lamp_feature_id;
 static PyObject *__pyx_n_s_device_get_light_source_feature;
 static PyObject *__pyx_n_s_device_get_model;
 static PyObject *__pyx_n_s_device_get_nonlinearity_coeffs_f;
+static PyObject *__pyx_n_s_device_get_raw_usb_bus_access_fe;
 static PyObject *__pyx_n_s_device_get_serial_number;
 static PyObject *__pyx_n_s_device_get_shutter_feature_id;
 static PyObject *__pyx_n_s_device_get_spectrometer_feature;
 static PyObject *__pyx_n_s_device_get_spectrum_processing_f;
 static PyObject *__pyx_n_s_device_get_stray_light_coeffs_fe;
 static PyObject *__pyx_n_s_device_get_tec_feature_id;
-static PyObject *__pyx_n_s_device_get_usb_bus_access_featur;
 static PyObject *__pyx_n_s_device_is_open;
 static PyObject *__pyx_n_s_device_list_devices;
 static PyObject *__pyx_n_s_device_open;
@@ -2122,7 +2122,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_92nonlinearity_coeffs
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_94device_get_stray_light_coeffs_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_96stray_light_coeffs_get(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID); /* proto */
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_98device_get_spectrum_processing_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_usb_bus_access_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_raw_usb_bus_access_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, __Pyx_memviewslice __pyx_v_out); /* proto */
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_usb_read(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, __Pyx_memviewslice __pyx_v_read); /* proto */
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processing_set_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned char __pyx_v_boxcar_width); /* proto */
@@ -14348,20 +14348,20 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_98device_get_spectrum
 /* "seabreeze/cseabreeze/wrapper.pyx":632
  * 
  * 
- * def device_get_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ * def device_get_raw_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
  *     cdef int N
  *     cdef int error_code
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_101device_get_usb_bus_access_feature_id(PyObject *__pyx_self, PyObject *__pyx_v_device); /*proto*/
-static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_101device_get_usb_bus_access_feature_id = {"device_get_usb_bus_access_feature_id", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_101device_get_usb_bus_access_feature_id, METH_O, 0};
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_101device_get_usb_bus_access_feature_id(PyObject *__pyx_self, PyObject *__pyx_v_device) {
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_101device_get_raw_usb_bus_access_feature_id(PyObject *__pyx_self, PyObject *__pyx_v_device); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_101device_get_raw_usb_bus_access_feature_id = {"device_get_raw_usb_bus_access_feature_id", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_101device_get_raw_usb_bus_access_feature_id, METH_O, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_101device_get_raw_usb_bus_access_feature_id(PyObject *__pyx_self, PyObject *__pyx_v_device) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("device_get_usb_bus_access_feature_id (wrapper)", 0);
+  __Pyx_RefNannySetupContext("device_get_raw_usb_bus_access_feature_id (wrapper)", 0);
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 632, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_usb_bus_access_feature_id(__pyx_self, ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)__pyx_v_device));
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_raw_usb_bus_access_feature_id(__pyx_self, ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)__pyx_v_device));
 
   /* function exit code */
   goto __pyx_L0;
@@ -14372,7 +14372,7 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_101device_get_usb_bus
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_usb_bus_access_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device) {
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_raw_usb_bus_access_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device) {
   int __pyx_v_N;
   int __pyx_v_error_code;
   long __pyx_v_featureID;
@@ -14384,7 +14384,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_usb_bus
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("device_get_usb_bus_access_feature_id", 0);
+  __Pyx_RefNannySetupContext("device_get_raw_usb_bus_access_feature_id", 0);
 
   /* "seabreeze/cseabreeze/wrapper.pyx":637
  *     cdef long featureID
@@ -14636,7 +14636,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_usb_bus
   /* "seabreeze/cseabreeze/wrapper.pyx":632
  * 
  * 
- * def device_get_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ * def device_get_raw_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
  *     cdef int N
  *     cdef int error_code
  */
@@ -14648,7 +14648,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_usb_bus
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_get_usb_bus_access_feature_id", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_get_raw_usb_bus_access_feature_id", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -28419,13 +28419,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_device_get_light_source_feature, __pyx_k_device_get_light_source_feature, sizeof(__pyx_k_device_get_light_source_feature), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_model, __pyx_k_device_get_model, sizeof(__pyx_k_device_get_model), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_nonlinearity_coeffs_f, __pyx_k_device_get_nonlinearity_coeffs_f, sizeof(__pyx_k_device_get_nonlinearity_coeffs_f), 0, 0, 1, 1},
+  {&__pyx_n_s_device_get_raw_usb_bus_access_fe, __pyx_k_device_get_raw_usb_bus_access_fe, sizeof(__pyx_k_device_get_raw_usb_bus_access_fe), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_serial_number, __pyx_k_device_get_serial_number, sizeof(__pyx_k_device_get_serial_number), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_shutter_feature_id, __pyx_k_device_get_shutter_feature_id, sizeof(__pyx_k_device_get_shutter_feature_id), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_spectrometer_feature, __pyx_k_device_get_spectrometer_feature, sizeof(__pyx_k_device_get_spectrometer_feature), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_spectrum_processing_f, __pyx_k_device_get_spectrum_processing_f, sizeof(__pyx_k_device_get_spectrum_processing_f), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_stray_light_coeffs_fe, __pyx_k_device_get_stray_light_coeffs_fe, sizeof(__pyx_k_device_get_stray_light_coeffs_fe), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_tec_feature_id, __pyx_k_device_get_tec_feature_id, sizeof(__pyx_k_device_get_tec_feature_id), 0, 0, 1, 1},
-  {&__pyx_n_s_device_get_usb_bus_access_featur, __pyx_k_device_get_usb_bus_access_featur, sizeof(__pyx_k_device_get_usb_bus_access_featur), 0, 0, 1, 1},
   {&__pyx_n_s_device_is_open, __pyx_k_device_is_open, sizeof(__pyx_k_device_is_open), 0, 0, 1, 1},
   {&__pyx_n_s_device_list_devices, __pyx_k_device_list_devices, sizeof(__pyx_k_device_list_devices), 0, 0, 1, 1},
   {&__pyx_n_s_device_open, __pyx_k_device_open, sizeof(__pyx_k_device_open), 0, 0, 1, 1},
@@ -29355,14 +29355,14 @@ static int __Pyx_InitCachedConstants(void) {
   /* "seabreeze/cseabreeze/wrapper.pyx":632
  * 
  * 
- * def device_get_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ * def device_get_raw_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
  *     cdef int N
  *     cdef int error_code
  */
   __pyx_tuple__119 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__119)) __PYX_ERR(0, 632, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__119);
   __Pyx_GIVEREF(__pyx_tuple__119);
-  __pyx_codeobj__120 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__119, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_usb_bus_access_featur, 632, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__120)) __PYX_ERR(0, 632, __pyx_L1_error)
+  __pyx_codeobj__120 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__119, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_raw_usb_bus_access_fe, 632, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__120)) __PYX_ERR(0, 632, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":652
  *                 "Please file a bug report including a description of your device." % N)
@@ -30266,13 +30266,13 @@ PyMODINIT_FUNC PyInit_wrapper(void)
   /* "seabreeze/cseabreeze/wrapper.pyx":632
  * 
  * 
- * def device_get_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ * def device_get_raw_usb_bus_access_feature_id(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_101device_get_usb_bus_access_feature_id, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 632, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_101device_get_raw_usb_bus_access_feature_id, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 632, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_get_usb_bus_access_featur, __pyx_t_1) < 0) __PYX_ERR(0, 632, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_get_raw_usb_bus_access_fe, __pyx_t_1) < 0) __PYX_ERR(0, 632, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "seabreeze/cseabreeze/wrapper.pyx":652

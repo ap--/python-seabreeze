@@ -85,6 +85,13 @@ cdef extern:
     int sbapi_get_number_of_spectrum_processing_features(long deviceID, int *error_code)
     int sbapi_get_spectrum_processing_features(long deviceID, int *error_code, long *features, int max_features)
     unsigned short int sbapi_spectrum_processing_scans_to_average_get(long deviceID, long featureID, int *error_code) nogil
-    unsigned char sbapi_spectrum_processing_boxcar_width_get(long deviceID, long featureID, int *error_code) nogil
+    unsigned char sbapi_spectrum_processing_boxcar_width_get(long deviceID, long featureID, int *serror_code) nogil
     void sbapi_spectrum_processing_scans_to_average_set(long deviceID, long featureID, int *error_code, unsigned short int scansToAverage) nogil
     void sbapi_spectrum_processing_boxcar_width_set(long deviceID, long featureID, int *error_code, unsigned char boxcarWidth) nogil
+
+    # wrapper for raw usb access
+    int sbapi_get_number_of_raw_usb_bus_access_features(long deviceID, int *error_code)
+    int sbapi_get_raw_usb_bus_access_features(long deviceID, int *error_code, long *features, int max_features)
+    int sbapi_raw_usb_bus_access_read(long deviceID, long featureID, int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint)
+    int sbapi_raw_usb_bus_access_write(long deviceID, long featureID, int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint)
+

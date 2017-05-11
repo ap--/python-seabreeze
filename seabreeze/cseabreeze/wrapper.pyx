@@ -12,6 +12,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 # define max length for some strings
 DEF SBMAXBUFLEN = 32
 DEF SBMAXDBUFLEN = 256
+DEF USBENDPOINT = 1
 
 class SeaBreezeError(Exception):
 
@@ -627,6 +628,45 @@ def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
                 "%d spectrum_processing features. The code expects it to have 0 or 1. "
                 "Please file a bug report including a description of your device." % N)
 
+
+def device_get_raw_usb_bus_access_feature_id(SeaBreezeDevice device not None):
+    cdef int N
+    cdef int error_code
+    cdef long featureID
+
+    N = csb.sbapi_get_number_of_raw_usb_bus_access_features(device.handle, &error_code)
+    if error_code != 0:
+        raise SeaBreezeError(error_code=error_code)
+    if N == 0:
+        return []
+    elif N == 1:
+        csb.sbapi_get_raw_usb_bus_access_features(device.handle, &error_code, &featureID, 1)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return [featureID]
+    else:
+        raise SeaBreezeError("This should not have happened. Apparently this device has "
+                "%d spectrum_processing features. The code expects it to have 0 or 1. "
+                "Please file a bug report including a description of your device." % N)
+
+def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):
+    cdef int error_code
+    cdef int bytes_written
+    cdef int out_length = out.size
+    bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, USBENDPOINT)
+    if error_code != 0:
+         raise SeaBreezeError(error_code=error_code)
+    return bytes_written
+
+def device_usb_read(SeaBreezeDevice device not None, long featureID, unsigned char[::1] read):
+    cdef int error_code
+    cdef int bytes_read
+    cdef int read_length = read.size
+    bytes_read = csb.sbapi_raw_usb_bus_access_read(device.handle, featureID, &error_code, &read[0], read_length, USBENDPOINT)
+    if error_code != 0:
+         raise SeaBreezeError(error_code=error_code)
+    return bytes_read
+
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
     cdef int error_code
     with nogil:
@@ -658,3 +698,4 @@ def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, lo
     if scans_to_average < 1:
         raise SeaBreezeError(error_code=error_code)
     return scans_to_average
+

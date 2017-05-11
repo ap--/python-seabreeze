@@ -104,6 +104,7 @@ class Spectrometer(object):
         self._fidnc = feature.add('nonlinearity_coeffs')  # Added
         self._fidsl = feature.add('stray_light_coeffs')
         self._fidspp = feature.add('spectrum_processing') # Not implemented in pyseabreeze
+        self._fidrusb = feature.add('raw_usb_bus_access') # Not implemented in pyseabreeze
         # get additional information
         self._pixels = lib.spectrometer_get_formatted_spectrum_length(self._dev, self._fidsp)
         self._minimum_integration_time_micros = (

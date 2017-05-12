@@ -244,7 +244,7 @@ class Spectrometer(object):
         lib.continuous_strobe_set_period_micros(self._dev, self._fidcs, period_micros)
 
     def write_usb(self, output):
-        lib.device_usb_write(self._dev, self._fidrusb, output)
+        return lib.device_usb_write(self._dev, self._fidrusb, output)
 
     def close(self):
         lib.device_close(self._dev)

@@ -64,7 +64,6 @@ spec.minimum_integration_time_micros
 spec.trigger_mode(0)
 spec.integration_time_micros(100000)
 spec.wavelengths()
-spec.intensities()
 spec.spectrum()
 spec.intensities()
 spec.intensities(correct_dark_counts=True)

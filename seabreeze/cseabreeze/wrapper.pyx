@@ -658,15 +658,6 @@ def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned c
          raise SeaBreezeError(error_code=error_code)
     return bytes_written
 
-def device_usb_read(SeaBreezeDevice device not None, long featureID, unsigned char[::1] read):
-    cdef int error_code
-    cdef int bytes_read
-    cdef int read_length = read.size
-    bytes_read = csb.sbapi_raw_usb_bus_access_read(device.handle, featureID, &error_code, &read[0], read_length, USBENDPOINT)
-    if error_code != 0:
-         raise SeaBreezeError(error_code=error_code)
-    return bytes_read
-
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
     cdef int error_code
     with nogil:

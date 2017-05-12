@@ -672,7 +672,7 @@ def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):
 
 def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):
     cdef int error_code
-    endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+    endpoint = csb.sbapi_get_device_usb_endpoint_secondary_in(device.handle, &error_code)
     if error_code != 0:
         raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)
     return endpoint

@@ -82,7 +82,7 @@ spec.continuous_strobe_set_enable(1)
 spec.continuous_strobe_set_period_micros(10000)
 
 print("primary usb in endpoint {}".format(spec.primary_usb_in_endpoint))
-print("primary usb out endpoint {}").format(spec.primary_usb_out_endpoint)
+print("primary usb out endpoint {}".format(spec.primary_usb_out_endpoint))
 print("secondary usb in endpoint {}".format(spec.secondary_usb_in_endpoint))
 print("secondary usb out endpoint {}".format(spec.secondary_usb_out_endpoint))
 spec.write_usb(np.fromstring('\xc1\xc0\x00\x11\x00\x00\x00\x00\x10\x01\x20\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x08\x10\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc5\xc4\xc3\xc2', dtype=np.uint8))

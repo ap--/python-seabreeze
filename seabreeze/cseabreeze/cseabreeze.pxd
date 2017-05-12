@@ -94,4 +94,9 @@ cdef extern:
     int sbapi_get_raw_usb_bus_access_features(long deviceID, int *error_code, long *features, int max_features)
     int sbapi_raw_usb_bus_access_read(long deviceID, long featureID, int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint)
     int sbapi_raw_usb_bus_access_write(long deviceID, long featureID, int *error_code, unsigned char *buffer, int buffer_length, unsigned char endpoint)
+    unsigned char sbapi_get_device_usb_endpoint_primary_out(long deviceID, int *error_code)
+    unsigned char sbapi_get_device_usb_endpoint_primary_in(long deviceID, int *error_code)
+    unsigned char sbapi_get_device_usb_endpoint_secondary_out(long deviceID, int *error_code)
+    unsigned char sbapi_get_device_usb_endpoint_secondary_in(long deviceID, int *error_code)
+
 

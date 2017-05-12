@@ -1,13 +1,13 @@
 
 import seabreeze.backends
+import numpy
+
 # get the backend and add some functions/classes to this module
 lib = seabreeze.backends.get_backend()
 
 list_devices = lib.device_list_devices
 SeaBreezeError = lib.SeaBreezeError
 SeaBreezeDevice = lib.SeaBreezeDevice
-
-import numpy
 
 
 class _HelperFeatureAdder(object):
@@ -21,7 +21,8 @@ class _HelperFeatureAdder(object):
         if fids:
             return fids[0]
         else:
-            return -1 # It seems as if negative numbers are not used for featureIDs
+            return -1  # It seems as if negative numbers are not used for featureIDs
+
 
 class LightSource(object):
 
@@ -105,6 +106,7 @@ class Spectrometer(object):
         self._fidsl = feature.add('stray_light_coeffs')
         self._fidspp = feature.add('spectrum_processing') # Not implemented in pyseabreeze
         self._fidrusb = feature.add('raw_usb_bus_access') # Not implemented in pyseabreeze
+
         # get additional information
         self._pixels = lib.spectrometer_get_formatted_spectrum_length(self._dev, self._fidsp)
         self._minimum_integration_time_micros = (
@@ -134,6 +136,12 @@ class Spectrometer(object):
                                                     for i in range(N_light_sources))
         except SeaBreezeError:
             self._light_sources = tuple()
+
+        # get usb send endpoint
+        self._primary_usb_out_endpoint = lib.device_get_raw_usb_endpoint_primary_out(self._dev)
+        self._primary_usb_in_endpoint = lib.device_get_raw_usb_endpoint_primary_in(self._dev)
+        self._secondary_usb_out_endpoint = lib.device_get_raw_usb_endpoint_secondary_out(self._dev)
+        self._secondary_usb_in_endpoint = lib.device_get_raw_usb_endpoint_secondary_in(self._dev)
 
     def wavelengths(self):
         return self._wavelengths
@@ -244,7 +252,7 @@ class Spectrometer(object):
         lib.continuous_strobe_set_period_micros(self._dev, self._fidcs, period_micros)
 
     def write_usb(self, output):
-        return lib.device_usb_write(self._dev, self._fidrusb, output)
+        return lib.device_usb_write(self._dev, self._fidrusb, self._primary_usb_out_endpoint, output)
 
     def close(self):
         lib.device_close(self._dev)

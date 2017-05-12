@@ -1592,8 +1592,10 @@ __PYX_EXTERN_C DL_IMPORT(void) sbapi_spectrum_processing_scans_to_average_set(lo
 __PYX_EXTERN_C DL_IMPORT(void) sbapi_spectrum_processing_boxcar_width_set(long, long, int *, unsigned char); /*proto*/
 __PYX_EXTERN_C DL_IMPORT(int) sbapi_get_number_of_raw_usb_bus_access_features(long, int *); /*proto*/
 __PYX_EXTERN_C DL_IMPORT(int) sbapi_get_raw_usb_bus_access_features(long, int *, long *, int); /*proto*/
-__PYX_EXTERN_C DL_IMPORT(int) sbapi_raw_usb_bus_access_read(long, long, int *, unsigned char *, int, unsigned char); /*proto*/
 __PYX_EXTERN_C DL_IMPORT(int) sbapi_raw_usb_bus_access_write(long, long, int *, unsigned char *, int, unsigned char); /*proto*/
+__PYX_EXTERN_C DL_IMPORT(unsigned char) sbapi_get_device_usb_endpoint_primary_out(long, int *); /*proto*/
+__PYX_EXTERN_C DL_IMPORT(unsigned char) sbapi_get_device_usb_endpoint_primary_in(long, int *); /*proto*/
+__PYX_EXTERN_C DL_IMPORT(unsigned char) sbapi_get_device_usb_endpoint_secondary_out(long, int *); /*proto*/
 
 /* Module declarations from 'cython.view' */
 
@@ -1685,7 +1687,6 @@ static const char __pyx_k_mode[] = "mode";
 static const char __pyx_k_name[] = "name";
 static const char __pyx_k_ndim[] = "ndim";
 static const char __pyx_k_pack[] = "pack";
-static const char __pyx_k_read[] = "read";
 static const char __pyx_k_self[] = "self";
 static const char __pyx_k_size[] = "size";
 static const char __pyx_k_step[] = "step";
@@ -1728,6 +1729,7 @@ static const char __pyx_k_Ellipsis[] = "Ellipsis";
 static const char __pyx_k_cindices[] = "cindices";
 static const char __pyx_k_cmessage[] = "cmessage";
 static const char __pyx_k_dp_count[] = "dp_count";
+static const char __pyx_k_endpoint[] = "endpoint";
 static const char __pyx_k_itemsize[] = "itemsize";
 static const char __pyx_k_ls_count[] = "ls_count";
 static const char __pyx_k_qualname[] = "__qualname__";
@@ -1741,7 +1743,6 @@ static const char __pyx_k_metaclass[] = "__metaclass__";
 static const char __pyx_k_tmpdevice[] = "tmpdevice";
 static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_ValueError[] = "ValueError";
-static const char __pyx_k_bytes_read[] = "bytes_read";
 static const char __pyx_k_error_code[] = "error_code";
 static const char __pyx_k_has_enable[] = "has_enable";
 static const char __pyx_k_is_enabled[] = "is_enabled";
@@ -1751,7 +1752,6 @@ static const char __pyx_k_tec_enable[] = "tec_enable";
 static const char __pyx_k_MemoryError[] = "MemoryError";
 static const char __pyx_k_device_open[] = "device_open";
 static const char __pyx_k_lamp_enable[] = "lamp_enable";
-static const char __pyx_k_read_length[] = "read_length";
 static const char __pyx_k_slot_number[] = "slot_number";
 static const char __pyx_k_spec_length[] = "spec_length";
 static const char __pyx_k_temperature[] = "temperature";
@@ -1766,13 +1766,13 @@ static const char __pyx_k_device_is_open[] = "device_is_open";
 static const char __pyx_k_tec_set_enable[] = "tec_set_enable";
 static const char __pyx_k_values_written[] = "values_written";
 static const char __pyx_k_allocate_buffer[] = "allocate_buffer";
-static const char __pyx_k_device_usb_read[] = "device_usb_read";
 static const char __pyx_k_dtype_is_object[] = "dtype_is_object";
 static const char __pyx_k_was_open_before[] = "was_open_before";
 static const char __pyx_k_device_get_model[] = "device_get_model";
 static const char __pyx_k_device_usb_write[] = "device_usb_write";
 static const char __pyx_k_eeprom_read_slot[] = "eeprom_read_slot";
 static const char __pyx_k_scans_to_average[] = "scans_to_average";
+static const char __pyx_k_usb_out_endpoint[] = "usb_out_endpoint";
 static const char __pyx_k_light_source_index[] = "light_source_index";
 static const char __pyx_k_strided_and_direct[] = "<strided and direct>";
 static const char __pyx_k_SeaBreezeDevice_s_s[] = "<SeaBreezeDevice %s:%s>";
@@ -1812,14 +1812,18 @@ static const char __pyx_k_spectrometer_get_wavelengths[] = "spectrometer_get_wav
 static const char __pyx_k_device_get_shutter_feature_id[] = "device_get_shutter_feature_id";
 static const char __pyx_k_spectrometer_set_trigger_mode[] = "spectrometer_set_trigger_mode";
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
+static const char __pyx_k_Users_cmorton_Documents_Saturn[] = "/Users/cmorton/Documents/Saturn/VFMS/python-seabreeze/seabreeze/cseabreeze/wrapper.pyx";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
 static const char __pyx_k_tec_read_temperature_degrees_C[] = "tec_read_temperature_degrees_C";
-static const char __pyx_k_Volumes_stuff_src_apps_python_s[] = "/Volumes/stuff/src_apps/python-seabreeze/seabreeze/cseabreeze/wrapper.pyx";
+static const char __pyx_k_Failed_to_get_Secondary_Out_USB[] = "Failed to get Secondary Out USB endpoint";
 static const char __pyx_k_device_get_light_source_feature[] = "device_get_light_source_feature_id";
 static const char __pyx_k_device_get_spectrometer_feature[] = "device_get_spectrometer_feature_id";
 static const char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
 static const char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
 static const char __pyx_k_Empty_shape_tuple_for_cython_arr[] = "Empty shape tuple for cython.array";
+static const char __pyx_k_Failed_to_get_Primary_In_USB_end[] = "Failed to get Primary In USB endpoint";
+static const char __pyx_k_Failed_to_get_Primary_Out_USB_en[] = "Failed to get Primary Out USB endpoint";
+static const char __pyx_k_Failed_to_get_Secondary_In_USB_e[] = "Failed to get Secondary In USB endpoint";
 static const char __pyx_k_Indirect_dimensions_not_supporte[] = "Indirect dimensions not supported";
 static const char __pyx_k_Invalid_mode_expected_c_or_fortr[] = "Invalid mode, expected 'c' or 'fortran', got %s";
 static const char __pyx_k_Out_of_bounds_on_buffer_access_a[] = "Out of bounds on buffer access (axis %d)";
@@ -1831,6 +1835,8 @@ static const char __pyx_k_device_get_continuous_strobe_fea[] = "device_get_conti
 static const char __pyx_k_device_get_irrad_calibration_fea[] = "device_get_irrad_calibration_feature_id";
 static const char __pyx_k_device_get_nonlinearity_coeffs_f[] = "device_get_nonlinearity_coeffs_feature_id";
 static const char __pyx_k_device_get_raw_usb_bus_access_fe[] = "device_get_raw_usb_bus_access_feature_id";
+static const char __pyx_k_device_get_raw_usb_endpoint_prim[] = "device_get_raw_usb_endpoint_primary_out";
+static const char __pyx_k_device_get_raw_usb_endpoint_seco[] = "device_get_raw_usb_endpoint_secondary_out";
 static const char __pyx_k_device_get_spectrum_processing_f[] = "device_get_spectrum_processing_feature_id";
 static const char __pyx_k_device_get_stray_light_coeffs_fe[] = "device_get_stray_light_coeffs_feature_id";
 static const char __pyx_k_got_differing_extents_in_dimensi[] = "got differing extents in dimension %d (got %d and %d)";
@@ -1857,6 +1863,8 @@ static const char __pyx_k_This_should_not_have_happened_Ap_6[] = "This should no
 static const char __pyx_k_This_should_not_have_happened_Ap_7[] = "This should not have happened. Apparently this device has %d irrad cal features. The code expects it to have 0 or 1. Please file a bug report including a description of your device.";
 static const char __pyx_k_This_should_not_have_happened_Ap_8[] = "This should not have happened. Apparently this device has %d tec features. The code expects it to have 0 or 1. Please file a bug report including a description of your device.";
 static const char __pyx_k_This_should_not_have_happened_Ap_9[] = "This should not have happened. Apparently this device has %d lamp features. The code expects it to have 0 or 1. Please file a bug report including a description of your device.";
+static const char __pyx_k_device_get_raw_usb_endpoint_prim_2[] = "device_get_raw_usb_endpoint_primary_in";
+static const char __pyx_k_device_get_raw_usb_endpoint_seco_2[] = "device_get_raw_usb_endpoint_secondary_in";
 static const char __pyx_k_spectrometer_get_formatted_spect_2[] = "spectrometer_get_formatted_spectrum";
 static const char __pyx_k_spectrometer_get_unformatted_spe_2[] = "spectrometer_get_unformatted_spectrum";
 static const char __pyx_k_This_should_not_have_happened_Ap_10[] = "This should not have happened. Apparently this device has %d nonlinearity coeffs features. The code expects it to have 0 or 1. Please file a bug report including a description of your device.";
@@ -1869,6 +1877,10 @@ static PyObject *__pyx_kp_s_Can_only_create_a_buffer_that_is;
 static PyObject *__pyx_kp_s_Cannot_index_with_type_s;
 static PyObject *__pyx_n_s_Ellipsis;
 static PyObject *__pyx_kp_s_Empty_shape_tuple_for_cython_arr;
+static PyObject *__pyx_kp_s_Failed_to_get_Primary_In_USB_end;
+static PyObject *__pyx_kp_s_Failed_to_get_Primary_Out_USB_en;
+static PyObject *__pyx_kp_s_Failed_to_get_Secondary_In_USB_e;
+static PyObject *__pyx_kp_s_Failed_to_get_Secondary_Out_USB;
 static PyObject *__pyx_n_s_IndexError;
 static PyObject *__pyx_kp_s_Indirect_dimensions_not_supporte;
 static PyObject *__pyx_kp_s_Invalid_mode_expected_c_or_fortr;
@@ -1899,14 +1911,13 @@ static PyObject *__pyx_kp_s_This_should_not_have_happened_Ap_8;
 static PyObject *__pyx_kp_s_This_should_not_have_happened_Ap_9;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_kp_s_Unable_to_convert_item_to_object;
+static PyObject *__pyx_kp_s_Users_cmorton_Documents_Saturn;
 static PyObject *__pyx_n_s_ValueError;
-static PyObject *__pyx_kp_s_Volumes_stuff_src_apps_python_s;
 static PyObject *__pyx_kp_s__5;
 static PyObject *__pyx_n_s_allocate_buffer;
 static PyObject *__pyx_n_s_area;
 static PyObject *__pyx_n_s_base;
 static PyObject *__pyx_n_s_boxcar_width;
-static PyObject *__pyx_n_s_bytes_read;
 static PyObject *__pyx_n_s_bytes_written;
 static PyObject *__pyx_n_s_c;
 static PyObject *__pyx_n_u_c;
@@ -1931,6 +1942,10 @@ static PyObject *__pyx_n_s_device_get_light_source_feature;
 static PyObject *__pyx_n_s_device_get_model;
 static PyObject *__pyx_n_s_device_get_nonlinearity_coeffs_f;
 static PyObject *__pyx_n_s_device_get_raw_usb_bus_access_fe;
+static PyObject *__pyx_n_s_device_get_raw_usb_endpoint_prim;
+static PyObject *__pyx_n_s_device_get_raw_usb_endpoint_prim_2;
+static PyObject *__pyx_n_s_device_get_raw_usb_endpoint_seco;
+static PyObject *__pyx_n_s_device_get_raw_usb_endpoint_seco_2;
 static PyObject *__pyx_n_s_device_get_serial_number;
 static PyObject *__pyx_n_s_device_get_shutter_feature_id;
 static PyObject *__pyx_n_s_device_get_spectrometer_feature;
@@ -1940,7 +1955,6 @@ static PyObject *__pyx_n_s_device_get_tec_feature_id;
 static PyObject *__pyx_n_s_device_is_open;
 static PyObject *__pyx_n_s_device_list_devices;
 static PyObject *__pyx_n_s_device_open;
-static PyObject *__pyx_n_s_device_usb_read;
 static PyObject *__pyx_n_s_device_usb_write;
 static PyObject *__pyx_n_s_devices;
 static PyObject *__pyx_n_s_doc;
@@ -1949,6 +1963,7 @@ static PyObject *__pyx_n_s_dtype_is_object;
 static PyObject *__pyx_n_s_eeprom_read_slot;
 static PyObject *__pyx_n_s_enable;
 static PyObject *__pyx_n_s_encode;
+static PyObject *__pyx_n_s_endpoint;
 static PyObject *__pyx_n_s_enumerate;
 static PyObject *__pyx_n_s_error;
 static PyObject *__pyx_n_s_error_code;
@@ -2011,8 +2026,6 @@ static PyObject *__pyx_n_s_pyx_getbuffer;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_qualname;
 static PyObject *__pyx_n_s_range;
-static PyObject *__pyx_n_s_read;
-static PyObject *__pyx_n_s_read_length;
 static PyObject *__pyx_n_s_ret;
 static PyObject *__pyx_n_s_rstrip;
 static PyObject *__pyx_n_s_scans_to_average;
@@ -2058,6 +2071,7 @@ static PyObject *__pyx_n_s_tmpdevice;
 static PyObject *__pyx_kp_s_unable_to_allocate_array_data;
 static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
 static PyObject *__pyx_n_s_unpack;
+static PyObject *__pyx_n_s_usb_out_endpoint;
 static PyObject *__pyx_kp_s_utf_8;
 static PyObject *__pyx_n_s_values_written;
 static PyObject *__pyx_n_s_was_open_before;
@@ -2123,12 +2137,15 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_94device_get_stray_li
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_96stray_light_coeffs_get(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID); /* proto */
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_98device_get_spectrum_processing_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
 static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_raw_usb_bus_access_feature_id(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, __Pyx_memviewslice __pyx_v_out); /* proto */
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_usb_read(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, __Pyx_memviewslice __pyx_v_read); /* proto */
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processing_set_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned char __pyx_v_boxcar_width); /* proto */
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processing_set_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned short __pyx_v_scans_to_average); /* proto */
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processing_get_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID); /* proto */
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processing_get_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_get_raw_usb_endpoint_primary_out(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_get_raw_usb_endpoint_primary_in(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106device_get_raw_usb_endpoint_secondary_out(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108device_get_raw_usb_endpoint_secondary_in(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110device_usb_write(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, int __pyx_v_usb_out_endpoint, __Pyx_memviewslice __pyx_v_out); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processing_set_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned char __pyx_v_boxcar_width); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_114spectrum_processing_set_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned short __pyx_v_scans_to_average); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_116spectrum_processing_get_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID); /* proto */
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_118spectrum_processing_get_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(struct __pyx_array_obj *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_array___pyx_pf_15View_dot_MemoryView_5array_4__dealloc__(struct __pyx_array_obj *__pyx_v_self); /* proto */
@@ -2176,20 +2193,22 @@ static PyObject *__pyx_tuple__6;
 static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
-static PyObject *__pyx_slice__16;
-static PyObject *__pyx_slice__17;
-static PyObject *__pyx_slice__18;
+static PyObject *__pyx_slice__20;
+static PyObject *__pyx_slice__21;
+static PyObject *__pyx_slice__22;
 static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__14;
 static PyObject *__pyx_tuple__15;
+static PyObject *__pyx_tuple__16;
+static PyObject *__pyx_tuple__17;
+static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__19;
-static PyObject *__pyx_tuple__20;
-static PyObject *__pyx_tuple__22;
 static PyObject *__pyx_tuple__23;
-static PyObject *__pyx_tuple__25;
+static PyObject *__pyx_tuple__24;
+static PyObject *__pyx_tuple__26;
 static PyObject *__pyx_tuple__27;
 static PyObject *__pyx_tuple__29;
 static PyObject *__pyx_tuple__31;
@@ -2244,13 +2263,16 @@ static PyObject *__pyx_tuple__127;
 static PyObject *__pyx_tuple__129;
 static PyObject *__pyx_tuple__131;
 static PyObject *__pyx_tuple__133;
-static PyObject *__pyx_tuple__134;
 static PyObject *__pyx_tuple__135;
-static PyObject *__pyx_tuple__136;
 static PyObject *__pyx_tuple__137;
-static PyObject *__pyx_codeobj__21;
-static PyObject *__pyx_codeobj__24;
-static PyObject *__pyx_codeobj__26;
+static PyObject *__pyx_tuple__139;
+static PyObject *__pyx_tuple__141;
+static PyObject *__pyx_tuple__143;
+static PyObject *__pyx_tuple__144;
+static PyObject *__pyx_tuple__145;
+static PyObject *__pyx_tuple__146;
+static PyObject *__pyx_tuple__147;
+static PyObject *__pyx_codeobj__25;
 static PyObject *__pyx_codeobj__28;
 static PyObject *__pyx_codeobj__30;
 static PyObject *__pyx_codeobj__32;
@@ -2304,6 +2326,11 @@ static PyObject *__pyx_codeobj__126;
 static PyObject *__pyx_codeobj__128;
 static PyObject *__pyx_codeobj__130;
 static PyObject *__pyx_codeobj__132;
+static PyObject *__pyx_codeobj__134;
+static PyObject *__pyx_codeobj__136;
+static PyObject *__pyx_codeobj__138;
+static PyObject *__pyx_codeobj__140;
+static PyObject *__pyx_codeobj__142;
 
 /* "seabreeze/cseabreeze/wrapper.pyx":19
  * class SeaBreezeError(Exception):
@@ -14574,7 +14601,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_raw_usb
  *                 "%d spectrum_processing features. The code expects it to have 0 or 1. "
  *                 "Please file a bug report including a description of your device." % N)             # <<<<<<<<<<<<<<
  * 
- * def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):
+ * def device_get_raw_usb_endpoint_primary_out(SeaBreezeDevice device not None):
  */
     __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_N); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 650, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
@@ -14659,28 +14686,526 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_100device_get_raw_usb
 /* "seabreeze/cseabreeze/wrapper.pyx":652
  *                 "Please file a bug report including a description of your device." % N)
  * 
- * def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):             # <<<<<<<<<<<<<<
+ * def device_get_raw_usb_endpoint_primary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_get_raw_usb_endpoint_primary_out(PyObject *__pyx_self, PyObject *__pyx_v_device); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_103device_get_raw_usb_endpoint_primary_out = {"device_get_raw_usb_endpoint_primary_out", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_get_raw_usb_endpoint_primary_out, METH_O, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_get_raw_usb_endpoint_primary_out(PyObject *__pyx_self, PyObject *__pyx_v_device) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_primary_out (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 652, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_get_raw_usb_endpoint_primary_out(__pyx_self, ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)__pyx_v_device));
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_get_raw_usb_endpoint_primary_out(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device) {
+  int __pyx_v_error_code;
+  unsigned char __pyx_v_endpoint;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_primary_out", 0);
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":654
+ * def device_get_raw_usb_endpoint_primary_out(SeaBreezeDevice device not None):
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)             # <<<<<<<<<<<<<<
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary Out USB endpoint", error_code=error_code)
+ */
+  __pyx_v_endpoint = sbapi_get_device_usb_endpoint_primary_out(__pyx_v_device->handle, (&__pyx_v_error_code));
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":655
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Primary Out USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  __pyx_t_1 = ((__pyx_v_error_code != 0) != 0);
+  if (__pyx_t_1) {
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":656
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary Out USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 656, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 656, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 656, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 656, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__7, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 656, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __PYX_ERR(0, 656, __pyx_L1_error)
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":655
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Primary Out USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  }
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":657
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary Out USB endpoint", error_code=error_code)
+ *     return endpoint             # <<<<<<<<<<<<<<
+ * 
+ * def device_get_raw_usb_endpoint_primary_in(SeaBreezeDevice device not None):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_char(__pyx_v_endpoint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 657, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_r = __pyx_t_4;
+  __pyx_t_4 = 0;
+  goto __pyx_L0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":652
+ *                 "Please file a bug report including a description of your device." % N)
+ * 
+ * def device_get_raw_usb_endpoint_primary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_get_raw_usb_endpoint_primary_out", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "seabreeze/cseabreeze/wrapper.pyx":659
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_primary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_105device_get_raw_usb_endpoint_primary_in(PyObject *__pyx_self, PyObject *__pyx_v_device); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_105device_get_raw_usb_endpoint_primary_in = {"device_get_raw_usb_endpoint_primary_in", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_105device_get_raw_usb_endpoint_primary_in, METH_O, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_105device_get_raw_usb_endpoint_primary_in(PyObject *__pyx_self, PyObject *__pyx_v_device) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_primary_in (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 659, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_get_raw_usb_endpoint_primary_in(__pyx_self, ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)__pyx_v_device));
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_get_raw_usb_endpoint_primary_in(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device) {
+  int __pyx_v_error_code;
+  unsigned char __pyx_v_endpoint;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_primary_in", 0);
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":661
+ * def device_get_raw_usb_endpoint_primary_in(SeaBreezeDevice device not None):
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)             # <<<<<<<<<<<<<<
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary In USB endpoint", error_code=error_code)
+ */
+  __pyx_v_endpoint = sbapi_get_device_usb_endpoint_primary_in(__pyx_v_device->handle, (&__pyx_v_error_code));
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":662
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Primary In USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  __pyx_t_1 = ((__pyx_v_error_code != 0) != 0);
+  if (__pyx_t_1) {
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":663
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary In USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 663, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 663, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 663, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 663, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__8, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 663, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __PYX_ERR(0, 663, __pyx_L1_error)
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":662
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Primary In USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  }
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":664
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary In USB endpoint", error_code=error_code)
+ *     return endpoint             # <<<<<<<<<<<<<<
+ * 
+ * def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_char(__pyx_v_endpoint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 664, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_r = __pyx_t_4;
+  __pyx_t_4 = 0;
+  goto __pyx_L0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":659
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_primary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_get_raw_usb_endpoint_primary_in", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "seabreeze/cseabreeze/wrapper.pyx":666
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107device_get_raw_usb_endpoint_secondary_out(PyObject *__pyx_self, PyObject *__pyx_v_device); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_107device_get_raw_usb_endpoint_secondary_out = {"device_get_raw_usb_endpoint_secondary_out", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107device_get_raw_usb_endpoint_secondary_out, METH_O, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107device_get_raw_usb_endpoint_secondary_out(PyObject *__pyx_self, PyObject *__pyx_v_device) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_secondary_out (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 666, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_106device_get_raw_usb_endpoint_secondary_out(__pyx_self, ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)__pyx_v_device));
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106device_get_raw_usb_endpoint_secondary_out(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device) {
+  int __pyx_v_error_code;
+  unsigned char __pyx_v_endpoint;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_secondary_out", 0);
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":668
+ * def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)             # <<<<<<<<<<<<<<
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary Out USB endpoint", error_code=error_code)
+ */
+  __pyx_v_endpoint = sbapi_get_device_usb_endpoint_secondary_out(__pyx_v_device->handle, (&__pyx_v_error_code));
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":669
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Secondary Out USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  __pyx_t_1 = ((__pyx_v_error_code != 0) != 0);
+  if (__pyx_t_1) {
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":670
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary Out USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 670, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 670, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 670, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 670, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__9, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 670, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __PYX_ERR(0, 670, __pyx_L1_error)
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":669
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Secondary Out USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  }
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":671
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary Out USB endpoint", error_code=error_code)
+ *     return endpoint             # <<<<<<<<<<<<<<
+ * 
+ * def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_char(__pyx_v_endpoint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 671, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_r = __pyx_t_4;
+  __pyx_t_4 = 0;
+  goto __pyx_L0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":666
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_get_raw_usb_endpoint_secondary_out", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "seabreeze/cseabreeze/wrapper.pyx":673
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109device_get_raw_usb_endpoint_secondary_in(PyObject *__pyx_self, PyObject *__pyx_v_device); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_109device_get_raw_usb_endpoint_secondary_in = {"device_get_raw_usb_endpoint_secondary_in", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109device_get_raw_usb_endpoint_secondary_in, METH_O, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109device_get_raw_usb_endpoint_secondary_in(PyObject *__pyx_self, PyObject *__pyx_v_device) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_secondary_in (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 673, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_108device_get_raw_usb_endpoint_secondary_in(__pyx_self, ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)__pyx_v_device));
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108device_get_raw_usb_endpoint_secondary_in(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device) {
+  int __pyx_v_error_code;
+  unsigned char __pyx_v_endpoint;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("device_get_raw_usb_endpoint_secondary_in", 0);
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":675
+ * def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)             # <<<<<<<<<<<<<<
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)
+ */
+  __pyx_v_endpoint = sbapi_get_device_usb_endpoint_secondary_out(__pyx_v_device->handle, (&__pyx_v_error_code));
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":676
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  __pyx_t_1 = ((__pyx_v_error_code != 0) != 0);
+  if (__pyx_t_1) {
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":677
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 677, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 677, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 677, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 677, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__10, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 677, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __PYX_ERR(0, 677, __pyx_L1_error)
+
+    /* "seabreeze/cseabreeze/wrapper.pyx":676
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:             # <<<<<<<<<<<<<<
+ *         raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)
+ *     return endpoint
+ */
+  }
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":678
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)
+ *     return endpoint             # <<<<<<<<<<<<<<
+ * 
+ * def device_usb_write(SeaBreezeDevice device not None, long featureID, int usb_out_endpoint, unsigned char[::1] out):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_char(__pyx_v_endpoint); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 678, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_r = __pyx_t_4;
+  __pyx_t_4 = 0;
+  goto __pyx_L0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":673
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_get_raw_usb_endpoint_secondary_in", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "seabreeze/cseabreeze/wrapper.pyx":680
+ *     return endpoint
+ * 
+ * def device_usb_write(SeaBreezeDevice device not None, long featureID, int usb_out_endpoint, unsigned char[::1] out):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     cdef int bytes_written
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_usb_write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_103device_usb_write = {"device_usb_write", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_usb_write, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_usb_write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111device_usb_write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_111device_usb_write = {"device_usb_write", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111device_usb_write, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111device_usb_write(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device = 0;
   long __pyx_v_featureID;
+  int __pyx_v_usb_out_endpoint;
   __Pyx_memviewslice __pyx_v_out = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("device_usb_write (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device,&__pyx_n_s_featureID,&__pyx_n_s_out,0};
-    PyObject* values[3] = {0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device,&__pyx_n_s_featureID,&__pyx_n_s_usb_out_endpoint,&__pyx_n_s_out,0};
+    PyObject* values[4] = {0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
@@ -14695,38 +15220,45 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_usb_write(P
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_featureID)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("device_usb_write", 1, 3, 3, 1); __PYX_ERR(0, 652, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("device_usb_write", 1, 4, 4, 1); __PYX_ERR(0, 680, __pyx_L3_error)
         }
         case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_out)) != 0)) kw_args--;
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_usb_out_endpoint)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("device_usb_write", 1, 3, 3, 2); __PYX_ERR(0, 652, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("device_usb_write", 1, 4, 4, 2); __PYX_ERR(0, 680, __pyx_L3_error)
+        }
+        case  3:
+        if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_out)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("device_usb_write", 1, 4, 4, 3); __PYX_ERR(0, 680, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "device_usb_write") < 0)) __PYX_ERR(0, 652, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "device_usb_write") < 0)) __PYX_ERR(0, 680, __pyx_L3_error)
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
     }
     __pyx_v_device = ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)values[0]);
-    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 652, __pyx_L3_error)
-    __pyx_v_out = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char(values[2]); if (unlikely(!__pyx_v_out.memview)) __PYX_ERR(0, 652, __pyx_L3_error)
+    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 680, __pyx_L3_error)
+    __pyx_v_usb_out_endpoint = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_usb_out_endpoint == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 680, __pyx_L3_error)
+    __pyx_v_out = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char(values[3]); if (unlikely(!__pyx_v_out.memview)) __PYX_ERR(0, 680, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("device_usb_write", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 652, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("device_usb_write", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 680, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_usb_write", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 652, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(__pyx_self, __pyx_v_device, __pyx_v_featureID, __pyx_v_out);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 680, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_110device_usb_write(__pyx_self, __pyx_v_device, __pyx_v_featureID, __pyx_v_usb_out_endpoint, __pyx_v_out);
 
   /* function exit code */
   goto __pyx_L0;
@@ -14737,7 +15269,7 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_103device_usb_write(P
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, __Pyx_memviewslice __pyx_v_out) {
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110device_usb_write(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, int __pyx_v_usb_out_endpoint, __Pyx_memviewslice __pyx_v_out) {
   int __pyx_v_error_code;
   int __pyx_v_bytes_written;
   int __pyx_v_out_length;
@@ -14751,26 +15283,26 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(C
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("device_usb_write", 0);
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":655
+  /* "seabreeze/cseabreeze/wrapper.pyx":683
  *     cdef int error_code
  *     cdef int bytes_written
  *     cdef int out_length = out.size             # <<<<<<<<<<<<<<
- *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, USBENDPOINT)
+ *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, usb_out_endpoint)
  *     if error_code != 0:
  */
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_out, 1, (PyObject *(*)(char *)) __pyx_memview_get_unsigned_char, (int (*)(char *, PyObject *)) __pyx_memview_set_unsigned_char, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 655, __pyx_L1_error)
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_out, 1, (PyObject *(*)(char *)) __pyx_memview_get_unsigned_char, (int (*)(char *, PyObject *)) __pyx_memview_set_unsigned_char, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 683, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 655, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 683, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 655, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 683, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_out_length = __pyx_t_3;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":656
+  /* "seabreeze/cseabreeze/wrapper.pyx":684
  *     cdef int bytes_written
  *     cdef int out_length = out.size
- *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, USBENDPOINT)             # <<<<<<<<<<<<<<
+ *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, usb_out_endpoint)             # <<<<<<<<<<<<<<
  *     if error_code != 0:
  *          raise SeaBreezeError(error_code=error_code)
  */
@@ -14782,13 +15314,13 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(C
   } else if (unlikely(__pyx_t_4 >= __pyx_v_out.shape[0])) __pyx_t_3 = 0;
   if (unlikely(__pyx_t_3 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_3);
-    __PYX_ERR(0, 656, __pyx_L1_error)
+    __PYX_ERR(0, 684, __pyx_L1_error)
   }
-  __pyx_v_bytes_written = sbapi_raw_usb_bus_access_write(__pyx_v_device->handle, __pyx_v_featureID, (&__pyx_v_error_code), (&(*((unsigned char *) ( /* dim=0 */ ((char *) (((unsigned char *) __pyx_v_out.data) + __pyx_t_4)) )))), __pyx_v_out_length, 1);
+  __pyx_v_bytes_written = sbapi_raw_usb_bus_access_write(__pyx_v_device->handle, __pyx_v_featureID, (&__pyx_v_error_code), (&(*((unsigned char *) ( /* dim=0 */ ((char *) (((unsigned char *) __pyx_v_out.data) + __pyx_t_4)) )))), __pyx_v_out_length, __pyx_v_usb_out_endpoint);
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":657
+  /* "seabreeze/cseabreeze/wrapper.pyx":685
  *     cdef int out_length = out.size
- *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, USBENDPOINT)
+ *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, usb_out_endpoint)
  *     if error_code != 0:             # <<<<<<<<<<<<<<
  *          raise SeaBreezeError(error_code=error_code)
  *     return bytes_written
@@ -14796,56 +15328,56 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(C
   __pyx_t_5 = ((__pyx_v_error_code != 0) != 0);
   if (__pyx_t_5) {
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":658
- *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, USBENDPOINT)
+    /* "seabreeze/cseabreeze/wrapper.pyx":686
+ *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, usb_out_endpoint)
  *     if error_code != 0:
  *          raise SeaBreezeError(error_code=error_code)             # <<<<<<<<<<<<<<
  *     return bytes_written
  * 
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 658, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 686, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 658, __pyx_L1_error)
+    __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 686, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 658, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 686, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_error_code, __pyx_t_6) < 0) __PYX_ERR(0, 658, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_error_code, __pyx_t_6) < 0) __PYX_ERR(0, 686, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 658, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 686, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_6, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __PYX_ERR(0, 658, __pyx_L1_error)
+    __PYX_ERR(0, 686, __pyx_L1_error)
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":657
+    /* "seabreeze/cseabreeze/wrapper.pyx":685
  *     cdef int out_length = out.size
- *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, USBENDPOINT)
+ *     bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, usb_out_endpoint)
  *     if error_code != 0:             # <<<<<<<<<<<<<<
  *          raise SeaBreezeError(error_code=error_code)
  *     return bytes_written
  */
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":659
+  /* "seabreeze/cseabreeze/wrapper.pyx":687
  *     if error_code != 0:
  *          raise SeaBreezeError(error_code=error_code)
  *     return bytes_written             # <<<<<<<<<<<<<<
  * 
- * def device_usb_read(SeaBreezeDevice device not None, long featureID, unsigned char[::1] read):
+ * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_bytes_written); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 659, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_bytes_written); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 687, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_r = __pyx_t_6;
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":652
- *                 "Please file a bug report including a description of your device." % N)
+  /* "seabreeze/cseabreeze/wrapper.pyx":680
+ *     return endpoint
  * 
- * def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):             # <<<<<<<<<<<<<<
+ * def device_usb_write(SeaBreezeDevice device not None, long featureID, int usb_out_endpoint, unsigned char[::1] out):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     cdef int bytes_written
  */
@@ -14864,216 +15396,8 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_102device_usb_write(C
   return __pyx_r;
 }
 
-/* "seabreeze/cseabreeze/wrapper.pyx":661
+/* "seabreeze/cseabreeze/wrapper.pyx":689
  *     return bytes_written
- * 
- * def device_usb_read(SeaBreezeDevice device not None, long featureID, unsigned char[::1] read):             # <<<<<<<<<<<<<<
- *     cdef int error_code
- *     cdef int bytes_read
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_105device_usb_read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_105device_usb_read = {"device_usb_read", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_105device_usb_read, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_105device_usb_read(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device = 0;
-  long __pyx_v_featureID;
-  __Pyx_memviewslice __pyx_v_read = { 0, 0, { 0 }, { 0 }, { 0 } };
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("device_usb_read (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device,&__pyx_n_s_featureID,&__pyx_n_s_read,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_device)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_featureID)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("device_usb_read", 1, 3, 3, 1); __PYX_ERR(0, 661, __pyx_L3_error)
-        }
-        case  2:
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_read)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("device_usb_read", 1, 3, 3, 2); __PYX_ERR(0, 661, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "device_usb_read") < 0)) __PYX_ERR(0, 661, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_device = ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)values[0]);
-    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 661, __pyx_L3_error)
-    __pyx_v_read = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char(values[2]); if (unlikely(!__pyx_v_read.memview)) __PYX_ERR(0, 661, __pyx_L3_error)
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("device_usb_read", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 661, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_usb_read", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 661, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_usb_read(__pyx_self, __pyx_v_device, __pyx_v_featureID, __pyx_v_read);
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_usb_read(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, __Pyx_memviewslice __pyx_v_read) {
-  int __pyx_v_error_code;
-  int __pyx_v_bytes_read;
-  int __pyx_v_read_length;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
-  int __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("device_usb_read", 0);
-
-  /* "seabreeze/cseabreeze/wrapper.pyx":664
- *     cdef int error_code
- *     cdef int bytes_read
- *     cdef int read_length = read.size             # <<<<<<<<<<<<<<
- *     bytes_read = csb.sbapi_raw_usb_bus_access_read(device.handle, featureID, &error_code, &read[0], read_length, USBENDPOINT)
- *     if error_code != 0:
- */
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_read, 1, (PyObject *(*)(char *)) __pyx_memview_get_unsigned_char, (int (*)(char *, PyObject *)) __pyx_memview_set_unsigned_char, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 664, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 664, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 664, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_read_length = __pyx_t_3;
-
-  /* "seabreeze/cseabreeze/wrapper.pyx":665
- *     cdef int bytes_read
- *     cdef int read_length = read.size
- *     bytes_read = csb.sbapi_raw_usb_bus_access_read(device.handle, featureID, &error_code, &read[0], read_length, USBENDPOINT)             # <<<<<<<<<<<<<<
- *     if error_code != 0:
- *          raise SeaBreezeError(error_code=error_code)
- */
-  __pyx_t_4 = 0;
-  __pyx_t_3 = -1;
-  if (__pyx_t_4 < 0) {
-    __pyx_t_4 += __pyx_v_read.shape[0];
-    if (unlikely(__pyx_t_4 < 0)) __pyx_t_3 = 0;
-  } else if (unlikely(__pyx_t_4 >= __pyx_v_read.shape[0])) __pyx_t_3 = 0;
-  if (unlikely(__pyx_t_3 != -1)) {
-    __Pyx_RaiseBufferIndexError(__pyx_t_3);
-    __PYX_ERR(0, 665, __pyx_L1_error)
-  }
-  __pyx_v_bytes_read = sbapi_raw_usb_bus_access_read(__pyx_v_device->handle, __pyx_v_featureID, (&__pyx_v_error_code), (&(*((unsigned char *) ( /* dim=0 */ ((char *) (((unsigned char *) __pyx_v_read.data) + __pyx_t_4)) )))), __pyx_v_read_length, 1);
-
-  /* "seabreeze/cseabreeze/wrapper.pyx":666
- *     cdef int read_length = read.size
- *     bytes_read = csb.sbapi_raw_usb_bus_access_read(device.handle, featureID, &error_code, &read[0], read_length, USBENDPOINT)
- *     if error_code != 0:             # <<<<<<<<<<<<<<
- *          raise SeaBreezeError(error_code=error_code)
- *     return bytes_read
- */
-  __pyx_t_5 = ((__pyx_v_error_code != 0) != 0);
-  if (__pyx_t_5) {
-
-    /* "seabreeze/cseabreeze/wrapper.pyx":667
- *     bytes_read = csb.sbapi_raw_usb_bus_access_read(device.handle, featureID, &error_code, &read[0], read_length, USBENDPOINT)
- *     if error_code != 0:
- *          raise SeaBreezeError(error_code=error_code)             # <<<<<<<<<<<<<<
- *     return bytes_read
- * 
- */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 667, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 667, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 667, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_error_code, __pyx_t_6) < 0) __PYX_ERR(0, 667, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 667, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_Raise(__pyx_t_6, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __PYX_ERR(0, 667, __pyx_L1_error)
-
-    /* "seabreeze/cseabreeze/wrapper.pyx":666
- *     cdef int read_length = read.size
- *     bytes_read = csb.sbapi_raw_usb_bus_access_read(device.handle, featureID, &error_code, &read[0], read_length, USBENDPOINT)
- *     if error_code != 0:             # <<<<<<<<<<<<<<
- *          raise SeaBreezeError(error_code=error_code)
- *     return bytes_read
- */
-  }
-
-  /* "seabreeze/cseabreeze/wrapper.pyx":668
- *     if error_code != 0:
- *          raise SeaBreezeError(error_code=error_code)
- *     return bytes_read             # <<<<<<<<<<<<<<
- * 
- * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_bytes_read); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 668, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_r = __pyx_t_6;
-  __pyx_t_6 = 0;
-  goto __pyx_L0;
-
-  /* "seabreeze/cseabreeze/wrapper.pyx":661
- *     return bytes_written
- * 
- * def device_usb_read(SeaBreezeDevice device not None, long featureID, unsigned char[::1] read):             # <<<<<<<<<<<<<<
- *     cdef int error_code
- *     cdef int bytes_read
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.device_usb_read", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __PYX_XDEC_MEMVIEW(&__pyx_v_read, 1);
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "seabreeze/cseabreeze/wrapper.pyx":670
- *     return bytes_read
  * 
  * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):             # <<<<<<<<<<<<<<
  *     cdef int error_code
@@ -15081,9 +15405,9 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_104device_usb_read(CY
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107spectrum_processing_set_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_107spectrum_processing_set_boxcar_width = {"spectrum_processing_set_boxcar_width", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107spectrum_processing_set_boxcar_width, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107spectrum_processing_set_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_set_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_set_boxcar_width = {"spectrum_processing_set_boxcar_width", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_set_boxcar_width, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_set_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device = 0;
   long __pyx_v_featureID;
   unsigned char __pyx_v_boxcar_width;
@@ -15111,16 +15435,16 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107spectrum_processin
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_featureID)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_boxcar_width", 1, 3, 3, 1); __PYX_ERR(0, 670, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_boxcar_width", 1, 3, 3, 1); __PYX_ERR(0, 689, __pyx_L3_error)
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_boxcar_width)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_boxcar_width", 1, 3, 3, 2); __PYX_ERR(0, 670, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_boxcar_width", 1, 3, 3, 2); __PYX_ERR(0, 689, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_set_boxcar_width") < 0)) __PYX_ERR(0, 670, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_set_boxcar_width") < 0)) __PYX_ERR(0, 689, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -15130,19 +15454,19 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107spectrum_processin
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
     __pyx_v_device = ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)values[0]);
-    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 670, __pyx_L3_error)
-    __pyx_v_boxcar_width = __Pyx_PyInt_As_unsigned_char(values[2]); if (unlikely((__pyx_v_boxcar_width == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 670, __pyx_L3_error)
+    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 689, __pyx_L3_error)
+    __pyx_v_boxcar_width = __Pyx_PyInt_As_unsigned_char(values[2]); if (unlikely((__pyx_v_boxcar_width == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 689, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_boxcar_width", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 670, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_boxcar_width", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 689, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.spectrum_processing_set_boxcar_width", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 670, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processing_set_boxcar_width(__pyx_self, __pyx_v_device, __pyx_v_featureID, __pyx_v_boxcar_width);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 689, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processing_set_boxcar_width(__pyx_self, __pyx_v_device, __pyx_v_featureID, __pyx_v_boxcar_width);
 
   /* function exit code */
   goto __pyx_L0;
@@ -15153,7 +15477,7 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_107spectrum_processin
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processing_set_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned char __pyx_v_boxcar_width) {
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processing_set_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned char __pyx_v_boxcar_width) {
   int __pyx_v_error_code;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -15163,7 +15487,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("spectrum_processing_set_boxcar_width", 0);
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":672
+  /* "seabreeze/cseabreeze/wrapper.pyx":691
  * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15177,7 +15501,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
       #endif
       /*try:*/ {
 
-        /* "seabreeze/cseabreeze/wrapper.pyx":673
+        /* "seabreeze/cseabreeze/wrapper.pyx":692
  *     cdef int error_code
  *     with nogil:
  *         csb.sbapi_spectrum_processing_boxcar_width_set(device.handle, featureID, &error_code, boxcar_width)             # <<<<<<<<<<<<<<
@@ -15187,7 +15511,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
         sbapi_spectrum_processing_boxcar_width_set(__pyx_v_device->handle, __pyx_v_featureID, (&__pyx_v_error_code), __pyx_v_boxcar_width);
       }
 
-      /* "seabreeze/cseabreeze/wrapper.pyx":672
+      /* "seabreeze/cseabreeze/wrapper.pyx":691
  * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15205,7 +15529,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
       }
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":674
+  /* "seabreeze/cseabreeze/wrapper.pyx":693
  *     with nogil:
  *         csb.sbapi_spectrum_processing_boxcar_width_set(device.handle, featureID, &error_code, boxcar_width)
  *     if error_code != 0:             # <<<<<<<<<<<<<<
@@ -15215,30 +15539,30 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
   __pyx_t_1 = ((__pyx_v_error_code != 0) != 0);
   if (__pyx_t_1) {
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":675
+    /* "seabreeze/cseabreeze/wrapper.pyx":694
  *         csb.sbapi_spectrum_processing_boxcar_width_set(device.handle, featureID, &error_code, boxcar_width)
  *     if error_code != 0:
  *         raise SeaBreezeError(error_code=error_code)             # <<<<<<<<<<<<<<
  * 
  * def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 675, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 694, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 675, __pyx_L1_error)
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 694, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 675, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 694, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 675, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 694, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 675, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 694, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 675, __pyx_L1_error)
+    __PYX_ERR(0, 694, __pyx_L1_error)
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":674
+    /* "seabreeze/cseabreeze/wrapper.pyx":693
  *     with nogil:
  *         csb.sbapi_spectrum_processing_boxcar_width_set(device.handle, featureID, &error_code, boxcar_width)
  *     if error_code != 0:             # <<<<<<<<<<<<<<
@@ -15247,8 +15571,8 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
  */
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":670
- *     return bytes_read
+  /* "seabreeze/cseabreeze/wrapper.pyx":689
+ *     return bytes_written
  * 
  * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):             # <<<<<<<<<<<<<<
  *     cdef int error_code
@@ -15270,7 +15594,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
   return __pyx_r;
 }
 
-/* "seabreeze/cseabreeze/wrapper.pyx":677
+/* "seabreeze/cseabreeze/wrapper.pyx":696
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):             # <<<<<<<<<<<<<<
@@ -15279,9 +15603,9 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_106spectrum_processin
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109spectrum_processing_set_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_109spectrum_processing_set_scans_to_average = {"spectrum_processing_set_scans_to_average", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109spectrum_processing_set_scans_to_average, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109spectrum_processing_set_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_115spectrum_processing_set_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_115spectrum_processing_set_scans_to_average = {"spectrum_processing_set_scans_to_average", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_115spectrum_processing_set_scans_to_average, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_115spectrum_processing_set_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device = 0;
   long __pyx_v_featureID;
   unsigned short __pyx_v_scans_to_average;
@@ -15309,16 +15633,16 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109spectrum_processin
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_featureID)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_scans_to_average", 1, 3, 3, 1); __PYX_ERR(0, 677, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_scans_to_average", 1, 3, 3, 1); __PYX_ERR(0, 696, __pyx_L3_error)
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_scans_to_average)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_scans_to_average", 1, 3, 3, 2); __PYX_ERR(0, 677, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_scans_to_average", 1, 3, 3, 2); __PYX_ERR(0, 696, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_set_scans_to_average") < 0)) __PYX_ERR(0, 677, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_set_scans_to_average") < 0)) __PYX_ERR(0, 696, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -15328,19 +15652,19 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109spectrum_processin
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
     __pyx_v_device = ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)values[0]);
-    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 677, __pyx_L3_error)
-    __pyx_v_scans_to_average = __Pyx_PyInt_As_unsigned_short(values[2]); if (unlikely((__pyx_v_scans_to_average == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 677, __pyx_L3_error)
+    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 696, __pyx_L3_error)
+    __pyx_v_scans_to_average = __Pyx_PyInt_As_unsigned_short(values[2]); if (unlikely((__pyx_v_scans_to_average == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 696, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_scans_to_average", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 677, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("spectrum_processing_set_scans_to_average", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 696, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.spectrum_processing_set_scans_to_average", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 677, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processing_set_scans_to_average(__pyx_self, __pyx_v_device, __pyx_v_featureID, __pyx_v_scans_to_average);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 696, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_114spectrum_processing_set_scans_to_average(__pyx_self, __pyx_v_device, __pyx_v_featureID, __pyx_v_scans_to_average);
 
   /* function exit code */
   goto __pyx_L0;
@@ -15351,7 +15675,7 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_109spectrum_processin
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processing_set_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned short __pyx_v_scans_to_average) {
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_114spectrum_processing_set_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID, unsigned short __pyx_v_scans_to_average) {
   int __pyx_v_error_code;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -15361,7 +15685,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("spectrum_processing_set_scans_to_average", 0);
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":679
+  /* "seabreeze/cseabreeze/wrapper.pyx":698
  * def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15375,7 +15699,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
       #endif
       /*try:*/ {
 
-        /* "seabreeze/cseabreeze/wrapper.pyx":680
+        /* "seabreeze/cseabreeze/wrapper.pyx":699
  *     cdef int error_code
  *     with nogil:
  *         csb.sbapi_spectrum_processing_scans_to_average_set(device.handle, featureID, &error_code, scans_to_average)             # <<<<<<<<<<<<<<
@@ -15385,7 +15709,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
         sbapi_spectrum_processing_scans_to_average_set(__pyx_v_device->handle, __pyx_v_featureID, (&__pyx_v_error_code), __pyx_v_scans_to_average);
       }
 
-      /* "seabreeze/cseabreeze/wrapper.pyx":679
+      /* "seabreeze/cseabreeze/wrapper.pyx":698
  * def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15403,7 +15727,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
       }
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":681
+  /* "seabreeze/cseabreeze/wrapper.pyx":700
  *     with nogil:
  *         csb.sbapi_spectrum_processing_scans_to_average_set(device.handle, featureID, &error_code, scans_to_average)
  *     if error_code != 0:             # <<<<<<<<<<<<<<
@@ -15413,30 +15737,30 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
   __pyx_t_1 = ((__pyx_v_error_code != 0) != 0);
   if (__pyx_t_1) {
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":682
+    /* "seabreeze/cseabreeze/wrapper.pyx":701
  *         csb.sbapi_spectrum_processing_scans_to_average_set(device.handle, featureID, &error_code, scans_to_average)
  *     if error_code != 0:
  *         raise SeaBreezeError(error_code=error_code)             # <<<<<<<<<<<<<<
  * 
  * def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 682, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 701, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 682, __pyx_L1_error)
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 701, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 682, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 701, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 682, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 701, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 682, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 701, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 682, __pyx_L1_error)
+    __PYX_ERR(0, 701, __pyx_L1_error)
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":681
+    /* "seabreeze/cseabreeze/wrapper.pyx":700
  *     with nogil:
  *         csb.sbapi_spectrum_processing_scans_to_average_set(device.handle, featureID, &error_code, scans_to_average)
  *     if error_code != 0:             # <<<<<<<<<<<<<<
@@ -15445,7 +15769,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
  */
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":677
+  /* "seabreeze/cseabreeze/wrapper.pyx":696
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):             # <<<<<<<<<<<<<<
@@ -15468,7 +15792,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
   return __pyx_r;
 }
 
-/* "seabreeze/cseabreeze/wrapper.pyx":684
+/* "seabreeze/cseabreeze/wrapper.pyx":703
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
@@ -15477,9 +15801,9 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_108spectrum_processin
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111spectrum_processing_get_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_111spectrum_processing_get_boxcar_width = {"spectrum_processing_get_boxcar_width", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111spectrum_processing_get_boxcar_width, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111spectrum_processing_get_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_117spectrum_processing_get_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_117spectrum_processing_get_boxcar_width = {"spectrum_processing_get_boxcar_width", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_117spectrum_processing_get_boxcar_width, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_117spectrum_processing_get_boxcar_width(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device = 0;
   long __pyx_v_featureID;
   PyObject *__pyx_r = 0;
@@ -15505,11 +15829,11 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111spectrum_processin
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_featureID)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_boxcar_width", 1, 2, 2, 1); __PYX_ERR(0, 684, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_boxcar_width", 1, 2, 2, 1); __PYX_ERR(0, 703, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_get_boxcar_width") < 0)) __PYX_ERR(0, 684, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_get_boxcar_width") < 0)) __PYX_ERR(0, 703, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -15518,18 +15842,18 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111spectrum_processin
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_device = ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)values[0]);
-    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 684, __pyx_L3_error)
+    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 703, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_boxcar_width", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 684, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_boxcar_width", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 703, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.spectrum_processing_get_boxcar_width", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 684, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processing_get_boxcar_width(__pyx_self, __pyx_v_device, __pyx_v_featureID);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 703, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_116spectrum_processing_get_boxcar_width(__pyx_self, __pyx_v_device, __pyx_v_featureID);
 
   /* function exit code */
   goto __pyx_L0;
@@ -15540,7 +15864,7 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_111spectrum_processin
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processing_get_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID) {
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_116spectrum_processing_get_boxcar_width(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID) {
   unsigned char __pyx_v_boxcar_width;
   int __pyx_v_error_code;
   PyObject *__pyx_r = NULL;
@@ -15551,7 +15875,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("spectrum_processing_get_boxcar_width", 0);
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":687
+  /* "seabreeze/cseabreeze/wrapper.pyx":706
  *     cdef unsigned char boxcar_width
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15565,7 +15889,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
       #endif
       /*try:*/ {
 
-        /* "seabreeze/cseabreeze/wrapper.pyx":688
+        /* "seabreeze/cseabreeze/wrapper.pyx":707
  *     cdef int error_code
  *     with nogil:
  *         boxcar_width = csb.sbapi_spectrum_processing_boxcar_width_get(device.handle, featureID, &error_code)             # <<<<<<<<<<<<<<
@@ -15575,7 +15899,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
         __pyx_v_boxcar_width = sbapi_spectrum_processing_boxcar_width_get(__pyx_v_device->handle, __pyx_v_featureID, (&__pyx_v_error_code));
       }
 
-      /* "seabreeze/cseabreeze/wrapper.pyx":687
+      /* "seabreeze/cseabreeze/wrapper.pyx":706
  *     cdef unsigned char boxcar_width
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15593,7 +15917,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
       }
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":689
+  /* "seabreeze/cseabreeze/wrapper.pyx":708
  *     with nogil:
  *         boxcar_width = csb.sbapi_spectrum_processing_boxcar_width_get(device.handle, featureID, &error_code)
  *     if boxcar_width < 0:             # <<<<<<<<<<<<<<
@@ -15603,30 +15927,30 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
   __pyx_t_1 = ((__pyx_v_boxcar_width < 0) != 0);
   if (__pyx_t_1) {
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":690
+    /* "seabreeze/cseabreeze/wrapper.pyx":709
  *         boxcar_width = csb.sbapi_spectrum_processing_boxcar_width_get(device.handle, featureID, &error_code)
  *     if boxcar_width < 0:
  *         raise SeaBreezeError(error_code=error_code)             # <<<<<<<<<<<<<<
  *     return boxcar_width
  * 
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 690, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 690, __pyx_L1_error)
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 690, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 690, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 690, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 690, __pyx_L1_error)
+    __PYX_ERR(0, 709, __pyx_L1_error)
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":689
+    /* "seabreeze/cseabreeze/wrapper.pyx":708
  *     with nogil:
  *         boxcar_width = csb.sbapi_spectrum_processing_boxcar_width_get(device.handle, featureID, &error_code)
  *     if boxcar_width < 0:             # <<<<<<<<<<<<<<
@@ -15635,7 +15959,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
  */
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":691
+  /* "seabreeze/cseabreeze/wrapper.pyx":710
  *     if boxcar_width < 0:
  *         raise SeaBreezeError(error_code=error_code)
  *     return boxcar_width             # <<<<<<<<<<<<<<
@@ -15643,13 +15967,13 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
  * def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_char(__pyx_v_boxcar_width); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 691, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_char(__pyx_v_boxcar_width); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 710, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":684
+  /* "seabreeze/cseabreeze/wrapper.pyx":703
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
@@ -15670,7 +15994,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
   return __pyx_r;
 }
 
-/* "seabreeze/cseabreeze/wrapper.pyx":693
+/* "seabreeze/cseabreeze/wrapper.pyx":712
  *     return boxcar_width
  * 
  * def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
@@ -15679,9 +16003,9 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_110spectrum_processin
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_get_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_get_scans_to_average = {"spectrum_processing_get_scans_to_average", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_get_scans_to_average, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_get_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_119spectrum_processing_get_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_9seabreeze_10cseabreeze_7wrapper_119spectrum_processing_get_scans_to_average = {"spectrum_processing_get_scans_to_average", (PyCFunction)__pyx_pw_9seabreeze_10cseabreeze_7wrapper_119spectrum_processing_get_scans_to_average, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_119spectrum_processing_get_scans_to_average(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device = 0;
   long __pyx_v_featureID;
   PyObject *__pyx_r = 0;
@@ -15707,11 +16031,11 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processin
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_featureID)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_scans_to_average", 1, 2, 2, 1); __PYX_ERR(0, 693, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_scans_to_average", 1, 2, 2, 1); __PYX_ERR(0, 712, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_get_scans_to_average") < 0)) __PYX_ERR(0, 693, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "spectrum_processing_get_scans_to_average") < 0)) __PYX_ERR(0, 712, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -15720,18 +16044,18 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processin
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_device = ((struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *)values[0]);
-    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 693, __pyx_L3_error)
+    __pyx_v_featureID = __Pyx_PyInt_As_long(values[1]); if (unlikely((__pyx_v_featureID == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 712, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_scans_to_average", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 693, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("spectrum_processing_get_scans_to_average", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 712, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("seabreeze.cseabreeze.wrapper.spectrum_processing_get_scans_to_average", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 693, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processing_get_scans_to_average(__pyx_self, __pyx_v_device, __pyx_v_featureID);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_device), __pyx_ptype_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice, 0, "device", 0))) __PYX_ERR(0, 712, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9seabreeze_10cseabreeze_7wrapper_118spectrum_processing_get_scans_to_average(__pyx_self, __pyx_v_device, __pyx_v_featureID);
 
   /* function exit code */
   goto __pyx_L0;
@@ -15742,7 +16066,7 @@ static PyObject *__pyx_pw_9seabreeze_10cseabreeze_7wrapper_113spectrum_processin
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processing_get_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID) {
+static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_118spectrum_processing_get_scans_to_average(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_9seabreeze_10cseabreeze_7wrapper_SeaBreezeDevice *__pyx_v_device, long __pyx_v_featureID) {
   unsigned short __pyx_v_scans_to_average;
   int __pyx_v_error_code;
   PyObject *__pyx_r = NULL;
@@ -15753,7 +16077,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processin
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("spectrum_processing_get_scans_to_average", 0);
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":696
+  /* "seabreeze/cseabreeze/wrapper.pyx":715
  *     cdef unsigned short int scans_to_average
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15767,7 +16091,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processin
       #endif
       /*try:*/ {
 
-        /* "seabreeze/cseabreeze/wrapper.pyx":697
+        /* "seabreeze/cseabreeze/wrapper.pyx":716
  *     cdef int error_code
  *     with nogil:
  *         scans_to_average = csb.sbapi_spectrum_processing_scans_to_average_get(device.handle, featureID, &error_code)             # <<<<<<<<<<<<<<
@@ -15777,7 +16101,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processin
         __pyx_v_scans_to_average = sbapi_spectrum_processing_scans_to_average_get(__pyx_v_device->handle, __pyx_v_featureID, (&__pyx_v_error_code));
       }
 
-      /* "seabreeze/cseabreeze/wrapper.pyx":696
+      /* "seabreeze/cseabreeze/wrapper.pyx":715
  *     cdef unsigned short int scans_to_average
  *     cdef int error_code
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -15795,7 +16119,7 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processin
       }
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":698
+  /* "seabreeze/cseabreeze/wrapper.pyx":717
  *     with nogil:
  *         scans_to_average = csb.sbapi_spectrum_processing_scans_to_average_get(device.handle, featureID, &error_code)
  *     if scans_to_average < 1:             # <<<<<<<<<<<<<<
@@ -15805,30 +16129,30 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processin
   __pyx_t_1 = ((__pyx_v_scans_to_average < 1) != 0);
   if (__pyx_t_1) {
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":699
+    /* "seabreeze/cseabreeze/wrapper.pyx":718
  *         scans_to_average = csb.sbapi_spectrum_processing_scans_to_average_get(device.handle, featureID, &error_code)
  *     if scans_to_average < 1:
  *         raise SeaBreezeError(error_code=error_code)             # <<<<<<<<<<<<<<
  *     return scans_to_average
  * 
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 699, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_SeaBreezeError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 718, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 699, __pyx_L1_error)
+    __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 718, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 699, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_error_code); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 718, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 699, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_error_code, __pyx_t_4) < 0) __PYX_ERR(0, 718, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 699, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 718, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 699, __pyx_L1_error)
+    __PYX_ERR(0, 718, __pyx_L1_error)
 
-    /* "seabreeze/cseabreeze/wrapper.pyx":698
+    /* "seabreeze/cseabreeze/wrapper.pyx":717
  *     with nogil:
  *         scans_to_average = csb.sbapi_spectrum_processing_scans_to_average_get(device.handle, featureID, &error_code)
  *     if scans_to_average < 1:             # <<<<<<<<<<<<<<
@@ -15837,20 +16161,20 @@ static PyObject *__pyx_pf_9seabreeze_10cseabreeze_7wrapper_112spectrum_processin
  */
   }
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":700
+  /* "seabreeze/cseabreeze/wrapper.pyx":719
  *     if scans_to_average < 1:
  *         raise SeaBreezeError(error_code=error_code)
  *     return scans_to_average             # <<<<<<<<<<<<<<
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_scans_to_average); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 700, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_scans_to_average); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 719, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":693
+  /* "seabreeze/cseabreeze/wrapper.pyx":712
  *     return boxcar_width
  * 
  * def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
@@ -16056,7 +16380,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if itemsize <= 0:
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 131, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 131, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -16088,7 +16412,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if not isinstance(format, bytes):
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 134, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 134, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -16123,7 +16447,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  */
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_format, __pyx_n_s_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 137, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 137, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 137, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_format, __pyx_t_5);
@@ -16199,7 +16523,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  * 
  */
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 146, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -16483,7 +16807,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *             if self.dtype_is_object:
  */
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 174, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 174, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_Raise(__pyx_t_5, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -16721,7 +17045,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(stru
  *         info.buf = self.data
  *         info.len = self.len
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 190, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -19687,7 +20011,7 @@ static PyObject *__pyx_memoryview_convert_item_to_object(struct __pyx_memoryview
  *         else:
  *             if len(self.view.format) == 1:
  */
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 484, __pyx_L5_except_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 484, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_Raise(__pyx_t_6, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -20528,7 +20852,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_7strides___get__(st
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 556, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__18, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 556, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -20642,7 +20966,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_10suboffsets___get_
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->view.ndim); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 563, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__15, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 563, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__19, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 563, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_r = __pyx_t_3;
@@ -21946,9 +22270,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
         __Pyx_GOTREF(__pyx_t_7);
         { Py_ssize_t __pyx_temp;
           for (__pyx_temp=0; __pyx_temp < ((__pyx_v_ndim - __pyx_t_8) + 1); __pyx_temp++) {
-            __Pyx_INCREF(__pyx_slice__16);
-            __Pyx_GIVEREF(__pyx_slice__16);
-            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__16);
+            __Pyx_INCREF(__pyx_slice__20);
+            __Pyx_GIVEREF(__pyx_slice__20);
+            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__20);
           }
         }
         __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_7); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 668, __pyx_L1_error)
@@ -21981,7 +22305,7 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
  *         else:
  */
       /*else*/ {
-        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__17); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 671, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__21); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 671, __pyx_L1_error)
       }
       __pyx_L7:;
 
@@ -22126,9 +22450,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
     __Pyx_GOTREF(__pyx_t_3);
     { Py_ssize_t __pyx_temp;
       for (__pyx_temp=0; __pyx_temp < __pyx_v_nslices; __pyx_temp++) {
-        __Pyx_INCREF(__pyx_slice__18);
-        __Pyx_GIVEREF(__pyx_slice__18);
-        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__18);
+        __Pyx_INCREF(__pyx_slice__22);
+        __Pyx_GIVEREF(__pyx_slice__22);
+        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__22);
       }
     }
     __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_3); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 682, __pyx_L1_error)
@@ -22252,7 +22576,7 @@ static PyObject *assert_direct_dimensions(Py_ssize_t *__pyx_v_suboffsets, int __
  * 
  * 
  */
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 689, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 689, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_Raise(__pyx_t_5, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -28358,6 +28682,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_Cannot_index_with_type_s, __pyx_k_Cannot_index_with_type_s, sizeof(__pyx_k_Cannot_index_with_type_s), 0, 0, 1, 0},
   {&__pyx_n_s_Ellipsis, __pyx_k_Ellipsis, sizeof(__pyx_k_Ellipsis), 0, 0, 1, 1},
   {&__pyx_kp_s_Empty_shape_tuple_for_cython_arr, __pyx_k_Empty_shape_tuple_for_cython_arr, sizeof(__pyx_k_Empty_shape_tuple_for_cython_arr), 0, 0, 1, 0},
+  {&__pyx_kp_s_Failed_to_get_Primary_In_USB_end, __pyx_k_Failed_to_get_Primary_In_USB_end, sizeof(__pyx_k_Failed_to_get_Primary_In_USB_end), 0, 0, 1, 0},
+  {&__pyx_kp_s_Failed_to_get_Primary_Out_USB_en, __pyx_k_Failed_to_get_Primary_Out_USB_en, sizeof(__pyx_k_Failed_to_get_Primary_Out_USB_en), 0, 0, 1, 0},
+  {&__pyx_kp_s_Failed_to_get_Secondary_In_USB_e, __pyx_k_Failed_to_get_Secondary_In_USB_e, sizeof(__pyx_k_Failed_to_get_Secondary_In_USB_e), 0, 0, 1, 0},
+  {&__pyx_kp_s_Failed_to_get_Secondary_Out_USB, __pyx_k_Failed_to_get_Secondary_Out_USB, sizeof(__pyx_k_Failed_to_get_Secondary_Out_USB), 0, 0, 1, 0},
   {&__pyx_n_s_IndexError, __pyx_k_IndexError, sizeof(__pyx_k_IndexError), 0, 0, 1, 1},
   {&__pyx_kp_s_Indirect_dimensions_not_supporte, __pyx_k_Indirect_dimensions_not_supporte, sizeof(__pyx_k_Indirect_dimensions_not_supporte), 0, 0, 1, 0},
   {&__pyx_kp_s_Invalid_mode_expected_c_or_fortr, __pyx_k_Invalid_mode_expected_c_or_fortr, sizeof(__pyx_k_Invalid_mode_expected_c_or_fortr), 0, 0, 1, 0},
@@ -28388,14 +28716,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_This_should_not_have_happened_Ap_9, __pyx_k_This_should_not_have_happened_Ap_9, sizeof(__pyx_k_This_should_not_have_happened_Ap_9), 0, 0, 1, 0},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Unable_to_convert_item_to_object, __pyx_k_Unable_to_convert_item_to_object, sizeof(__pyx_k_Unable_to_convert_item_to_object), 0, 0, 1, 0},
+  {&__pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_k_Users_cmorton_Documents_Saturn, sizeof(__pyx_k_Users_cmorton_Documents_Saturn), 0, 0, 1, 0},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
-  {&__pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_k_Volumes_stuff_src_apps_python_s, sizeof(__pyx_k_Volumes_stuff_src_apps_python_s), 0, 0, 1, 0},
   {&__pyx_kp_s__5, __pyx_k__5, sizeof(__pyx_k__5), 0, 0, 1, 0},
   {&__pyx_n_s_allocate_buffer, __pyx_k_allocate_buffer, sizeof(__pyx_k_allocate_buffer), 0, 0, 1, 1},
   {&__pyx_n_s_area, __pyx_k_area, sizeof(__pyx_k_area), 0, 0, 1, 1},
   {&__pyx_n_s_base, __pyx_k_base, sizeof(__pyx_k_base), 0, 0, 1, 1},
   {&__pyx_n_s_boxcar_width, __pyx_k_boxcar_width, sizeof(__pyx_k_boxcar_width), 0, 0, 1, 1},
-  {&__pyx_n_s_bytes_read, __pyx_k_bytes_read, sizeof(__pyx_k_bytes_read), 0, 0, 1, 1},
   {&__pyx_n_s_bytes_written, __pyx_k_bytes_written, sizeof(__pyx_k_bytes_written), 0, 0, 1, 1},
   {&__pyx_n_s_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 0, 1, 1},
   {&__pyx_n_u_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 1, 0, 1},
@@ -28420,6 +28747,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_device_get_model, __pyx_k_device_get_model, sizeof(__pyx_k_device_get_model), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_nonlinearity_coeffs_f, __pyx_k_device_get_nonlinearity_coeffs_f, sizeof(__pyx_k_device_get_nonlinearity_coeffs_f), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_raw_usb_bus_access_fe, __pyx_k_device_get_raw_usb_bus_access_fe, sizeof(__pyx_k_device_get_raw_usb_bus_access_fe), 0, 0, 1, 1},
+  {&__pyx_n_s_device_get_raw_usb_endpoint_prim, __pyx_k_device_get_raw_usb_endpoint_prim, sizeof(__pyx_k_device_get_raw_usb_endpoint_prim), 0, 0, 1, 1},
+  {&__pyx_n_s_device_get_raw_usb_endpoint_prim_2, __pyx_k_device_get_raw_usb_endpoint_prim_2, sizeof(__pyx_k_device_get_raw_usb_endpoint_prim_2), 0, 0, 1, 1},
+  {&__pyx_n_s_device_get_raw_usb_endpoint_seco, __pyx_k_device_get_raw_usb_endpoint_seco, sizeof(__pyx_k_device_get_raw_usb_endpoint_seco), 0, 0, 1, 1},
+  {&__pyx_n_s_device_get_raw_usb_endpoint_seco_2, __pyx_k_device_get_raw_usb_endpoint_seco_2, sizeof(__pyx_k_device_get_raw_usb_endpoint_seco_2), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_serial_number, __pyx_k_device_get_serial_number, sizeof(__pyx_k_device_get_serial_number), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_shutter_feature_id, __pyx_k_device_get_shutter_feature_id, sizeof(__pyx_k_device_get_shutter_feature_id), 0, 0, 1, 1},
   {&__pyx_n_s_device_get_spectrometer_feature, __pyx_k_device_get_spectrometer_feature, sizeof(__pyx_k_device_get_spectrometer_feature), 0, 0, 1, 1},
@@ -28429,7 +28760,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_device_is_open, __pyx_k_device_is_open, sizeof(__pyx_k_device_is_open), 0, 0, 1, 1},
   {&__pyx_n_s_device_list_devices, __pyx_k_device_list_devices, sizeof(__pyx_k_device_list_devices), 0, 0, 1, 1},
   {&__pyx_n_s_device_open, __pyx_k_device_open, sizeof(__pyx_k_device_open), 0, 0, 1, 1},
-  {&__pyx_n_s_device_usb_read, __pyx_k_device_usb_read, sizeof(__pyx_k_device_usb_read), 0, 0, 1, 1},
   {&__pyx_n_s_device_usb_write, __pyx_k_device_usb_write, sizeof(__pyx_k_device_usb_write), 0, 0, 1, 1},
   {&__pyx_n_s_devices, __pyx_k_devices, sizeof(__pyx_k_devices), 0, 0, 1, 1},
   {&__pyx_n_s_doc, __pyx_k_doc, sizeof(__pyx_k_doc), 0, 0, 1, 1},
@@ -28438,6 +28768,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_eeprom_read_slot, __pyx_k_eeprom_read_slot, sizeof(__pyx_k_eeprom_read_slot), 0, 0, 1, 1},
   {&__pyx_n_s_enable, __pyx_k_enable, sizeof(__pyx_k_enable), 0, 0, 1, 1},
   {&__pyx_n_s_encode, __pyx_k_encode, sizeof(__pyx_k_encode), 0, 0, 1, 1},
+  {&__pyx_n_s_endpoint, __pyx_k_endpoint, sizeof(__pyx_k_endpoint), 0, 0, 1, 1},
   {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
   {&__pyx_n_s_error, __pyx_k_error, sizeof(__pyx_k_error), 0, 0, 1, 1},
   {&__pyx_n_s_error_code, __pyx_k_error_code, sizeof(__pyx_k_error_code), 0, 0, 1, 1},
@@ -28500,8 +28831,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_qualname, __pyx_k_qualname, sizeof(__pyx_k_qualname), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
-  {&__pyx_n_s_read, __pyx_k_read, sizeof(__pyx_k_read), 0, 0, 1, 1},
-  {&__pyx_n_s_read_length, __pyx_k_read_length, sizeof(__pyx_k_read_length), 0, 0, 1, 1},
   {&__pyx_n_s_ret, __pyx_k_ret, sizeof(__pyx_k_ret), 0, 0, 1, 1},
   {&__pyx_n_s_rstrip, __pyx_k_rstrip, sizeof(__pyx_k_rstrip), 0, 0, 1, 1},
   {&__pyx_n_s_scans_to_average, __pyx_k_scans_to_average, sizeof(__pyx_k_scans_to_average), 0, 0, 1, 1},
@@ -28547,6 +28876,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_unable_to_allocate_array_data, __pyx_k_unable_to_allocate_array_data, sizeof(__pyx_k_unable_to_allocate_array_data), 0, 0, 1, 0},
   {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
   {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
+  {&__pyx_n_s_usb_out_endpoint, __pyx_k_usb_out_endpoint, sizeof(__pyx_k_usb_out_endpoint), 0, 0, 1, 1},
   {&__pyx_kp_s_utf_8, __pyx_k_utf_8, sizeof(__pyx_k_utf_8), 0, 0, 1, 0},
   {&__pyx_n_s_values_written, __pyx_k_values_written, sizeof(__pyx_k_values_written), 0, 0, 1, 1},
   {&__pyx_n_s_was_open_before, __pyx_k_was_open_before, sizeof(__pyx_k_was_open_before), 0, 0, 1, 1},
@@ -28615,6 +28945,50 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
+  /* "seabreeze/cseabreeze/wrapper.pyx":656
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary Out USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_s_Failed_to_get_Primary_Out_USB_en); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 656, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__7);
+  __Pyx_GIVEREF(__pyx_tuple__7);
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":663
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Primary In USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_Failed_to_get_Primary_In_USB_end); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 663, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":670
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary Out USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s_Failed_to_get_Secondary_Out_USB); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 670, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__9);
+  __Pyx_GIVEREF(__pyx_tuple__9);
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":677
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ *     if error_code != 0:
+ *         raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)             # <<<<<<<<<<<<<<
+ *     return endpoint
+ * 
+ */
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_s_Failed_to_get_Secondary_In_USB_e); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 677, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
+
   /* "View.MemoryView":131
  * 
  *         if not self.ndim:
@@ -28622,9 +28996,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if itemsize <= 0:
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(1, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__7);
-  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 131, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__11);
+  __Pyx_GIVEREF(__pyx_tuple__11);
 
   /* "View.MemoryView":134
  * 
@@ -28633,9 +29007,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if not isinstance(format, bytes):
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 134, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__8);
-  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 134, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
 
   /* "View.MemoryView":137
  * 
@@ -28644,9 +29018,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         self._format = format  # keep a reference to the byte string
  *         self.format = self._format
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_n_s_ASCII); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 137, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__9);
-  __Pyx_GIVEREF(__pyx_tuple__9);
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_n_s_ASCII); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 137, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
 
   /* "View.MemoryView":146
  * 
@@ -28655,9 +29029,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(1, 146, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__10);
-  __Pyx_GIVEREF(__pyx_tuple__10);
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 146, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "View.MemoryView":174
  *             self.data = <char *>malloc(self.len)
@@ -28666,9 +29040,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             if self.dtype_is_object:
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 174, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 174, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
 
   /* "View.MemoryView":190
  *             bufmode = PyBUF_F_CONTIGUOUS | PyBUF_ANY_CONTIGUOUS
@@ -28677,9 +29051,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         info.buf = self.data
  *         info.len = self.len
  */
-  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 190, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__12);
-  __Pyx_GIVEREF(__pyx_tuple__12);
+  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(1, 190, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__16);
+  __Pyx_GIVEREF(__pyx_tuple__16);
 
   /* "View.MemoryView":484
  *             result = struct.unpack(self.view.format, bytesitem)
@@ -28688,9 +29062,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         else:
  *             if len(self.view.format) == 1:
  */
-  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 484, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
+  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(1, 484, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
 
   /* "View.MemoryView":556
  *         if self.view.strides == NULL:
@@ -28699,9 +29073,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 556, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 556, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
 
   /* "View.MemoryView":563
  *     def suboffsets(self):
@@ -28710,12 +29084,12 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([suboffset for suboffset in self.view.suboffsets[:self.view.ndim]])
  */
-  __pyx_tuple__15 = PyTuple_New(1); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 563, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
+  __pyx_tuple__19 = PyTuple_New(1); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(1, 563, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
   __Pyx_INCREF(__pyx_int_neg_1);
   __Pyx_GIVEREF(__pyx_int_neg_1);
-  PyTuple_SET_ITEM(__pyx_tuple__15, 0, __pyx_int_neg_1);
-  __Pyx_GIVEREF(__pyx_tuple__15);
+  PyTuple_SET_ITEM(__pyx_tuple__19, 0, __pyx_int_neg_1);
+  __Pyx_GIVEREF(__pyx_tuple__19);
 
   /* "View.MemoryView":668
  *         if item is Ellipsis:
@@ -28724,9 +29098,9 @@ static int __Pyx_InitCachedConstants(void) {
  *                 seen_ellipsis = True
  *             else:
  */
-  __pyx_slice__16 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__16)) __PYX_ERR(1, 668, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__16);
-  __Pyx_GIVEREF(__pyx_slice__16);
+  __pyx_slice__20 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__20)) __PYX_ERR(1, 668, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__20);
+  __Pyx_GIVEREF(__pyx_slice__20);
 
   /* "View.MemoryView":671
  *                 seen_ellipsis = True
@@ -28735,9 +29109,9 @@ static int __Pyx_InitCachedConstants(void) {
  *             have_slices = True
  *         else:
  */
-  __pyx_slice__17 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__17)) __PYX_ERR(1, 671, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__17);
-  __Pyx_GIVEREF(__pyx_slice__17);
+  __pyx_slice__21 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__21)) __PYX_ERR(1, 671, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__21);
+  __Pyx_GIVEREF(__pyx_slice__21);
 
   /* "View.MemoryView":682
  *     nslices = ndim - len(result)
@@ -28746,9 +29120,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *     return have_slices or nslices, tuple(result)
  */
-  __pyx_slice__18 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__18)) __PYX_ERR(1, 682, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__18);
-  __Pyx_GIVEREF(__pyx_slice__18);
+  __pyx_slice__22 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__22)) __PYX_ERR(1, 682, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__22);
+  __Pyx_GIVEREF(__pyx_slice__22);
 
   /* "View.MemoryView":689
  *     for suboffset in suboffsets[:ndim]:
@@ -28757,9 +29131,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(1, 689, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 689, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
 
   /* "seabreeze/cseabreeze/wrapper.pyx":19
  * class SeaBreezeError(Exception):
@@ -28768,13 +29142,13 @@ static int __Pyx_InitCachedConstants(void) {
  *         cdef const char *cmessage
  *         if error_code is not None:
  */
-  __pyx_tuple__20 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_message, __pyx_n_s_error_code, __pyx_n_s_cmessage); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 19, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__20);
-  __Pyx_GIVEREF(__pyx_tuple__20);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_init, 19, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 19, __pyx_L1_error)
-  __pyx_tuple__22 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 19, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__22);
-  __Pyx_GIVEREF(__pyx_tuple__22);
+  __pyx_tuple__24 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_message, __pyx_n_s_error_code, __pyx_n_s_cmessage); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__24);
+  __Pyx_GIVEREF(__pyx_tuple__24);
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_init, 19, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_tuple__26 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__26);
+  __Pyx_GIVEREF(__pyx_tuple__26);
 
   /* "seabreeze/cseabreeze/wrapper.pyx":60
  * 
@@ -28783,10 +29157,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     """list_devices()
  * 
  */
-  __pyx_tuple__23 = PyTuple_Pack(9, __pyx_n_s_N_devices, __pyx_n_s_deviceIDs, __pyx_n_s_devices, __pyx_n_s_tmpdevice, __pyx_n_s_i, __pyx_n_s_handle, __pyx_n_s_was_open_before, __pyx_n_s_model, __pyx_n_s_serial); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(0, 60, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
-  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(0, 0, 9, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_list_devices, 60, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 60, __pyx_L1_error)
+  __pyx_tuple__27 = PyTuple_Pack(9, __pyx_n_s_N_devices, __pyx_n_s_deviceIDs, __pyx_n_s_devices, __pyx_n_s_tmpdevice, __pyx_n_s_i, __pyx_n_s_handle, __pyx_n_s_was_open_before, __pyx_n_s_model, __pyx_n_s_serial); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 60, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__27);
+  __Pyx_GIVEREF(__pyx_tuple__27);
+  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(0, 0, 9, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_list_devices, 60, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 60, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":94
  * 
@@ -28795,10 +29169,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int ret
  */
-  __pyx_tuple__25 = PyTuple_Pack(3, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_ret); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 94, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__25);
-  __Pyx_GIVEREF(__pyx_tuple__25);
-  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_open, 94, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_tuple__29 = PyTuple_Pack(3, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_ret); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__29);
+  __Pyx_GIVEREF(__pyx_tuple__29);
+  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_open, 94, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 94, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":101
  *         raise SeaBreezeError(error_code=error_code)
@@ -28807,10 +29181,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     try:
  *         # this is a hack to figure out if the spectrometer is connected
  */
-  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_n_s_device); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 101, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__27);
-  __Pyx_GIVEREF(__pyx_tuple__27);
-  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_is_open, 101, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 101, __pyx_L1_error)
+  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_n_s_device); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 101, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__31);
+  __Pyx_GIVEREF(__pyx_tuple__31);
+  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_is_open, 101, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 101, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":110
  *         return True
@@ -28819,10 +29193,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     # always returns 1
  */
-  __pyx_tuple__29 = PyTuple_Pack(2, __pyx_n_s_device, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 110, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__29);
-  __Pyx_GIVEREF(__pyx_tuple__29);
-  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_close, 110, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_tuple__33 = PyTuple_Pack(2, __pyx_n_s_device, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__33);
+  __Pyx_GIVEREF(__pyx_tuple__33);
+  __pyx_codeobj__34 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_close, 110, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__34)) __PYX_ERR(0, 110, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":117
  *         raise SeaBreezeError(error_code=error_code)
@@ -28831,10 +29205,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef char cbuf[SBMAXBUFLEN]
  */
-  __pyx_tuple__31 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_cbuf, __pyx_n_s_bytes_written, __pyx_n_s_model); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 117, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__31);
-  __Pyx_GIVEREF(__pyx_tuple__31);
-  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_model, 117, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_tuple__35 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_cbuf, __pyx_n_s_bytes_written, __pyx_n_s_model); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(0, 117, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__35);
+  __Pyx_GIVEREF(__pyx_tuple__35);
+  __pyx_codeobj__36 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_model, 117, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__36)) __PYX_ERR(0, 117, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":127
  *     return model.decode("utf-8")
@@ -28843,10 +29217,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int N_serialnumber_features
  */
-  __pyx_tuple__33 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_N_serialnumber_features, __pyx_n_s_featureID, __pyx_n_s_cbuf, __pyx_n_s_bytes_written, __pyx_n_s_serial); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(0, 127, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__33);
-  __Pyx_GIVEREF(__pyx_tuple__33);
-  __pyx_codeobj__34 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_serial_number, 127, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__34)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __pyx_tuple__37 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_N_serialnumber_features, __pyx_n_s_featureID, __pyx_n_s_cbuf, __pyx_n_s_bytes_written, __pyx_n_s_serial); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__37);
+  __Pyx_GIVEREF(__pyx_tuple__37);
+  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_serial_number, 127, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(0, 127, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":151
  * 
@@ -28855,10 +29229,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__35 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(0, 151, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__35);
-  __Pyx_GIVEREF(__pyx_tuple__35);
-  __pyx_codeobj__36 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_spectrometer_feature, 151, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__36)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __pyx_tuple__39 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__39);
+  __Pyx_GIVEREF(__pyx_tuple__39);
+  __pyx_codeobj__40 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__39, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_spectrometer_feature, 151, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__40)) __PYX_ERR(0, 151, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":170
  *                 "Please file a bug report including a description of your device." % N)
@@ -28867,10 +29241,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     with nogil:
  */
-  __pyx_tuple__37 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_mode, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 170, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__37);
-  __Pyx_GIVEREF(__pyx_tuple__37);
-  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_set_trigger_mode, 170, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __pyx_tuple__41 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_mode, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__41);
+  __Pyx_GIVEREF(__pyx_tuple__41);
+  __pyx_codeobj__42 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__41, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_set_trigger_mode, 170, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__42)) __PYX_ERR(0, 170, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":177
  *         raise SeaBreezeError(error_code=error_code)
@@ -28879,10 +29253,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     with nogil:
  */
-  __pyx_tuple__39 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_integration_time_micros, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(0, 177, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__39);
-  __Pyx_GIVEREF(__pyx_tuple__39);
-  __pyx_codeobj__40 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__39, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_set_integration_tim, 177, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__40)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_tuple__43 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_integration_time_micros, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__43);
+  __Pyx_GIVEREF(__pyx_tuple__43);
+  __pyx_codeobj__44 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__43, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_set_integration_tim, 177, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__44)) __PYX_ERR(0, 177, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":184
  *         raise SeaBreezeError(error_code=error_code)
@@ -28891,10 +29265,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef long min_integration_time
  *     cdef int error_code
  */
-  __pyx_tuple__41 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_min_integration_time, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(0, 184, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__41);
-  __Pyx_GIVEREF(__pyx_tuple__41);
-  __pyx_codeobj__42 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__41, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_get_minimum_integra, 184, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__42)) __PYX_ERR(0, 184, __pyx_L1_error)
+  __pyx_tuple__45 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_min_integration_time, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(0, 184, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__45);
+  __Pyx_GIVEREF(__pyx_tuple__45);
+  __pyx_codeobj__46 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__45, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_get_minimum_integra, 184, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__46)) __PYX_ERR(0, 184, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":193
  *     return min_integration_time
@@ -28903,10 +29277,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int spec_length
  */
-  __pyx_tuple__43 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_spec_length); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(0, 193, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__43);
-  __Pyx_GIVEREF(__pyx_tuple__43);
-  __pyx_codeobj__44 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__43, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_get_formatted_spect, 193, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__44)) __PYX_ERR(0, 193, __pyx_L1_error)
+  __pyx_tuple__47 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_spec_length); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(0, 193, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__47);
+  __Pyx_GIVEREF(__pyx_tuple__47);
+  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_get_formatted_spect, 193, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(0, 193, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":203
  * 
@@ -28915,10 +29289,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int bytes_written
  */
-  __pyx_tuple__45 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(0, 203, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__45);
-  __Pyx_GIVEREF(__pyx_tuple__45);
-  __pyx_codeobj__46 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__45, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_get_formatted_spect_2, 203, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__46)) __PYX_ERR(0, 203, __pyx_L1_error)
+  __pyx_tuple__49 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 203, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__49);
+  __Pyx_GIVEREF(__pyx_tuple__49);
+  __pyx_codeobj__50 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_get_formatted_spect_2, 203, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__50)) __PYX_ERR(0, 203, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":213
  *     return bytes_written
@@ -28927,10 +29301,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int spec_length
  */
-  __pyx_tuple__47 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_spec_length); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(0, 213, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__47);
-  __Pyx_GIVEREF(__pyx_tuple__47);
-  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_get_unformatted_spe, 213, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_tuple__51 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_spec_length); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__51);
+  __Pyx_GIVEREF(__pyx_tuple__51);
+  __pyx_codeobj__52 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__51, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_get_unformatted_spe, 213, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__52)) __PYX_ERR(0, 213, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":223
  * 
@@ -28939,10 +29313,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int bytes_written
  */
-  __pyx_tuple__49 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 223, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__49);
-  __Pyx_GIVEREF(__pyx_tuple__49);
-  __pyx_codeobj__50 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_get_unformatted_spe_2, 223, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__50)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_tuple__53 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__53);
+  __Pyx_GIVEREF(__pyx_tuple__53);
+  __pyx_codeobj__54 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__53, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_get_unformatted_spe_2, 223, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__54)) __PYX_ERR(0, 223, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":234
  * 
@@ -28951,10 +29325,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int bytes_written
  */
-  __pyx_tuple__51 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 234, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__51);
-  __Pyx_GIVEREF(__pyx_tuple__51);
-  __pyx_codeobj__52 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__51, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_get_wavelengths, 234, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__52)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_tuple__55 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__55);
+  __Pyx_GIVEREF(__pyx_tuple__55);
+  __pyx_codeobj__56 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__55, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_get_wavelengths, 234, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__56)) __PYX_ERR(0, 234, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":244
  *     return bytes_written
@@ -28963,10 +29337,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     assert device.handle >= 0
  *     cdef int error_code
  */
-  __pyx_tuple__53 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_dp_count, __pyx_n_s_cindices, __pyx_n_s_indices, __pyx_n_s_i); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(0, 244, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__53);
-  __Pyx_GIVEREF(__pyx_tuple__53);
-  __pyx_codeobj__54 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__53, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrometer_get_electric_dark_p, 244, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__54)) __PYX_ERR(0, 244, __pyx_L1_error)
+  __pyx_tuple__57 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_dp_count, __pyx_n_s_cindices, __pyx_n_s_indices, __pyx_n_s_i); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(0, 244, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__57);
+  __Pyx_GIVEREF(__pyx_tuple__57);
+  __pyx_codeobj__58 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__57, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrometer_get_electric_dark_p, 244, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__58)) __PYX_ERR(0, 244, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":264
  * 
@@ -28975,10 +29349,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__55 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(0, 264, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__55);
-  __Pyx_GIVEREF(__pyx_tuple__55);
-  __pyx_codeobj__56 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__55, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_shutter_feature_id, 264, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__56)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_tuple__59 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__59);
+  __Pyx_GIVEREF(__pyx_tuple__59);
+  __pyx_codeobj__60 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__59, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_shutter_feature_id, 264, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__60)) __PYX_ERR(0, 264, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":283
  *                 "Please file a bug report including a description of your device." % N)
@@ -28987,10 +29361,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_shutter_set_shutter_open(device.handle, featureID, &error_code, opened)
  */
-  __pyx_tuple__57 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_opened, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(0, 283, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__57);
-  __Pyx_GIVEREF(__pyx_tuple__57);
-  __pyx_codeobj__58 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__57, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_shutter_set_shutter_open, 283, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__58)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_tuple__61 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_opened, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__61);
+  __Pyx_GIVEREF(__pyx_tuple__61);
+  __pyx_codeobj__62 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__61, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_shutter_set_shutter_open, 283, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__62)) __PYX_ERR(0, 283, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":290
  * 
@@ -28999,10 +29373,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__59 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(0, 290, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__59);
-  __Pyx_GIVEREF(__pyx_tuple__59);
-  __pyx_codeobj__60 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__59, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_light_source_feature, 290, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__60)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_tuple__63 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__63)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__63);
+  __Pyx_GIVEREF(__pyx_tuple__63);
+  __pyx_codeobj__64 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__63, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_light_source_feature, 290, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__64)) __PYX_ERR(0, 290, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":309
  *                 "Please file a bug report including a description of your device." % N)
@@ -29011,10 +29385,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int ls_count
  */
-  __pyx_tuple__61 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_ls_count); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 309, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__61);
-  __Pyx_GIVEREF(__pyx_tuple__61);
-  __pyx_codeobj__62 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__61, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_light_source_get_count, 309, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__62)) __PYX_ERR(0, 309, __pyx_L1_error)
+  __pyx_tuple__65 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_ls_count); if (unlikely(!__pyx_tuple__65)) __PYX_ERR(0, 309, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__65);
+  __Pyx_GIVEREF(__pyx_tuple__65);
+  __pyx_codeobj__66 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__65, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_light_source_get_count, 309, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__66)) __PYX_ERR(0, 309, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":317
  *     return int(ls_count)
@@ -29023,10 +29397,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef unsigned char has_enable
  */
-  __pyx_tuple__63 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_has_enable); if (unlikely(!__pyx_tuple__63)) __PYX_ERR(0, 317, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__63);
-  __Pyx_GIVEREF(__pyx_tuple__63);
-  __pyx_codeobj__64 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__63, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_light_source_has_enable, 317, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__64)) __PYX_ERR(0, 317, __pyx_L1_error)
+  __pyx_tuple__67 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_has_enable); if (unlikely(!__pyx_tuple__67)) __PYX_ERR(0, 317, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__67);
+  __Pyx_GIVEREF(__pyx_tuple__67);
+  __pyx_codeobj__68 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__67, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_light_source_has_enable, 317, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__68)) __PYX_ERR(0, 317, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":325
  *     return bool(has_enable)
@@ -29035,10 +29409,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef unsigned char is_enabled
  */
-  __pyx_tuple__65 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_is_enabled); if (unlikely(!__pyx_tuple__65)) __PYX_ERR(0, 325, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__65);
-  __Pyx_GIVEREF(__pyx_tuple__65);
-  __pyx_codeobj__66 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__65, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_light_source_is_enabled, 325, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__66)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __pyx_tuple__69 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_is_enabled); if (unlikely(!__pyx_tuple__69)) __PYX_ERR(0, 325, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__69);
+  __Pyx_GIVEREF(__pyx_tuple__69);
+  __pyx_codeobj__70 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__69, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_light_source_is_enabled, 325, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__70)) __PYX_ERR(0, 325, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":333
  *     return bool(is_enabled)
@@ -29047,10 +29421,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_light_source_set_enable(device.handle, featureID, &error_code, light_source_index, enable)
  */
-  __pyx_tuple__67 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__67)) __PYX_ERR(0, 333, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__67);
-  __Pyx_GIVEREF(__pyx_tuple__67);
-  __pyx_codeobj__68 = (PyObject*)__Pyx_PyCode_New(4, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__67, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_light_source_set_enable, 333, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__68)) __PYX_ERR(0, 333, __pyx_L1_error)
+  __pyx_tuple__71 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__71)) __PYX_ERR(0, 333, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__71);
+  __Pyx_GIVEREF(__pyx_tuple__71);
+  __pyx_codeobj__72 = (PyObject*)__Pyx_PyCode_New(4, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__71, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_light_source_set_enable, 333, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__72)) __PYX_ERR(0, 333, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":339
  *         raise SeaBreezeError(error_code=error_code)
@@ -29059,10 +29433,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef unsigned char has_vi
  */
-  __pyx_tuple__69 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_has_vi); if (unlikely(!__pyx_tuple__69)) __PYX_ERR(0, 339, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__69);
-  __Pyx_GIVEREF(__pyx_tuple__69);
-  __pyx_codeobj__70 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__69, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_light_source_has_variable_intens, 339, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__70)) __PYX_ERR(0, 339, __pyx_L1_error)
+  __pyx_tuple__73 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_has_vi); if (unlikely(!__pyx_tuple__73)) __PYX_ERR(0, 339, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__73);
+  __Pyx_GIVEREF(__pyx_tuple__73);
+  __pyx_codeobj__74 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__73, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_light_source_has_variable_intens, 339, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__74)) __PYX_ERR(0, 339, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":347
  *     return bool(has_vi)
@@ -29071,10 +29445,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef double intensity
  */
-  __pyx_tuple__71 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_intensity); if (unlikely(!__pyx_tuple__71)) __PYX_ERR(0, 347, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__71);
-  __Pyx_GIVEREF(__pyx_tuple__71);
-  __pyx_codeobj__72 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__71, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_light_source_get_intensity, 347, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__72)) __PYX_ERR(0, 347, __pyx_L1_error)
+  __pyx_tuple__75 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_error_code, __pyx_n_s_intensity); if (unlikely(!__pyx_tuple__75)) __PYX_ERR(0, 347, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__75);
+  __Pyx_GIVEREF(__pyx_tuple__75);
+  __pyx_codeobj__76 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__75, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_light_source_get_intensity, 347, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__76)) __PYX_ERR(0, 347, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":355
  *     return float(intensity)
@@ -29083,10 +29457,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_light_source_set_intensity(device.handle, featureID, &error_code, light_source_index, intensity)
  */
-  __pyx_tuple__73 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_intensity, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__73)) __PYX_ERR(0, 355, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__73);
-  __Pyx_GIVEREF(__pyx_tuple__73);
-  __pyx_codeobj__74 = (PyObject*)__Pyx_PyCode_New(4, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__73, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_light_source_set_intensity, 355, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__74)) __PYX_ERR(0, 355, __pyx_L1_error)
+  __pyx_tuple__77 = PyTuple_Pack(5, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_light_source_index, __pyx_n_s_intensity, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__77)) __PYX_ERR(0, 355, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__77);
+  __Pyx_GIVEREF(__pyx_tuple__77);
+  __pyx_codeobj__78 = (PyObject*)__Pyx_PyCode_New(4, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__77, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_light_source_set_intensity, 355, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__78)) __PYX_ERR(0, 355, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":362
  * 
@@ -29095,10 +29469,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__75 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__75)) __PYX_ERR(0, 362, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__75);
-  __Pyx_GIVEREF(__pyx_tuple__75);
-  __pyx_codeobj__76 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__75, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_continuous_strobe_fea, 362, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__76)) __PYX_ERR(0, 362, __pyx_L1_error)
+  __pyx_tuple__79 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__79)) __PYX_ERR(0, 362, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__79);
+  __Pyx_GIVEREF(__pyx_tuple__79);
+  __pyx_codeobj__80 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__79, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_continuous_strobe_fea, 362, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__80)) __PYX_ERR(0, 362, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":381
  *                 "Please file a bug report including a description of your device." % N)
@@ -29107,10 +29481,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_continuous_strobe_set_continuous_strobe_enable(device.handle, featureID, &error_code, strobe_enable)
  */
-  __pyx_tuple__77 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_strobe_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__77)) __PYX_ERR(0, 381, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__77);
-  __Pyx_GIVEREF(__pyx_tuple__77);
-  __pyx_codeobj__78 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__77, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_continuous_strobe_set_enable, 381, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__78)) __PYX_ERR(0, 381, __pyx_L1_error)
+  __pyx_tuple__81 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_strobe_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__81)) __PYX_ERR(0, 381, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__81);
+  __Pyx_GIVEREF(__pyx_tuple__81);
+  __pyx_codeobj__82 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__81, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_continuous_strobe_set_enable, 381, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__82)) __PYX_ERR(0, 381, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":387
  *         raise SeaBreezeError(error_code=error_code)
@@ -29119,10 +29493,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_continuous_strobe_set_continuous_strobe_period_micros(device.handle, featureID, &error_code, period_micros)
  */
-  __pyx_tuple__79 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_period_micros, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__79)) __PYX_ERR(0, 387, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__79);
-  __Pyx_GIVEREF(__pyx_tuple__79);
-  __pyx_codeobj__80 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__79, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_continuous_strobe_set_period_mic, 387, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__80)) __PYX_ERR(0, 387, __pyx_L1_error)
+  __pyx_tuple__83 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_period_micros, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__83)) __PYX_ERR(0, 387, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__83);
+  __Pyx_GIVEREF(__pyx_tuple__83);
+  __pyx_codeobj__84 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__83, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_continuous_strobe_set_period_mic, 387, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__84)) __PYX_ERR(0, 387, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":394
  * 
@@ -29131,10 +29505,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__81 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__81)) __PYX_ERR(0, 394, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__81);
-  __Pyx_GIVEREF(__pyx_tuple__81);
-  __pyx_codeobj__82 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__81, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_eeprom_feature_id, 394, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__82)) __PYX_ERR(0, 394, __pyx_L1_error)
+  __pyx_tuple__85 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__85)) __PYX_ERR(0, 394, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__85);
+  __Pyx_GIVEREF(__pyx_tuple__85);
+  __pyx_codeobj__86 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__85, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_eeprom_feature_id, 394, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__86)) __PYX_ERR(0, 394, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":413
  *                 "Please file a bug report including a description of your device." % N)
@@ -29143,10 +29517,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef unsigned char cbuf[SBMAXBUFLEN]
  */
-  __pyx_tuple__83 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_slot_number, __pyx_n_s_error_code, __pyx_n_s_cbuf, __pyx_n_s_bytes_written); if (unlikely(!__pyx_tuple__83)) __PYX_ERR(0, 413, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__83);
-  __Pyx_GIVEREF(__pyx_tuple__83);
-  __pyx_codeobj__84 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__83, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_eeprom_read_slot, 413, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__84)) __PYX_ERR(0, 413, __pyx_L1_error)
+  __pyx_tuple__87 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_slot_number, __pyx_n_s_error_code, __pyx_n_s_cbuf, __pyx_n_s_bytes_written); if (unlikely(!__pyx_tuple__87)) __PYX_ERR(0, 413, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__87);
+  __Pyx_GIVEREF(__pyx_tuple__87);
+  __pyx_codeobj__88 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__87, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_eeprom_read_slot, 413, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__88)) __PYX_ERR(0, 413, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":426
  * 
@@ -29155,10 +29529,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__85 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__85)) __PYX_ERR(0, 426, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__85);
-  __Pyx_GIVEREF(__pyx_tuple__85);
-  __pyx_codeobj__86 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__85, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_irrad_calibration_fea, 426, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__86)) __PYX_ERR(0, 426, __pyx_L1_error)
+  __pyx_tuple__89 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__89)) __PYX_ERR(0, 426, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__89);
+  __Pyx_GIVEREF(__pyx_tuple__89);
+  __pyx_codeobj__90 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__89, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_irrad_calibration_fea, 426, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__90)) __PYX_ERR(0, 426, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":445
  *                 "Please file a bug report including a description of your device." % N)
@@ -29167,10 +29541,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int bytes_written
  */
-  __pyx_tuple__87 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__87)) __PYX_ERR(0, 445, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__87);
-  __Pyx_GIVEREF(__pyx_tuple__87);
-  __pyx_codeobj__88 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__87, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_irrad_calibration_read, 445, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__88)) __PYX_ERR(0, 445, __pyx_L1_error)
+  __pyx_tuple__91 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__91)) __PYX_ERR(0, 445, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__91);
+  __Pyx_GIVEREF(__pyx_tuple__91);
+  __pyx_codeobj__92 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__91, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_irrad_calibration_read, 445, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__92)) __PYX_ERR(0, 445, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":454
  *     return bytes_written
@@ -29179,10 +29553,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int bytes_written
  */
-  __pyx_tuple__89 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__89)) __PYX_ERR(0, 454, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__89);
-  __Pyx_GIVEREF(__pyx_tuple__89);
-  __pyx_codeobj__90 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__89, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_irrad_calibration_write, 454, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__90)) __PYX_ERR(0, 454, __pyx_L1_error)
+  __pyx_tuple__93 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__93)) __PYX_ERR(0, 454, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__93);
+  __Pyx_GIVEREF(__pyx_tuple__93);
+  __pyx_codeobj__94 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__93, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_irrad_calibration_write, 454, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__94)) __PYX_ERR(0, 454, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":463
  *     return bytes_written
@@ -29191,10 +29565,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int has_ca
  */
-  __pyx_tuple__91 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_has_ca); if (unlikely(!__pyx_tuple__91)) __PYX_ERR(0, 463, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__91);
-  __Pyx_GIVEREF(__pyx_tuple__91);
-  __pyx_codeobj__92 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__91, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_irrad_calibration_has_collection, 463, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__92)) __PYX_ERR(0, 463, __pyx_L1_error)
+  __pyx_tuple__95 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_has_ca); if (unlikely(!__pyx_tuple__95)) __PYX_ERR(0, 463, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__95);
+  __Pyx_GIVEREF(__pyx_tuple__95);
+  __pyx_codeobj__96 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__95, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_irrad_calibration_has_collection, 463, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__96)) __PYX_ERR(0, 463, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":471
  *     return bool(has_ca)
@@ -29203,10 +29577,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef float area
  */
-  __pyx_tuple__93 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_area); if (unlikely(!__pyx_tuple__93)) __PYX_ERR(0, 471, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__93);
-  __Pyx_GIVEREF(__pyx_tuple__93);
-  __pyx_codeobj__94 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__93, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_irrad_calibration_read_collectio, 471, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__94)) __PYX_ERR(0, 471, __pyx_L1_error)
+  __pyx_tuple__97 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_area); if (unlikely(!__pyx_tuple__97)) __PYX_ERR(0, 471, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__97);
+  __Pyx_GIVEREF(__pyx_tuple__97);
+  __pyx_codeobj__98 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__97, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_irrad_calibration_read_collectio, 471, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__98)) __PYX_ERR(0, 471, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":479
  *     return area
@@ -29215,10 +29589,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_irrad_calibration_write_collection_area(device.handle, featureID, &error_code, area)
  */
-  __pyx_tuple__95 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_area, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__95)) __PYX_ERR(0, 479, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__95);
-  __Pyx_GIVEREF(__pyx_tuple__95);
-  __pyx_codeobj__96 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__95, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_irrad_calibration_write_collecti, 479, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__96)) __PYX_ERR(0, 479, __pyx_L1_error)
+  __pyx_tuple__99 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_area, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__99)) __PYX_ERR(0, 479, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__99);
+  __Pyx_GIVEREF(__pyx_tuple__99);
+  __pyx_codeobj__100 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__99, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_irrad_calibration_write_collecti, 479, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__100)) __PYX_ERR(0, 479, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":486
  * 
@@ -29227,10 +29601,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__97 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__97)) __PYX_ERR(0, 486, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__97);
-  __Pyx_GIVEREF(__pyx_tuple__97);
-  __pyx_codeobj__98 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__97, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_tec_feature_id, 486, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__98)) __PYX_ERR(0, 486, __pyx_L1_error)
+  __pyx_tuple__101 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__101)) __PYX_ERR(0, 486, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__101);
+  __Pyx_GIVEREF(__pyx_tuple__101);
+  __pyx_codeobj__102 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__101, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_tec_feature_id, 486, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__102)) __PYX_ERR(0, 486, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":505
  *                 "Please file a bug report including a description of your device." % N)
@@ -29239,10 +29613,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef double temperature
  */
-  __pyx_tuple__99 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_temperature); if (unlikely(!__pyx_tuple__99)) __PYX_ERR(0, 505, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__99);
-  __Pyx_GIVEREF(__pyx_tuple__99);
-  __pyx_codeobj__100 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__99, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_tec_read_temperature_degrees_C, 505, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__100)) __PYX_ERR(0, 505, __pyx_L1_error)
+  __pyx_tuple__103 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_temperature); if (unlikely(!__pyx_tuple__103)) __PYX_ERR(0, 505, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__103);
+  __Pyx_GIVEREF(__pyx_tuple__103);
+  __pyx_codeobj__104 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__103, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_tec_read_temperature_degrees_C, 505, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__104)) __PYX_ERR(0, 505, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":513
  *     return temperature
@@ -29251,10 +29625,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_tec_set_temperature_setpoint_degrees_C(device.handle, featureID, &error_code, temperature_degrees_celsius)
  */
-  __pyx_tuple__101 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_temperature_degrees_celsius, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__101)) __PYX_ERR(0, 513, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__101);
-  __Pyx_GIVEREF(__pyx_tuple__101);
-  __pyx_codeobj__102 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__101, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_tec_set_temperature_setpoint_deg, 513, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__102)) __PYX_ERR(0, 513, __pyx_L1_error)
+  __pyx_tuple__105 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_temperature_degrees_celsius, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__105)) __PYX_ERR(0, 513, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__105);
+  __Pyx_GIVEREF(__pyx_tuple__105);
+  __pyx_codeobj__106 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__105, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_tec_set_temperature_setpoint_deg, 513, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__106)) __PYX_ERR(0, 513, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":519
  *         raise SeaBreezeError(error_code=error_code)
@@ -29263,10 +29637,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_tec_set_enable(device.handle, featureID, &error_code, tec_enable)
  */
-  __pyx_tuple__103 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_tec_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__103)) __PYX_ERR(0, 519, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__103);
-  __Pyx_GIVEREF(__pyx_tuple__103);
-  __pyx_codeobj__104 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__103, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_tec_set_enable, 519, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__104)) __PYX_ERR(0, 519, __pyx_L1_error)
+  __pyx_tuple__107 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_tec_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__107)) __PYX_ERR(0, 519, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__107);
+  __Pyx_GIVEREF(__pyx_tuple__107);
+  __pyx_codeobj__108 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__107, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_tec_set_enable, 519, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__108)) __PYX_ERR(0, 519, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":526
  * 
@@ -29275,10 +29649,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__105 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__105)) __PYX_ERR(0, 526, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__105);
-  __Pyx_GIVEREF(__pyx_tuple__105);
-  __pyx_codeobj__106 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__105, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_lamp_feature_id, 526, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__106)) __PYX_ERR(0, 526, __pyx_L1_error)
+  __pyx_tuple__109 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__109)) __PYX_ERR(0, 526, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__109);
+  __Pyx_GIVEREF(__pyx_tuple__109);
+  __pyx_codeobj__110 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__109, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_lamp_feature_id, 526, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__110)) __PYX_ERR(0, 526, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":545
  *                 "Please file a bug report including a description of your device." % N)
@@ -29287,10 +29661,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     csb.sbapi_lamp_set_lamp_enable(device.handle, featureID, &error_code, lamp_enable)
  */
-  __pyx_tuple__107 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_lamp_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__107)) __PYX_ERR(0, 545, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__107);
-  __Pyx_GIVEREF(__pyx_tuple__107);
-  __pyx_codeobj__108 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__107, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_lamp_set_lamp_enable, 545, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__108)) __PYX_ERR(0, 545, __pyx_L1_error)
+  __pyx_tuple__111 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_lamp_enable, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__111)) __PYX_ERR(0, 545, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__111);
+  __Pyx_GIVEREF(__pyx_tuple__111);
+  __pyx_codeobj__112 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__111, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_lamp_set_lamp_enable, 545, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__112)) __PYX_ERR(0, 545, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":552
  * 
@@ -29299,10 +29673,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__109 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__109)) __PYX_ERR(0, 552, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__109);
-  __Pyx_GIVEREF(__pyx_tuple__109);
-  __pyx_codeobj__110 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__109, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_nonlinearity_coeffs_f, 552, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__110)) __PYX_ERR(0, 552, __pyx_L1_error)
+  __pyx_tuple__113 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__113)) __PYX_ERR(0, 552, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__113);
+  __Pyx_GIVEREF(__pyx_tuple__113);
+  __pyx_codeobj__114 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__113, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_nonlinearity_coeffs_f, 552, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__114)) __PYX_ERR(0, 552, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":571
  *                 "Please file a bug report including a description of your device." % N)
@@ -29311,10 +29685,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int values_written
  */
-  __pyx_tuple__111 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_values_written, __pyx_n_s_ccoeffs, __pyx_n_s_coeffs, __pyx_n_s_i); if (unlikely(!__pyx_tuple__111)) __PYX_ERR(0, 571, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__111);
-  __Pyx_GIVEREF(__pyx_tuple__111);
-  __pyx_codeobj__112 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__111, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_nonlinearity_coeffs_get, 571, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__112)) __PYX_ERR(0, 571, __pyx_L1_error)
+  __pyx_tuple__115 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_values_written, __pyx_n_s_ccoeffs, __pyx_n_s_coeffs, __pyx_n_s_i); if (unlikely(!__pyx_tuple__115)) __PYX_ERR(0, 571, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__115);
+  __Pyx_GIVEREF(__pyx_tuple__115);
+  __pyx_codeobj__116 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__115, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_nonlinearity_coeffs_get, 571, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__116)) __PYX_ERR(0, 571, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":582
  * 
@@ -29323,10 +29697,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__113 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__113)) __PYX_ERR(0, 582, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__113);
-  __Pyx_GIVEREF(__pyx_tuple__113);
-  __pyx_codeobj__114 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__113, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_stray_light_coeffs_fe, 582, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__114)) __PYX_ERR(0, 582, __pyx_L1_error)
+  __pyx_tuple__117 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__117)) __PYX_ERR(0, 582, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__117);
+  __Pyx_GIVEREF(__pyx_tuple__117);
+  __pyx_codeobj__118 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__117, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_stray_light_coeffs_fe, 582, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__118)) __PYX_ERR(0, 582, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":601
  *                 "Please file a bug report including a description of your device." % N)
@@ -29335,10 +29709,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int error_code
  *     cdef int values_written
  */
-  __pyx_tuple__115 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_values_written, __pyx_n_s_ccoeffs, __pyx_n_s_coeffs, __pyx_n_s_i); if (unlikely(!__pyx_tuple__115)) __PYX_ERR(0, 601, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__115);
-  __Pyx_GIVEREF(__pyx_tuple__115);
-  __pyx_codeobj__116 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__115, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_stray_light_coeffs_get, 601, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__116)) __PYX_ERR(0, 601, __pyx_L1_error)
+  __pyx_tuple__119 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_error_code, __pyx_n_s_values_written, __pyx_n_s_ccoeffs, __pyx_n_s_coeffs, __pyx_n_s_i); if (unlikely(!__pyx_tuple__119)) __PYX_ERR(0, 601, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__119);
+  __Pyx_GIVEREF(__pyx_tuple__119);
+  __pyx_codeobj__120 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__119, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_stray_light_coeffs_get, 601, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__120)) __PYX_ERR(0, 601, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":612
  * 
@@ -29347,10 +29721,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__117 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__117)) __PYX_ERR(0, 612, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__117);
-  __Pyx_GIVEREF(__pyx_tuple__117);
-  __pyx_codeobj__118 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__117, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_spectrum_processing_f, 612, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__118)) __PYX_ERR(0, 612, __pyx_L1_error)
+  __pyx_tuple__121 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__121)) __PYX_ERR(0, 612, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__121);
+  __Pyx_GIVEREF(__pyx_tuple__121);
+  __pyx_codeobj__122 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__121, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_spectrum_processing_f, 612, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__122)) __PYX_ERR(0, 612, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":632
  * 
@@ -29359,82 +29733,118 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef int N
  *     cdef int error_code
  */
-  __pyx_tuple__119 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__119)) __PYX_ERR(0, 632, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__119);
-  __Pyx_GIVEREF(__pyx_tuple__119);
-  __pyx_codeobj__120 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__119, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_get_raw_usb_bus_access_fe, 632, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__120)) __PYX_ERR(0, 632, __pyx_L1_error)
+  __pyx_tuple__123 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_N, __pyx_n_s_error_code, __pyx_n_s_featureID); if (unlikely(!__pyx_tuple__123)) __PYX_ERR(0, 632, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__123);
+  __Pyx_GIVEREF(__pyx_tuple__123);
+  __pyx_codeobj__124 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__123, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_raw_usb_bus_access_fe, 632, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__124)) __PYX_ERR(0, 632, __pyx_L1_error)
 
   /* "seabreeze/cseabreeze/wrapper.pyx":652
  *                 "Please file a bug report including a description of your device." % N)
  * 
- * def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):             # <<<<<<<<<<<<<<
+ * def device_get_raw_usb_endpoint_primary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ */
+  __pyx_tuple__125 = PyTuple_Pack(3, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_endpoint); if (unlikely(!__pyx_tuple__125)) __PYX_ERR(0, 652, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__125);
+  __Pyx_GIVEREF(__pyx_tuple__125);
+  __pyx_codeobj__126 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__125, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_raw_usb_endpoint_prim, 652, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__126)) __PYX_ERR(0, 652, __pyx_L1_error)
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":659
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_primary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ */
+  __pyx_tuple__127 = PyTuple_Pack(3, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_endpoint); if (unlikely(!__pyx_tuple__127)) __PYX_ERR(0, 659, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__127);
+  __Pyx_GIVEREF(__pyx_tuple__127);
+  __pyx_codeobj__128 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__127, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_raw_usb_endpoint_prim_2, 659, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__128)) __PYX_ERR(0, 659, __pyx_L1_error)
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":666
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+  __pyx_tuple__129 = PyTuple_Pack(3, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_endpoint); if (unlikely(!__pyx_tuple__129)) __PYX_ERR(0, 666, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__129);
+  __Pyx_GIVEREF(__pyx_tuple__129);
+  __pyx_codeobj__130 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__129, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_raw_usb_endpoint_seco, 666, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__130)) __PYX_ERR(0, 666, __pyx_L1_error)
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":673
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+  __pyx_tuple__131 = PyTuple_Pack(3, __pyx_n_s_device, __pyx_n_s_error_code, __pyx_n_s_endpoint); if (unlikely(!__pyx_tuple__131)) __PYX_ERR(0, 673, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__131);
+  __Pyx_GIVEREF(__pyx_tuple__131);
+  __pyx_codeobj__132 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__131, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_get_raw_usb_endpoint_seco_2, 673, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__132)) __PYX_ERR(0, 673, __pyx_L1_error)
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":680
+ *     return endpoint
+ * 
+ * def device_usb_write(SeaBreezeDevice device not None, long featureID, int usb_out_endpoint, unsigned char[::1] out):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     cdef int bytes_written
  */
-  __pyx_tuple__121 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__121)) __PYX_ERR(0, 652, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__121);
-  __Pyx_GIVEREF(__pyx_tuple__121);
-  __pyx_codeobj__122 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__121, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_usb_write, 652, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__122)) __PYX_ERR(0, 652, __pyx_L1_error)
+  __pyx_tuple__133 = PyTuple_Pack(7, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_usb_out_endpoint, __pyx_n_s_out, __pyx_n_s_error_code, __pyx_n_s_bytes_written, __pyx_n_s_out_length); if (unlikely(!__pyx_tuple__133)) __PYX_ERR(0, 680, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__133);
+  __Pyx_GIVEREF(__pyx_tuple__133);
+  __pyx_codeobj__134 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__133, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_device_usb_write, 680, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__134)) __PYX_ERR(0, 680, __pyx_L1_error)
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":661
+  /* "seabreeze/cseabreeze/wrapper.pyx":689
  *     return bytes_written
- * 
- * def device_usb_read(SeaBreezeDevice device not None, long featureID, unsigned char[::1] read):             # <<<<<<<<<<<<<<
- *     cdef int error_code
- *     cdef int bytes_read
- */
-  __pyx_tuple__123 = PyTuple_Pack(6, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_read, __pyx_n_s_error_code, __pyx_n_s_bytes_read, __pyx_n_s_read_length); if (unlikely(!__pyx_tuple__123)) __PYX_ERR(0, 661, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__123);
-  __Pyx_GIVEREF(__pyx_tuple__123);
-  __pyx_codeobj__124 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__123, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_device_usb_read, 661, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__124)) __PYX_ERR(0, 661, __pyx_L1_error)
-
-  /* "seabreeze/cseabreeze/wrapper.pyx":670
- *     return bytes_read
  * 
  * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     with nogil:
  */
-  __pyx_tuple__125 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_boxcar_width, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__125)) __PYX_ERR(0, 670, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__125);
-  __Pyx_GIVEREF(__pyx_tuple__125);
-  __pyx_codeobj__126 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__125, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrum_processing_set_boxcar_w, 670, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__126)) __PYX_ERR(0, 670, __pyx_L1_error)
+  __pyx_tuple__135 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_boxcar_width, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__135)) __PYX_ERR(0, 689, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__135);
+  __Pyx_GIVEREF(__pyx_tuple__135);
+  __pyx_codeobj__136 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__135, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrum_processing_set_boxcar_w, 689, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__136)) __PYX_ERR(0, 689, __pyx_L1_error)
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":677
+  /* "seabreeze/cseabreeze/wrapper.pyx":696
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     with nogil:
  */
-  __pyx_tuple__127 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_scans_to_average, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__127)) __PYX_ERR(0, 677, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__127);
-  __Pyx_GIVEREF(__pyx_tuple__127);
-  __pyx_codeobj__128 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__127, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrum_processing_set_scans_to, 677, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__128)) __PYX_ERR(0, 677, __pyx_L1_error)
+  __pyx_tuple__137 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_scans_to_average, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__137)) __PYX_ERR(0, 696, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__137);
+  __Pyx_GIVEREF(__pyx_tuple__137);
+  __pyx_codeobj__138 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__137, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrum_processing_set_scans_to, 696, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__138)) __PYX_ERR(0, 696, __pyx_L1_error)
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":684
+  /* "seabreeze/cseabreeze/wrapper.pyx":703
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     cdef unsigned char boxcar_width
  *     cdef int error_code
  */
-  __pyx_tuple__129 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_boxcar_width, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__129)) __PYX_ERR(0, 684, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__129);
-  __Pyx_GIVEREF(__pyx_tuple__129);
-  __pyx_codeobj__130 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__129, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrum_processing_get_boxcar_w, 684, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__130)) __PYX_ERR(0, 684, __pyx_L1_error)
+  __pyx_tuple__139 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_boxcar_width, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__139)) __PYX_ERR(0, 703, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__139);
+  __Pyx_GIVEREF(__pyx_tuple__139);
+  __pyx_codeobj__140 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__139, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrum_processing_get_boxcar_w, 703, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__140)) __PYX_ERR(0, 703, __pyx_L1_error)
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":693
+  /* "seabreeze/cseabreeze/wrapper.pyx":712
  *     return boxcar_width
  * 
  * def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     cdef unsigned short int scans_to_average
  *     cdef int error_code
  */
-  __pyx_tuple__131 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_scans_to_average, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__131)) __PYX_ERR(0, 693, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__131);
-  __Pyx_GIVEREF(__pyx_tuple__131);
-  __pyx_codeobj__132 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__131, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Volumes_stuff_src_apps_python_s, __pyx_n_s_spectrum_processing_get_scans_to, 693, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__132)) __PYX_ERR(0, 693, __pyx_L1_error)
+  __pyx_tuple__141 = PyTuple_Pack(4, __pyx_n_s_device, __pyx_n_s_featureID, __pyx_n_s_scans_to_average, __pyx_n_s_error_code); if (unlikely(!__pyx_tuple__141)) __PYX_ERR(0, 712, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__141);
+  __Pyx_GIVEREF(__pyx_tuple__141);
+  __pyx_codeobj__142 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__141, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_cmorton_Documents_Saturn, __pyx_n_s_spectrum_processing_get_scans_to, 712, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__142)) __PYX_ERR(0, 712, __pyx_L1_error)
 
   /* "View.MemoryView":282
  *         return self.name
@@ -29443,9 +29853,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_tuple__133 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__133)) __PYX_ERR(1, 282, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__133);
-  __Pyx_GIVEREF(__pyx_tuple__133);
+  __pyx_tuple__143 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__143)) __PYX_ERR(1, 282, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__143);
+  __Pyx_GIVEREF(__pyx_tuple__143);
 
   /* "View.MemoryView":283
  * 
@@ -29454,9 +29864,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_tuple__134 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__134)) __PYX_ERR(1, 283, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__134);
-  __Pyx_GIVEREF(__pyx_tuple__134);
+  __pyx_tuple__144 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__144)) __PYX_ERR(1, 283, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__144);
+  __Pyx_GIVEREF(__pyx_tuple__144);
 
   /* "View.MemoryView":284
  * cdef generic = Enum("<strided and direct or indirect>")
@@ -29465,9 +29875,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__135 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__135)) __PYX_ERR(1, 284, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__135);
-  __Pyx_GIVEREF(__pyx_tuple__135);
+  __pyx_tuple__145 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__145)) __PYX_ERR(1, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__145);
+  __Pyx_GIVEREF(__pyx_tuple__145);
 
   /* "View.MemoryView":287
  * 
@@ -29476,9 +29886,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_tuple__136 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__136)) __PYX_ERR(1, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__136);
-  __Pyx_GIVEREF(__pyx_tuple__136);
+  __pyx_tuple__146 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__146)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__146);
+  __Pyx_GIVEREF(__pyx_tuple__146);
 
   /* "View.MemoryView":288
  * 
@@ -29487,9 +29897,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__137 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__137)) __PYX_ERR(1, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__137);
-  __Pyx_GIVEREF(__pyx_tuple__137);
+  __pyx_tuple__147 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__147)) __PYX_ERR(1, 288, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__147);
+  __Pyx_GIVEREF(__pyx_tuple__147);
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -29643,7 +30053,7 @@ PyMODINIT_FUNC PyInit_wrapper(void)
   #endif
 
   /* "seabreeze/cseabreeze/wrapper.pyx":17
- * DEF USBENDPOINT = 1
+ * 
  * 
  * class SeaBreezeError(Exception):             # <<<<<<<<<<<<<<
  * 
@@ -29666,14 +30076,14 @@ PyMODINIT_FUNC PyInit_wrapper(void)
  *         cdef const char *cmessage
  *         if error_code is not None:
  */
-  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_14SeaBreezeError_1__init__, 0, __pyx_n_s_SeaBreezeError___init, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_14SeaBreezeError_1__init__, 0, __pyx_n_s_SeaBreezeError___init, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_tuple__22);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_tuple__26);
   if (PyObject_SetItem(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
   /* "seabreeze/cseabreeze/wrapper.pyx":17
- * DEF USBENDPOINT = 1
+ * 
  * 
  * class SeaBreezeError(Exception):             # <<<<<<<<<<<<<<
  * 
@@ -30278,73 +30688,109 @@ PyMODINIT_FUNC PyInit_wrapper(void)
   /* "seabreeze/cseabreeze/wrapper.pyx":652
  *                 "Please file a bug report including a description of your device." % N)
  * 
- * def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):             # <<<<<<<<<<<<<<
+ * def device_get_raw_usb_endpoint_primary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_103device_get_raw_usb_endpoint_primary_out, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 652, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_get_raw_usb_endpoint_prim, __pyx_t_1) < 0) __PYX_ERR(0, 652, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":659
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_primary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_105device_get_raw_usb_endpoint_primary_in, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 659, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_get_raw_usb_endpoint_prim_2, __pyx_t_1) < 0) __PYX_ERR(0, 659, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":666
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_107device_get_raw_usb_endpoint_secondary_out, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 666, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_get_raw_usb_endpoint_seco, __pyx_t_1) < 0) __PYX_ERR(0, 666, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":673
+ *     return endpoint
+ * 
+ * def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):             # <<<<<<<<<<<<<<
+ *     cdef int error_code
+ *     endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_109device_get_raw_usb_endpoint_secondary_in, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 673, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_get_raw_usb_endpoint_seco_2, __pyx_t_1) < 0) __PYX_ERR(0, 673, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "seabreeze/cseabreeze/wrapper.pyx":680
+ *     return endpoint
+ * 
+ * def device_usb_write(SeaBreezeDevice device not None, long featureID, int usb_out_endpoint, unsigned char[::1] out):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     cdef int bytes_written
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_103device_usb_write, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 652, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_111device_usb_write, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 680, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_usb_write, __pyx_t_1) < 0) __PYX_ERR(0, 652, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_usb_write, __pyx_t_1) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":661
+  /* "seabreeze/cseabreeze/wrapper.pyx":689
  *     return bytes_written
- * 
- * def device_usb_read(SeaBreezeDevice device not None, long featureID, unsigned char[::1] read):             # <<<<<<<<<<<<<<
- *     cdef int error_code
- *     cdef int bytes_read
- */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_105device_usb_read, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 661, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_device_usb_read, __pyx_t_1) < 0) __PYX_ERR(0, 661, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "seabreeze/cseabreeze/wrapper.pyx":670
- *     return bytes_read
  * 
  * def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     with nogil:
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_107spectrum_processing_set_boxcar_width, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 670, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_set_boxcar_width, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 689, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_set_boxcar_w, __pyx_t_1) < 0) __PYX_ERR(0, 670, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_set_boxcar_w, __pyx_t_1) < 0) __PYX_ERR(0, 689, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":677
+  /* "seabreeze/cseabreeze/wrapper.pyx":696
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):             # <<<<<<<<<<<<<<
  *     cdef int error_code
  *     with nogil:
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_109spectrum_processing_set_scans_to_average, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 677, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_115spectrum_processing_set_scans_to_average, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 696, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_set_scans_to, __pyx_t_1) < 0) __PYX_ERR(0, 677, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_set_scans_to, __pyx_t_1) < 0) __PYX_ERR(0, 696, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":684
+  /* "seabreeze/cseabreeze/wrapper.pyx":703
  *         raise SeaBreezeError(error_code=error_code)
  * 
  * def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     cdef unsigned char boxcar_width
  *     cdef int error_code
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_111spectrum_processing_get_boxcar_width, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 684, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_117spectrum_processing_get_boxcar_width, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 703, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_get_boxcar_w, __pyx_t_1) < 0) __PYX_ERR(0, 684, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_get_boxcar_w, __pyx_t_1) < 0) __PYX_ERR(0, 703, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "seabreeze/cseabreeze/wrapper.pyx":693
+  /* "seabreeze/cseabreeze/wrapper.pyx":712
  *     return boxcar_width
  * 
  * def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):             # <<<<<<<<<<<<<<
  *     cdef unsigned short int scans_to_average
  *     cdef int error_code
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_113spectrum_processing_get_scans_to_average, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 693, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9seabreeze_10cseabreeze_7wrapper_119spectrum_processing_get_scans_to_average, NULL, __pyx_n_s_seabreeze_cseabreeze_wrapper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 712, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_get_scans_to, __pyx_t_1) < 0) __PYX_ERR(0, 693, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_spectrum_processing_get_scans_to, __pyx_t_1) < 0) __PYX_ERR(0, 712, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "seabreeze/cseabreeze/wrapper.pyx":1
@@ -30377,7 +30823,7 @@ PyMODINIT_FUNC PyInit_wrapper(void)
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__133, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 282, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__143, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 282, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(generic);
   __Pyx_DECREF_SET(generic, __pyx_t_1);
@@ -30391,7 +30837,7 @@ PyMODINIT_FUNC PyInit_wrapper(void)
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__134, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 283, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__144, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 283, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(strided);
   __Pyx_DECREF_SET(strided, __pyx_t_1);
@@ -30405,7 +30851,7 @@ PyMODINIT_FUNC PyInit_wrapper(void)
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__135, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 284, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__145, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 284, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect);
   __Pyx_DECREF_SET(indirect, __pyx_t_1);
@@ -30419,7 +30865,7 @@ PyMODINIT_FUNC PyInit_wrapper(void)
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__136, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__146, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 287, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(contiguous);
   __Pyx_DECREF_SET(contiguous, __pyx_t_1);
@@ -30433,7 +30879,7 @@ PyMODINIT_FUNC PyInit_wrapper(void)
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__137, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 288, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__147, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect_contiguous);
   __Pyx_DECREF_SET(indirect_contiguous, __pyx_t_1);

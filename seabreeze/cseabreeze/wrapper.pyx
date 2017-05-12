@@ -12,7 +12,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 # define max length for some strings
 DEF SBMAXBUFLEN = 32
 DEF SBMAXDBUFLEN = 256
-DEF USBENDPOINT = 1
+
 
 class SeaBreezeError(Exception):
 
@@ -649,11 +649,39 @@ def device_get_raw_usb_bus_access_feature_id(SeaBreezeDevice device not None):
                 "%d spectrum_processing features. The code expects it to have 0 or 1. "
                 "Please file a bug report including a description of your device." % N)
 
-def device_usb_write(SeaBreezeDevice device not None, long featureID, unsigned char[::1] out):
+def device_get_raw_usb_endpoint_primary_out(SeaBreezeDevice device not None):
+    cdef int error_code
+    endpoint = csb.sbapi_get_device_usb_endpoint_primary_out(device.handle, &error_code)
+    if error_code != 0:
+        raise SeaBreezeError("Failed to get Primary Out USB endpoint", error_code=error_code)
+    return endpoint
+
+def device_get_raw_usb_endpoint_primary_in(SeaBreezeDevice device not None):
+    cdef int error_code
+    endpoint = csb.sbapi_get_device_usb_endpoint_primary_in(device.handle, &error_code)
+    if error_code != 0:
+        raise SeaBreezeError("Failed to get Primary In USB endpoint", error_code=error_code)
+    return endpoint
+
+def device_get_raw_usb_endpoint_secondary_out(SeaBreezeDevice device not None):
+    cdef int error_code
+    endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+    if error_code != 0:
+        raise SeaBreezeError("Failed to get Secondary Out USB endpoint", error_code=error_code)
+    return endpoint
+
+def device_get_raw_usb_endpoint_secondary_in(SeaBreezeDevice device not None):
+    cdef int error_code
+    endpoint = csb.sbapi_get_device_usb_endpoint_secondary_out(device.handle, &error_code)
+    if error_code != 0:
+        raise SeaBreezeError("Failed to get Secondary In USB endpoint", error_code=error_code)
+    return endpoint
+
+def device_usb_write(SeaBreezeDevice device not None, long featureID, int usb_out_endpoint, unsigned char[::1] out):
     cdef int error_code
     cdef int bytes_written
     cdef int out_length = out.size
-    bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, USBENDPOINT)
+    bytes_written = csb.sbapi_raw_usb_bus_access_write(device.handle, featureID, &error_code, &out[0], out_length, usb_out_endpoint)
     if error_code != 0:
          raise SeaBreezeError(error_code=error_code)
     return bytes_written

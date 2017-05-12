@@ -57,4 +57,11 @@ from .wrapper import (SeaBreezeError,
                       spectrum_processing_set_boxcar_width,
                       spectrum_processing_set_scans_to_average,
                       spectrum_processing_get_boxcar_width,
-                      spectrum_processing_get_scans_to_average)
+                      spectrum_processing_get_scans_to_average,
+                      device_get_raw_usb_bus_access_feature_id,
+                      device_usb_write,
+                      device_get_raw_usb_endpoint_primary_out,
+                      device_get_raw_usb_endpoint_primary_in,
+                      device_get_raw_usb_endpoint_secondary_out,
+                      device_get_raw_usb_endpoint_secondary_in,
+                      )

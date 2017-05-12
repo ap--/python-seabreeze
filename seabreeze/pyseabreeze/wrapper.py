@@ -315,3 +315,28 @@ def spectrum_processing_get_scans_to_average(device, has_feature):
     if not has_feature:
         raise SeaBreezeError("Error: No such feature on device")
     raise NotImplementedError
+
+
+# USB
+def device_get_raw_usb_bus_access_feature_id(device):
+    raise NotImplementedError
+
+
+def device_get_raw_usb_endpoint_primary_out(device):
+    raise NotImplementedError
+
+
+def device_get_raw_usb_endpoint_primary_in(device):
+    raise NotImplementedError
+
+
+def device_get_raw_usb_endpoint_secondary_out(device):
+    raise NotImplementedError
+
+
+def device_get_raw_usb_endpoint_secondary_in(device):
+    raise NotImplementedError
+
+
+def device_usb_write(device, has_feature, usb_out_endpoint, out):
+    raise NotImplementedError

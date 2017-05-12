@@ -192,7 +192,6 @@ class Spectrometer(object):
     def get_scans_to_average(self):
         lib.spectrum_processing_get_scans_to_average(self._dev, self._fidspp) # Not implemented in pyseabreeze
 
-
     @property
     def serial_number(self):
         return self._serial

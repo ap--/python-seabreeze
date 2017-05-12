@@ -213,6 +213,22 @@ class Spectrometer(object):
     def light_sources(self):
         return self._light_sources
 
+    @property
+    def primary_usb_in_endpoint(self):
+        return self._primary_usb_in_endpoint
+
+    @property
+    def primary_usb_out_endpoint(self):
+        return self._primary_usb_out_endpoint
+
+    @property
+    def secondary_usb_in_endpoint(self):
+        return self._secondary_usb_in_endpoint
+
+    @property
+    def secondary_usb_out_endpoint(self):
+        return self._secondary_usb_out_endpoint
+
     def eeprom_read_slot(self, slot):
         return lib.eeprom_read_slot(self._dev, self._fidee, slot)
 

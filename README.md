@@ -1,48 +1,118 @@
-# Python module for [OceanOptics](http://www.oceanoptics.com/) spectrometers
+# Python module for [Ocean Optics](http://www.oceanoptics.com/) spectrometers
 
-[![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=windows)](https://ci.appveyor.com/project/ap--/python-seabreeze)
-[![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=macosx)](https://travis-ci.org/ap--/python-seabreeze)
-[![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg)]()
-[![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](http://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/ap--/python-seabreeze.svg)](https://github.com/ap--/python-seabreeze/issues)
-[![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg)](https://paypal.me/apoehlmann)
+[![Anaconda](https://anaconda.org/poehlmann/python-seabreeze/badges/version.svg)](https://anaconda.org/poehlmann/python-seabreeze)
+[![CondaDownload](https://anaconda.org/poehlmann/python-seabreeze/badges/downloads.svg)]()
+[![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=win-whl&style=flat-square)](https://ci.appveyor.com/project/ap--/python-seabreeze)
+[![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=osx-whl&style=flat-square)](https://travis-ci.org/ap--/python-seabreeze)
+[![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg?style=flat-square)]()
+[![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+[![GitHub issues](https://img.shields.io/github/issues/ap--/python-seabreeze.svg?style=flat-square)](https://github.com/ap--/python-seabreeze/issues)
+[![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square)](https://paypal.me/apoehlmann)
 
-Python-seabreeze is the easy way to access your OceanOptics spectrometers from
+Python-seabreeze is the easy way to access your Ocean Optics spectrometers from
 python. It wraps the [SeaBreeze](http://oceanoptics.com/product/seabreeze/)
-library provided by OceanOptics to communicate with the spectrometer. If
+library provided by Ocean Optics to communicate with the spectrometer. If
 SeaBreeze is not available it can fallback to a pyUSB based reimplementation.
-**This software is not associated with OceanOptics. Use it at your own risk.**
+**This software is not associated with Ocean Optics. Use it at your own risk.**
 
-## Requirements
+## tl;dr
 
-- [NumPy](http://www.numpy.org)
-- One of the backend libraries:
-  - [SeaBreeze - Embedded Open-Source Device Driver](http://oceanoptics.com/products/seabreeze/)
-  - [pyUSB==1.0.0b2](https://walac.github.io/pyusb/) 
+> **from: _urgent&lt;at&gt;user.edu_** <br>
+> I got PhDs in spectroscopy, usb-communication, and computerz --- give me the spectra now!
+
+```
+conda install -c poehlmann python-seabreeze
+```
+
+**if windows (** force your spectrometer to use a driver from [here](misc/windows-driver-files.zip) **)** <br>
+**if linux (** install udev rules from [here](misc/10-oceanoptics.rules) **)**
+
+```python
+>>> import seabreeze.spectrometers as sb
+>>> spec = sb.Spectrometer.from_serial_number()
+>>> spec.integration_time_micros(20000)
+>>> spec.wavelengths()
+array([  340.32581   ,   340.70321186,   341.08058305, ...,  1024.84940994,
+        1025.1300678 ,  1025.4106617 ])
+>>> spec.intensities()
+array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
+         6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
+```
+
+**A quick comment:** I am a PhD student too. Please realize that I just saved
+you HOURS (maybe DAYS) of your valuable time. Think about how long it would
+take you to write the Cython wrapper and abstraction layer for the Ocean
+Optic's C++ library and maybe at least consider supporting open source software
+and [buying me a beer](https://paypal.me/apoehlmann).
+
+
+## Overview
+
+![overview](docs/overview.png)
+
+Starting with version _0.6.0_, python-seabreeze is available as a pre-built
+package for Python versions _2.7.x_, _3.5.x_, _3.6.x_ on _win-32_, _win-64_,
+_osx-64_ and _linux-64_ via anaconda. The module supports communicating with
+[various Ocean Optics spectrometers](#supported-devices) via one of two
+backends. More information on the backends is available
+[here](docs/BACKENDS.md). The recommended default is **cseabreeze**.
+Everything required ships with the conda package.
+
 
 ## Installation
 
-Python-seabreeze is available for Python versions _2.7.x_, _3.3.x_, _3.4.x_ and
-_3.5.x_ on all platforms. Before installing the module, you need to decide
-which backend you want to use and install it. Your options are the cseabreeze
-backend (recommended) and the pyseabreeze backend (click
-[here](docs/BACKENDS.md) for more information on the backends).  Please follow
-the installation instructions for your platform.
+### THE RECOMMENDED WAY - Anaconda
 
+python-seabreeze now ships pre-built packages for
+[Anaconda](https://www.continuum.io/downloads). If you're not using Anaconda
+yet, start using it now. As a scientist, who spent way to much time dealing
+with stupid computer problems, I urge you to switch all your python development
+to Anaconda environments. It'll save you a lot of time, believe me. 
+
+To install the module run the following in your conda environment. This will
+install the module and the minimal dependencies you need.
+```
+conda install -c poehlmann python-seabreeze
+```
+
+**IF WINDOWS:**
+you need to install driver-files for your spectrometer from [here](misc/windows-driver-files.zip). These drivers tell windows to use the winusb driver for the spectrometer. It's
+possible that OceanView won't find the spectrometer anymore after this. Extract the drivers to a location you like. Goto _Device Manager_. Select your spectrometer, _right click_ and _update driver software_.
+Then choose a suiting driver from the extracted folder.
+
+**IF LINUX:**
+you need to install the udev rules from [here](misc/10-oceanoptics.rules). These give all users access to connected usb spectrometers and are required, so that you can access the
+spectrometers via libusb as a user without root privileges. Download and copy this file to `/etc/udev/rules.d/` and run `sudo udevadm --reload-rules`. Replug your spectrometer.
+
+**IF OSX:**
+You're all set. It should already work.
+
+
+### THE OTHER WAY - ... ?not Anaconda?
+
+So you need to go the other way and install the package without conda because:
+1. you want to run this on a RaspberryPi (or other ARM architecture)
+2. you want to run this on 32bit osx/linux.
+3. you don't want to use anaconda python (... why? WHY??!!??)
+
+Reasons (1) and (2) are valid and you may proceed. If you chose reason (3)
+because you don't know a lot about Python and the teaching course you are
+currently attending is not using Anaconda: Go to your instructor and demand
+that he rewrites the course instructions to use Anaconda python. You are
+probably paying for this, so your instructor should start teaching you the
+correct way to use python for scientific data analysis.
+
+**Instructions:**
 * [Linux](docs/LINUX_INSTALL.md)
 * [MacOSX](docs/MACOSX_INSTALL.md)
 * [Windows](docs/WINDOWS_INSTALL.md)
 
-I have confirmation from different people, that this module runs on several
-different Linux distributions, on different OSX versions and on Windows (from
-XP up to 8, I haven't heard from someone who uses 10 yet). It also runs on
-different architectures x86, x64 and arm. The installation instructions
-provided here are detailed enough to get the module up and running. If you
-think that you can't install this module because there is something wrong with
-it, read through the installation instructions again. Then try to look for a
-solution for your problem on the internet at least three times. If nothing
-helped, read the contributing guidelines, file an issue on github and be nice.
-Please note, that I am not an OceanOptics employee and am maintaining this
+If you think that you can't install this module because there is something
+wrong with it, read through the installation instructions again. Then try to
+look for a solution for your problem [on the internet](https://www.google.com)
+at least three times. If nothing helped, read the [contributing
+guidelines](#contributing-guidelines), file an issue on github and be nice.
+Please note, that I am not an Ocean Optics employee and am maintaining this
 module in my free time.
 
 
@@ -50,9 +120,9 @@ module in my free time.
 
 The following example shows how simple it is to acquire a spectrum with
 python-seabreeze through the model independent _Spectrometer_ class. For a more
-detailed description read the [documentation](docs/DOCUMENTATION.md).:
+detailed description read the (currently incomplete) [documentation](docs/DOCUMENTATION.md).:
 
-```{python}
+```python
 >>> import seabreeze.spectrometers as sb
 >>> devices = sb.list_devices()
 >>> print devices
@@ -67,9 +137,12 @@ array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
          6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
 ```
 
-To use the pyseabreeze backend simply run this before importing seabreeze.spectrometers:
+To use the pyseabreeze backend simply run this before importing
+seabreeze.spectrometers. The pyseabreeze backend requires [pyUSB](https://walac.github.io/pyusb/) to be
+installed. (Look at the [backends documentation](docs/BACKENDS.md) for more
+info.)
 
-```{python}
+```python
 >>> import seabreeze
 >>> seabreeze.use('pyseabreeze')
 >>> import seabreeze.spectrometers as sb
@@ -95,7 +168,7 @@ To use the pyseabreeze backend simply run this before importing seabreeze.spectr
 | USB2000      |     x      |      x      |
 | USB2000PLUS  |     x      |      x      |
 | USB4000      |     x      |      x      |
-| USB650       |            |      x      |
+| USB650       |     x      |      x      |
 | SPARK        |     x      |             |
 
 
@@ -117,4 +190,13 @@ paypal, click on the paypal donate button on top of this README.
 ## License
 
 Files in this repository are released under the [MIT license](LICENSE.md).
+
+
+## Related Repositories
+
+If you want me to add your project here, let me know. Happy to add it.
+
+- [SeaBreeze](https://sourceforge.net/projects/seabreeze/) - Ocean Optics' SeaBreeze C library.
+- [libseabreeze](https://github.com/ap--/libseabreeze) - github clone of the C library. _internal use only_ (has pre-built libraries if you know what you're doing)
+- [python-seabreeze-feedstock](https://github.com/ap--/python-seabreeze) - anaconda feedstock for automated package deployment. _internal use only_
 

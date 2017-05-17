@@ -14,6 +14,9 @@ I write this, because of some e-mails I received from Windows users:
 * And if you manage to get it up and running, and you think that the install
   instructions here are bad, send me better ones.
 
+_Okay, I really need to emphasize, that using Anaconda is the recommended way
+to install this module. But ok:_
+
 
 ## Backends
 
@@ -21,6 +24,8 @@ On windows you can't easily run both backends side by side, because you have to
 switch drivers when switching backends. So choose now.
 
 ### Installing requirements for cseabreeze backend on Windows
+
+**This section needs updating.**
 
 I require that you have read the [oceanoptics install
 guide](http://oceanoptics.com/api/seabreeze/) before you file any issue!

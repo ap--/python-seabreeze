@@ -1,22 +1,21 @@
 # Installing on MacOSX
 
+_Okay, I really need to emphasize, that using Anaconda is the recommended way
+to install this module. But ok:_
+
 This should work on OSX versions 10.6 up to the most recent. But only on INTEL
 architectures, not on PowerPC. I am testing on 10.10. And I have confirmation
 for 10.9. Let me know if you can confirm it working on a different version.
 
-## Backends
+### Installing requirements for cseabreeze backend on OSX not using conda
 
-I really recommend using the cseabreeze backend, because you don't have to do
-anything.
-
-### Installing requirements for cseabreeze backend on OSX
-
-Nothing. You are done :) The library ships with the wheel.
+Nothing. You are done :) The library ships with the wheel. 
 
 ### Installing requirements for pyseabreeze backend on OSX
 
 You need to find a tutorial for running pyUSB on OSX. If you find a good one,
 let me know, then I'll add it here. But I really recommend running cseabreeze.
+
 
 ## python-seabreeze
 

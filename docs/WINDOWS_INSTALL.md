@@ -25,10 +25,7 @@ switch drivers when switching backends. So choose now.
 
 ### Installing requirements for cseabreeze backend on Windows
 
-**This section needs updating.**
-
-I require that you have read the [oceanoptics install
-guide](http://oceanoptics.com/api/seabreeze/) before you file any issue!
+**I am not sure if this will work.** 
 
 1. Download the seabreeze installer from sourceforge for your architecture
    [here](https://sourceforge.net/projects/seabreeze/files/SeaBreeze/installers/).
@@ -40,7 +37,14 @@ OmniDriver**. Since you want to use python-seabreeze you have to go for the
 seebreeze drivers, which means OceanView is most likely to stop working for
 you.
 
-### Installing requirements for pyseabreeze backend on Windows
+python-seabreeze versions now try to be locked to one SeaBreeze.dll version.
+This means, that if you run into issues, I would try downloading the latest
+[libseabreeze-x.x.x.x-ARCH-VSVER.zip](https://github.com/ap--/libseabreeze/releases) where ARCH should be your computer architecture (32, or 64) and VSVER should be vc9 if you use python2.7 and vc14 if you use python 3.x.
+After downloading overwrite the dll and lib files that the installer copied to your
+machine with the ones provided in the zip file.
+(Also let me know if this worked for you or not)
+
+### (OPTIONAL) Installing requirements for pyseabreeze backend on Windows
 
 You need to get [pyUSB](http://walac.github.io/pyusb/) up and running. As soon
 as pyUSB is working on your machine and you are using a libusb driver for your

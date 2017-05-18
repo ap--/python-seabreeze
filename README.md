@@ -15,10 +15,9 @@ library provided by Ocean Optics to communicate with the spectrometer. If
 SeaBreeze is not available it can fallback to a pyUSB based reimplementation.
 **This software is not associated with Ocean Optics. Use it at your own risk.**
 
-## tl;dr
 
-> **from: _urgent&lt;at&gt;user.edu_** <br>
-> I got PhDs in spectroscopy, usb-communication, and computerz --- give me the spectra now!
+
+## tl;dr -- give me the spectrum now!
 
 ```
 conda install -c poehlmann python-seabreeze
@@ -39,11 +38,8 @@ array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
          6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
 ```
 
-**A quick comment:** I am a PhD student too. Please realize that I just saved
-you HOURS (maybe DAYS) of your valuable time. Think about how long it would
-take you to write the Cython wrapper and abstraction layer for the Ocean
-Optic's C++ library and maybe at least consider supporting open source software
-and [buying me a beer](https://paypal.me/apoehlmann).
+_Consider supporting open source software and_ [_buying me a beer_](https://paypal.me/apoehlmann).
+
 
 
 ## Overview
@@ -59,7 +55,9 @@ backends. More information on the backends is available
 Everything required ships with the conda package.
 
 
+
 ## Installation
+
 
 ### THE RECOMMENDED WAY - Anaconda
 
@@ -70,8 +68,9 @@ with stupid computer problems, I urge you to switch all your python development
 to Anaconda environments. It'll save you a lot of time, believe me. 
 
 To install the module run the following in your conda environment. This will
-install the module and the minimal dependencies you need.
-```
+install the module and the dependencies you need for the cseabreeze backend.
+
+```bash
 conda install -c poehlmann python-seabreeze
 ```
 
@@ -88,24 +87,21 @@ spectrometers via libusb as a user without root privileges. Download and copy th
 You're all set. It should already work.
 
 
-### THE OTHER WAY - ... ?not Anaconda?
+### THE 400 OTHER WAYS - ...
 
-So you need to go the other way and install the package without conda because:
-1. you want to run this on a RaspberryPi (or other ARM architecture)
-2. you want to run this on 32bit osx/linux.
-3. you don't want to use anaconda python (... why? WHY??!!??)
-
-Reasons (1) and (2) are valid and you may proceed. If you chose reason (3)
-because you don't know a lot about Python and the teaching course you are
-currently attending is not using Anaconda: Go to your instructor and demand
-that he rewrites the course instructions to use Anaconda python. You are
-probably paying for this, so your instructor should start teaching you the
-correct way to use python for scientific data analysis.
-
-**Instructions:**
-* [Linux](docs/LINUX_INSTALL.md)
-* [MacOSX](docs/MACOSX_INSTALL.md)
-* [Windows](docs/WINDOWS_INSTALL.md)
+| Platform | OS      | interpreter | backend     | instructions |
+| -------- | ------- | ----------- | ----------  | ------------ |
+| x86/x64  | Windows | Anaconda    | pyseabreeze | [recommended](README.md#the-recommended-way---anaconda) + [pyusb](docs/BACKENDS.md#install-pyseabreeze)
+| x86/x64  | Windows | Python.org  | cseabreeze  | [windows](docs/WINDOWS_INSTALL.md)
+| x86/x64  | Windows | Python.org  | pyseabreeze | [without-cseabreeze](docs/BACKENDS.md#install-python-seabreeze-without-cseabreeze) + [pyusb](docs/BACKENDS.md#install-pyseabreeze)
+| x86/x64  | OSX     | Anaconda    | pyseabreeze | [recommended](README.md#the-recommended-way---anaconda) + [pyusb](docs/BACKENDS.md#install-pyseabreeze)
+| x86/x64  | OSX     | Python.org  | cseabreeze  | [osx](docs/MACOSX_INSTALL.md)
+| x86/x64  | OSX     | Python.org  | pyseabreeze | [without-cseabreeze](docs/BACKENDS.md#install-python-seabreeze-without-cseabreeze) + [pyusb](docs/BACKENDS.md#install-pyseabreeze)
+| x86/x64  | Linux   | Anaconda    | pyseabreeze | [recommended](README.md#the-recommended-way---anaconda) + [pyusb](docs/BACKENDS.md#install-pyseabreeze)
+| x86/x64  | Linux   | Python.org  | cseabreeze  | [linux](docs/LINUX_INSTALL.md)
+| x86/x64  | Linux   | Python.org  | pyseabreeze | [without-cseabreeze](docs/BACKENDS.md#install-python-seabreeze-without-cseabreeze) + [pyusb](docs/BACKENDS.md#install-pyseabreeze)
+| ARM      | Linux   | Python.org  | cseabreeze  | [linux](docs/LINUX_INSTALL.md)
+| ARM      | Linux   | Python.org  | pyseabreeze | [without-cseabreeze](docs/BACKENDS.md#install-python-seabreeze-without-cseabreeze) + [pyusb](docs/BACKENDS.md#install-pyseabreeze)
 
 If you think that you can't install this module because there is something
 wrong with it, read through the installation instructions again. Then try to

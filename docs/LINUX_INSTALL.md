@@ -23,7 +23,7 @@ sudo yum install git-all gcc gcc-c++ make libusb-devel
 
 ```bash
 # if your distro is a arch flavor
-pacman -S base-devel base-devel libusb libusb-compat libusb-devel make gcc
+pacman -S base-devel libusb libusb-compat libusb-devel make gcc
 ```
 
 ```bash
@@ -120,5 +120,4 @@ Most likely you'll have to do:
 "/usr/local/lib" >> /etc/ld.so.conf.d/usrlocal.conf
 sudo ldconfig -v
 ```
-
 

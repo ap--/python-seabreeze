@@ -1,10 +1,10 @@
 # Python module for [Ocean Optics](http://www.oceanoptics.com/) spectrometers
 
 [![Anaconda](https://anaconda.org/poehlmann/python-seabreeze/badges/version.svg)](https://anaconda.org/poehlmann/python-seabreeze)
-[![CondaDownload](https://anaconda.org/poehlmann/python-seabreeze/badges/downloads.svg)]()
+[![CondaDownload](https://anaconda.org/poehlmann/python-seabreeze/badges/downloads.svg)](https://anaconda.org/poehlmann/python-seabreeze/files)
 [![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=win-whl&style=flat-square)](https://ci.appveyor.com/project/ap--/python-seabreeze)
 [![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=osx-whl&style=flat-square)](https://travis-ci.org/ap--/python-seabreeze)
-[![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg?style=flat-square)]()
+[![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg?style=flat-square)](https://github.com/ap--/python-seabreeze/releases)
 [![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/ap--/python-seabreeze.svg?style=flat-square)](https://github.com/ap--/python-seabreeze/issues)
 [![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square)](https://paypal.me/apoehlmann)

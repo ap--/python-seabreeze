@@ -2,11 +2,11 @@ language:
 - objective-c
 env:
   global:
-    - SEABREEZE_VERSION="3.0.11.11"
+  - SEABREEZE_VERSION="3.0.11.11"
   matrix:
-    - PYTHON_VERSION="2.7.13" 
-    - PYTHON_VERSION="3.5.3"
-    - PYTHON_VERSION="3.6.1"
+  - PYTHON_VERSION="2.7.13"
+  - PYTHON_VERSION="3.5.3"
+  - PYTHON_VERSION="3.6.1"
 install: source travis/build_wheel.sh
 script:
 - echo "done."
@@ -16,8 +16,8 @@ deploy:
   file_glob: true
   file:
       - dist/*.whl
+  api_key:
+    secure: hDbhZMLLmvid2U9VuFBRkdduRMnsLnUvZzSnzJE96NSrGd/rcHM0GXUiVEOpVqHJmygBSVekTVjk7wOvljWvyxTfa4qd1/hdkKNbUbhWCBC1pXsPLLsnb2xLu8s6YHJc4bu0ZE3imm+6gAaABHB6SZe9P0c21L40TDh6Ew2VY1g=
   on:
     all_branches: true
     tags: true
-  api-key:
-    secure: OkvQCnZAtWvXtmiR2uyy5GCo7LXXHAB0TDrUSxbg9cylc72zeUGEgPjgdAbRSNygLimNDMzuAWCdNvXBABrB5USPjb5eAheWI7E7loVPN0kAuBj+DDwD2N5QV0dO0+GQerRyxoMLks90FrPwhVLbke0rLxr8eM9roP7Ouo4wYBc=

@@ -48,7 +48,7 @@ _Consider supporting open source software and_ [_buying me a beer_](https://payp
 
 Starting with version _0.6.0_, python-seabreeze is available as a pre-built
 package for Python versions _2.7.x_, _3.5.x_, _3.6.x_ on _win-32_, _win-64_,
-_osx-64_ and _linux-64_ via anaconda. The module supports communicating with
+_osx-64_, _linux-64_ and _linux-armv7l_ via anaconda. The module supports communicating with
 [various Ocean Optics spectrometers](#supported-devices) via one of two
 backends. More information on the backends is available
 [here](docs/BACKENDS.md). The recommended default is **cseabreeze**.
@@ -65,7 +65,8 @@ python-seabreeze now ships pre-built packages for
 [Anaconda](https://www.continuum.io/downloads). If you're not using Anaconda
 yet, start using it now. As a scientist, who spent way to much time dealing
 with stupid computer problems, I urge you to switch all your python development
-to Anaconda environments. It'll save you a lot of time, believe me. 
+to Anaconda environments. It'll save you a lot of time, believe me.
+(for RaspberryPIs I recommend using [Berryconda](https://github.com/jjhelmus/berryconda))
 
 To install the module run the following in your conda environment. This will
 install the module and the dependencies you need for the cseabreeze backend.

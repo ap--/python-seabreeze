@@ -165,7 +165,7 @@ info.)
 | USB2000      |     x      |      x      |
 | USB2000PLUS  |     x      |      x      |
 | USB4000      |     x      |      x      |
-| USB650       |     x      |      x      |
+| USB650       |            | [Issue #47](https://github.com/ap--/python-seabreeze/issues/47) |
 | SPARK        |     x      |             |
 
 

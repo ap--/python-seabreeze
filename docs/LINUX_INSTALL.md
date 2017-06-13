@@ -1,72 +1,68 @@
 # Installing on Linux
 
+_Okay, I really need to emphasize, that using Anaconda is the recommended way
+to install this module. But ok:_
+
 This should really run anywhere. I have confirmation of people running this on
 ubuntu, debian, arch and others. On 32bit and 64bit systems, as well as on ARM
 on the Raspberry PI.
 
-Let's get started:
+#### Before you can start 
 
-1. Clone/download this repository 
-2. Install AND/OR upgrade [pip](https://pip.pypa.io/en/stable/installing/). Do
-   not file any issues if `pip --version` returns less than version _8.x.x_!
+Stuff you need for installing python-seabreeze without conda.
 
-## Backends
+```bash
+# if your distro is a deb flavor
+sudo apt-get install git-all build-essential libusb-dev
+```
 
-### Installing requirements for cseabreeze backend on Linux
+```bash
+# if your distro is a rpm flavor
+sudo yum install git-all gcc gcc-c++ make libusb-devel
+```
+
+```bash
+# if your distro is a arch flavor
+pacman -S base-devel libusb libusb-compat libusb-devel make gcc
+```
+
+```bash
+# Make sure to install pip and:
+pip --version  # has to be >= 8.0.0
+```
+
+
+#### Install the C library backend
 
 You need to build and install _libseabreeze.so_. There's a helper script in this
-repositories misc folder (requires wget).
+repositories misc folder.
 
-Before running it you need to make sure that you have a working build
-environment and libusb installed. Please refer to your distribution how to
-install these requirements. Here are one-liners for some distributions (let me
-know if it's different for your distribution):
-
-```
-# UBUNTU
-sudo apt-get install build-essential python-numpy libusb-0.1-4 libusb-dev
-# ARCH LINUX (try one or the other)
-sudo pacman -S base-devel libusb libusb-devel 
-sudo pacman -S base-devel libusb-compat make gcc python2-pip python2-setuptools
-# RHEL   
-sudo yum install gcc gcc-c++ make libusb libusb-devel 
-```
-
-After that run 
-```
+```bash
+# script is located in the misc folder
 ./install_libseabreeze.sh
 ```
-from the misc folder.
-
-This will install _libseabreeze.so_ to /usr/local/lib/. You can check if python
-will find the shared library later, by running `ldconfig -v`. If it shows
-libseabreeze you're done. If not, you need to "add /usr/local/lib" to your
-library search path. Google "add /usr/local/lib", and you'll find how to do
-that for your distribution. Most likely you do `echo "/usr/local/lib" >>
-/etc/ld.so.conf.d/usrlocal.conf` and run ldconfig to rebuild the cache.
 
 
-### Installing requirements for pyseabreeze backend on Linux
+#### Install pyUSB
 
-You need to get pyUSB up and running. Check if your distributions package manager
-has a pyusb packaged first. If not:
+If you want to use pyseabreeze, you'll need this.
 
-```
-pip install pyusb==1.0.0b2
+```bash
+pip install pyusb
 ```
 
-If it is correctly installed, you should be able to run
+You can check, if it is installed correctly by running:
 
 ```python
-import usb.core
-usb.core.find()
+>>> import usb.core
+>>> usb.core.find()
 ```
 
-without any exception being raised. If it raises an exception google how to
-get pyusb up and running for your distribution first.
+If this code raises an exception google how to get pyUSB up and running for
+your distribution first.
 
 
-## python-seabreeze
+#### python-seabreeze
 
 Now you need to setup the udev rules. Theres another helper script in the misc
 folder:
@@ -75,7 +71,7 @@ folder:
 ./install_udev_rules.sh
 ```
 
-You also need to make sure that your user is in the plugdev group!  Also please
+You also need to make sure that your user is in the plugdev group! Also please
 double check that you are using the 10-oceanoptics.rules file from this
 repository! There are several different ones floating around.
 
@@ -98,6 +94,7 @@ Note: If you want to build cseabreeze，you should install Cython.
 ```
 pip install cython
 ```
+
 ## Common problems
 
 #### python-seabreeze can't find my spectrometer
@@ -110,4 +107,17 @@ the "plugdev" group.
 
 Also make sure you add your user to the plugdev group (and create the group if
 it doesn't exist on your machine). Google is your friend.
+
+#### Can't find libseabreeze.so 
+
+The library is installed to /usr/local/lib/. 
+Some distributions don't seem to have this location in their default search path.
+You can check if python will find the shared library later, by running ldconfig -v.
+If it shows libseabreeze you're done. If not, you need to "add /usr/local/lib" to your library search path. Google "add /usr/local/lib", and you'll find how to do that for your distribution.
+Most likely you'll have to do:
+
+```bash
+"/usr/local/lib" >> /etc/ld.so.conf.d/usrlocal.conf
+sudo ldconfig -v
+```
 

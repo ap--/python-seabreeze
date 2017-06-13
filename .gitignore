@@ -3,5 +3,6 @@
 *.tar.bz2
 *.pyc
 *.cpp
-build
-.idea
+build/*
+dist/*
+.DS_Store

@@ -10,7 +10,7 @@ source terryfy/travis_tools.sh
 get_python_environment macpython $PYTHON_VERSION venv
 pip install --upgrade pip
 pip install --upgrade wheel
-pip install cython
+pip install cython==0.25.2
 pip install delocate
 python --version
 

@@ -1,8 +1,10 @@
 # python-seabreeze documentation #
 
 Currently only some features of the module are documented. Look at the
-Spectrometer class in [spectrometers.py](../seabreeze/spectrometers.py) for
-more detailed information.
+Spectrometer class and read the code in
+[spectrometers.py](../seabreeze/spectrometers.py) for more detailed
+information. Help improve this documentation by submitting a pull request!
+
 
 #### class SeabreezeDevice
 
@@ -55,6 +57,8 @@ spec.intensities(correct_dark_counts=True, correct_nonlinearity=True)
 
 
 #### The documentation still needs work
+
+This is very likely to be outdated
 
 ```python
 class Spectrometer(object):

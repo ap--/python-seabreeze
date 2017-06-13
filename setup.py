@@ -6,6 +6,9 @@ import platform
 import sys
 import warnings
 
+SEABREEZE_VERSION = "0.6.0"
+
+
 if "--without-cseabreeze" in sys.argv:
     sys.argv.remove("--without-cseabreeze")  # this is a hack...
     # user requests to not install cython wrapper
@@ -43,7 +46,7 @@ else:
 
 setup(
     name='seabreeze',
-    version='0.5.3',
+    version=SEABREEZE_VERSION,
     author='Andreas Poehlmann',
     author_email='mail@andreaspoehlmann.de',
     packages=['seabreeze',

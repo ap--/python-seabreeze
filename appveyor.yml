@@ -1,8 +1,8 @@
 environment:
 
   global:
-    SEABREEZE: "3.0.10.2"
-    SEABREEZE_PATH: "C:\\Program Files (x86)\\Ocean Optics\\SeaBreeze\\Library;C:\\Program Files\\Ocean Optics\\SeaBreeze\\Library"
+    SEABREEZE: "3.0.11.11"
+    SEABREEZE_PATH: "C:\\SeaBreeze"
 
   matrix:
 
@@ -11,42 +11,39 @@ environment:
 
     - PYTHON: "C:\\Python27"
       PYTHON_ARCH: "32"
-      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
-    - PYTHON: "C:\\Python33"
-      PYTHON_ARCH: "32"
-      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
-    - PYTHON: "C:\\Python34"
-      PYTHON_ARCH: "32"
+      VSC_V: "vc9"
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
     - PYTHON: "C:\\Python35"
       PYTHON_ARCH: "32"
+      VSC_V: "vc14"
+      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
+    - PYTHON: "C:\\Python36"
+      PYTHON_ARCH: "32"
+      VSC_V: "vc14"
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wxp\\i386"
 
     - PYTHON: "C:\\Python27-x64"
       PYTHON_ARCH: "64"
-      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
-    - PYTHON: "C:\\Python33-x64"
-      PYTHON_ARCH: "64"
-      DISTUTILS_USE_SDK: "1"
-      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
-    - PYTHON: "C:\\Python34-x64"
-      PYTHON_ARCH: "64"
-      DISTUTILS_USE_SDK: "1"
+      VSC_V: "vc9"
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
     - PYTHON: "C:\\Python35-x64"
       PYTHON_ARCH: "64"
+      VSC_V: "vc14"
+      WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
+    - PYTHON: "C:\\Python36-x64"
+      PYTHON_ARCH: "64"
+      VSC_V: "vc14"
       WDDK_LIB_PATH: "C:\\WinDDK\\7600.16385.1\\lib\\wlh\\amd64"
 
 install:
   # Setup the build environment
   - "%PYTHON%\\python.exe -m pip install --disable-pip-version-check --user --upgrade pip"
   - "%PYTHON%\\python.exe -m pip install wheel"
-  - "%PYTHON%\\python.exe -m pip install cython==0.23.4"
+  - "%PYTHON%\\python.exe -m pip install cython==0.25.2"
 
   # Install Seabreeze
-  - cmd: echo "Downloading seabreeze-%SEABREEZE%-unofficial-Setup%PYTHON_ARCH%.msi"
-  - "appveyor DownloadFile https://github.com/ap--/libseabreeze/releases/download/libseabreeze-%SEABREEZE%/seabreeze-%SEABREEZE%-unofficial-Setup%PYTHON_ARCH%.msi -FileName sbsetup.msi"
-  - cmd: msiexec /i sbsetup.msi /quiet /qn /norestart
+  - "appveyor DownloadFile https://github.com/ap--/libseabreeze/releases/download/libseabreeze-%SEABREEZE%/libseabreeze-%SEABREEZE%-%PYTHON_ARCH%-%VSC_V%.zip -FileName sb.zip"
+  - cmd: 7z x sb.zip -o%SEABREEZE_PATH% 
 
 build: off
 
@@ -58,7 +55,6 @@ after_test:
   - '.\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py build_ext --library-dirs="%SEABREEZE_PATH%;%WDDK_LIB_PATH%"'
   - ".\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py build"
   - ".\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py bdist_wheel"
-  - ".\\appveyor\\build.cmd %PYTHON%\\python.exe setup.py bdist_msi"
 
 artifacts:
   - path: dist\*
@@ -68,7 +64,7 @@ deploy:
   release: $(appveyor_repo_tag_name)
   provider: GitHub
   auth_token:
-    secure: 2jmPAIr0bDr/Aak6PsCtd5nRPQpHEKwjKN13k4fDp4f6fbibuLmGEkQspQguQwFe
+    secure: OiiLi86ESCEHBxNyRQKpWMw2b7tp5whZ8OcgFIjizPBFhOpyonU61GV9LDIYyjh8
   artifact: wheel
   draft: false
   prerelease: false

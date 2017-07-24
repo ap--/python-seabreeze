@@ -82,7 +82,7 @@ Then choose a suiting driver from the extracted folder.
 
 **IF LINUX:**
 you need to install the udev rules from [here](misc/10-oceanoptics.rules). These give all users access to connected usb spectrometers and are required, so that you can access the
-spectrometers via libusb as a user without root privileges. Download and copy this file to `/etc/udev/rules.d/` and run `sudo udevadm --reload-rules`. Replug your spectrometer.
+spectrometers via libusb as a user without root privileges. Download and copy this file to `/etc/udev/rules.d/` and run `sudo udevadm control --reload-rules`. Replug your spectrometer.
 
 **IF OSX:**
 You're all set. It should already work.

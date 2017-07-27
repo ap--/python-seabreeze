@@ -36,9 +36,9 @@ ATTR{idVendor}=="2457", ATTR{idProduct}=="1028", SYMLINK+="nirquest256-%n", GROU
 # Ocean Optics Inc. NIRQuest-512 spectrometer
 ATTR{idVendor}=="2457", ATTR{idProduct}=="1026", SYMLINK+="nirquest512-%n", GROUP="plugdev"
 # Ocean Optics Inc. Maya 2000 spectrometer
-ATTR{idVendor}=="2457", ATTR{idProduct}=="102C", SYMLINK+="maya2000-%n", GROUP="plugdev"
+ATTR{idVendor}=="2457", ATTR{idProduct}=="102c", SYMLINK+="maya2000-%n", GROUP="plugdev"
 # Ocean Optics Inc. Maya Pro 2000 spectrometer
-ATTR{idVendor}=="2457", ATTR{idProduct}=="102A", SYMLINK+="mayapro2000-%n", GROUP="plugdev"
+ATTR{idVendor}=="2457", ATTR{idProduct}=="102a", SYMLINK+="mayapro2000-%n", GROUP="plugdev"
 # Ocean Optics Inc. Torus spectrometer
 ATTR{idVendor}=="2457", ATTR{idProduct}=="1040", SYMLINK+="torus-%n", GROUP="plugdev"
 # Ocean Optics Inc. Jaz spectrometer

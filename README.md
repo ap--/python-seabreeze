@@ -169,6 +169,12 @@ info.)
 | SPARK        |     x      |             |
 
 
+## Known Issues
+
+- USB2000 spectrometers cause `Data transfer error` due to old firmware [Issue #48](https://github.com/ap--/python-seabreeze/issues/48)
+- USB650 not supported [Issue #47](https://github.com/ap--/python-seabreeze/issues/47)
+- No conda packages for armv6 (RPI version 1) [Issue #46](https://github.com/ap--/python-seabreeze/issues/46)
+
 ## Contributing Guidelines
 
 If you run into any problems, file an issue and be sure to include the
@@ -196,4 +202,8 @@ If you want me to add your project here, let me know. Happy to add it.
 - [SeaBreeze](https://sourceforge.net/projects/seabreeze/) - Ocean Optics' SeaBreeze C library.
 - [libseabreeze](https://github.com/ap--/libseabreeze) - github clone of the C library. _internal use only_ (has pre-built libraries if you know what you're doing)
 - [python-seabreeze-feedstock](https://github.com/ap--/python-seabreeze) - anaconda feedstock for automated package deployment. _internal use only_
+
+
+
+
 

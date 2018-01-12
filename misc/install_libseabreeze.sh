@@ -15,6 +15,7 @@ curl -L -o libseabreeze.zip ${SB_URL}
 unzip libseabreeze.zip
 mv libseabreeze-libseabreeze-${SB_VER} libseabreeze
 cd libseabreeze/SeaBreeze
+sed -i "s/\t/    /g" src/common/Log.cpp
 
 case "$(uname -s)" in
   Linux)

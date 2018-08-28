@@ -122,7 +122,7 @@ detailed description read the (currently incomplete) [documentation](docs/DOCUME
 ```python
 >>> import seabreeze.spectrometers as sb
 >>> devices = sb.list_devices()
->>> print devices
+>>> print(devices)
 [<SeaBreezeDevice USB2000PLUS:USB2+H02749>, <SeaBreezeDevice USB2000PLUS:USB2+H02751>]
 >>> spec = sb.Spectrometer(devices[0])
 >>> spec.integration_time_micros(12000)

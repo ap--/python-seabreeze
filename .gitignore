@@ -1,8 +1,8 @@
 *.so
-*.c
 *.tar.bz2
 *.pyc
-*.cpp
 build/*
 dist/*
 .DS_Store
+.eggs
+.idea

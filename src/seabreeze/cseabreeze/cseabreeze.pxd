@@ -1,5 +1,4 @@
 # distutils: language = c
-# distutils: include_dirs = /usr/local/lib
 
 # The cython wrapper now uses seabreezeapi.h instead of the obsolete seabreezewrapper.h
 

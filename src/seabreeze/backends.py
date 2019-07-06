@@ -1,48 +1,98 @@
+import logging
 import warnings
 
-__SEABREEZE_BACKEND = 'cseabreeze'
+__all__ = ['use', 'get_backend']
 
-def use(backend):
-    if not backend in ['cseabreeze', 'pyseabreeze']:
-        raise Exception('Choose backend from "cseabreeze", "pyseabreeze"')
-    else:
-        global __SEABREEZE_BACKEND
-        __SEABREEZE_BACKEND = backend
-
-def get_backend():
-    global __SEABREEZE_BACKEND
-    if __SEABREEZE_BACKEND == 'cseabreeze':
-        b = _use_cseabreeze()
-        if b: return b
-        warnings.warn("Falling back to 'pyseabreeze'.")
-        b = _use_pyseabreeze()
-        if b: return b
-    if __SEABREEZE_BACKEND == 'pyseabreeze':
-        b = _use_pyseabreeze()
-        if b: return b
-        warnings.warn("Falling back to 'cseabreeze'.")
-        b = _use_cseabreeze()
-        if b: return b
-    raise ImportError('Could not import any backends. Wanted "%s"' % __SEABREEZE_BACKEND)
 
 def _use_cseabreeze():
+    # internal: import the libseabreeze cython wrapper -> cseabreeze
     try:
         import seabreeze.cseabreeze as sbb
     except ImportError as err:
-        warnings.warn("Can't load seabreeze c library wrapper, because:\n'%s'\n" % str(err) )
+        logging.warn("seabreeze can't load 'cseabreeze' backend - error: '%s'" % str(err), exc_info=True)
         return None
     else:
         sbb.initialize()
         return sbb
 
+
 def _use_pyseabreeze():
+    # internal: import the pyusb wrapper -> pyseabreeze
     try:
         import seabreeze.pyseabreeze as sbb
     except ImportError as err:
-        warnings.warn("Can't load pyusb wrapper, because:\n'%s'\n" % str(err) )
+        logging.warn("seabreeze can't load 'pyseabreeze' backend - error: '%s'" % str(err), exc_info=True)
         return None
     else:
         sbb.initialize()
         return sbb
 
 
+# internal config dict used exclusively in this submodule
+_SeaBreezeConfig = {
+    'requested_backend': 'cseabreeze',  # default is cseabreeze
+    'available_backends': {
+        'cseabreeze': _use_cseabreeze,
+        'pyseabreeze': _use_pyseabreeze
+    },
+    'allow_fallback': False
+}
+
+
+def use(backend, force=None):
+    """
+    select the backend used for communicating with the spectrometer
+
+    Parameters
+    ----------
+    backend : str
+
+    force : bool, optional, default: False
+        raises an ImportError when ``seabreeze.get_backend()`` is called
+        and the requested backend can not be imported. force=True should
+        be used in user code to make
+    """
+    if force is None:
+        warnings.warn("seabreeze.use will default to force=True in future versions", FutureWarning)
+        force = False
+    if backend not in _SeaBreezeConfig['available_backends']:
+        raise ValueError('backend not in: {}'.format(', '.join(_SeaBreezeConfig['available_backends'])))
+    _SeaBreezeConfig['requested_backend'] = backend
+    _SeaBreezeConfig['allow_fallback'] = not force
+
+
+def get_backend():
+    """
+    return the requested backend or a fallback. configuration is done
+    via ``seabreeze.use()``
+
+    Returns
+    -------
+    backend:
+        a backend interface for communicating with the spectrometers
+    """
+    requested = _SeaBreezeConfig['requested_backend']
+    fallback = _SeaBreezeConfig['allow_fallback']
+    backends = _SeaBreezeConfig['available_backends']
+
+    import_func = backends.get(requested, lambda: None)
+    backend = import_func()  # trying to import requested backend
+    if backend is None and fallback:
+
+        warnings.warn("seabreeze failed to load user requested '%s' backend but will try fallback backends" % requested,
+                      category=ImportWarning)
+
+        fallback_backends = [b for b in backends.keys() if b != requested]
+        for fallback_backend in fallback_backends:
+            import_func = backends.get(fallback_backend)
+            backend = import_func()
+            if backend is not None:
+                break
+        else:
+            raise ImportError('Failed to import backend. '
+                              'Tried: {}'.format(requested, ', '.join(fallback_backends)))
+
+    if backend is None:
+        raise ImportError('Could not import any backends. Wanted "%s"' % requested)
+
+    return backend

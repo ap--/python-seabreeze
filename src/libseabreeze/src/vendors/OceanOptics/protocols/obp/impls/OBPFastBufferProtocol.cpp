@@ -50,7 +50,7 @@ OBPFastBufferProtocol::~OBPFastBufferProtocol() {
 }
 
 unsigned char OBPFastBufferProtocol::getBufferingEnable(const Bus &bus,
-        unsigned char bufferIndex) throw (ProtocolException) {
+        unsigned char bufferIndex) {
 
     unsigned char isEnabled;
     OBPGetFastBufferingEnableExchange exchange;
@@ -76,8 +76,7 @@ unsigned char OBPFastBufferProtocol::getBufferingEnable(const Bus &bus,
 }
 
 void OBPFastBufferProtocol::setBufferingEnable(const Bus &bus,
-        unsigned char bufferIndex, const unsigned char isEnabled)
-        throw (ProtocolException) {
+        unsigned char bufferIndex, const unsigned char isEnabled) {
 
     if(0 != bufferIndex) {
         /* At present, this protocol only knows how to deal with one buffer
@@ -102,7 +101,7 @@ void OBPFastBufferProtocol::setBufferingEnable(const Bus &bus,
 }
 
 unsigned int OBPFastBufferProtocol::getConsecutiveSampleCount(const Bus &bus,
-	unsigned char bufferIndex) throw (ProtocolException) {
+	unsigned char bufferIndex) {
 
 	unsigned int consecutiveSampleCount;
 	OBPGetConsecutiveSampleCountExchange exchange;
@@ -127,8 +126,7 @@ unsigned int OBPFastBufferProtocol::getConsecutiveSampleCount(const Bus &bus,
 }
 
 void OBPFastBufferProtocol::setConsecutiveSampleCount(const Bus &bus,
-	unsigned char bufferIndex, const unsigned int consecutiveSampleCount)
-	throw (ProtocolException) {
+	unsigned char bufferIndex, const unsigned int consecutiveSampleCount) {
 
 	if (0 != bufferIndex) {
 		/* At present, this protocol only knows how to deal with one buffer

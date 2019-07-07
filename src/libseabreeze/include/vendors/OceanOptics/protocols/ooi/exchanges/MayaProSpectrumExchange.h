@@ -44,7 +44,7 @@ namespace seabreeze {
         virtual ~MayaProSpectrumExchange();
 
         /* Inherited */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
 
     private:
         /* This is necessary so that the saturation level which is determined

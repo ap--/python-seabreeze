@@ -57,8 +57,7 @@ OBPOpticalBenchProtocol::~OBPOpticalBenchProtocol() {
 }
 
 
-string *OBPOpticalBenchProtocol::readOpticalBenchID(const Bus &bus)
-                throw (ProtocolException) {
+string *OBPOpticalBenchProtocol::readOpticalBenchID(const Bus &bus) {
 
     vector<byte> *result;
     string *retval = NULL;
@@ -99,8 +98,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchID(const Bus &bus)
     return retval;
 }
 
-string *OBPOpticalBenchProtocol::readOpticalBenchSerialNumber(const Bus &bus)
-                throw (ProtocolException) {
+string *OBPOpticalBenchProtocol::readOpticalBenchSerialNumber(const Bus &bus) {
 
     vector<byte> *result;
     string *retval = NULL;
@@ -142,8 +140,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchSerialNumber(const Bus &bus)
     return retval;
 }
 
-string *OBPOpticalBenchProtocol::readOpticalBenchCoating(const Bus &bus)
-                throw (ProtocolException) {
+string *OBPOpticalBenchProtocol::readOpticalBenchCoating(const Bus &bus) {
 
     vector<byte> *result;
     string *retval = NULL;
@@ -185,8 +182,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchCoating(const Bus &bus)
     return retval;
 }
 
-string *OBPOpticalBenchProtocol::readOpticalBenchFilter(const Bus &bus)
-                throw (ProtocolException) {
+string *OBPOpticalBenchProtocol::readOpticalBenchFilter(const Bus &bus) {
 
     vector<byte> *result;
     string *retval = NULL;
@@ -228,8 +224,7 @@ string *OBPOpticalBenchProtocol::readOpticalBenchFilter(const Bus &bus)
     return retval;
 }
 
-string *OBPOpticalBenchProtocol::readOpticalBenchGrating(const Bus &bus)
-                throw (ProtocolException) {
+string *OBPOpticalBenchProtocol::readOpticalBenchGrating(const Bus &bus) {
 
     vector<byte> *result;
     string *retval = NULL;
@@ -273,7 +268,6 @@ string *OBPOpticalBenchProtocol::readOpticalBenchGrating(const Bus &bus)
 
 
 unsigned short int OBPOpticalBenchProtocol::readOpticalBenchSlitWidthMicrons(const Bus &bus)
-                throw (ProtocolException) 
 {
     vector<byte> *result = NULL;
     unsigned short int slitWidth;
@@ -308,7 +302,6 @@ unsigned short int OBPOpticalBenchProtocol::readOpticalBenchSlitWidthMicrons(con
 }
 
 unsigned short int OBPOpticalBenchProtocol::readOpticalBenchFiberDiameterMicrons(const Bus &bus)
-                throw (ProtocolException) 
 {
     vector<byte> *result = NULL;
     unsigned short int fiberDiameter;

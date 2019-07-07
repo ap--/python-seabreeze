@@ -65,7 +65,7 @@ OBPIPv4Protocol::~OBPIPv4Protocol()
 #endif
 
 
-void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> *IPv4_Address,  unsigned char *netMask) throw (ProtocolException)
+void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> *IPv4_Address,  unsigned char *netMask)
 {
     TransferHelper *helper;
     OBPGetIPv4AddressExchange request;
@@ -95,7 +95,7 @@ void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIn
     delete raw;
 }
 
-vector<unsigned char> OBPIPv4Protocol::get_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException) 
+vector<unsigned char> OBPIPv4Protocol::get_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
     OBPGetIPv4DefaultGatewayExchange request;
@@ -123,7 +123,7 @@ vector<unsigned char> OBPIPv4Protocol::get_IPv4_Default_Gateway(const Bus &bus, 
 }
 
 
-void OBPIPv4Protocol::set_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> defaultGatewayAddress) throw (ProtocolException)
+void OBPIPv4Protocol::set_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> defaultGatewayAddress)
 {
     TransferHelper *helper;
 	OBPSetIPv4DefaultGatewayExchange command;
@@ -147,7 +147,7 @@ void OBPIPv4Protocol::set_IPv4_Default_Gateway(const Bus &bus, unsigned char int
 }
 
 
-unsigned char OBPIPv4Protocol::get_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException) 
+unsigned char OBPIPv4Protocol::get_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
 	OBPGetIPv4DHCPEnableStateExchange request;
@@ -181,7 +181,7 @@ unsigned char OBPIPv4Protocol::get_IPv4_DHCP_Enable_State(const Bus &bus, unsign
 }
 
 
-void OBPIPv4Protocol::set_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus) throw (ProtocolException)
+void OBPIPv4Protocol::set_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus)
 {
     TransferHelper *helper;
 	OBPSetIPv4DHCPEnableStateExchange command;
@@ -201,7 +201,7 @@ void OBPIPv4Protocol::set_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char i
     /* FIXME: this could check the return value and react if it did not succeed */
 }
 
-unsigned char OBPIPv4Protocol::get_Number_Of_IPv4_Addresses(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPIPv4Protocol::get_Number_Of_IPv4_Addresses(const Bus &bus, unsigned char interfaceIndex)
 {
 	TransferHelper *helper;
 	OBPGetIPv4NumberOfAddressesExchange request;
@@ -234,7 +234,7 @@ unsigned char OBPIPv4Protocol::get_Number_Of_IPv4_Addresses(const Bus &bus, unsi
 	return retval;
 }
 
-void OBPIPv4Protocol::add_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> IPv4_Address, unsigned char netMask) throw (ProtocolException)
+void OBPIPv4Protocol::add_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> IPv4_Address, unsigned char netMask)
 {
 	TransferHelper *helper;
 	OBPAddIPv4AddressExchange command;
@@ -258,7 +258,7 @@ void OBPIPv4Protocol::add_IPv4_Address(const Bus &bus, unsigned char interfaceIn
 
 }
 
-void OBPIPv4Protocol::delete_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char IPv4_Address_Index) throw (ProtocolException)
+void OBPIPv4Protocol::delete_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char IPv4_Address_Index)
 {
 	TransferHelper *helper;
 	OBPDeleteIPv4AddressExchange command;

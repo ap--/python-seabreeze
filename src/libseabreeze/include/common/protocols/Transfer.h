@@ -73,7 +73,7 @@ namespace seabreeze {
                 direction_t direction, unsigned int length);
 
         virtual ~Transfer();
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
 
         static const direction_t TO_DEVICE;
         static const direction_t FROM_DEVICE;

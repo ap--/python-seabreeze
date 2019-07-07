@@ -42,8 +42,7 @@ namespace seabreeze {
         OBPStrayLightCoeffsProtocol();
         virtual ~OBPStrayLightCoeffsProtocol();
 
-        virtual std::vector<double> *readStrayLightCoeffs(const Bus &bus)
-                throw (ProtocolException);
+        virtual std::vector<double> *readStrayLightCoeffs(const Bus &bus);
     };
   }
 }

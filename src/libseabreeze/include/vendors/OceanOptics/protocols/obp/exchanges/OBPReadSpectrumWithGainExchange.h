@@ -42,7 +42,7 @@ namespace seabreeze {
         virtual ~OBPReadSpectrumWithGainExchange();
 
         /* Inherited */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
         
     private:
         GainAdjustedSpectrometerFeature *spectrometerFeature;

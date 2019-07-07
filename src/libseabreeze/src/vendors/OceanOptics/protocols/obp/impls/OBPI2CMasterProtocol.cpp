@@ -60,7 +60,7 @@ OBPI2CMasterProtocol::~OBPI2CMasterProtocol()
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-unsigned char OBPI2CMasterProtocol::i2cMasterGetNumberOfBuses(const Bus &bus) throw (ProtocolException)
+unsigned char OBPI2CMasterProtocol::i2cMasterGetNumberOfBuses(const Bus &bus)
 {
     TransferHelper *helper;
     OBPGetI2CMasterNumberOfBusesExchange request;
@@ -94,7 +94,7 @@ unsigned char OBPI2CMasterProtocol::i2cMasterGetNumberOfBuses(const Bus &bus) th
 }
 
 
-std::vector<unsigned char> OBPI2CMasterProtocol::i2cMasterReadBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes) throw (ProtocolException)
+std::vector<unsigned char> OBPI2CMasterProtocol::i2cMasterReadBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes)
 {
 	TransferHelper *helper;
 	OBPReadI2CMasterBusExchange request;
@@ -124,7 +124,7 @@ std::vector<unsigned char> OBPI2CMasterProtocol::i2cMasterReadBus(const Bus &bus
 	return result;
 }
 
-unsigned short OBPI2CMasterProtocol::i2cMasterWriteBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData) throw (ProtocolException)
+unsigned short OBPI2CMasterProtocol::i2cMasterWriteBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData)
 {
 	TransferHelper *helper;
 	OBPWriteI2CMasterBusExchange request;

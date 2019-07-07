@@ -55,7 +55,7 @@ OBPEthernetConfigurationProtocol::~OBPEthernetConfigurationProtocol()
 
 }
 
-vector<unsigned char> OBPEthernetConfigurationProtocol::get_MAC_Address(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException) 
+vector<unsigned char> OBPEthernetConfigurationProtocol::get_MAC_Address(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
     OBPGetEthernetConfigurationMACAddressExchange request;
@@ -85,7 +85,7 @@ vector<unsigned char> OBPEthernetConfigurationProtocol::get_MAC_Address(const Bu
 }
 
 
-void OBPEthernetConfigurationProtocol::set_MAC_Address(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress) throw (ProtocolException) 
+void OBPEthernetConfigurationProtocol::set_MAC_Address(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress)
 {
     TransferHelper *helper;
 	OBPSetEthernetConfigurationMacAddressExchange command;
@@ -113,7 +113,7 @@ void OBPEthernetConfigurationProtocol::set_MAC_Address(const Bus &bus, unsigned 
 #endif
 
 
-unsigned char OBPEthernetConfigurationProtocol::get_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException) 
+unsigned char OBPEthernetConfigurationProtocol::get_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
     OBPGetEthernetConfigurationGbEEnableExchange request;
@@ -150,7 +150,7 @@ unsigned char OBPEthernetConfigurationProtocol::get_GbE_Enable_Status(const Bus 
 }
 
 
-void OBPEthernetConfigurationProtocol::set_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus) throw (ProtocolException) 
+void OBPEthernetConfigurationProtocol::set_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus)
 {
     TransferHelper *helper;
     OBPSetEthernetConfigurationGbEEnableExchange command;

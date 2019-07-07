@@ -67,7 +67,7 @@ Transfer::~Transfer() {
     delete this->buffer;
 }
 
-Data *Transfer::transfer(TransferHelper *helper) throw (ProtocolException) {
+Data *Transfer::transfer(TransferHelper *helper) {
     int flag = 0;
 
     /* Execute the actual movement of the data in this object's buffer

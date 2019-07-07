@@ -47,7 +47,7 @@ FlameXUSBTransferHelper::~FlameXUSBTransferHelper() {
 }
 
 int FlameXUSBTransferHelper::receive(vector<byte> &buffer,
-        unsigned int length) throw (BusTransferException) {
+        unsigned int length) {
     if(0 != (length % WORD_SIZE_BYTES)) {
         vector<byte> *inBuffer;
         int paddedLength;
@@ -72,7 +72,7 @@ int FlameXUSBTransferHelper::receive(vector<byte> &buffer,
 }
 
 int FlameXUSBTransferHelper::send(const std::vector<byte> &buffer,
-        unsigned int length) const throw (BusTransferException) {
+        unsigned int length) const {
     
     if(0 != (length % WORD_SIZE_BYTES)) {
         /* Pad up to a multiple of the word size */

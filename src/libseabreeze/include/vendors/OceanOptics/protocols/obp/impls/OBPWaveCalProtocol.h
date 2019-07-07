@@ -42,8 +42,7 @@ namespace seabreeze {
         OBPWaveCalProtocol();
         virtual ~OBPWaveCalProtocol();
 
-        virtual std::vector<double> *readWavelengthCoeffs(const Bus &bus)
-                throw (ProtocolException);
+        virtual std::vector<double> *readWavelengthCoeffs(const Bus &bus);
     };
   }
 }

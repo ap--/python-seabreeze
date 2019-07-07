@@ -46,26 +46,23 @@ namespace seabreeze {
 
         virtual DataBufferCount_t getNumberOfBuffers() = 0;
         virtual void clearBuffer(const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex) throw (FeatureException) = 0;
+                const DataBufferIndex_t bufferIndex) = 0;
         virtual void removeOldestSpectraFromBuffer(const Protocol &protocol, const Bus &bus,
-            const DataBufferIndex_t bufferIndex, const unsigned int numberOfSpectra) 
-            throw (FeatureException) = 0;
+            const DataBufferIndex_t bufferIndex, const unsigned int numberOfSpectra) = 0;
         virtual DataBufferElementCount_t getBufferCapacity(const Protocol &protocol,
-                const Bus &bus, const DataBufferIndex_t bufferIndex)
-                throw (FeatureException) = 0;
+                const Bus &bus, const DataBufferIndex_t bufferIndex) = 0;
 		virtual DataBufferElementCount_t getBufferCapacityMaximum(
                 const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex) throw (FeatureException) = 0;
+                const DataBufferIndex_t bufferIndex) = 0;
         virtual DataBufferElementCount_t getBufferCapacityMinimum(
                 const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex) throw (FeatureException) = 0;
+                const DataBufferIndex_t bufferIndex) = 0;
         virtual DataBufferElementCount_t getNumberOfElements(
                 const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex) throw (FeatureException) = 0;
+                const DataBufferIndex_t bufferIndex) = 0;
         virtual void setBufferCapacity(const Protocol &protocol, const Bus &bus,
                 const DataBufferIndex_t bufferIndex,
-                const DataBufferElementCount_t bufferSize)
-                throw (FeatureException) = 0;
+                const DataBufferElementCount_t bufferSize) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

@@ -38,9 +38,9 @@ using namespace seabreeze::api;
 using namespace std;
 
 static double __mapIntensityFromProtocol(double intensity,
-            double minimum, double maximum) throw (FeatureException);
+            double minimum, double maximum);
 static double __mapIntensityToProtocol(double intensity, double minimum,
-            double maximum) throw (FeatureException);
+            double maximum);
 
 LightSourceFeatureBase::LightSourceFeatureBase(vector<ProtocolHelper *> helpers,
             int lampModuleIndex) {
@@ -61,7 +61,7 @@ LightSourceFeatureBase::~LightSourceFeatureBase() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 bool LightSourceFeatureBase::hasLightSourceEnable(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex) throw (FeatureException) {
+            const Bus &bus, int lightSourceIndex) {
 
     if(lightSourceIndex < 0 || lightSourceIndex >= getLightSourceCount(protocol, bus)) {
         throw FeatureException("Invalid light source index");
@@ -91,7 +91,7 @@ bool LightSourceFeatureBase::hasLightSourceEnable(const Protocol &protocol,
 }
 
 bool LightSourceFeatureBase::isLightSourceEnabled(const Protocol &protocol,
-        const Bus &bus, int lightSourceIndex) throw (FeatureException) {
+        const Bus &bus, int lightSourceIndex) {
 
     if(lightSourceIndex < 0 || lightSourceIndex >= getLightSourceCount(protocol, bus)) {
         throw FeatureException("Invalid light source index");
@@ -121,7 +121,7 @@ bool LightSourceFeatureBase::isLightSourceEnabled(const Protocol &protocol,
 }
 
 void LightSourceFeatureBase::setLightSourceEnable(const Protocol &protocol,
-        const Bus &bus, int lightSourceIndex, bool enable) throw (FeatureException) {
+        const Bus &bus, int lightSourceIndex, bool enable) {
 
     if(lightSourceIndex < 0 || lightSourceIndex >= getLightSourceCount(protocol, bus)) {
         throw FeatureException("Invalid light source index");
@@ -151,7 +151,7 @@ void LightSourceFeatureBase::setLightSourceEnable(const Protocol &protocol,
 }
 
 bool LightSourceFeatureBase::hasVariableIntensity(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex) throw (FeatureException) {
+            const Bus &bus, int lightSourceIndex) {
 
     if(lightSourceIndex < 0 || lightSourceIndex >= getLightSourceCount(protocol, bus)) {
         throw FeatureException("Invalid light source index");
@@ -181,7 +181,7 @@ bool LightSourceFeatureBase::hasVariableIntensity(const Protocol &protocol,
 }
 
 double LightSourceFeatureBase::getLightSourceIntensity(const Protocol &protocol,
-        const Bus &bus, int lightSourceIndex) throw (FeatureException) {
+        const Bus &bus, int lightSourceIndex) {
 
     if(lightSourceIndex < 0 || lightSourceIndex >= getLightSourceCount(protocol, bus)) {
         throw FeatureException("Invalid light source index");
@@ -246,7 +246,7 @@ double LightSourceFeatureBase::getLightSourceIntensity(const Protocol &protocol,
 }
 
 void LightSourceFeatureBase::setLightSourceIntensity(const Protocol &protocol,
-        const Bus &bus, int lightSourceIndex, double intensity) throw (FeatureException) {
+        const Bus &bus, int lightSourceIndex, double intensity) {
 
     if(lightSourceIndex < 0 || lightSourceIndex >= getLightSourceCount(protocol, bus)) {
         throw FeatureException("Invalid lamp index");
@@ -321,7 +321,7 @@ FeatureFamily LightSourceFeatureBase::getFeatureFamily() {
 }
 
 static double __mapIntensityFromProtocol(double intensity,
-            double minimum, double maximum) throw (FeatureException) {
+            double minimum, double maximum) {
 
     if (maximum > minimum) {
         /* Maximum intensity corresponds to maximum counts */
@@ -334,8 +334,7 @@ static double __mapIntensityFromProtocol(double intensity,
     throw FeatureException("Minimum and maximum intensity values are equal");
 }
 
-static double __mapIntensityToProtocol(double intensity, double minimum, double maximum)
-            throw (FeatureException) {
+static double __mapIntensityToProtocol(double intensity, double minimum, double maximum) {
     double retval = 0.0;
 
     if (maximum > minimum) {

@@ -46,10 +46,10 @@ namespace seabreeze {
         IntrospectionProtocolInterface(Protocol *protocol);
         virtual ~IntrospectionProtocolInterface();
 
-		virtual unsigned short getNumberOfPixels(const Bus &bus) throw (ProtocolException) = 0;
-		virtual std::vector<unsigned int> *getActivePixelRanges(const Bus &bus) throw (ProtocolException) = 0;
-		virtual std::vector<unsigned int> *getElectricDarkPixelRanges(const Bus &bus) throw (ProtocolException) = 0;
-		virtual std::vector<unsigned int> *getOpticalDarkPixelRanges(const Bus &bus) throw (ProtocolException) = 0;
+		virtual unsigned short getNumberOfPixels(const Bus &bus) = 0;
+		virtual std::vector<unsigned int> *getActivePixelRanges(const Bus &bus) = 0;
+		virtual std::vector<unsigned int> *getElectricDarkPixelRanges(const Bus &bus) = 0;
+		virtual std::vector<unsigned int> *getOpticalDarkPixelRanges(const Bus &bus) = 0;
 
     };
 

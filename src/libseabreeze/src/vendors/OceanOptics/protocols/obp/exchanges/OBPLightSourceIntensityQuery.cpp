@@ -54,8 +54,7 @@ OBPLightSourceIntensityQuery::~OBPLightSourceIntensityQuery() {
 
 }
 
-float OBPLightSourceIntensityQuery::queryIntensity(TransferHelper *helper)
-        throw (ProtocolException) {
+float OBPLightSourceIntensityQuery::queryIntensity(TransferHelper *helper) {
 
     vector<byte>::iterator iter;
     float retval = 0;

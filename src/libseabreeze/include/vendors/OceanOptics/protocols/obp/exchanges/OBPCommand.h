@@ -41,7 +41,7 @@ namespace seabreeze {
             virtual ~OBPCommand();
 
             using OBPTransaction::sendCommandToDevice;
-            virtual bool sendCommandToDevice(TransferHelper *helper) throw (ProtocolException);
+            virtual bool sendCommandToDevice(TransferHelper *helper);
 
         protected:
             int messageType;

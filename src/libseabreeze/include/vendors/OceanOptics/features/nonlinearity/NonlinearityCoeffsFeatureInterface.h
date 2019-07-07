@@ -40,7 +40,7 @@ namespace seabreeze {
     public:
         virtual ~NonlinearityCoeffsFeatureInterface() = 0;
         virtual std::vector<double> *readNonlinearityCoefficients(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

@@ -42,8 +42,7 @@ namespace seabreeze {
         OOIStrobeLampProtocol();
         virtual ~OOIStrobeLampProtocol();
 
-        virtual void setStrobeLampEnable(const Bus &bus, bool enable)
-                throw (ProtocolException);
+        virtual void setStrobeLampEnable(const Bus &bus, bool enable);
 
     private:
         StrobeEnableExchange *strobeEnableExchange;

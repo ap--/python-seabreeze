@@ -57,7 +57,7 @@ DHCPServerFeature::~DHCPServerFeature()
 
 }
 
-void DHCPServerFeature::getServerAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> *serverAddress, unsigned char *netMask) throw (FeatureException) 
+void DHCPServerFeature::getServerAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> *serverAddress, unsigned char *netMask)
 {
 
 	DHCPServerProtocolInterface *DHCPServerPI = NULL;
@@ -89,7 +89,7 @@ void DHCPServerFeature::getServerAddress(const Protocol &protocol, const Bus &bu
     }
 }
 
-void DHCPServerFeature::setServerAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> serverAddress, unsigned char netMask) throw (FeatureException) 
+void DHCPServerFeature::setServerAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> serverAddress, unsigned char netMask)
 {
 
     DHCPServerProtocolInterface *dhcpServerPI = NULL;
@@ -116,7 +116,7 @@ void DHCPServerFeature::setServerAddress(const Protocol &protocol, const Bus &bu
 }
 
 
-unsigned char DHCPServerFeature::getServerEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+unsigned char DHCPServerFeature::getServerEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	DHCPServerProtocolInterface *dhcpServerPI = NULL;
 	ProtocolHelper *proto;
@@ -144,7 +144,7 @@ unsigned char DHCPServerFeature::getServerEnableState(const Protocol &protocol, 
     return enableStatus;
 }
 
-void DHCPServerFeature::setServerEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus) throw (FeatureException) 
+void DHCPServerFeature::setServerEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus)
 {
 	DHCPServerProtocolInterface *dhcpServerPI = NULL;
 	ProtocolHelper *proto;

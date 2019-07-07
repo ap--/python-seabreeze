@@ -39,8 +39,7 @@ namespace seabreeze {
             OBPGetFastBufferingEnableExchange();
             virtual ~OBPGetFastBufferingEnableExchange();
 
-            unsigned char queryBufferingEnable(TransferHelper *helper)
-                    throw (ProtocolException);
+            unsigned char queryBufferingEnable(TransferHelper *helper);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */

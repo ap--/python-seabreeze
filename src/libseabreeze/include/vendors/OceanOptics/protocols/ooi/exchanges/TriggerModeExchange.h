@@ -43,7 +43,7 @@ namespace seabreeze {
         void setTriggerMode(SpectrometerTriggerMode &mode);
 
         /* Inherited from Transfer */
-        Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        Data *transfer(TransferHelper *helper);
 
     private:
         int triggerMode;

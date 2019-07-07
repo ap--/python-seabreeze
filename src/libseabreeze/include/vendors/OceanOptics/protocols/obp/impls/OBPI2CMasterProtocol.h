@@ -44,14 +44,11 @@ namespace seabreeze {
 
         /* Inherited from OBPI2CMasterProtocolInterface */
         
-        virtual unsigned char i2cMasterGetNumberOfBuses(const Bus &bus)
-            throw (ProtocolException);
+        virtual unsigned char i2cMasterGetNumberOfBuses(const Bus &bus);
 
-		virtual std::vector<unsigned char> i2cMasterReadBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes)
-			throw (ProtocolException);
+		virtual std::vector<unsigned char> i2cMasterReadBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes);
 
-		virtual unsigned short i2cMasterWriteBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData)
-			throw (ProtocolException);
+		virtual unsigned short i2cMasterWriteBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData);
     };
   }
 }

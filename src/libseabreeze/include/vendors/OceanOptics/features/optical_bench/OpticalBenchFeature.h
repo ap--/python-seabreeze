@@ -46,19 +46,19 @@ namespace seabreeze {
         OpticalBenchFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~OpticalBenchFeature();
         virtual unsigned short int readOpticalBenchFiberDiameterMicrons(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
 		virtual unsigned short int readOpticalBenchSlitWidthMicrons(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
         virtual std::string *readOpticalBenchID(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
         virtual std::string *readOpticalBenchSerialNumber(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
         virtual std::string *readOpticalBenchCoating(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
         virtual std::string *readOpticalBenchFilter(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
         virtual std::string *readOpticalBenchGrating(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
                 
                                 
         /* Overriding from Feature */

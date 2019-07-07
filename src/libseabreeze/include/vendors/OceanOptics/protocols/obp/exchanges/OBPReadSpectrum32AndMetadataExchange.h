@@ -46,7 +46,7 @@ namespace seabreeze {
             virtual ~OBPReadSpectrum32AndMetadataExchange();
 
             /* Inherited */
-            virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+            virtual Data *transfer(TransferHelper *helper);
         };
     }
 }

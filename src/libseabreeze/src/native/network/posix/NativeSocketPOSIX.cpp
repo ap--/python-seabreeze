@@ -61,8 +61,7 @@ NativeSocketPOSIX::~NativeSocketPOSIX() {
     close();
 }
         
-void NativeSocketPOSIX::connect(Inet4Address &addr, int port)
-        throw (UnknownHostException, BusConnectException) {
+void NativeSocketPOSIX::connect(Inet4Address &addr, int port) {
     struct in_addr in;
     struct sockaddr_in sockaddr;
     socklen_t addrlen;
@@ -91,8 +90,7 @@ void NativeSocketPOSIX::connect(Inet4Address &addr, int port)
     this->address = addr;
 }
 
-void NativeSocketPOSIX::connect(const string hostname, int port)
-        throw (UnknownHostException, BusConnectException) {
+void NativeSocketPOSIX::connect(const string hostname, int port) {
     
     struct hostent *host_info;
     struct in_addr in;
@@ -111,7 +109,7 @@ void NativeSocketPOSIX::connect(const string hostname, int port)
     connect(inet4addr, port);
 }
 
-void NativeSocketPOSIX::close() throw (BusException) {
+void NativeSocketPOSIX::close() {
     int result;
     
     if(this->sock >= 0 && false == this->closed) {
@@ -137,7 +135,7 @@ bool NativeSocketPOSIX::isBound() {
     return this->bound;
 }
 
-int NativeSocketPOSIX::getSOLinger() throw (SocketException) {
+int NativeSocketPOSIX::getSOLinger() {
     struct linger so_linger;
     socklen_t length;
     int result;
@@ -164,8 +162,7 @@ int NativeSocketPOSIX::getSOLinger() throw (SocketException) {
     return so_linger.l_linger;
 }
 
-void NativeSocketPOSIX::setSOLinger(bool enable, int linger)
-        throw (SocketException) {
+void NativeSocketPOSIX::setSOLinger(bool enable, int linger) {
     struct linger so_linger;
     int result;
     
@@ -187,7 +184,7 @@ void NativeSocketPOSIX::setSOLinger(bool enable, int linger)
     }
 }
 
-unsigned long NativeSocketPOSIX::getReadTimeoutMillis() throw (SocketException) {
+unsigned long NativeSocketPOSIX::getReadTimeoutMillis() {
     struct timeval timeout;
     int result;
     socklen_t length;
@@ -210,8 +207,7 @@ unsigned long NativeSocketPOSIX::getReadTimeoutMillis() throw (SocketException) 
     return (timeout.tv_sec * 1000) + (timeout.tv_usec / 1000);
 }
 
-void NativeSocketPOSIX::setReadTimeoutMillis(unsigned long timeoutMillis)
-        throw (SocketException) {
+void NativeSocketPOSIX::setReadTimeoutMillis(unsigned long timeoutMillis) {
     struct timeval timeout;
     int result;
     
@@ -233,8 +229,7 @@ void NativeSocketPOSIX::setReadTimeoutMillis(unsigned long timeoutMillis)
     }
 }
 
-int NativeSocketPOSIX::read(unsigned char *buf, unsigned long count)
-            throw (BusTransferException) {
+int NativeSocketPOSIX::read(unsigned char *buf, unsigned long count) {
     int result = ::read(this->sock, buf, count);
     
     if(result < 0) {
@@ -251,8 +246,7 @@ int NativeSocketPOSIX::read(unsigned char *buf, unsigned long count)
     return result;
 }
 
-int NativeSocketPOSIX::write(const unsigned char *buf, unsigned long count)
-            throw (BusTransferException) {
+int NativeSocketPOSIX::write(const unsigned char *buf, unsigned long count) {
     int result = ::write(this->sock, buf, count);
     
     if(result < 0) {

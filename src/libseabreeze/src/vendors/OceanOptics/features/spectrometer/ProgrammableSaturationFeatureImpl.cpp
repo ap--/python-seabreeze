@@ -54,14 +54,13 @@ ProgrammableSaturationFeatureImpl::~ProgrammableSaturationFeatureImpl() {
 }
 
 
-bool ProgrammableSaturationFeatureImpl::initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+bool ProgrammableSaturationFeatureImpl::initialize(const Protocol &protocol, const Bus &bus) {
     return FeatureImpl::initialize(protocol, bus)
             && ProgrammableSaturationFeatureBase::initialize(protocol, bus);
 }
 
 unsigned int ProgrammableSaturationFeatureImpl::getSaturation(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
     
     ProgrammableSaturationProtocolInterface *saturation = NULL;
     unsigned int saturationValue;

@@ -46,7 +46,7 @@ ThermoElectricFeatureBase::~ThermoElectricFeatureBase() {
 }
 
 void ThermoElectricFeatureBase::setThermoElectricEnable(const Protocol &protocol,
-        const Bus &bus, bool enable) throw (FeatureException) {
+        const Bus &bus, bool enable) {
 
     ThermoElectricProtocolInterface *te = NULL;
     ProtocolHelper *proto = NULL;
@@ -72,7 +72,7 @@ void ThermoElectricFeatureBase::setThermoElectricEnable(const Protocol &protocol
 }
 
 double ThermoElectricFeatureBase::getTemperatureCelsius(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     ThermoElectricProtocolInterface *te = NULL;
     ProtocolHelper *proto = NULL;
@@ -101,7 +101,7 @@ double ThermoElectricFeatureBase::getTemperatureCelsius(const Protocol &protocol
 }
 
 void ThermoElectricFeatureBase::setTemperatureSetPointCelsius(const Protocol &protocol,
-        const Bus &bus, double degreesC) throw (FeatureException, IllegalArgumentException) {
+        const Bus &bus, double degreesC) {
 
     ThermoElectricProtocolInterface *te = NULL;
     ProtocolHelper *proto = NULL;

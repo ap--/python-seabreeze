@@ -43,8 +43,7 @@ Inet4Address::Inet4Address() {
     memset(&(this->in), 0, sizeof(struct in_addr));
 }
 
-Inet4Address::Inet4Address(std::string ipAddressQuads)
-        throw (IllegalArgumentException) {
+Inet4Address::Inet4Address(std::string ipAddressQuads) {
     
     const char *addrString = ipAddressQuads.c_str();
     

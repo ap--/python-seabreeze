@@ -49,8 +49,7 @@ VentanaLightSourceFeature::~VentanaLightSourceFeature() {
     /* Nothing to do here */
 }
 
-bool VentanaLightSourceFeature::initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+bool VentanaLightSourceFeature::initialize(const Protocol &protocol, const Bus &bus) {
     try {
         /* Attempt to query the state of the laser.  If this fails, then
          * there is no laser module.  The returned state of the laser is

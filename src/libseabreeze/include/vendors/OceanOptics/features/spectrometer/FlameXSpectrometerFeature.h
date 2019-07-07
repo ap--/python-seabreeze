@@ -40,8 +40,8 @@ namespace seabreeze {
         virtual ~FlameXSpectrometerFeature();
 
         /* Using OBP wavelength coefficient commands */
-        virtual std::vector<double> *getWavelengths(const Protocol &protocol, const Bus &bus) throw (FeatureException);
-		virtual bool initialize(const Protocol &protocol, const Bus &bus) throw (FeatureException);
+        virtual std::vector<double> *getWavelengths(const Protocol &protocol, const Bus &bus);
+		virtual bool initialize(const Protocol &protocol, const Bus &bus);
 
 	private:
         static const long INTEGRATION_TIME_MINIMUM;

@@ -60,7 +60,7 @@ WaveCalFeature::~WaveCalFeature() {
 }
 
 vector<double> *WaveCalFeature::readWavelengths(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     WaveCalProtocolInterface *wavecal = NULL;
     vector<double> *coeffs = NULL;

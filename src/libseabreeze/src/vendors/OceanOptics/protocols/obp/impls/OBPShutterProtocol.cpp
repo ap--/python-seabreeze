@@ -46,8 +46,7 @@ OBPShutterProtocol::~OBPShutterProtocol() {
     delete this->shutterExchange;
 }
 
-void OBPShutterProtocol::setShutterOpen(const Bus &bus, bool opened)
-                throw (ProtocolException) {
+void OBPShutterProtocol::setShutterOpen(const Bus &bus, bool opened) {
 
     TransferHelper *helper;
 

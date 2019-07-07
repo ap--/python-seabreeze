@@ -44,17 +44,17 @@ namespace seabreeze {
     public:
         virtual ~PixelBinningFeatureInterface() = 0;
         virtual void setPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus, const unsigned char binningFactor) throw (FeatureException) = 0;
+                const Bus &bus, const unsigned char binningFactor) = 0;
         virtual unsigned char getPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual void setDefaultPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus, const unsigned char binningFactor) throw (FeatureException) = 0;
+                const Bus &bus, const unsigned char binningFactor) = 0;
         virtual void setDefaultPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual unsigned char getDefaultPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual unsigned char getMaxPixelBinningFactor(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
     };
 }
 

@@ -46,7 +46,7 @@ namespace seabreeze {
             void setNumberOfPixels(int numberOfPixels);
 
             /* Inherited */
-            virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+            virtual Data *transfer(TransferHelper *helper);
 
         protected:
             unsigned int isLegalMessageType(unsigned int t);

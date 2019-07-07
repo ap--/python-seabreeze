@@ -49,8 +49,7 @@ NativeSocketWindows::~NativeSocketWindows() {
     close();
 }
 
-void NativeSocketWindows::connect(Inet4Address &addr, int port)
-        throw (UnknownHostException, BusConnectException) {
+void NativeSocketWindows::connect(Inet4Address &addr, int port) {
     struct in_addr in;
     struct sockaddr_in sockaddr;
     int addrlen;
@@ -79,8 +78,7 @@ void NativeSocketWindows::connect(Inet4Address &addr, int port)
     this->address = addr;
 }
 
-void NativeSocketWindows::connect(const string hostname, int port)
-        throw (UnknownHostException, BusConnectException) {
+void NativeSocketWindows::connect(const string hostname, int port) {
     
     struct hostent *host_info;
     struct in_addr in;
@@ -101,7 +99,7 @@ void NativeSocketWindows::connect(const string hostname, int port)
     connect(inet4addr, port);
 }
 
-void NativeSocketWindows::close() throw (BusException) {
+void NativeSocketWindows::close() {
     int result;
     
     if(this->sock >= 0 && false == this->closed) {
@@ -127,7 +125,7 @@ bool NativeSocketWindows::isBound() {
     return this->bound;
 }
 
-int NativeSocketWindows::getSOLinger() throw (SocketException) {
+int NativeSocketWindows::getSOLinger() {
     linger so_linger;
     int length;
     int result;
@@ -154,8 +152,7 @@ int NativeSocketWindows::getSOLinger() throw (SocketException) {
     return so_linger.l_linger;
 }
 
-void NativeSocketWindows::setSOLinger(bool enable, int linger)
-        throw (SocketException) {
+void NativeSocketWindows::setSOLinger(bool enable, int linger) {
     struct linger so_linger;
     int result;
     
@@ -177,7 +174,7 @@ void NativeSocketWindows::setSOLinger(bool enable, int linger)
     }
 }
 
-unsigned long NativeSocketWindows::getReadTimeoutMillis() throw (SocketException) {
+unsigned long NativeSocketWindows::getReadTimeoutMillis() {
     unsigned long timeoutMillis;
     int result;
     unsigned int length;
@@ -200,8 +197,7 @@ unsigned long NativeSocketWindows::getReadTimeoutMillis() throw (SocketException
     return timeoutMillis;
 }
 
-void NativeSocketWindows::setReadTimeoutMillis(unsigned long timeoutMillis)
-        throw (SocketException) {
+void NativeSocketWindows::setReadTimeoutMillis(unsigned long timeoutMillis) {
     int result;
     
     if(this->sock < 0) {
@@ -219,8 +215,7 @@ void NativeSocketWindows::setReadTimeoutMillis(unsigned long timeoutMillis)
     }
 }
 
-int NativeSocketWindows::read(unsigned char *buf, unsigned long count)
-            throw (BusTransferException) {
+int NativeSocketWindows::read(unsigned char *buf, unsigned long count) {
     int result = ::recv(this->sock, (char *)buf, count, 0);
     
     if(result < 0) {
@@ -238,8 +233,7 @@ int NativeSocketWindows::read(unsigned char *buf, unsigned long count)
     return result;
 }
 
-int NativeSocketWindows::write(const unsigned char *buf, unsigned long count)
-            throw (BusTransferException) {
+int NativeSocketWindows::write(const unsigned char *buf, unsigned long count) {
     int result = ::send(this->sock, (char *)buf, count, 0);
     
     if(result < 0) {

@@ -50,44 +50,37 @@ namespace seabreeze {
 	    /**
          * Get the Wifi mode (0: client, 1: access point, from the device.
          */
-        virtual unsigned char getMode(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char getMode(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          * Set the Wifi mode (0: client, 1: access point, for the device.
          */
-        virtual void setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode)
-            throw (ProtocolException) = 0;
+        virtual void setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode) = 0;
             
             
           /**
          * Get the Wifi security type (0: open, 1: WPA2, from the device.
          */
-        virtual unsigned char getSecurityType(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char getSecurityType(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          * Get the Wifi security type (0: open, 1: WPA2, from the device.
          */
-        virtual void setSecurityType(const Bus &bus, unsigned char interfaceIndex, unsigned char securityType)
-            throw (ProtocolException) = 0;
+        virtual void setSecurityType(const Bus &bus, unsigned char interfaceIndex, unsigned char securityType) = 0;
                       
         /**
          * Get the 32 byte SSID  from the device.
          */
-        virtual std::vector<unsigned char> getSSID(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual std::vector<unsigned char> getSSID(const Bus &bus, unsigned char interfaceIndex) = 0;
         /**
          *  Set the SSID  .
          */
-        virtual void setSSID(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> ssid_32_bytes)
-            throw (ProtocolException) = 0;
+        virtual void setSSID(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> ssid_32_bytes) = 0;
 
         /**
          *  Set the pass phrase
          */
-        virtual void setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> passPhrase)
-            throw (ProtocolException) = 0;
+        virtual void setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> passPhrase) = 0;
 
 
     };

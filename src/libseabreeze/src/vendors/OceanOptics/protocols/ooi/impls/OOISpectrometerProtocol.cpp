@@ -74,8 +74,7 @@ OOISpectrometerProtocol::~OOISpectrometerProtocol() {
     delete this->triggerModeExchange;
 }
 
-vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
-        throw (ProtocolException) {
+vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus) {
     LOG(__FUNCTION__);
 
     Data *result;
@@ -112,8 +111,7 @@ vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
     return retval;
 }
 
-vector<byte> *OOISpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
-throw (ProtocolException) {
+vector<byte> *OOISpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve) {
 	LOG(__FUNCTION__);
 
 	Data *result;
@@ -150,8 +148,7 @@ throw (ProtocolException) {
 	return retval;
 }
 
-vector<double> *OOISpectrometerProtocol::readFormattedSpectrum(const Bus &bus)
-        throw (ProtocolException) {
+vector<double> *OOISpectrometerProtocol::readFormattedSpectrum(const Bus &bus) {
 
     LOG(__FUNCTION__);
 
@@ -208,8 +205,7 @@ vector<double> *OOISpectrometerProtocol::readFormattedSpectrum(const Bus &bus)
     return retval;
 }
 
-void OOISpectrometerProtocol::requestFormattedSpectrum(const Bus &bus)
-        throw (ProtocolException) {
+void OOISpectrometerProtocol::requestFormattedSpectrum(const Bus &bus) {
     LOG(__FUNCTION__);
 
     TransferHelper *helper;
@@ -225,8 +221,7 @@ void OOISpectrometerProtocol::requestFormattedSpectrum(const Bus &bus)
     this->requestFormattedSpectrumExchange->transfer(helper);
 }
 
-void OOISpectrometerProtocol::requestUnformattedSpectrum(const Bus &bus)
-throw (ProtocolException) {
+void OOISpectrometerProtocol::requestUnformattedSpectrum(const Bus &bus) {
 	LOG(__FUNCTION__);
 
 	TransferHelper *helper;
@@ -242,8 +237,7 @@ throw (ProtocolException) {
 	this->requestUnformattedSpectrumExchange->transfer(helper);
 }
 
-void OOISpectrometerProtocol::requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
-throw (ProtocolException) {
+void OOISpectrometerProtocol::requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve) {
 	LOG(__FUNCTION__);
 
 	TransferHelper *helper;
@@ -264,7 +258,7 @@ throw (ProtocolException) {
 
 
 void OOISpectrometerProtocol::setIntegrationTimeMicros(const Bus &bus,
-        unsigned long integrationTime_usec) throw (ProtocolException) {
+        unsigned long integrationTime_usec) {
     TransferHelper *helper;
 
     helper = bus.getHelper(this->integrationTimeExchange->getHints());
@@ -280,7 +274,7 @@ void OOISpectrometerProtocol::setIntegrationTimeMicros(const Bus &bus,
 }
 
 void OOISpectrometerProtocol::setTriggerMode(const Bus &bus,
-            SpectrometerTriggerMode &mode) throw (ProtocolException) {
+            SpectrometerTriggerMode &mode) {
     LOG(__FUNCTION__);
     TransferHelper *helper;
 

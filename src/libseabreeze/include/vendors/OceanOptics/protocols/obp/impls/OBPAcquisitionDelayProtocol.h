@@ -42,7 +42,7 @@ namespace seabreeze {
             virtual ~OBPAcquisitionDelayProtocol();
 
             virtual void setAcquisitionDelayMicroseconds(const Bus &bus,
-                    const unsigned long delayMicros) throw (ProtocolException);
+                    const unsigned long delayMicros);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */

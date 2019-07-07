@@ -58,7 +58,7 @@ MulticastFeature::~MulticastFeature()
 }
 
 #if 0
-vector<unsigned char> MulticastFeature::getGroupAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+vector<unsigned char> MulticastFeature::getGroupAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 
     vector<unsigned char> data;
@@ -93,7 +93,7 @@ vector<unsigned char> MulticastFeature::getGroupAddress(const Protocol &protocol
     return data;
 }
 
-void MulticastFeature::setGroupAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress) throw (FeatureException) 
+void MulticastFeature::setGroupAddress(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress)
 {
 
     MulticastProtocolInterface *multicastPI = NULL;
@@ -120,7 +120,7 @@ void MulticastFeature::setGroupAddress(const Protocol &protocol, const Bus &bus,
 }
 #endif
 
-unsigned char MulticastFeature::getEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+unsigned char MulticastFeature::getEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	MulticastProtocolInterface *multicastPI = NULL;
 	ProtocolHelper *proto;
@@ -148,7 +148,7 @@ unsigned char MulticastFeature::getEnableState(const Protocol &protocol, const B
     return enableStatus;
 }
 
-void MulticastFeature::setEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) throw (FeatureException) 
+void MulticastFeature::setEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableState)
 {
 	MulticastProtocolInterface *multicastPI = NULL;
 	ProtocolHelper *proto;

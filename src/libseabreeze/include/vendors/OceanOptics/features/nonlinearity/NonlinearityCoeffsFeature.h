@@ -46,7 +46,7 @@ namespace seabreeze {
         NonlinearityCoeffsFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~NonlinearityCoeffsFeature();
         virtual std::vector<double> *readNonlinearityCoefficients(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

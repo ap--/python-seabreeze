@@ -58,7 +58,7 @@ SerialNumberFeature::~SerialNumberFeature() {
 }
 
 string *SerialNumberFeature::readSerialNumber(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     SerialNumberProtocolInterface *serial = NULL;
     ProtocolHelper *proto = NULL;
@@ -87,7 +87,7 @@ string *SerialNumberFeature::readSerialNumber(const Protocol &protocol,
 }
 
 unsigned char SerialNumberFeature::readSerialNumberMaximumLength(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     SerialNumberProtocolInterface *serial = NULL;
     ProtocolHelper *proto = NULL;

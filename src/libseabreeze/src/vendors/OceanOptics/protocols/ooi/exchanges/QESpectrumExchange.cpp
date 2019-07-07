@@ -48,8 +48,7 @@ QESpectrumExchange::~QESpectrumExchange() {
 
 }
 
-Data *QESpectrumExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *QESpectrumExchange::transfer(TransferHelper *helper) {
 
     LOG(__FUNCTION__);
 

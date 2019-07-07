@@ -57,7 +57,7 @@ NetworkConfigurationFeature::~NetworkConfigurationFeature()
 
 }
 
-unsigned char NetworkConfigurationFeature::getNumberOfNetworkInterfaces(const Protocol &protocol, const Bus &bus) throw (FeatureException) 
+unsigned char NetworkConfigurationFeature::getNumberOfNetworkInterfaces(const Protocol &protocol, const Bus &bus)
 {
 
     unsigned char data;
@@ -92,7 +92,7 @@ unsigned char NetworkConfigurationFeature::getNumberOfNetworkInterfaces(const Pr
     return data;
 }
 
-unsigned char NetworkConfigurationFeature::runNetworkInterfaceSelfTest(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException)
+unsigned char NetworkConfigurationFeature::runNetworkInterfaceSelfTest(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	NetworkConfigurationProtocolInterface *networkConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -121,7 +121,7 @@ unsigned char NetworkConfigurationFeature::runNetworkInterfaceSelfTest(const Pro
 
 	return selftestStatus;
 }
-unsigned char NetworkConfigurationFeature::getNetworkInterfaceConnectionType(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException)
+unsigned char NetworkConfigurationFeature::getNetworkInterfaceConnectionType(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	NetworkConfigurationProtocolInterface *networkConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -151,7 +151,7 @@ unsigned char NetworkConfigurationFeature::getNetworkInterfaceConnectionType(con
 	return networkType;
 }
 
-unsigned char NetworkConfigurationFeature::getNetworkInterfaceEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException)
+unsigned char NetworkConfigurationFeature::getNetworkInterfaceEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	NetworkConfigurationProtocolInterface *networkConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -182,7 +182,7 @@ unsigned char NetworkConfigurationFeature::getNetworkInterfaceEnableState(const 
 }
 
 
-void NetworkConfigurationFeature::setNetworkInterfaceEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus) throw (FeatureException) 
+void NetworkConfigurationFeature::setNetworkInterfaceEnableState(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus)
 {
 	NetworkConfigurationProtocolInterface *networkConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -208,7 +208,7 @@ void NetworkConfigurationFeature::setNetworkInterfaceEnableState(const Protocol 
 
 }
 
-void NetworkConfigurationFeature::saveNetworkInterfaceConnectionSettings(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException)
+void NetworkConfigurationFeature::saveNetworkInterfaceConnectionSettings(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	NetworkConfigurationProtocolInterface *networkConfigurationPI = NULL;
 	ProtocolHelper *proto;

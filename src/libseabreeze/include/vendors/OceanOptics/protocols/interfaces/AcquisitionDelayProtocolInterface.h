@@ -47,7 +47,7 @@ namespace seabreeze {
         virtual ~AcquisitionDelayProtocolInterface();
 
         virtual void setAcquisitionDelayMicroseconds(const Bus &bus,
-            const unsigned long delayMicros) throw (ProtocolException) = 0;
+            const unsigned long delayMicros) = 0;
 
         /* At this point, the supported devices don't have protocol
          * messages to get the current delay or the range of valid

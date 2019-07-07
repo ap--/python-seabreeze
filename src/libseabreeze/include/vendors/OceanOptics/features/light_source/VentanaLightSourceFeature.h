@@ -40,8 +40,7 @@ namespace seabreeze {
         virtual ~VentanaLightSourceFeature();
 
         /* Overriding from Feature */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
+        virtual bool initialize(const Protocol &protocol, const Bus &bus);
     };
 
 }

@@ -52,8 +52,7 @@ namespace seabreeze {
     public:
         StrayLightCoeffsProtocolInterface(Protocol *protocol);
         virtual ~StrayLightCoeffsProtocolInterface();
-        virtual std::vector<double> *readStrayLightCoeffs(const Bus &bus)
-                throw (ProtocolException) = 0;
+        virtual std::vector<double> *readStrayLightCoeffs(const Bus &bus) = 0;
     };
 
 }

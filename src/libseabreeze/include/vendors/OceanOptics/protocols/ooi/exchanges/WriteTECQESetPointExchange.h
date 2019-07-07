@@ -46,7 +46,7 @@ namespace seabreeze {
 
         /** Inherited from WriteTECSetPointExchange */
         virtual void setSetPointCelsius(double degreesC);
-        Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        Data *transfer(TransferHelper *helper);
 
     private:
         int tecCounts;

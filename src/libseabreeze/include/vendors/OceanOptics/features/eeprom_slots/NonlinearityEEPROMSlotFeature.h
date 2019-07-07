@@ -43,8 +43,7 @@ namespace seabreeze {
     public:
         NonlinearityEEPROMSlotFeature();
         virtual ~NonlinearityEEPROMSlotFeature();
-        std::vector<double> *readNonlinearityCoefficients(const Protocol &protocol, const Bus &bus)
-                throw (FeatureException);
+        std::vector<double> *readNonlinearityCoefficients(const Protocol &protocol, const Bus &bus);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

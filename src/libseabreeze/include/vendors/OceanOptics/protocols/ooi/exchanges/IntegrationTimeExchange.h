@@ -42,7 +42,7 @@ namespace seabreeze {
         void setIntegrationTimeMicros(unsigned long integrationTime_usec);
 
         /* Inherited from Transfer */
-        Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        Data *transfer(TransferHelper *helper);
 
     private:
         unsigned long integrationTimeBase_usec;

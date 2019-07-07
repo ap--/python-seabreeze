@@ -47,7 +47,7 @@ ProgrammableSaturationFeatureBase::~ProgrammableSaturationFeatureBase() {
 }
 
 bool ProgrammableSaturationFeatureBase::initialize(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
     try {
         this->saturation = getSaturation(protocol, bus);
         this->valid = true;
@@ -58,8 +58,7 @@ bool ProgrammableSaturationFeatureBase::initialize(const Protocol &protocol,
     return true;
 }
 
-unsigned int ProgrammableSaturationFeatureBase::getSaturation()
-        throw (FeatureException) {
+unsigned int ProgrammableSaturationFeatureBase::getSaturation() {
     if(false == this->valid) {
         throw FeatureException("Saturation level not properly initialized");
     }

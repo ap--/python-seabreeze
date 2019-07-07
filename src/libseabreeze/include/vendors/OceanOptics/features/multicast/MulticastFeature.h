@@ -48,26 +48,22 @@ namespace seabreeze
 		virtual unsigned char getEnableState(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void setEnableState(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException);
+			unsigned char enableState);
 #if 0
 		virtual std::vector<byte> getGroupAddress(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void setGroupAddress(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> macAddress)
-			throw (FeatureException);
+			const std::vector<byte> macAddress);
 #endif
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

@@ -40,7 +40,7 @@ namespace seabreeze {
     public:
         virtual ~ShutterFeatureInterface() = 0;
         virtual void setShutterOpen(const Protocol &protocol,
-                const Bus &bus, bool opened) throw (FeatureException) = 0;
+                const Bus &bus, bool opened) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

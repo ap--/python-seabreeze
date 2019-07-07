@@ -53,28 +53,26 @@ namespace seabreeze {
         ThermoElectricFeatureBase();
         virtual ~ThermoElectricFeatureBase();
         virtual void setThermoElectricEnable(const Protocol &protocol,
-                const Bus &bus, bool enable) throw (FeatureException);
+                const Bus &bus, bool enable);
         virtual double getTemperatureCelsius(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
         virtual void setTemperatureSetPointCelsius(const Protocol &protocol,
-                const Bus &bus, double degreesC)
-                throw (FeatureException, IllegalArgumentException);
+                const Bus &bus, double degreesC);
 
         /* These remain abstract because the limits of any given device will
          * depend on its implementation.  They will either need to be hardcoded
          * into the implementation or be queried from the device.
          */
         virtual double getDefaultSetPointCelsius(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual bool getDefaultThermoElectricEnable(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
 
         /* Inherited from Feature */
         /* This is still abstract in case the device needs to do anything
          * special with regards to defaults when it is initialized.
          */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) = 0;
+        virtual bool initialize(const Protocol &protocol, const Bus &bus) = 0;
 
         virtual FeatureFamily getFeatureFamily();
     };

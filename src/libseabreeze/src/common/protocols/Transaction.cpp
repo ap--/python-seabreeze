@@ -61,7 +61,7 @@ void Transaction::addTransfer(Transfer *xfer) {
     updateHints();
 }
 
-Data *Transaction::transfer(TransferHelper *helper) throw (ProtocolException) {
+Data *Transaction::transfer(TransferHelper *helper) {
     Data *retval = NULL;
     vector<Transfer *>::iterator iter = this->transfers.begin();
     /* Iterate over all stored transfers and delegate to the helper to

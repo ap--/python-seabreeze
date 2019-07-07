@@ -47,8 +47,7 @@ OBPAcquisitionDelayProtocol::~OBPAcquisitionDelayProtocol() {
 }
 
 void OBPAcquisitionDelayProtocol::setAcquisitionDelayMicroseconds(
-            const Bus &bus, const unsigned long delayMicros)
-            throw (ProtocolException) {
+            const Bus &bus, const unsigned long delayMicros) {
 
     TransferHelper *helper;
     OBPSetAcquisitionDelayExchange exchange;

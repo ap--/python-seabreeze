@@ -40,7 +40,7 @@ namespace seabreeze {
             virtual ~OBPGetDataBufferMaximumCapacityExchange();
 
             unsigned long queryBufferMaximumCapacity(
-                TransferHelper *helper) throw (ProtocolException);
+                TransferHelper *helper);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */

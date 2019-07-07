@@ -51,7 +51,7 @@ NonlinearityEEPROMSlotFeature::~NonlinearityEEPROMSlotFeature() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 vector<double> *NonlinearityEEPROMSlotFeature::readNonlinearityCoefficients(
-        const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+        const Protocol &protocol, const Bus &bus) {
     LOG(__FUNCTION__)
 
     int i;

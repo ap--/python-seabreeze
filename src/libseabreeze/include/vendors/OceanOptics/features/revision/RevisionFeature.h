@@ -46,9 +46,9 @@ namespace seabreeze {
         RevisionFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~RevisionFeature();
         virtual unsigned char readHardwareRevision(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
 		virtual unsigned short int readFirmwareRevision(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
                 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

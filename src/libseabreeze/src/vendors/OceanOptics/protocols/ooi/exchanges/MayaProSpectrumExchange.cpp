@@ -49,8 +49,7 @@ MayaProSpectrumExchange::~MayaProSpectrumExchange() {
 
 }
 
-Data *MayaProSpectrumExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *MayaProSpectrumExchange::transfer(TransferHelper *helper) {
     LOG(__FUNCTION__);
 
     unsigned int i;

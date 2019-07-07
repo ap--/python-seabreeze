@@ -46,7 +46,7 @@ namespace seabreeze {
         Exchange();
         Exchange(std::vector<ProtocolHint *> *hints);
         virtual ~Exchange();
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException) = 0;
+        virtual Data *transfer(TransferHelper *helper) = 0;
         virtual const std::vector<ProtocolHint *> &getHints();
 
     protected:

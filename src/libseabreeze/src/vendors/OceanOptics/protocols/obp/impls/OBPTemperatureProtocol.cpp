@@ -50,7 +50,6 @@ OBPTemperatureProtocol::~OBPTemperatureProtocol() {
 
 
 unsigned char OBPTemperatureProtocol::readTemperatureCount(const Bus &bus)
-                throw (ProtocolException) 
 {
     int count = 0;
     vector<byte> *countResult;
@@ -73,7 +72,6 @@ unsigned char OBPTemperatureProtocol::readTemperatureCount(const Bus &bus)
 }
 
 double OBPTemperatureProtocol::readTemperature(const Bus &bus, int index)
-                throw (ProtocolException) 
 {
     vector<byte> *result = NULL;
     float temperature;
@@ -130,8 +128,7 @@ double OBPTemperatureProtocol::readTemperature(const Bus &bus, int index)
 }
 
 
-vector<double> *OBPTemperatureProtocol::readAllTemperatures(const Bus &bus) 
-        throw (ProtocolException) {
+vector<double> *OBPTemperatureProtocol::readAllTemperatures(const Bus &bus) {
     
     vector<byte> *result = NULL;
     unsigned int i;

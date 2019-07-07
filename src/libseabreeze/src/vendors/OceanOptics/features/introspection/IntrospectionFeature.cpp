@@ -59,7 +59,7 @@ IntrospectionFeature::~IntrospectionFeature() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-unsigned short IntrospectionFeature::getNumberOfPixels(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+unsigned short IntrospectionFeature::getNumberOfPixels(const Protocol &protocol, const Bus &bus)
 {
 	
 	IntrospectionProtocolInterface *introspection_protocolInterface = NULL;
@@ -88,7 +88,7 @@ unsigned short IntrospectionFeature::getNumberOfPixels(const Protocol &protocol,
 }
 
 
-vector<unsigned int> *IntrospectionFeature::getActivePixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+vector<unsigned int> *IntrospectionFeature::getActivePixelRanges(const Protocol &protocol, const Bus &bus) {
 
 	IntrospectionProtocolInterface *introspection_protocolInterface = NULL;
 	vector<unsigned int> *pixelIndexPairs = NULL;
@@ -120,7 +120,7 @@ vector<unsigned int> *IntrospectionFeature::getActivePixelRanges(const Protocol 
 	return NULL;
 }
 
-vector<unsigned int> *IntrospectionFeature::getElectricDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+vector<unsigned int> *IntrospectionFeature::getElectricDarkPixelRanges(const Protocol &protocol, const Bus &bus) {
 
 	IntrospectionProtocolInterface *introspection_protocolInterface = NULL;
 	vector<unsigned int> *pixelIndexPairs = NULL;
@@ -152,7 +152,7 @@ vector<unsigned int> *IntrospectionFeature::getElectricDarkPixelRanges(const Pro
 	return NULL;
 }
 
-vector<unsigned int> *IntrospectionFeature::getOpticalDarkPixelRanges(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+vector<unsigned int> *IntrospectionFeature::getOpticalDarkPixelRanges(const Protocol &protocol, const Bus &bus) {
 
 	IntrospectionProtocolInterface *introspection_protocolInterface = NULL;
 	vector<unsigned int> *pixelIndexPairs = NULL;

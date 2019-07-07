@@ -42,22 +42,18 @@ namespace seabreeze {
             virtual ~OBPFastBufferProtocol();
                     
             virtual unsigned char getBufferingEnable(const Bus &bus,
-				unsigned char bufferIndex)
-				throw (ProtocolException);
+				unsigned char bufferIndex);
 
             virtual void setBufferingEnable(const Bus &bus,
 				unsigned char bufferIndex,
-				const unsigned char isEnabled)
-				throw (ProtocolException);
+				const unsigned char isEnabled);
 
 			virtual unsigned int getConsecutiveSampleCount(const Bus &bus,
-				unsigned char bufferIndex)
-				throw (ProtocolException);
+				unsigned char bufferIndex);
 
 			virtual void setConsecutiveSampleCount(const Bus &bus,
 				unsigned char bufferIndex,
-				const unsigned int consecutiveSampleCount)
-				throw (ProtocolException);
+				const unsigned int consecutiveSampleCount);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */

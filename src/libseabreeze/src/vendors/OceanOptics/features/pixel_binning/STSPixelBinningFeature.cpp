@@ -52,7 +52,7 @@ STSPixelBinningFeature::~STSPixelBinningFeature() {
 }
 
 void STSPixelBinningFeature::setPixelBinningFactor(const Protocol &protocol,
-        const Bus &bus, const unsigned char binningFactor) throw (FeatureException) {
+        const Bus &bus, const unsigned char binningFactor) {
 
     PixelBinningProtocolInterface *pb = NULL;
     ProtocolHelper *proto = NULL;
@@ -90,7 +90,7 @@ void STSPixelBinningFeature::setPixelBinningFactor(const Protocol &protocol,
 }
 
 unsigned char STSPixelBinningFeature::getPixelBinningFactor(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     PixelBinningProtocolInterface *pb = NULL;
     ProtocolHelper *proto = NULL;
@@ -119,7 +119,7 @@ unsigned char STSPixelBinningFeature::getPixelBinningFactor(const Protocol &prot
 }
 
 void STSPixelBinningFeature::setDefaultPixelBinningFactor(const Protocol &protocol,
-        const Bus &bus, const unsigned char binningFactor) throw (FeatureException) {
+        const Bus &bus, const unsigned char binningFactor) {
 
     PixelBinningProtocolInterface *pb = NULL;
     ProtocolHelper *proto = NULL;
@@ -153,7 +153,7 @@ void STSPixelBinningFeature::setDefaultPixelBinningFactor(const Protocol &protoc
 }
 
 void STSPixelBinningFeature::setDefaultPixelBinningFactor(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     PixelBinningProtocolInterface *pb = NULL;
     ProtocolHelper *proto = NULL;
@@ -179,7 +179,7 @@ void STSPixelBinningFeature::setDefaultPixelBinningFactor(const Protocol &protoc
 }
 
 unsigned char STSPixelBinningFeature::getDefaultPixelBinningFactor(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     PixelBinningProtocolInterface *pb = NULL;
     ProtocolHelper *proto = NULL;
@@ -208,7 +208,7 @@ unsigned char STSPixelBinningFeature::getDefaultPixelBinningFactor(const Protoco
 }
 
 unsigned char STSPixelBinningFeature::getMaxPixelBinningFactor(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     PixelBinningProtocolInterface *pb = NULL;
     ProtocolHelper *proto = NULL;
@@ -246,8 +246,7 @@ FeatureFamily STSPixelBinningFeature::getFeatureFamily() {
     return families.PIXEL_BINNING;
 }
 
-bool STSPixelBinningFeature::initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+bool STSPixelBinningFeature::initialize(const Protocol &protocol, const Bus &bus) {
     /* This doesn't need to do anything special at this point.  If desired, this
      * could be used to read out the current setting and cache it, but that is
      * not strictly required.

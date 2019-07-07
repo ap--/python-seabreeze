@@ -45,13 +45,13 @@ namespace seabreeze
 				OBPIntrospectionProtocol();
 				virtual ~OBPIntrospectionProtocol();
 
-				virtual unsigned short getNumberOfPixels(const Bus &bus) throw (ProtocolException);
+				virtual unsigned short getNumberOfPixels(const Bus &bus);
 
-				virtual std::vector<unsigned int> *getActivePixelRanges(const Bus &bus) throw (ProtocolException);
+				virtual std::vector<unsigned int> *getActivePixelRanges(const Bus &bus);
 
-				virtual std::vector<unsigned int> *getElectricDarkPixelRanges(const Bus &bus) throw (ProtocolException);
+				virtual std::vector<unsigned int> *getElectricDarkPixelRanges(const Bus &bus);
 
-				virtual std::vector<unsigned int> *getOpticalDarkPixelRanges(const Bus &bus) throw (ProtocolException);
+				virtual std::vector<unsigned int> *getOpticalDarkPixelRanges(const Bus &bus);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */

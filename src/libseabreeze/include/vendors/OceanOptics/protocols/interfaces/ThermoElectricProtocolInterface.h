@@ -49,22 +49,19 @@ namespace seabreeze {
         /**
          * Get the temperature of the thermoelectric device.
          */
-        virtual double readThermoElectricTemperatureCelsius(const Bus &bus)
-            throw (ProtocolException) = 0;
+        virtual double readThermoElectricTemperatureCelsius(const Bus &bus) = 0;
 
         /**
          * Enable the thermoelectric unit on the device.
          */
-        virtual void writeThermoElectricEnable(const Bus &bus, bool enable)
-            throw (ProtocolException) = 0;
+        virtual void writeThermoElectricEnable(const Bus &bus, bool enable) = 0;
 
         /**
          * Set the target temperature for the thermoelectric in degrees
          * Celsius.  The actual temperature that the device
          * can reach may be a function of ambient temperature.
          */
-        virtual void writeThermoElectricSetPointCelsius(const Bus &bus, double degreesC)
-            throw (ProtocolException) = 0;
+        virtual void writeThermoElectricSetPointCelsius(const Bus &bus, double degreesC) = 0;
 
     };
 

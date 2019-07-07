@@ -62,8 +62,7 @@ AcquisitionDelayFeature_FPGA::~AcquisitionDelayFeature_FPGA() {
 #endif
 void AcquisitionDelayFeature_FPGA::setAcquisitionDelayMicroseconds(
                     const Protocol &protocol, const Bus &bus,
-                    const unsigned long delayMicros)
-                    throw (FeatureException) {
+                    const unsigned long delayMicros) {
 
     unsigned long counts = microsecondsToCounts(delayMicros);
 
@@ -106,20 +105,17 @@ void AcquisitionDelayFeature_FPGA::setAcquisitionDelayMicroseconds(
 }
 
 unsigned long AcquisitionDelayFeature_FPGA::getAcquisitionDelayIncrementMicroseconds(
-            const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+            const Protocol &protocol, const Bus &bus) {
     return this->incrementMicroseconds;
 }
 
 unsigned long AcquisitionDelayFeature_FPGA::getAcquisitionDelayMaximumMicroseconds(
-            const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+            const Protocol &protocol, const Bus &bus) {
     return countsToMicroseconds(this->maximumDelayCounts);
 }
 
 unsigned long AcquisitionDelayFeature_FPGA::getAcquisitionDelayMinimumMicroseconds(
-            const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+            const Protocol &protocol, const Bus &bus) {
     return countsToMicroseconds(this->minimumDelayCounts);
 }
 

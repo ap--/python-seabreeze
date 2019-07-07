@@ -54,7 +54,7 @@ OBPMulticastProtocol::~OBPMulticastProtocol()
 }
 
 #if 0
-vector<unsigned char> OBPMulticastProtocol::getGroupAddress(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+vector<unsigned char> OBPMulticastProtocol::getGroupAddress(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
     OBPGetMulticastGroupAddressExchange request;
@@ -84,7 +84,7 @@ vector<unsigned char> OBPMulticastProtocol::getGroupAddress(const Bus &bus, unsi
 }
 
 
-void OBPMulticastProtocol::setGroupAddress(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress) throw (ProtocolException)
+void OBPMulticastProtocol::setGroupAddress(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress)
 {
     TransferHelper *helper;
 	OBPSetMulticastGroupAddressExchange command;
@@ -113,7 +113,7 @@ void OBPMulticastProtocol::setGroupAddress(const Bus &bus, unsigned char interfa
 #endif
 
 
-unsigned char OBPMulticastProtocol::getEnableState(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPMulticastProtocol::getEnableState(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
     OBPGetMulticastEnableExchange request;
@@ -148,7 +148,7 @@ unsigned char OBPMulticastProtocol::getEnableState(const Bus &bus, unsigned char
 }
 
 
-void OBPMulticastProtocol::setEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) throw (ProtocolException)
+void OBPMulticastProtocol::setEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState)
 {
     TransferHelper *helper;
     OBPSetMulticastEnableExchange command;

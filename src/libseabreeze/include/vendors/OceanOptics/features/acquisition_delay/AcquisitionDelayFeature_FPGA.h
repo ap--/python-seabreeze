@@ -49,18 +49,14 @@ namespace seabreeze {
 
         virtual void setAcquisitionDelayMicroseconds(
                     const Protocol &protocol, const Bus &bus,
-                    const unsigned long delayMicros)
-                    throw (FeatureException);
+                    const unsigned long delayMicros);
 
         virtual unsigned long getAcquisitionDelayIncrementMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
+                    const Protocol &protocol, const Bus &bus);
         virtual unsigned long getAcquisitionDelayMaximumMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
+                    const Protocol &protocol, const Bus &bus);
         virtual unsigned long getAcquisitionDelayMinimumMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException);
+                    const Protocol &protocol, const Bus &bus);
 
     protected:
         virtual unsigned long countsToMicroseconds(unsigned long counts);

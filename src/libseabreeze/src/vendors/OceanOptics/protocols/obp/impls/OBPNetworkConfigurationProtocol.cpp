@@ -63,7 +63,7 @@ OBPNetworkConfigurationProtocol::~OBPNetworkConfigurationProtocol()
 #endif
 
 
-unsigned char OBPNetworkConfigurationProtocol::getNumberOfNetworkInterfaces(const Bus &bus) throw (ProtocolException)
+unsigned char OBPNetworkConfigurationProtocol::getNumberOfNetworkInterfaces(const Bus &bus)
 {
     TransferHelper *helper;
 	OBPGetNumberOfNetworkInterfacesExchange request;
@@ -89,7 +89,7 @@ unsigned char OBPNetworkConfigurationProtocol::getNumberOfNetworkInterfaces(cons
     return result;
 }
 
-unsigned char OBPNetworkConfigurationProtocol::runNetworkInterfaceSelfTest(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPNetworkConfigurationProtocol::runNetworkInterfaceSelfTest(const Bus &bus, unsigned char interfaceIndex)
 {
 	TransferHelper *helper;
 	OBPRunNetworkInterfaceSelfTestExchange request;
@@ -117,7 +117,7 @@ unsigned char OBPNetworkConfigurationProtocol::runNetworkInterfaceSelfTest(const
 	return result;
 }
 
-unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceConnectionType(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceConnectionType(const Bus &bus, unsigned char interfaceIndex)
 {
 	TransferHelper *helper;
 	OBPGetNetworkInterfaceConnectionTypeExchange request;
@@ -145,7 +145,7 @@ unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceConnectionType
 	return result;
 }
 
-void OBPNetworkConfigurationProtocol::setNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) throw (ProtocolException)
+void OBPNetworkConfigurationProtocol::setNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState)
 {
     TransferHelper *helper;
 	OBPSetNetworkInterfaceEnableStateExchange command;
@@ -168,7 +168,7 @@ void OBPNetworkConfigurationProtocol::setNetworkInterfaceEnableState(const Bus &
 
 }
 
-unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
 	OBPGetNetworkInterfaceEnableStateExchange request;
@@ -204,7 +204,7 @@ unsigned char OBPNetworkConfigurationProtocol::getNetworkInterfaceEnableState(co
 }
 
 
-void OBPNetworkConfigurationProtocol::saveNetworkInterfaceConnectionSettings(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+void OBPNetworkConfigurationProtocol::saveNetworkInterfaceConnectionSettings(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
 	OBPSaveNetworkInterfaceConnectionSettingsExchange command;

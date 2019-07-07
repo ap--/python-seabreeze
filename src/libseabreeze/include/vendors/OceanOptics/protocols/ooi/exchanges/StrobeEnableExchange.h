@@ -42,7 +42,7 @@ namespace seabreeze {
         void setEnable(bool enable);
 
         /* Inherited from Transfer */
-        Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        Data *transfer(TransferHelper *helper);
 
     private:
         bool strobeEnable;

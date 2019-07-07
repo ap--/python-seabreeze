@@ -58,7 +58,7 @@ ShutterFeature::~ShutterFeature() {
 }
 
 void ShutterFeature::setShutterOpen(const Protocol &protocol,
-                const Bus &bus, bool opened) throw (FeatureException) {
+                const Bus &bus, bool opened) {
 
     ShutterProtocolInterface *shutter = NULL;
     ProtocolHelper *proto = NULL;

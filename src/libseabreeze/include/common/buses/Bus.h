@@ -54,8 +54,7 @@ namespace seabreeze {
         /* Associate this Bus instance with a particular device location.
          * This MUST be done before open or close can be used.
          */
-        virtual void setLocation(const DeviceLocatorInterface &location)
-                throw (IllegalArgumentException) = 0;
+        virtual void setLocation(const DeviceLocatorInterface &location) = 0;
         virtual bool open() = 0;
         virtual void close() = 0;
         virtual DeviceLocatorInterface *getLocation() = 0;

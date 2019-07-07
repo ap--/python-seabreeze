@@ -41,9 +41,9 @@ namespace seabreeze {
     public:
         virtual ~SerialNumberFeatureInterface() = 0;
         virtual unsigned char readSerialNumberMaximumLength(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual std::string *readSerialNumber(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

@@ -48,28 +48,24 @@ namespace seabreeze
 		virtual unsigned char getServerEnableState(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void setServerEnableState(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException);
+			unsigned char enableState);
 		virtual void getServerAddress(
 			const Protocol &protocol,
 			const Bus &bus, 
 			unsigned char interfaceIndex,
 			std::vector<unsigned char> *serverAddress,
-			unsigned char *netMask)
-			throw (FeatureException);
+			unsigned char *netMask);
 		virtual void setServerAddress(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> serverAddress,
-			unsigned char netMask)
-			throw (FeatureException);
+			unsigned char netMask);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

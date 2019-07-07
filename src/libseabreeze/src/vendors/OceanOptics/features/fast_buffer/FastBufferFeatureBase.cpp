@@ -56,7 +56,7 @@ FastBufferFeatureBase::~FastBufferFeatureBase() {
 
 FastBufferIndex_t FastBufferFeatureBase::getBufferingEnable(
 	const Protocol &protocol, const Bus &bus,
-	const FastBufferIndex_t bufferIndex) throw (FeatureException) 
+	const FastBufferIndex_t bufferIndex)
 {
 
 	FastBufferProtocolInterface *buffer = NULL;
@@ -89,7 +89,7 @@ FastBufferIndex_t FastBufferFeatureBase::getBufferingEnable(
 
 void FastBufferFeatureBase::setBufferingEnable(const Protocol &protocol,
 	const Bus &bus, const FastBufferIndex_t bufferIndex,
-	const FastBufferIndex_t isEnabled) throw (FeatureException) {
+	const FastBufferIndex_t isEnabled) {
 
 	FastBufferProtocolInterface *buffer = NULL;
 	ProtocolHelper *proto = NULL;
@@ -118,7 +118,7 @@ void FastBufferFeatureBase::setBufferingEnable(const Protocol &protocol,
 
 FastBufferSampleCount_t FastBufferFeatureBase::getConsecutiveSampleCount(
 	const Protocol &protocol, const Bus &bus,
-	const FastBufferIndex_t bufferIndex) throw (FeatureException) {
+	const FastBufferIndex_t bufferIndex) {
 
 	FastBufferProtocolInterface *buffer = NULL;
 	ProtocolHelper *proto = NULL;
@@ -150,7 +150,7 @@ FastBufferSampleCount_t FastBufferFeatureBase::getConsecutiveSampleCount(
 
 void FastBufferFeatureBase::setConsecutiveSampleCount(const Protocol &protocol,
 	const Bus &bus, const FastBufferIndex_t bufferIndex,
-	const FastBufferSampleCount_t consecutiveSampleCount) throw (FeatureException) {
+	const FastBufferSampleCount_t consecutiveSampleCount) {
 
 	FastBufferProtocolInterface *buffer = NULL;
 	ProtocolHelper *proto = NULL;

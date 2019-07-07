@@ -41,8 +41,7 @@ namespace seabreeze {
         ProgrammableSaturationProtocolInterface(Protocol *protocol);
         virtual ~ProgrammableSaturationProtocolInterface();
         
-        virtual unsigned int getSaturation(const Bus &bus)
-                throw (ProtocolException) = 0;
+        virtual unsigned int getSaturation(const Bus &bus) = 0;
     };
     
 } /* end namespace seabreeze */

@@ -57,7 +57,7 @@ IPv4Feature::~IPv4Feature()
 
 }
 
-unsigned char IPv4Feature::get_IPv4_DHCP_Enable_State(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException)
+unsigned char IPv4Feature::get_IPv4_DHCP_Enable_State(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
@@ -87,7 +87,7 @@ unsigned char IPv4Feature::get_IPv4_DHCP_Enable_State(const Protocol &protocol, 
 	return enableStatus;
 }
 
-void IPv4Feature::set_IPv4_DHCP_Enable_State(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus) throw (FeatureException)
+void IPv4Feature::set_IPv4_DHCP_Enable_State(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus)
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
@@ -115,7 +115,7 @@ void IPv4Feature::set_IPv4_DHCP_Enable_State(const Protocol &protocol, const Bus
 
 }
 
-unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException)
+unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
@@ -145,7 +145,7 @@ unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol
 	return numberOfAddresses;
 }
 
-void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> *IPv4_Address,  unsigned char *netMask) throw (FeatureException)
+void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  vector<unsigned char> *IPv4_Address,  unsigned char *netMask)
 {
 
     vector<unsigned char> data;
@@ -178,7 +178,7 @@ void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, uns
     }
 }
 
-vector<byte> IPv4Feature::get_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException)
+vector<byte> IPv4Feature::get_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 
 	vector<unsigned char> data;
@@ -213,7 +213,7 @@ vector<byte> IPv4Feature::get_IPv4_Default_Gateway(const Protocol &protocol, con
 	return data;
 }
 
-void IPv4Feature::set_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> gatewayAddress) throw (FeatureException)
+void IPv4Feature::set_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> gatewayAddress)
 {
 
 	IPv4ProtocolInterface *IPv4PI = NULL;
@@ -239,7 +239,7 @@ void IPv4Feature::set_IPv4_Default_Gateway(const Protocol &protocol, const Bus &
     }
 }
 
-void IPv4Feature::add_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> IPv4_Address, unsigned char netMask) throw (FeatureException)
+void IPv4Feature::add_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> IPv4_Address, unsigned char netMask)
 {
 
 	IPv4ProtocolInterface *IPv4PI = NULL;
@@ -266,7 +266,7 @@ void IPv4Feature::add_IPv4_Address(const Protocol &protocol, const Bus &bus, uns
 		throw FeatureControlException(error);
 	}
 }
-void IPv4Feature::delete_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex) throw (FeatureException)
+void IPv4Feature::delete_IPv4_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex)
 {
 
 	IPv4ProtocolInterface *IPv4PI = NULL;

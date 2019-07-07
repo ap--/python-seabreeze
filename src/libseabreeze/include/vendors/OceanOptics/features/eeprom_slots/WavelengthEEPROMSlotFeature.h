@@ -43,8 +43,7 @@ namespace seabreeze {
     public:
         WavelengthEEPROMSlotFeature(unsigned int numberOfPixels);
         virtual ~WavelengthEEPROMSlotFeature();
-        std::vector<double> *readWavelengths(const Protocol &protocol, const Bus &bus)
-                throw (FeatureException);
+        std::vector<double> *readWavelengths(const Protocol &protocol, const Bus &bus);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

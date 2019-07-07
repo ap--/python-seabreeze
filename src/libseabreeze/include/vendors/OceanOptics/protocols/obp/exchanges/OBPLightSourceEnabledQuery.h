@@ -40,7 +40,7 @@ namespace seabreeze {
             OBPLightSourceEnabledQuery(int module, int source);
             virtual ~OBPLightSourceEnabledQuery();
 
-            bool queryEnable(TransferHelper *helper) throw (ProtocolException);
+            bool queryEnable(TransferHelper *helper);
 
         private:
             int moduleIndex;

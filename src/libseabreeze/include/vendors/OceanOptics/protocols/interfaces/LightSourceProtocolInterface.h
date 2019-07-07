@@ -42,16 +42,16 @@ namespace seabreeze {
         virtual ~LightSourceProtocolInterface();
 
         virtual bool hasLightSourceEnable(const Bus &bus, int moduleIndex,
-            int lightSourceIndex) throw (ProtocolException) = 0;
+            int lightSourceIndex) = 0;
 
         virtual bool isLightSourceEnabled(const Bus &bus, int moduleIndex,
-            int lightSourceIndex) throw (ProtocolException) = 0;
+            int lightSourceIndex) = 0;
 
         virtual bool hasVariableIntensity(const Bus &bus, int moduleIndex,
-            int lightSourceIndex) throw (ProtocolException) = 0;
+            int lightSourceIndex) = 0;
 
         virtual void setLightSourceEnable(const Bus &bus, int moduleIndex,
-            int lightSourceIndex, bool enable) throw (ProtocolException) = 0;
+            int lightSourceIndex, bool enable) = 0;
     };
 
     class LightSourceProtocolInterface_NormalizedIntensity {
@@ -60,10 +60,10 @@ namespace seabreeze {
         virtual ~LightSourceProtocolInterface_NormalizedIntensity();
 
         virtual double getIntensity(const Bus &bus, int moduleIndex,
-            int lightSourceIndex) throw (ProtocolException) = 0;
+            int lightSourceIndex) = 0;
 
         virtual void setIntensity(const Bus &bus, int moduleIndex,
-            int lightSourceIndex, double intensity) throw (ProtocolException) = 0;
+            int lightSourceIndex, double intensity) = 0;
 
         virtual double getIntensityMinimum(const Bus &bus, int moduleIndex,
             int lightSourceIndex) = 0;
@@ -78,16 +78,16 @@ namespace seabreeze {
         virtual ~LightSourceProtocolInterface_Counts();
 
         virtual int getIntensityCounts(const Bus &bus, int moduleIndex,
-            int lightSourceIndex) throw (ProtocolException) = 0;
+            int lightSourceIndex) = 0;
 
         virtual int getIntensityMinimumCounts(const Bus &bus, int moduleIndex,
-            int lightSourceIndex) throw (ProtocolException) = 0;
+            int lightSourceIndex) = 0;
 
         virtual int getIntensityMaximumCounts(const Bus &bus, int moduleIndex,
-            int lightSourceIndex) throw (ProtocolException) = 0;
+            int lightSourceIndex) = 0;
 
         virtual void setIntensityCounts(const Bus &bus, int moduleIndex,
-            int lightSourceIndex, int counts) throw (ProtocolException) = 0;
+            int lightSourceIndex, int counts) = 0;
     };
 
 }

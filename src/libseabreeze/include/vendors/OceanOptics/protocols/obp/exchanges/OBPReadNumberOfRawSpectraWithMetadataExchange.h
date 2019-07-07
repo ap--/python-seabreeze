@@ -47,7 +47,7 @@ namespace seabreeze {
 			void setNumberOfBytesPerPixel(int numberOfBytesPerPixel);
 
             /* Inherited */
-            virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+            virtual Data *transfer(TransferHelper *helper);
 
 			static void setNumberOfSamplesToRequest(void *myExchange, unsigned int numberOfSamples);
 

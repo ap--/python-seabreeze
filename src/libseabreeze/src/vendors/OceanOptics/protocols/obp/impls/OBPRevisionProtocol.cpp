@@ -48,7 +48,7 @@ OBPRevisionProtocol::~OBPRevisionProtocol() {
 }
 
 
-unsigned char OBPRevisionProtocol::readHardwareRevision(const Bus &bus) throw (ProtocolException) 
+unsigned char OBPRevisionProtocol::readHardwareRevision(const Bus &bus)
 {
     vector<byte> *result = NULL;
     unsigned char hardwareRevision;
@@ -77,7 +77,7 @@ unsigned char OBPRevisionProtocol::readHardwareRevision(const Bus &bus) throw (P
 	return hardwareRevision;
 }
 
-unsigned short int OBPRevisionProtocol::readFirmwareRevision(const Bus &bus) throw (ProtocolException) 
+unsigned short int OBPRevisionProtocol::readFirmwareRevision(const Bus &bus)
 {
     vector<byte> *result = NULL;
     unsigned short int firmwareRevision;

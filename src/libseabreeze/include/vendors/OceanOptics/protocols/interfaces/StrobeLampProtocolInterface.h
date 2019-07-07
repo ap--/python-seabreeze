@@ -45,8 +45,7 @@ namespace seabreeze {
     public:
         StrobeLampProtocolInterface(Protocol *proto);
         virtual ~StrobeLampProtocolInterface();
-        virtual void setStrobeLampEnable(const Bus &bus, bool enable)
-            throw (ProtocolException) = 0;
+        virtual void setStrobeLampEnable(const Bus &bus, bool enable) = 0;
     };
 
 }

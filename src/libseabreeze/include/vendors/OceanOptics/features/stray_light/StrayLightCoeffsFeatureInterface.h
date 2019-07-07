@@ -40,7 +40,7 @@ namespace seabreeze {
     public:
         virtual ~StrayLightCoeffsFeatureInterface() = 0;
         virtual std::vector<double> *readStrayLightCoefficients(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

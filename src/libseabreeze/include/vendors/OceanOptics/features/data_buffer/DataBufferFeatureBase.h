@@ -44,31 +44,24 @@ namespace seabreeze {
 
         virtual DataBufferCount_t getNumberOfBuffers();
         virtual void clearBuffer(const Protocol &protocol, const Bus &bus,
-                const DataBufferCount_t bufferIndex)
-                throw (FeatureException);
+                const DataBufferCount_t bufferIndex);
         virtual void removeOldestSpectraFromBuffer(const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex, const unsigned int numberOfSpectra)
-                throw (FeatureException);
+                const DataBufferIndex_t bufferIndex, const unsigned int numberOfSpectra);
         virtual DataBufferElementCount_t getNumberOfElements(
                 const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex)
-                throw (FeatureException);
+                const DataBufferIndex_t bufferIndex);
         virtual DataBufferElementCount_t getBufferCapacity(
                 const Protocol &protocol,
-                const Bus &bus, const DataBufferIndex_t bufferIndex)
-                throw (FeatureException);
+                const Bus &bus, const DataBufferIndex_t bufferIndex);
         virtual DataBufferElementCount_t getBufferCapacityMinimum(
                 const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex)
-                throw (FeatureException);
+                const DataBufferIndex_t bufferIndex);
         virtual DataBufferElementCount_t getBufferCapacityMaximum(
                 const Protocol &protocol, const Bus &bus,
-                const DataBufferIndex_t bufferIndex)
-                throw (FeatureException);
+                const DataBufferIndex_t bufferIndex);
         virtual void setBufferCapacity(const Protocol &protocol, const Bus &bus,
                 const DataBufferIndex_t bufferIndex,
-                const DataBufferElementCount_t bufferSize)
-                throw (FeatureException);
+                const DataBufferElementCount_t bufferSize);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

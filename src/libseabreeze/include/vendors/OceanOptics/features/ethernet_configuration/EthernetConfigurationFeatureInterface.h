@@ -43,25 +43,21 @@ namespace seabreeze {
 		virtual unsigned char get_GbE_Enable_Status(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException) = 0;
+			unsigned char interfaceIndex) = 0;
 		virtual void set_GbE_Enable_Status(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException) = 0;
+			unsigned char enableState) = 0;
 		virtual std::vector<unsigned char> get_MAC_Address(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException) = 0;
+			unsigned char interfaceIndex) = 0;
 		virtual void set_MAC_Address(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<unsigned char> macAddress)
-			throw (FeatureException) = 0;			
+			const std::vector<unsigned char> macAddress) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

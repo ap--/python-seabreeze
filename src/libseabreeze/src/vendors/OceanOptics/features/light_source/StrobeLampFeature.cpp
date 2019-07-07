@@ -57,7 +57,7 @@ StrobeLampFeature::~StrobeLampFeature() {
 }
 
 void StrobeLampFeature::setStrobeLampEnable(const Protocol &protocol,
-        const Bus &bus, bool enable) throw (FeatureException) {
+        const Bus &bus, bool enable) {
 
     StrobeLampProtocolInterface *lamp = NULL;
     ProtocolHelper *proto = NULL;

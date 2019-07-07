@@ -46,11 +46,10 @@ namespace seabreeze {
         ProgrammableSaturationFeature();
         virtual ~ProgrammableSaturationFeature();
         
-        virtual unsigned int getSaturation() throw (FeatureException) = 0;
+        virtual unsigned int getSaturation() = 0;
         
         /* Overriding from Feature */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) = 0;
+        virtual bool initialize(const Protocol &protocol, const Bus &bus) = 0;
         
         virtual FeatureFamily getFeatureFamily() = 0;
     };

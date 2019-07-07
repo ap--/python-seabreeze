@@ -52,10 +52,8 @@ namespace seabreeze {
     public:
         SerialNumberProtocolInterface(Protocol *protocol);
         virtual ~SerialNumberProtocolInterface();
-        virtual std::string *readSerialNumber(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual unsigned char readSerialNumberMaximumLength(const Bus &bus)
-                throw (ProtocolException) = 0;
+        virtual std::string *readSerialNumber(const Bus &bus) = 0;
+        virtual unsigned char readSerialNumberMaximumLength(const Bus &bus) = 0;
     };
 
 }

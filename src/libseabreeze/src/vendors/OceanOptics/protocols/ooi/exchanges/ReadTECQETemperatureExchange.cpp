@@ -68,8 +68,7 @@ ReadTECQETemperatureExchange::~ReadTECQETemperatureExchange() {
 
 }
 
-Data *ReadTECQETemperatureExchange::transfer(TransferHelper *helper)
-throw (ProtocolException) {
+Data *ReadTECQETemperatureExchange::transfer(TransferHelper *helper) {
     Data *xfer;
     DoubleVector *retval;
     double temp;

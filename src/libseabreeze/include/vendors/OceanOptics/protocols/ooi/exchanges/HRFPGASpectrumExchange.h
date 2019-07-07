@@ -42,7 +42,7 @@ namespace seabreeze {
         virtual ~HRFPGASpectrumExchange();
 
         /* Inherited */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
     };
   }
 }

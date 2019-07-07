@@ -51,14 +51,12 @@ FeatureImpl::~FeatureImpl() {
     }
 }
 
-bool FeatureImpl::initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+bool FeatureImpl::initialize(const Protocol &protocol, const Bus &bus) {
     /* Override this to initialize device, and/or return a different status */
     return true;
 }
 
-ProtocolHelper *FeatureImpl::lookupProtocolImpl(const Protocol &protocol)
-        throw (FeatureProtocolNotFoundException) {
+ProtocolHelper *FeatureImpl::lookupProtocolImpl(const Protocol &protocol) {
 
     vector<ProtocolHelper *>::iterator iter;
     ProtocolHelper *retval = NULL;

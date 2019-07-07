@@ -48,8 +48,7 @@ FPGASpectrumExchange::~FPGASpectrumExchange() {
 
 }
 
-Data *FPGASpectrumExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *FPGASpectrumExchange::transfer(TransferHelper *helper) {
     LOG(__FUNCTION__);
 
     unsigned int i;

@@ -43,26 +43,22 @@ namespace seabreeze {
 		virtual unsigned char getEnableState(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException) = 0;
+			unsigned char interfaceIndex) = 0;
 		virtual void setEnableState(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException) = 0;
+			unsigned char enableState) = 0;
 #if 0
 		virtual std::vector<unsigned char> getGroupAddress(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException) = 0;
+			unsigned char interfaceIndex) = 0;
 		virtual void setGroupAddress(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<unsigned char> groupAddress)
-			throw (FeatureException) = 0;			
+			const std::vector<unsigned char> groupAddress) = 0;
 
 #endif
 	};

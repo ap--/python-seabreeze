@@ -58,7 +58,7 @@ WifiConfigurationFeature::~WifiConfigurationFeature()
 }
 
 
-unsigned char WifiConfigurationFeature::getMode(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+unsigned char WifiConfigurationFeature::getMode(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -86,7 +86,7 @@ unsigned char WifiConfigurationFeature::getMode(const Protocol &protocol, const 
     return mode;
 }
 
-void WifiConfigurationFeature::setMode(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char mode) throw (FeatureException) 
+void WifiConfigurationFeature::setMode(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char mode)
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -112,7 +112,7 @@ void WifiConfigurationFeature::setMode(const Protocol &protocol, const Bus &bus,
 
 }
 
-unsigned char WifiConfigurationFeature::getSecurityType(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+unsigned char WifiConfigurationFeature::getSecurityType(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -140,7 +140,7 @@ unsigned char WifiConfigurationFeature::getSecurityType(const Protocol &protocol
     return securityType;
 }
 
-void WifiConfigurationFeature::setSecurityType(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char securityType) throw (FeatureException) 
+void WifiConfigurationFeature::setSecurityType(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char securityType)
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -167,7 +167,7 @@ void WifiConfigurationFeature::setSecurityType(const Protocol &protocol, const B
 }
 
 
-vector<unsigned char> WifiConfigurationFeature::getSSID(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+vector<unsigned char> WifiConfigurationFeature::getSSID(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 
     vector<unsigned char> data;
@@ -202,7 +202,7 @@ vector<unsigned char> WifiConfigurationFeature::getSSID(const Protocol &protocol
     return data;
 }
 
-void WifiConfigurationFeature::setSSID(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> ssid) throw (FeatureException) 
+void WifiConfigurationFeature::setSSID(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> ssid)
 {
 
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
@@ -228,7 +228,7 @@ void WifiConfigurationFeature::setSSID(const Protocol &protocol, const Bus &bus,
     }
 }
 
-void WifiConfigurationFeature::setPassPhrase(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> passPhrase) throw (FeatureException) 
+void WifiConfigurationFeature::setPassPhrase(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> passPhrase)
 {
 
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;

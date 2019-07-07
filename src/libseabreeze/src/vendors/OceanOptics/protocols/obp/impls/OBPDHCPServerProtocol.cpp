@@ -55,7 +55,7 @@ OBPDHCPServerProtocol::~OBPDHCPServerProtocol()
 
 }
 
-void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> *serverAddress, unsigned char *netMask) throw (ProtocolException) 
+void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char interfaceIndex, vector<unsigned char> *serverAddress, unsigned char *netMask)
 {
     TransferHelper *helper;
     OBPGetDHCPServerAddressExchange request;
@@ -86,7 +86,7 @@ void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char inter
 }
 
 
-void OBPDHCPServerProtocol::setServerAddress(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> serverAddress, unsigned char netMask) throw (ProtocolException)
+void OBPDHCPServerProtocol::setServerAddress(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> serverAddress, unsigned char netMask)
 {
     TransferHelper *helper;
 	OBPSetDHCPServerAddressExchange command;
@@ -116,7 +116,7 @@ void OBPDHCPServerProtocol::setServerAddress(const Bus &bus, unsigned char inter
 #endif
 
 
-unsigned char OBPDHCPServerProtocol::getServerEnableStatus(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPDHCPServerProtocol::getServerEnableStatus(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
 	OBPGetDHCPServerEnableExchange request;
@@ -153,7 +153,7 @@ unsigned char OBPDHCPServerProtocol::getServerEnableStatus(const Bus &bus, unsig
 }
 
 
-void OBPDHCPServerProtocol::setServerEnableStatus(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) throw (ProtocolException)
+void OBPDHCPServerProtocol::setServerEnableStatus(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState)
 {
     TransferHelper *helper;
     OBPSetDHCPServerEnableExchange command;

@@ -43,7 +43,7 @@ namespace seabreeze {
         virtual ~USBFPGASpectrumExchange();
 
         /* Inherited */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
 
     protected:
         /* This is necessary so that the saturation level which is determined

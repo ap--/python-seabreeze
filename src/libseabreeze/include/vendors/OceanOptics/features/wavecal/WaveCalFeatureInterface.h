@@ -39,7 +39,7 @@ namespace seabreeze {
     public:
         virtual ~WaveCalFeatureInterface() = 0;
         virtual std::vector<double> *readWavelengths(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

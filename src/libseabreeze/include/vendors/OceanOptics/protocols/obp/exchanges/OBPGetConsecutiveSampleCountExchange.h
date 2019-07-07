@@ -39,8 +39,7 @@ namespace seabreeze {
             OBPGetConsecutiveSampleCountExchange();
             virtual ~OBPGetConsecutiveSampleCountExchange();
 
-            unsigned int queryConsecutiveSampleCount(TransferHelper *helper)
-                    throw (ProtocolException);
+            unsigned int queryConsecutiveSampleCount(TransferHelper *helper);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */

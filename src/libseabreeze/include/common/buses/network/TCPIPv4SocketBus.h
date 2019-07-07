@@ -45,8 +45,7 @@ namespace seabreeze {
         
         virtual BusFamily getBusFamily() const;
         
-        virtual void setLocation(const DeviceLocatorInterface &location)
-                throw (IllegalArgumentException);
+        virtual void setLocation(const DeviceLocatorInterface &location);
         virtual DeviceLocatorInterface *getLocation();
         virtual TransferHelper *getHelper(
                 const std::vector<ProtocolHint *> &hints) const;

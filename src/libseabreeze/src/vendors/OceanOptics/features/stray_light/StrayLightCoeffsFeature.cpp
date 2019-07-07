@@ -56,7 +56,7 @@ StrayLightCoeffsFeature::~StrayLightCoeffsFeature() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 vector<double> *StrayLightCoeffsFeature::readStrayLightCoefficients(
-        const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+        const Protocol &protocol, const Bus &bus) {
 
     StrayLightCoeffsProtocolInterface *stray = NULL;
     vector<double> *coeffs = NULL;

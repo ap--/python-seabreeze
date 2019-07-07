@@ -48,7 +48,7 @@ OBPGetConsecutiveSampleCountExchange::~OBPGetConsecutiveSampleCountExchange() {
 }
 
 unsigned int OBPGetConsecutiveSampleCountExchange::queryConsecutiveSampleCount(
-        TransferHelper *helper) throw (ProtocolException) {
+        TransferHelper *helper) {
 
     unsigned int consecutiveSampleCount;
     vector<byte> *result;

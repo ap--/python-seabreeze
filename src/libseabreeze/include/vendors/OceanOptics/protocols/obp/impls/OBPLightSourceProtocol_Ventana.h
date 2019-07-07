@@ -47,10 +47,10 @@ namespace seabreeze {
 
             /* Required by LightSourceProtocolInterface */
             virtual bool hasLightSourceEnable(const Bus &bus, int moduleIndex,
-                int lightSourceIndex) throw (ProtocolException);
+                int lightSourceIndex);
 
             virtual bool hasVariableIntensity(const Bus &bus, int moduleIndex,
-                int lightSourceIndex) throw (ProtocolException);
+                int lightSourceIndex);
 
             /* Required by LightSourceProtocolInterface_NormalizedIntensity */
             virtual double getIntensityMinimum(const Bus &bus, int moduleIndex,

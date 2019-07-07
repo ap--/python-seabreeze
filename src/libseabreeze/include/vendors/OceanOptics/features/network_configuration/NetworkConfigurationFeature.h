@@ -47,34 +47,28 @@ namespace seabreeze
 
 		virtual unsigned char getNumberOfNetworkInterfaces(
 			const Protocol &protocol,
-			const Bus &bus)
-			throw (FeatureException);
+			const Bus &bus);
 		virtual unsigned char getNetworkInterfaceConnectionType(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual unsigned char getNetworkInterfaceEnableState(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void setNetworkInterfaceEnableState(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException);
+			unsigned char enableState);
 		virtual unsigned char runNetworkInterfaceSelfTest(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void saveNetworkInterfaceConnectionSettings(
 			const Protocol &protocol, 
 			const Bus &bus,
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 
 
         /* Overriding from Feature */

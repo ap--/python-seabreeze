@@ -62,8 +62,7 @@ unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
     }
 }
 
-bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus)
-        throw (FeatureException) {
+bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus) {
 
     bool result = this->saturation->initialize(proto, bus);
 	

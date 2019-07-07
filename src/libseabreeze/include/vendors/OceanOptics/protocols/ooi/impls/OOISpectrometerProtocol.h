@@ -57,14 +57,14 @@ namespace seabreeze {
         /* FIXME: instead of returning primitive vectors, should this return Data* so that
          * metadata (units, etc.) can also be attached?
          */
-		virtual void requestFormattedSpectrum(const Bus &bus) throw (ProtocolException);
-        virtual std::vector<double> *readFormattedSpectrum(const Bus &bus) throw (ProtocolException);
-		virtual void requestUnformattedSpectrum(const Bus &bus) throw (ProtocolException);
-		virtual std::vector<byte> *readUnformattedSpectrum(const Bus &bus) throw (ProtocolException);
-		virtual void requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (ProtocolException);
-		virtual std::vector<byte> *readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (ProtocolException);
-        virtual void setIntegrationTimeMicros(const Bus &bus, unsigned long time_usec) throw (ProtocolException);
-        virtual void setTriggerMode(const Bus &bus,  SpectrometerTriggerMode &mode) throw (ProtocolException);
+		virtual void requestFormattedSpectrum(const Bus &bus);
+        virtual std::vector<double> *readFormattedSpectrum(const Bus &bus);
+		virtual void requestUnformattedSpectrum(const Bus &bus);
+		virtual std::vector<byte> *readUnformattedSpectrum(const Bus &bus);
+		virtual void requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve);
+		virtual std::vector<byte> *readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve);
+        virtual void setIntegrationTimeMicros(const Bus &bus, unsigned long time_usec);
+        virtual void setTriggerMode(const Bus &bus,  SpectrometerTriggerMode &mode);
 
     private:
         IntegrationTimeExchange *integrationTimeExchange;

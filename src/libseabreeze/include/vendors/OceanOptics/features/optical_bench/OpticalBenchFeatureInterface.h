@@ -40,19 +40,19 @@ namespace seabreeze {
     public:
         virtual ~OpticalBenchFeatureInterface() = 0;
         virtual unsigned short int readOpticalBenchFiberDiameterMicrons(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual unsigned short int readOpticalBenchSlitWidthMicrons(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual std::string *readOpticalBenchID(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual std::string *readOpticalBenchSerialNumber(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual std::string *readOpticalBenchCoating(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual std::string *readOpticalBenchFilter(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual std::string *readOpticalBenchGrating(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;                
+                const Bus &bus) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

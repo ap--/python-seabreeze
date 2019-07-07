@@ -49,7 +49,7 @@ WavelengthEEPROMSlotFeature::~WavelengthEEPROMSlotFeature() {
 }
 
 vector<double> *WavelengthEEPROMSlotFeature::readWavelengths(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     double polynomial[4]; /* order of term equals index of term */
     int i;

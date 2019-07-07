@@ -57,7 +57,7 @@ EthernetConfigurationFeature::~EthernetConfigurationFeature()
 
 }
 
-vector<unsigned char> EthernetConfigurationFeature::get_MAC_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+vector<unsigned char> EthernetConfigurationFeature::get_MAC_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 
     vector<unsigned char> data;
@@ -92,7 +92,7 @@ vector<unsigned char> EthernetConfigurationFeature::get_MAC_Address(const Protoc
     return data;
 }
 
-void EthernetConfigurationFeature::set_MAC_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress) throw (FeatureException) 
+void EthernetConfigurationFeature::set_MAC_Address(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> macAddress)
 {
 
     EthernetConfigurationProtocolInterface *ethernetConfigurationPI = NULL;
@@ -119,7 +119,7 @@ void EthernetConfigurationFeature::set_MAC_Address(const Protocol &protocol, con
 }
 
 
-unsigned char EthernetConfigurationFeature::get_GbE_Enable_Status(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex) throw (FeatureException) 
+unsigned char EthernetConfigurationFeature::get_GbE_Enable_Status(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 	EthernetConfigurationProtocolInterface *ethernetConfigurationPI = NULL;
 	ProtocolHelper *proto;
@@ -147,7 +147,7 @@ unsigned char EthernetConfigurationFeature::get_GbE_Enable_Status(const Protocol
     return enableStatus;
 }
 
-void EthernetConfigurationFeature::set_GbE_Enable_Status(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus) throw (FeatureException) 
+void EthernetConfigurationFeature::set_GbE_Enable_Status(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatus)
 {
 	EthernetConfigurationProtocolInterface *ethernetConfigurationPI = NULL;
 	ProtocolHelper *proto;

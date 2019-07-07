@@ -64,7 +64,7 @@ OBPWifiConfigurationProtocol::~OBPWifiConfigurationProtocol()
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-vector<unsigned char> OBPWifiConfigurationProtocol::getSSID(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+vector<unsigned char> OBPWifiConfigurationProtocol::getSSID(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
     OBPGetWifiConfigurationSSIDExchange request;
@@ -93,7 +93,7 @@ vector<unsigned char> OBPWifiConfigurationProtocol::getSSID(const Bus &bus, unsi
 }
 
 
-void OBPWifiConfigurationProtocol::setSSID(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> ssid) throw (ProtocolException)
+void OBPWifiConfigurationProtocol::setSSID(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> ssid)
 {
     TransferHelper *helper;
 	OBPSetWifiConfigurationSSIDExchange command;
@@ -116,7 +116,7 @@ void OBPWifiConfigurationProtocol::setSSID(const Bus &bus, unsigned char interfa
 
 }
 
-void OBPWifiConfigurationProtocol::setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> passPhrase) throw (ProtocolException)
+void OBPWifiConfigurationProtocol::setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const vector<unsigned char> passPhrase)
 {
 	TransferHelper *helper;
 	OBPSetWifiConfigurationPassPhraseExchange command;
@@ -140,7 +140,7 @@ void OBPWifiConfigurationProtocol::setPassPhrase(const Bus &bus, unsigned char i
 }
 
 
-unsigned char OBPWifiConfigurationProtocol::getMode(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPWifiConfigurationProtocol::getMode(const Bus &bus, unsigned char interfaceIndex)
 {
     TransferHelper *helper;
     OBPGetWifiConfigurationModeExchange request;
@@ -176,7 +176,7 @@ unsigned char OBPWifiConfigurationProtocol::getMode(const Bus &bus, unsigned cha
 }
 
 
-void OBPWifiConfigurationProtocol::setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode) throw (ProtocolException)
+void OBPWifiConfigurationProtocol::setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode)
 {
     TransferHelper *helper;
     OBPSetWifiConfigurationModeExchange command;
@@ -197,7 +197,7 @@ void OBPWifiConfigurationProtocol::setMode(const Bus &bus, unsigned char interfa
 }
 
 
-unsigned char OBPWifiConfigurationProtocol::getSecurityType(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException)
+unsigned char OBPWifiConfigurationProtocol::getSecurityType(const Bus &bus, unsigned char interfaceIndex)
 {
 	TransferHelper *helper;
 	OBPGetWifiConfigurationSecurityExchange request;
@@ -233,7 +233,7 @@ unsigned char OBPWifiConfigurationProtocol::getSecurityType(const Bus &bus, unsi
 }
 
 
-void OBPWifiConfigurationProtocol::setSecurityType(const Bus &bus, unsigned char interfaceIndex, unsigned char securityType) throw (ProtocolException)
+void OBPWifiConfigurationProtocol::setSecurityType(const Bus &bus, unsigned char interfaceIndex, unsigned char securityType)
 {
 	TransferHelper *helper;
 	OBPSetWifiConfigurationSecurityExchange command;

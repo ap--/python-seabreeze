@@ -39,10 +39,8 @@ namespace seabreeze {
         TCPIPv4SocketTransferHelper(Socket *sock);
         virtual ~TCPIPv4SocketTransferHelper();
         
-        virtual int receive(std::vector<byte> &buffer, unsigned int length)
-            throw (BusTransferException);
-        virtual int send(const std::vector<byte> &buffer, unsigned int length) const
-            throw (BusTransferException);
+        virtual int receive(std::vector<byte> &buffer, unsigned int length);
+        virtual int send(const std::vector<byte> &buffer, unsigned int length) const;
         
     protected:
         Socket *socket;

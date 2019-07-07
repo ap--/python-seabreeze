@@ -43,7 +43,7 @@ TCPIPv4SocketTransferHelper::~TCPIPv4SocketTransferHelper() {
 }
 
 int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
-        unsigned int length) throw (BusTransferException) {
+        unsigned int length) {
     
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];
     unsigned int bytesRead = 0;
@@ -75,7 +75,7 @@ int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
 }
 
 int TCPIPv4SocketTransferHelper::send(const vector<byte> &buffer,
-        unsigned int length) const throw (BusTransferException) {
+        unsigned int length) const {
     
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];
     unsigned int written = 0;

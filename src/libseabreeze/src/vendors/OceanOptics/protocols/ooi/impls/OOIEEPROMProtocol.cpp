@@ -50,8 +50,7 @@ OOIEEPROMProtocol::~OOIEEPROMProtocol() {
 
 }
 
-vector<byte> *OOIEEPROMProtocol::readEEPROMSlot(const Bus &bus, int slot)
-        throw (ProtocolException) {
+vector<byte> *OOIEEPROMProtocol::readEEPROMSlot(const Bus &bus, int slot) {
 
     ByteVector *bv = NULL;
     Data *result = NULL;
@@ -84,8 +83,7 @@ vector<byte> *OOIEEPROMProtocol::readEEPROMSlot(const Bus &bus, int slot)
     return retval;
 }
 
-int OOIEEPROMProtocol::writeEEPROMSlot(const Bus &bus, int slot, const vector<byte> &data)
-        throw (ProtocolException) {
+int OOIEEPROMProtocol::writeEEPROMSlot(const Bus &bus, int slot, const vector<byte> &data) {
 
     WriteEEPROMSlotExchange xchange(slot, data);
 

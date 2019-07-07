@@ -47,7 +47,7 @@ namespace seabreeze {
         /*
          * Get the detector saturation level from the device.
          */
-        virtual unsigned int getSaturation() throw (FeatureException) = 0;
+        virtual unsigned int getSaturation() = 0;
     };
     
 

@@ -50,8 +50,8 @@ namespace seabreeze {
         OBPMessage();
         ~OBPMessage();
 
-        static OBPMessage *parseHeaderFromByteStream(std::vector<byte> *stream) throw (IllegalArgumentException);
-        static OBPMessage *parseByteStream(std::vector<byte> *stream) throw (IllegalArgumentException);
+        static OBPMessage *parseHeaderFromByteStream(std::vector<byte> *stream);
+        static OBPMessage *parseByteStream(std::vector<byte> *stream);
 
         std::vector<byte> *toByteStream();
         std::vector<byte> *getData();

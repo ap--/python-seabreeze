@@ -48,7 +48,7 @@ OBPGetDataBufferCapacityExchange::~OBPGetDataBufferCapacityExchange() {
 }
 
 unsigned long OBPGetDataBufferCapacityExchange::queryBufferCapacity(
-        TransferHelper *helper) throw (ProtocolException) {
+        TransferHelper *helper) {
 
     unsigned long capacity;
     vector<byte> *result;

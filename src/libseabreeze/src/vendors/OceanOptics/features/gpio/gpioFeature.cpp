@@ -57,7 +57,7 @@ GPIOFeature::~GPIOFeature()
 
 }
 
-unsigned char GPIOFeature::getGPIO_NumberOfPins(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+unsigned char GPIOFeature::getGPIO_NumberOfPins(const Protocol &protocol, const Bus &bus)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -88,7 +88,7 @@ unsigned char GPIOFeature::getGPIO_NumberOfPins(const Protocol &protocol, const 
 }
 
 
-unsigned int GPIOFeature::getGPIO_OutputEnableVector(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+unsigned int GPIOFeature::getGPIO_OutputEnableVector(const Protocol &protocol, const Bus &bus)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -118,7 +118,7 @@ unsigned int GPIOFeature::getGPIO_OutputEnableVector(const Protocol &protocol, c
 	return outputEnableVector;
 }
 
-void GPIOFeature::setGPIO_OutputEnableVector(const Protocol &protocol, const Bus &bus, unsigned int outputEnableVector, unsigned int bitMask) throw (FeatureException)
+void GPIOFeature::setGPIO_OutputEnableVector(const Protocol &protocol, const Bus &bus, unsigned int outputEnableVector, unsigned int bitMask)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -146,7 +146,7 @@ void GPIOFeature::setGPIO_OutputEnableVector(const Protocol &protocol, const Bus
 
 }
 
-unsigned int GPIOFeature::getGPIO_ValueVector(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+unsigned int GPIOFeature::getGPIO_ValueVector(const Protocol &protocol, const Bus &bus)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -176,7 +176,7 @@ unsigned int GPIOFeature::getGPIO_ValueVector(const Protocol &protocol, const Bu
 	return valueVector;
 }
 
-void GPIOFeature::setGPIO_ValueVector(const Protocol &protocol, const Bus &bus, unsigned int valueVector, unsigned int bitMask) throw (FeatureException)
+void GPIOFeature::setGPIO_ValueVector(const Protocol &protocol, const Bus &bus, unsigned int valueVector, unsigned int bitMask)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -204,7 +204,7 @@ void GPIOFeature::setGPIO_ValueVector(const Protocol &protocol, const Bus &bus, 
 
 }
 
-unsigned char GPIOFeature::getEGPIO_NumberOfPins(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+unsigned char GPIOFeature::getEGPIO_NumberOfPins(const Protocol &protocol, const Bus &bus)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -234,7 +234,7 @@ unsigned char GPIOFeature::getEGPIO_NumberOfPins(const Protocol &protocol, const
 	return numberOfPins;
 }
 
-vector<unsigned char> GPIOFeature::getEGPIO_AvailableModes(const Protocol &protocol, const Bus &bus, unsigned char pinNumber) throw (FeatureException)
+vector<unsigned char> GPIOFeature::getEGPIO_AvailableModes(const Protocol &protocol, const Bus &bus, unsigned char pinNumber)
 {
 
 	vector<unsigned char> data;
@@ -269,7 +269,7 @@ vector<unsigned char> GPIOFeature::getEGPIO_AvailableModes(const Protocol &proto
 	return data;
 }
 
-unsigned char GPIOFeature::getEGPIO_CurrentMode(const Protocol &protocol, const Bus &bus, unsigned char pinNumber) throw (FeatureException)
+unsigned char GPIOFeature::getEGPIO_CurrentMode(const Protocol &protocol, const Bus &bus, unsigned char pinNumber)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -299,7 +299,7 @@ unsigned char GPIOFeature::getEGPIO_CurrentMode(const Protocol &protocol, const 
 	return mode;
 }
 
-void GPIOFeature::setEGPIO_Mode(const Protocol &protocol, const Bus &bus, unsigned char pinNumber, unsigned char mode, float value) throw (FeatureException)
+void GPIOFeature::setEGPIO_Mode(const Protocol &protocol, const Bus &bus, unsigned char pinNumber, unsigned char mode, float value)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -327,7 +327,7 @@ void GPIOFeature::setEGPIO_Mode(const Protocol &protocol, const Bus &bus, unsign
 
 }
 
-unsigned int GPIOFeature::getEGPIO_OutputVector(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+unsigned int GPIOFeature::getEGPIO_OutputVector(const Protocol &protocol, const Bus &bus)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -357,7 +357,7 @@ unsigned int GPIOFeature::getEGPIO_OutputVector(const Protocol &protocol, const 
 	return outputEnableVector;
 }
 
-void GPIOFeature::setEGPIO_OutputVector(const Protocol &protocol, const Bus &bus, unsigned int outputVector, unsigned int bitMask) throw (FeatureException)
+void GPIOFeature::setEGPIO_OutputVector(const Protocol &protocol, const Bus &bus, unsigned int outputVector, unsigned int bitMask)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -385,7 +385,7 @@ void GPIOFeature::setEGPIO_OutputVector(const Protocol &protocol, const Bus &bus
 }
 
 
-float GPIOFeature::getEGPIO_Value(const Protocol &protocol, const Bus &bus, unsigned char pinNumber) throw (FeatureException)
+float GPIOFeature::getEGPIO_Value(const Protocol &protocol, const Bus &bus, unsigned char pinNumber)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
@@ -415,7 +415,7 @@ float GPIOFeature::getEGPIO_Value(const Protocol &protocol, const Bus &bus, unsi
 	return value;
 }
 
-void GPIOFeature::setEGPIO_Value(const Protocol &protocol, const Bus &bus, unsigned char pinNumber, float value) throw (FeatureException)
+void GPIOFeature::setEGPIO_Value(const Protocol &protocol, const Bus &bus, unsigned char pinNumber, float value)
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;

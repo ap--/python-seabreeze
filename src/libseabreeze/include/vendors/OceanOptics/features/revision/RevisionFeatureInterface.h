@@ -40,9 +40,9 @@ namespace seabreeze {
     public:
         virtual ~RevisionFeatureInterface() = 0;
         virtual unsigned char readHardwareRevision(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual unsigned short int readFirmwareRevision(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

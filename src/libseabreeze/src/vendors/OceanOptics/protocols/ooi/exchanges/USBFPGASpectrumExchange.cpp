@@ -53,8 +53,7 @@ USBFPGASpectrumExchange::~USBFPGASpectrumExchange() {
 
 }
 
-Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *USBFPGASpectrumExchange::transfer(TransferHelper *helper) {
 
     LOG(__FUNCTION__);
 

@@ -54,7 +54,7 @@ StrayLightEEPROMSlotFeature::~StrayLightEEPROMSlotFeature() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 vector<double> *StrayLightEEPROMSlotFeature::readStrayLightCoefficients(
-        const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+        const Protocol &protocol, const Bus &bus) {
     LOG(__FUNCTION__);
 
     unsigned int i, j, k;

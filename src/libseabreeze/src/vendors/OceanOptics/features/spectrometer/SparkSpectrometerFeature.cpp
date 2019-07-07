@@ -91,7 +91,7 @@ SparkSpectrometerFeature::~SparkSpectrometerFeature() {
 
 
 vector<double> *SparkSpectrometerFeature::getWavelengths(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException) {
+            const Bus &bus) {
 
     /* FIXME: this probably ought to attempt to create an instance based on
      * any available protocol.  However, this should suffice.

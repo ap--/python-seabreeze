@@ -83,8 +83,7 @@ unsigned int OBPReadRawSpectrum32AndMetadataExchange::isLegalMessageType(unsigne
     return 0;
 }
 
-Data *OBPReadRawSpectrum32AndMetadataExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *OBPReadRawSpectrum32AndMetadataExchange::transfer(TransferHelper *helper) {
     Data *xfer;
     OBPMessage *message = NULL;
     vector<byte> *bytes;

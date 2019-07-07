@@ -67,7 +67,7 @@ OBPGPIOProtocol::~OBPGPIOProtocol()
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-unsigned char OBPGPIOProtocol::getGPIO_NumberOfPins(const Bus &bus) throw (ProtocolException)
+unsigned char OBPGPIOProtocol::getGPIO_NumberOfPins(const Bus &bus)
 {
     TransferHelper *helper;
 	OBPGetGPIONumberOfPinsExchange request;
@@ -99,7 +99,7 @@ unsigned char OBPGPIOProtocol::getGPIO_NumberOfPins(const Bus &bus) throw (Proto
     return retval;
 }
 
-unsigned int OBPGPIOProtocol::getGPIO_OutputEnableVector(const Bus &bus) throw (ProtocolException)
+unsigned int OBPGPIOProtocol::getGPIO_OutputEnableVector(const Bus &bus)
 {
 	TransferHelper *helper;
 	OBPGetGPIOOutputEnableVectorExchange request;
@@ -131,7 +131,7 @@ unsigned int OBPGPIOProtocol::getGPIO_OutputEnableVector(const Bus &bus) throw (
 	return retval;
 }
 
-void OBPGPIOProtocol::setGPIO_OutputEnableVector(const Bus &bus, unsigned int outputEnableVector, unsigned int bitMask) throw (ProtocolException)
+void OBPGPIOProtocol::setGPIO_OutputEnableVector(const Bus &bus, unsigned int outputEnableVector, unsigned int bitMask)
 {
     TransferHelper *helper;
 	OBPSetGPIOOutputEnableVectorExchange command;
@@ -151,7 +151,7 @@ void OBPGPIOProtocol::setGPIO_OutputEnableVector(const Bus &bus, unsigned int ou
     /* FIXME: this could check the return value and react if it did not succeed */
 }
 
-unsigned int OBPGPIOProtocol::getGPIO_ValueVector(const Bus &bus) throw (ProtocolException)
+unsigned int OBPGPIOProtocol::getGPIO_ValueVector(const Bus &bus)
 {
 	TransferHelper *helper;
 	OBPGetGPIOValueVectorExchange request;
@@ -183,7 +183,7 @@ unsigned int OBPGPIOProtocol::getGPIO_ValueVector(const Bus &bus) throw (Protoco
 	return retval;
 }
 
-void OBPGPIOProtocol::setGPIO_ValueVector(const Bus &bus, unsigned int valueVector, unsigned int bitMask) throw (ProtocolException)
+void OBPGPIOProtocol::setGPIO_ValueVector(const Bus &bus, unsigned int valueVector, unsigned int bitMask)
 {
 	TransferHelper *helper;
 	OBPSetGPIOValueVectorExchange command;
@@ -203,7 +203,7 @@ void OBPGPIOProtocol::setGPIO_ValueVector(const Bus &bus, unsigned int valueVect
 	/* FIXME: this could check the return value and react if it did not succeed */
 }
 
-unsigned char OBPGPIOProtocol::getEGPIO_NumberOfPins(const Bus &bus) throw (ProtocolException)
+unsigned char OBPGPIOProtocol::getEGPIO_NumberOfPins(const Bus &bus)
 {
 	TransferHelper *helper;
 	OBPGetGPIOExtensionNumberOfPinsExchange request;
@@ -235,7 +235,7 @@ unsigned char OBPGPIOProtocol::getEGPIO_NumberOfPins(const Bus &bus) throw (Prot
 	return retval;
 }
 
-std::vector<unsigned char> OBPGPIOProtocol::getEGPIO_AvailableModes(const Bus &bus, unsigned char pinNumber) throw (ProtocolException)
+std::vector<unsigned char> OBPGPIOProtocol::getEGPIO_AvailableModes(const Bus &bus, unsigned char pinNumber)
 {
 	TransferHelper *helper;
 	OBPGetGPIOExtensionAvailableModesExchange request;
@@ -264,7 +264,7 @@ std::vector<unsigned char> OBPGPIOProtocol::getEGPIO_AvailableModes(const Bus &b
 	return result;
 }
 
-unsigned char OBPGPIOProtocol::getEGPIO_CurrentMode(const Bus &bus, unsigned char pinNumber ) throw (ProtocolException)
+unsigned char OBPGPIOProtocol::getEGPIO_CurrentMode(const Bus &bus, unsigned char pinNumber )
 {
 	TransferHelper *helper;
 	OBPGetGPIOExtensionCurrentModeExchange request;
@@ -298,7 +298,7 @@ unsigned char OBPGPIOProtocol::getEGPIO_CurrentMode(const Bus &bus, unsigned cha
 	return retval;
 }
 
-void OBPGPIOProtocol::setEGPIO_Mode(const Bus &bus, unsigned char pinNumber, unsigned char mode, float value) throw (ProtocolException)
+void OBPGPIOProtocol::setEGPIO_Mode(const Bus &bus, unsigned char pinNumber, unsigned char mode, float value)
 {
 	TransferHelper *helper;
 	OBPSetGPIOExtensionModeExchange command;
@@ -318,7 +318,7 @@ void OBPGPIOProtocol::setEGPIO_Mode(const Bus &bus, unsigned char pinNumber, uns
 	/* FIXME: this could check the return value and react if it did not succeed */
 }
 
-unsigned int OBPGPIOProtocol::getEGPIO_OutputVector(const Bus &bus) throw (ProtocolException)
+unsigned int OBPGPIOProtocol::getEGPIO_OutputVector(const Bus &bus)
 {
 	TransferHelper *helper;
 	OBPGetGPIOExtensionOutputVectorExchange request;
@@ -350,7 +350,7 @@ unsigned int OBPGPIOProtocol::getEGPIO_OutputVector(const Bus &bus) throw (Proto
 	return retval;
 }
 
-void OBPGPIOProtocol::setEGPIO_OutputVector(const Bus &bus, unsigned int outputVector, unsigned int bitMask) throw (ProtocolException)
+void OBPGPIOProtocol::setEGPIO_OutputVector(const Bus &bus, unsigned int outputVector, unsigned int bitMask)
 {
 	TransferHelper *helper;
 	OBPSetGPIOExtensionOutputVectorExchange command;
@@ -371,7 +371,7 @@ void OBPGPIOProtocol::setEGPIO_OutputVector(const Bus &bus, unsigned int outputV
 }
 
 
-float OBPGPIOProtocol::getEGPIO_Value(const Bus &bus, unsigned char pinNumber) throw (ProtocolException)
+float OBPGPIOProtocol::getEGPIO_Value(const Bus &bus, unsigned char pinNumber)
 {
 	TransferHelper *helper;
 	OBPGetGPIOExtensionValueExchange request;
@@ -405,7 +405,7 @@ float OBPGPIOProtocol::getEGPIO_Value(const Bus &bus, unsigned char pinNumber) t
 	return retval;
 }
 
-void OBPGPIOProtocol::setEGPIO_Value(const Bus &bus, unsigned char pinNumber, float value) throw (ProtocolException)
+void OBPGPIOProtocol::setEGPIO_Value(const Bus &bus, unsigned char pinNumber, float value)
 {
 	TransferHelper *helper;
 	OBPSetGPIOExtensionValueExchange command;

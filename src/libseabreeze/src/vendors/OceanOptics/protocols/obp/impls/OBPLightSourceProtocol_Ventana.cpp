@@ -60,7 +60,7 @@ int OBPLightSourceProtocol_Ventana::getLightSourceCount(int moduleIndex) {
 
 
 bool OBPLightSourceProtocol_Ventana::hasLightSourceEnable(const Bus &bus, int moduleIndex,
-                int lightSourceIndex) throw (ProtocolException) {
+                int lightSourceIndex) {
     if(0 != moduleIndex) {
         /* Ventana has at most one laser module */
         throw ProtocolException("Invalid module index");
@@ -77,7 +77,7 @@ bool OBPLightSourceProtocol_Ventana::hasLightSourceEnable(const Bus &bus, int mo
 
 
 bool OBPLightSourceProtocol_Ventana::hasVariableIntensity(const Bus &bus, int moduleIndex,
-                int lightSourceIndex) throw (ProtocolException) {
+                int lightSourceIndex) {
 
     if(0 != moduleIndex) {
         /* Ventana has at most one laser module */

@@ -45,7 +45,7 @@ SaturationEEPROMSlotFeatureBase::~SaturationEEPROMSlotFeatureBase() {
 }
 
 bool SaturationEEPROMSlotFeatureBase::initialize(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
     try {
         this->saturation = getSaturation(protocol, bus);
         this->valid = true;
@@ -56,8 +56,7 @@ bool SaturationEEPROMSlotFeatureBase::initialize(const Protocol &protocol,
     return true;
 }
 
-unsigned int SaturationEEPROMSlotFeatureBase::getSaturation()
-        throw (FeatureException) {
+unsigned int SaturationEEPROMSlotFeatureBase::getSaturation() {
     if(false == this->valid) {
         throw FeatureException("Saturation level not properly initialized");
     }

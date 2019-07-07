@@ -50,8 +50,7 @@ FlameNIRSpectrumExchange::FlameNIRSpectrumExchange(
 
 FlameNIRSpectrumExchange::~FlameNIRSpectrumExchange() { }
 
-Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper) {
 
     LOG(__FUNCTION__);
 

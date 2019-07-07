@@ -42,11 +42,10 @@ namespace seabreeze {
         virtual ~SaturationEEPROMSlotFeatureBase();
         
         /* Inherited from ProgrammableSaturationFeature */
-        virtual unsigned int getSaturation() throw (FeatureException);
+        virtual unsigned int getSaturation();
         
         /* Inherited from Feature */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
+        virtual bool initialize(const Protocol &protocol, const Bus &bus);
         
         virtual FeatureFamily getFeatureFamily();
         
@@ -55,7 +54,7 @@ namespace seabreeze {
          * to get the saturation level for the device.
          */
         virtual unsigned int getSaturation(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         
     private:
         unsigned int saturation;

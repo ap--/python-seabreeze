@@ -54,7 +54,7 @@ SerialNumberEEPROMSlotFeature::~SerialNumberEEPROMSlotFeature() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 string *SerialNumberEEPROMSlotFeature::readSerialNumber(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     vector<byte> *data;
 
@@ -89,7 +89,7 @@ string *SerialNumberEEPROMSlotFeature::readSerialNumber(const Protocol &protocol
 }
 
 unsigned char SerialNumberEEPROMSlotFeature::readSerialNumberMaximumLength(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
     return DEFAULT_EEPROM_SLOT_LENGTH;
 }
 

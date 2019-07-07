@@ -46,8 +46,7 @@ OBPProgrammableSaturationProtocol::~OBPProgrammableSaturationProtocol() {
     
 }
 
-unsigned int OBPProgrammableSaturationProtocol::getSaturation(const Bus &bus)
-        throw (ProtocolException) {
+unsigned int OBPProgrammableSaturationProtocol::getSaturation(const Bus &bus) {
     
     TransferHelper *helper;
     OBPGetSaturationExchange exchange;

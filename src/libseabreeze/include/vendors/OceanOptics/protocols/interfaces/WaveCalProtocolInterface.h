@@ -52,8 +52,7 @@ namespace seabreeze {
     public:
         WaveCalProtocolInterface(Protocol *protocol);
         virtual ~WaveCalProtocolInterface();
-        virtual std::vector<double> *readWavelengthCoeffs(const Bus &bus)
-                throw (ProtocolException) = 0;
+        virtual std::vector<double> *readWavelengthCoeffs(const Bus &bus) = 0;
     };
 
 }

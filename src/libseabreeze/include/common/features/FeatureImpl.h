@@ -62,8 +62,7 @@ namespace seabreeze {
          * Overriding this is not required.  This should return true if
          * the feature is ready to be used, and false otherwise.
          */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException);
+        virtual bool initialize(const Protocol &protocol, const Bus &bus);
 
         virtual FeatureFamily getFeatureFamily() = 0;
 
@@ -79,8 +78,7 @@ namespace seabreeze {
          * provide as a point of reference to then find the extended
          * Protocol class that can be used to access certain features.
          */
-        ProtocolHelper *lookupProtocolImpl(const Protocol &protocol)
-                        throw (FeatureProtocolNotFoundException);
+        ProtocolHelper *lookupProtocolImpl(const Protocol &protocol);
     };
 
 }

@@ -57,7 +57,7 @@ i2cMasterFeature::~i2cMasterFeature()
 
 }
 
-unsigned char i2cMasterFeature::i2cMasterGetNumberOfBuses(const Protocol &protocol, const Bus &bus) throw (FeatureException)
+unsigned char i2cMasterFeature::i2cMasterGetNumberOfBuses(const Protocol &protocol, const Bus &bus)
 {
 	
 	I2CMasterProtocolInterface *i2cMasterPI = NULL;
@@ -88,7 +88,7 @@ unsigned char i2cMasterFeature::i2cMasterGetNumberOfBuses(const Protocol &protoc
 	return numberOfBuses;
 }
 
-std::vector<unsigned char> i2cMasterFeature::i2cMasterReadBus(const Protocol &protocol, const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes) throw (FeatureException)
+std::vector<unsigned char> i2cMasterFeature::i2cMasterReadBus(const Protocol &protocol, const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes)
 {
 
 	vector<unsigned char> data;
@@ -123,7 +123,7 @@ std::vector<unsigned char> i2cMasterFeature::i2cMasterReadBus(const Protocol &pr
 	return data;
 }
 
-unsigned short i2cMasterFeature::i2cMasterWriteBus(const Protocol &protocol, const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData) throw (FeatureException)
+unsigned short i2cMasterFeature::i2cMasterWriteBus(const Protocol &protocol, const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData)
 {
 
 	unsigned short data;

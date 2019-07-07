@@ -63,8 +63,7 @@ AcquisitionDelayFeature::~AcquisitionDelayFeature() {
 #endif
 void AcquisitionDelayFeature::setAcquisitionDelayMicroseconds(
             const Protocol &protocol, const Bus &bus,
-            const unsigned long delayMicros)
-            throw (FeatureException) {
+            const unsigned long delayMicros) {
 
     AcquisitionDelayProtocolInterface *delay = NULL;
     ProtocolHelper *proto = NULL;
@@ -92,8 +91,7 @@ void AcquisitionDelayFeature::setAcquisitionDelayMicroseconds(
 }
 
 unsigned long AcquisitionDelayFeature::getAcquisitionDelayMicroseconds(
-                    const Protocol &protocol, const Bus &bus)
-                    throw (FeatureException) {
+                    const Protocol &protocol, const Bus &bus) {
     /* Many devices do not have a way to query this value.  The default
      * implementation of the method here will use a cached value for
      * the last delay that was configured.  If no value has been set

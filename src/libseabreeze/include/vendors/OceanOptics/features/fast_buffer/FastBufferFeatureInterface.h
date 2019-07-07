@@ -46,19 +46,15 @@ namespace seabreeze {
         virtual ~FastBufferFeatureInterface() = 0;
 
 		virtual FastBufferIndex_t getBufferingEnable(const Protocol &protocol,
-			const Bus &bus, const FastBufferIndex_t bufferIndex)
-			throw (FeatureException) = 0;
+			const Bus &bus, const FastBufferIndex_t bufferIndex) = 0;
 		virtual void setBufferingEnable(const Protocol &protocol, const Bus &bus,
 			const FastBufferIndex_t bufferIndex,
-			const FastBufferIndex_t isEnabled)
-			throw (FeatureException) = 0;
+			const FastBufferIndex_t isEnabled) = 0;
 		virtual FastBufferSampleCount_t getConsecutiveSampleCount(const Protocol &protocol,
-			const Bus &bus, const FastBufferIndex_t bufferIndex)
-			throw (FeatureException) = 0;
+			const Bus &bus, const FastBufferIndex_t bufferIndex) = 0;
 		virtual void setConsecutiveSampleCount(const Protocol &protocol, const Bus &bus,
 			const FastBufferIndex_t bufferIndex,
-			const FastBufferSampleCount_t consecutiveSampleCount)
-			throw (FeatureException) = 0;
+			const FastBufferSampleCount_t consecutiveSampleCount) = 0;
 			
     };
 

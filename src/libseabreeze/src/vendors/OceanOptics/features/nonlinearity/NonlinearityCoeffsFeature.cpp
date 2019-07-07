@@ -56,7 +56,7 @@ NonlinearityCoeffsFeature::~NonlinearityCoeffsFeature() {
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 vector<double> *NonlinearityCoeffsFeature::readNonlinearityCoefficients(
-        const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+        const Protocol &protocol, const Bus &bus) {
 
     NonlinearityCoeffsProtocolInterface *nonlinearity = NULL;
     vector<double> *coeffs = NULL;

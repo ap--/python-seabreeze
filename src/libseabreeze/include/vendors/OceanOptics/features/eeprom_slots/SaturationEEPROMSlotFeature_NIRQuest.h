@@ -46,7 +46,7 @@ namespace seabreeze {
     protected:
         /* Inherited from SaturationEEPROMSlotFeatureBase */
         virtual unsigned int getSaturation(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
         
     private:
         int saturationSlot;

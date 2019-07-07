@@ -47,7 +47,7 @@ namespace seabreeze {
 
         /* Inherited from TECEnableExchange */
         virtual void setEnable(bool enable);
-        Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        Data *transfer(TransferHelper *helper);
 
     private:
         bool tecEnable;

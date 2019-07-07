@@ -43,10 +43,10 @@ namespace seabreeze {
 
             /* Required by LightSourceProtocolInterface */
             virtual bool isLightSourceEnabled(const Bus &bus, int moduleIndex,
-                int lightSourceIndex) throw (ProtocolException);
+                int lightSourceIndex);
 
             virtual void setLightSourceEnable(const Bus &bus, int moduleIndex,
-                int lightSourceIndex, bool enable) throw (ProtocolException);
+                int lightSourceIndex, bool enable);
 
         protected:
             virtual int getModuleCount() = 0;
@@ -61,10 +61,10 @@ namespace seabreeze {
             virtual ~OBPLightSourceProtocol_NormalizedIntensity();
 
             virtual double getIntensity(const Bus &bus, int moduleIndex,
-                int lightSourceIndex) throw (ProtocolException);
+                int lightSourceIndex);
 
             virtual void setIntensity(const Bus &bus, int moduleIndex,
-                int lightSourceIndex, double intensity) throw (ProtocolException);
+                int lightSourceIndex, double intensity);
         };
 
         class OBPLightSourceProtocol_Counts : public OBPLightSourceProtocol,
@@ -74,10 +74,10 @@ namespace seabreeze {
             virtual ~OBPLightSourceProtocol_Counts();
 
             virtual int getIntensityCounts(const Bus &bus, int moduleIndex,
-                int lightSourceIndex) throw (ProtocolException);
+                int lightSourceIndex);
 
             virtual void setIntensityCounts(const Bus &bus, int moduleIndex,
-                int lightSourceIndex, int counts) throw (ProtocolException);
+                int lightSourceIndex, int counts);
         };
 
     }

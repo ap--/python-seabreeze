@@ -44,7 +44,7 @@ namespace seabreeze {
                 unsigned int numberOfPixels);
         virtual ~WaveCalFeature();
         virtual std::vector<double> *readWavelengths(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

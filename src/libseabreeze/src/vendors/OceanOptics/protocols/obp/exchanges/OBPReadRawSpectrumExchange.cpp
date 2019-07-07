@@ -76,8 +76,7 @@ unsigned int OBPReadRawSpectrumExchange::isLegalMessageType(unsigned int t) {
     return 0;
 }
 
-Data *OBPReadRawSpectrumExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *OBPReadRawSpectrumExchange::transfer(TransferHelper *helper) {
     Data *xfer;
     OBPMessage *message = NULL;
     vector<byte> *bytes;

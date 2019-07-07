@@ -57,7 +57,7 @@ OOIUSB4KSpectrumTransferHelper::~OOIUSB4KSpectrumTransferHelper() {
 }
 
 int OOIUSB4KSpectrumTransferHelper::receive(vector<byte> &buffer,
-        unsigned int length) throw (BusTransferException) {
+        unsigned int length) {
     size_t bytesRead = 0;
     size_t bytesToCopy;
     int flag;

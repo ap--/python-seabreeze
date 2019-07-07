@@ -51,8 +51,7 @@ JazSpectrumExchange::~JazSpectrumExchange() {
 
 }
 
-Data *JazSpectrumExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *JazSpectrumExchange::transfer(TransferHelper *helper) {
     unsigned int i;
     Data *xfer;
     double maxIntensity;

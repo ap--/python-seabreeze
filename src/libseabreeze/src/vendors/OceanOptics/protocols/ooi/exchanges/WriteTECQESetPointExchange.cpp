@@ -69,8 +69,7 @@ void WriteTECQESetPointExchange::setSetPointCelsius(double degreesC) {
     this->tecCounts = (int)(degreesC * QE_TEC_COUNTS_PER_DEGREE_C);
 }
 
-Data *WriteTECQESetPointExchange::transfer(TransferHelper *helper)
-throw (ProtocolException) {
+Data *WriteTECQESetPointExchange::transfer(TransferHelper *helper) {
 
     /* The format here is to send the counts (which are in 0.1 degree C increments)
      * in LSB, MSB order.  Note that the TEC counts is a 2's complement signed value.

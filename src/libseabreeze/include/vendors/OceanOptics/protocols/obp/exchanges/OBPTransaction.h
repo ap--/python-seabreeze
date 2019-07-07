@@ -62,7 +62,7 @@ namespace seabreeze {
              */
             virtual std::vector<byte> *queryDevice(TransferHelper *helper,
                     unsigned int messageType,
-                    std::vector<byte> &data) throw (ProtocolException);
+                    std::vector<byte> &data);
 
             /* This creates a message of the given type and payload and sends it
              * to the device.  No response (other than an acknowledgment) is
@@ -74,7 +74,7 @@ namespace seabreeze {
              */
             virtual bool sendCommandToDevice(TransferHelper *helper,
                     unsigned int messageType,
-                    std::vector<byte> &data) throw (ProtocolException);
+                    std::vector<byte> &data);
 
             std::vector<ProtocolHint *> *hints;
         };

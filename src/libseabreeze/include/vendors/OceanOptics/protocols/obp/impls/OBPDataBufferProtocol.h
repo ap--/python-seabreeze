@@ -41,32 +41,25 @@ namespace seabreeze {
             OBPDataBufferProtocol();
             virtual ~OBPDataBufferProtocol();
 
-            virtual void clearBuffer(const Bus &bus, unsigned char bufferIndex)
-                    throw (ProtocolException);
+            virtual void clearBuffer(const Bus &bus, unsigned char bufferIndex);
 
-            virtual void removeOldestSpectraFromBuffer(const Bus &bus, unsigned char bufferIndex, unsigned int numberOfSpectra)
-                    throw (ProtocolException);
+            virtual void removeOldestSpectraFromBuffer(const Bus &bus, unsigned char bufferIndex, unsigned int numberOfSpectra);
                     
             virtual unsigned long getNumberOfElements(const Bus &bus,
-                    unsigned char bufferIndex)
-                    throw (ProtocolException);
+                    unsigned char bufferIndex);
 
             virtual unsigned long getBufferCapacity(const Bus &bus,
-                    unsigned char bufferIndex)
-                    throw (ProtocolException);
+                    unsigned char bufferIndex);
 
             virtual unsigned long getBufferCapacityMinimum(const Bus &bus,
-                    unsigned char bufferIndex)
-                    throw (ProtocolException);
+                    unsigned char bufferIndex);
 
             virtual unsigned long getBufferCapacityMaximum(const Bus &bus,
-                    unsigned char bufferIndex)
-                    throw (ProtocolException);
+                    unsigned char bufferIndex);
 
             virtual void setBufferCapacity(const Bus &bus,
                     unsigned char bufferIndex,
-                    const unsigned long capacity)
-                    throw (ProtocolException);
+                    const unsigned long capacity);
 
         };
     } /* end namespace oceanBinaryProtocol */

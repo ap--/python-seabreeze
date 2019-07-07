@@ -43,51 +43,43 @@ namespace seabreeze {
 		virtual unsigned char get_IPv4_DHCP_Enable_State(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException) = 0;
+			unsigned char interfaceIndex) = 0;
 		virtual void set_IPv4_DHCP_Enable_State(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException) = 0;
+			unsigned char enableState) = 0;
 		virtual unsigned char get_Number_Of_IPv4_Addresses(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException) = 0;
+			unsigned char interfaceIndex) = 0;
 		virtual void get_IPv4_Address(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char addressIndex,
 			std::vector<unsigned char> *IPv4_Address,
-			unsigned char *netMask)
-			throw (FeatureException) = 0;
+			unsigned char *netMask) = 0;
 		virtual std::vector<byte> get_IPv4_Default_Gateway(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException) = 0;
+			unsigned char interfaceIndex) = 0;
 		virtual void set_IPv4_Default_Gateway(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> IPv4_Gateway_Address)
-			throw (FeatureException) = 0;
+			const std::vector<byte> IPv4_Gateway_Address) = 0;
 		virtual void add_IPv4_Address(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<byte> IPv4_Gateway_Address,
-			unsigned char netMask)
-			throw (FeatureException) = 0;
+			unsigned char netMask) = 0;
 		virtual void delete_IPv4_Address(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char addressIndex)
-			throw (FeatureException) = 0;		
+			unsigned char addressIndex) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

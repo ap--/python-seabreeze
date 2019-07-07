@@ -50,7 +50,7 @@ OBPThermoElectricProtocol::~OBPThermoElectricProtocol() {
 }
 
 double OBPThermoElectricProtocol::readThermoElectricTemperatureCelsius(
-            const Bus &bus) throw (ProtocolException) {
+            const Bus &bus) {
 
     vector<byte> *result;
     float temp = 0;
@@ -88,7 +88,7 @@ double OBPThermoElectricProtocol::readThermoElectricTemperatureCelsius(
 
 
 void OBPThermoElectricProtocol::writeThermoElectricEnable(const Bus &bus,
-            bool enable) throw (ProtocolException) {
+            bool enable) {
 
     OBPSetThermoElectricEnableExchange xchange;
 
@@ -111,7 +111,7 @@ void OBPThermoElectricProtocol::writeThermoElectricEnable(const Bus &bus,
 
 
 void OBPThermoElectricProtocol::writeThermoElectricSetPointCelsius(
-            const Bus &bus, double degreesC) throw (ProtocolException) {
+            const Bus &bus, double degreesC) {
 
     OBPSetThermoElectricSetpointExchange xchange;
 

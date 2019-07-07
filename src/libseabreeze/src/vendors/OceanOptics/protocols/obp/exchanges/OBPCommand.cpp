@@ -41,7 +41,7 @@ OBPCommand::~OBPCommand() {
 
 }
 
-bool OBPCommand::sendCommandToDevice(TransferHelper *helper) throw (ProtocolException) {
+bool OBPCommand::sendCommandToDevice(TransferHelper *helper) {
     return OBPTransaction::sendCommandToDevice(helper, this->messageType,
                     this->payload);
 }

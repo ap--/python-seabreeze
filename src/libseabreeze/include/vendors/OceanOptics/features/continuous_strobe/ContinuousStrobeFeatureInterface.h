@@ -41,11 +41,9 @@ namespace seabreeze {
     public:
         virtual ~ContinuousStrobeFeatureInterface() = 0;
         virtual void setContinuousStrobePeriodMicroseconds(const Protocol &protocol,
-                const Bus &bus, unsigned short strobe_id, unsigned long period_usec)
-                throw (FeatureException) = 0;
+                const Bus &bus, unsigned short strobe_id, unsigned long period_usec) = 0;
         virtual void setContinuousStrobeEnable(const Protocol &protocol,
-                const Bus &bus, unsigned short strobe_id, bool enable)
-                throw (FeatureException) = 0;
+                const Bus &bus, unsigned short strobe_id, bool enable) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

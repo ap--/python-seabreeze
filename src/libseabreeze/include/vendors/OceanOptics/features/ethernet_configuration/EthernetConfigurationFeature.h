@@ -48,25 +48,21 @@ namespace seabreeze
 		virtual unsigned char get_GbE_Enable_Status(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void set_GbE_Enable_Status(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException);
+			unsigned char enableState);
 		virtual std::vector<byte> get_MAC_Address(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void set_MAC_Address(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> macAddress)
-			throw (FeatureException);
+			const std::vector<byte> macAddress);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

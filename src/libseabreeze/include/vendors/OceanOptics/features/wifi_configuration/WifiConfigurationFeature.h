@@ -48,42 +48,35 @@ namespace seabreeze
 		virtual unsigned char getMode(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void setMode(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char mode)
-			throw (FeatureException);
+			unsigned char mode);
 		virtual unsigned char getSecurityType(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void setSecurityType(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char securityType)
-			throw (FeatureException);
+			unsigned char securityType);
 		virtual std::vector<unsigned char> getSSID(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void setSSID(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<unsigned char> ssid)
-			throw (FeatureException);
+			const std::vector<unsigned char> ssid);
 		virtual void setPassPhrase(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<unsigned char> passPhrase)
-			throw (FeatureException);
+			const std::vector<unsigned char> passPhrase);
 
 
         /* Overriding from Feature */

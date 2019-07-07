@@ -42,7 +42,7 @@ SaturationEEPROMSlotFeature::~SaturationEEPROMSlotFeature() {
 }
 
 unsigned int SaturationEEPROMSlotFeature::getSaturation(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
     
     unsigned int saturation;
 

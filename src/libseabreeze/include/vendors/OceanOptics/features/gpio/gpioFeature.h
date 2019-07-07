@@ -47,70 +47,57 @@ namespace seabreeze
 
 		virtual unsigned char getGPIO_NumberOfPins(
 			const Protocol &protocol,
-			const Bus &bus)
-			throw (FeatureException);
+			const Bus &bus);
 		virtual unsigned int getGPIO_OutputEnableVector(
 			const Protocol &protocol,
-			const Bus &bus)
-			throw (FeatureException);
+			const Bus &bus);
 		virtual void setGPIO_OutputEnableVector(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned int outputEnableVector,
-			unsigned int bitMask)
-			throw (FeatureException);
+			unsigned int bitMask);
 		virtual unsigned int getGPIO_ValueVector(
 			const Protocol &protocol,
-			const Bus &bus)
-			throw (FeatureException);
+			const Bus &bus);
 		virtual void setGPIO_ValueVector(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned int valueVector,
-			unsigned int bitMask)
-			throw (FeatureException);
+			unsigned int bitMask);
 		virtual unsigned char getEGPIO_NumberOfPins(
 			const Protocol &protocol,
-			const Bus &bus)
-			throw (FeatureException);
+			const Bus &bus);
 		virtual std::vector<unsigned char> getEGPIO_AvailableModes(
 			const Protocol &protocol,
 			const Bus &bus,
-			unsigned char pinNumber)
-			throw (FeatureException);
+			unsigned char pinNumber);
 		virtual unsigned char getEGPIO_CurrentMode(
 			const Protocol &protocol,
 			const Bus &bus,
-			unsigned char pinNumber)
-			throw (FeatureException);
+			unsigned char pinNumber);
 		virtual void setEGPIO_Mode(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char pinNumber,
 			unsigned char mode,
-			float value)
-			throw (FeatureException);
+			float value);
 		virtual unsigned int getEGPIO_OutputVector(
 			const Protocol &protocol,
-			const Bus &bus)
-			throw (FeatureException);
+			const Bus &bus);
 		virtual void setEGPIO_OutputVector(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned int valueVector,
-			unsigned int bitMask)
-			throw (FeatureException);
+			unsigned int bitMask);
 		virtual float getEGPIO_Value(
 			const Protocol &protocol,
 			const Bus &bus,
-			unsigned char pinNumber)
-			throw (FeatureException);
+			unsigned char pinNumber);
 		virtual void setEGPIO_Value(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char pinNumber,
-			float value)
-			throw (FeatureException);
+			float value);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

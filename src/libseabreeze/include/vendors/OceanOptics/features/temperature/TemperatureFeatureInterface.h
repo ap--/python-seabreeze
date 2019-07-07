@@ -40,11 +40,11 @@ namespace seabreeze {
     public:
         virtual ~TemperatureFeatureInterface() = 0;
         virtual unsigned char readTemperatureCount(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
         virtual double readTemperature(const Protocol &protocol,
-                const Bus &bus, int index) throw (FeatureException) = 0;
+                const Bus &bus, int index) = 0;
         virtual std::vector<double> *readAllTemperatures(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

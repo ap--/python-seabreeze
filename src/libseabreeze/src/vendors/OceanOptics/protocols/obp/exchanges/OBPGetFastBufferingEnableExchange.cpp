@@ -48,7 +48,7 @@ OBPGetFastBufferingEnableExchange::~OBPGetFastBufferingEnableExchange() {
 }
 
 unsigned char OBPGetFastBufferingEnableExchange::queryBufferingEnable(
-        TransferHelper *helper) throw (ProtocolException) {
+        TransferHelper *helper) {
 
     unsigned char isEnabled;
     vector<byte> *result;

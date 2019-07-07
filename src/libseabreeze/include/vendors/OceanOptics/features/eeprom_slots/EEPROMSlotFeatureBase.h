@@ -52,21 +52,20 @@ namespace seabreeze {
         EEPROMSlotFeatureBase();
         virtual ~EEPROMSlotFeatureBase();
         virtual std::vector<byte> *readEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot) throw (FeatureException, IllegalArgumentException);
+                const Bus &bus, unsigned int slot);
         virtual int writeEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot, const std::vector<byte> &data)
-                throw (FeatureException, IllegalArgumentException);
+                const Bus &bus, unsigned int slot, const std::vector<byte> &data);
 
         /* This is a utility function that reads out the given EEPROM slot and
          * parses it into a double value.  If for some reason the parse fails,
          * this will throw a NumberFormatException.
          */
         double readDouble(const Protocol &protocol, const Bus &bus,
-                unsigned int slot) throw (FeatureException, NumberFormatException);
+                unsigned int slot);
 
         /* As with readDouble(), this will read a slot and parse into an integer */
         long readLong(const Protocol &protocol, const Bus &bus,
-                unsigned int slot) throw (FeatureException, NumberFormatException);
+                unsigned int slot);
 
     };
 

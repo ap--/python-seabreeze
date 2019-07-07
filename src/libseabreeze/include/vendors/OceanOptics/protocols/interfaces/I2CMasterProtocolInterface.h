@@ -50,20 +50,17 @@ namespace seabreeze {
 	    /**
          * Get the number of I2C busses.
          */
-        virtual unsigned char i2cMasterGetNumberOfBuses(const Bus &bus)
-            throw (ProtocolException) = 0;
+        virtual unsigned char i2cMasterGetNumberOfBuses(const Bus &bus) = 0;
                     
         /**
          * Read data from the I2C bus
          */
-        virtual std::vector<unsigned char> i2cMasterReadBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes)
-            throw (ProtocolException) = 0;
+        virtual std::vector<unsigned char> i2cMasterReadBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes) = 0;
 
         /**
          *  write data to the I2C bus
          */
-        virtual unsigned short i2cMasterWriteBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData)
-            throw (ProtocolException) = 0;
+        virtual unsigned short i2cMasterWriteBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, const std::vector<unsigned char> writeData) = 0;
 
 
     };

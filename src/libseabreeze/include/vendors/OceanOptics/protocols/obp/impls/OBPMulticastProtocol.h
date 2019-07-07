@@ -44,10 +44,8 @@ namespace seabreeze {
 
         /* Inherited from OBPMulticastProtocolInterface */
 
-        virtual unsigned char getEnableState(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException);
-        virtual void setEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatue)
-            throw (ProtocolException);
+        virtual unsigned char getEnableState(const Bus &bus, unsigned char interfaceIndex);
+        virtual void setEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatue);
 
 
     };

@@ -41,7 +41,7 @@ OBPQuery::OBPQuery() {
 OBPQuery::~OBPQuery() {
 }
 
-vector<byte> *OBPQuery::queryDevice(TransferHelper *helper) throw (ProtocolException) {
+vector<byte> *OBPQuery::queryDevice(TransferHelper *helper) {
     return OBPTransaction::queryDevice(helper, this->messageType,
                     this->payload);
 }

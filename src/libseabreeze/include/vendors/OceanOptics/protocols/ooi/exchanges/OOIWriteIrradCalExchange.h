@@ -45,7 +45,7 @@ namespace seabreeze {
         int setCalibration(const std::vector<float> &calibration);
 
         /* Inherited */
-        virtual Data *transfer(TransferHelper* helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper* helper);
     };
   }
 }

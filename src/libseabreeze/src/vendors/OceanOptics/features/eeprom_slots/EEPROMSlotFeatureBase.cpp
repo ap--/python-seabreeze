@@ -57,8 +57,7 @@ EEPROMSlotFeatureBase::~EEPROMSlotFeatureBase() {
 }
 
 vector<byte> *EEPROMSlotFeatureBase::readEEPROMSlot(const Protocol &protocol,
-        const Bus &bus, unsigned int slot)
-        throw (FeatureException, IllegalArgumentException) {
+        const Bus &bus, unsigned int slot) {
 
     EEPROMProtocolInterface *eeprom = NULL;
     ProtocolHelper *proto;
@@ -98,8 +97,7 @@ vector<byte> *EEPROMSlotFeatureBase::readEEPROMSlot(const Protocol &protocol,
 }
 
 int EEPROMSlotFeatureBase::writeEEPROMSlot(const Protocol &protocol,
-        const Bus &bus, unsigned int slot, const vector<byte> &data)
-        throw (FeatureException, IllegalArgumentException) {
+        const Bus &bus, unsigned int slot, const vector<byte> &data) {
 
     int bytesWritten = 0;
 
@@ -124,7 +122,7 @@ int EEPROMSlotFeatureBase::writeEEPROMSlot(const Protocol &protocol,
 }
 
 double EEPROMSlotFeatureBase::readDouble(const Protocol &protocol, const Bus &bus,
-        unsigned int slotNumber) throw (FeatureException, NumberFormatException) {
+        unsigned int slotNumber) {
     LOG(__FUNCTION__);
 
     char buffer[20];
@@ -165,7 +163,7 @@ double EEPROMSlotFeatureBase::readDouble(const Protocol &protocol, const Bus &bu
 
 
 long EEPROMSlotFeatureBase::readLong(const Protocol &protocol, const Bus &bus,
-            unsigned int slotNumber) throw (FeatureException, NumberFormatException) {
+            unsigned int slotNumber) {
     LOG(__FUNCTION__)
 
     char buffer[20];

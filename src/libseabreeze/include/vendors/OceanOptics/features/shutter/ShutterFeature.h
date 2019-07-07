@@ -45,7 +45,7 @@ namespace seabreeze {
         ShutterFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~ShutterFeature();
         virtual void setShutterOpen(const Protocol &protocol,
-                const Bus &bus, bool opened) throw (FeatureException);
+                const Bus &bus, bool opened);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

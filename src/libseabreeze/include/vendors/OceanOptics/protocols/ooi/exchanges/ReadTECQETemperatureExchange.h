@@ -40,7 +40,7 @@ namespace seabreeze {
         virtual ~ReadTECQETemperatureExchange();
 
         /* Inherited from Transaction */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
 
     };
   }

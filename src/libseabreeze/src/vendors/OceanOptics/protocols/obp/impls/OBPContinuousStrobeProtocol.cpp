@@ -48,7 +48,7 @@ OBPContinuousStrobeProtocol::~OBPContinuousStrobeProtocol() {
 }
 
 void OBPContinuousStrobeProtocol::setContinuousStrobeEnable(const Bus &bus,
-        unsigned short strobe_id, bool enable) throw (ProtocolException) {
+        unsigned short strobe_id, bool enable) {
 
     TransferHelper *helper;
 
@@ -74,7 +74,7 @@ void OBPContinuousStrobeProtocol::setContinuousStrobeEnable(const Bus &bus,
 }
 
 void OBPContinuousStrobeProtocol::setContinuousStrobePeriodMicroseconds(const Bus &bus,
-        unsigned short strobe_id, unsigned long period_usec) throw (ProtocolException) {
+        unsigned short strobe_id, unsigned long period_usec) {
 
     TransferHelper *helper;
 

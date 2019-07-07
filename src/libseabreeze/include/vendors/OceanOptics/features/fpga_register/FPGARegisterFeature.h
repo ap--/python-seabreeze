@@ -42,12 +42,9 @@ namespace seabreeze {
     public:
         FPGARegisterFeature();
         virtual ~FPGARegisterFeature();
-        virtual unsigned int readRegister(const Bus &bus, byte address)
-                throw (FeatureException);
-        virtual void writeRegister(const Bus &bus, byte address, unsigned int value)
-                throw (FeatureException);
-        virtual unsigned char getMajorVersion(const Bus &bus)
-                throw (FeatureException);
+        virtual unsigned int readRegister(const Bus &bus, byte address);
+        virtual void writeRegister(const Bus &bus, byte address, unsigned int value);
+        virtual unsigned char getMajorVersion(const Bus &bus);
 
         virtual FeatureFamily getFeatureFamily();
     };

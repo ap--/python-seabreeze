@@ -54,7 +54,7 @@ FPGARegisterFeature::~FPGARegisterFeature() {
 }
 
 void FPGARegisterFeature::writeRegister(const Bus &bus, byte address,
-        unsigned int value) throw (FeatureException) {
+        unsigned int value) {
 
     FPGARegisterProtocol protocol;
     FPGARegisterProtocolInterface *fpga = &protocol;
@@ -67,8 +67,7 @@ void FPGARegisterFeature::writeRegister(const Bus &bus, byte address,
     }
 }
 
-unsigned int FPGARegisterFeature::readRegister(const Bus &bus, byte address)
-        throw (FeatureException) {
+unsigned int FPGARegisterFeature::readRegister(const Bus &bus, byte address) {
 
     unsigned int retval = 0;
 
@@ -85,7 +84,7 @@ unsigned int FPGARegisterFeature::readRegister(const Bus &bus, byte address)
     return retval;
 }
 
-unsigned char FPGARegisterFeature::getMajorVersion(const Bus &bus) throw (FeatureException) {
+unsigned char FPGARegisterFeature::getMajorVersion(const Bus &bus) {
     unsigned char retval = 0;
 
     FPGARegisterCodes::Base codes;

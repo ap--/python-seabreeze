@@ -43,7 +43,7 @@ namespace seabreeze {
         StrobeLampFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~StrobeLampFeature();
         virtual void setStrobeLampEnable(const Protocol &protocol,
-                const Bus &bus, bool enable) throw (FeatureException);
+                const Bus &bus, bool enable);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

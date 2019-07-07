@@ -43,12 +43,12 @@ namespace seabreeze {
         virtual ~OBPNetworkConfigurationProtocol();
 
         /* Inherited from OBPNetworkConfigurationProtocolInterface */
-        virtual unsigned char getNumberOfNetworkInterfaces(const Bus &bus) throw (ProtocolException);
-        virtual unsigned char getNetworkInterfaceConnectionType(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException);
-        virtual unsigned char getNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException);
-        virtual void setNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) throw (ProtocolException);
-        virtual unsigned char runNetworkInterfaceSelfTest(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException);
-        virtual void saveNetworkInterfaceConnectionSettings(const Bus &bus, unsigned char interfaceIndex) throw (ProtocolException);
+        virtual unsigned char getNumberOfNetworkInterfaces(const Bus &bus);
+        virtual unsigned char getNetworkInterfaceConnectionType(const Bus &bus, unsigned char interfaceIndex);
+        virtual unsigned char getNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex);
+        virtual void setNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState);
+        virtual unsigned char runNetworkInterfaceSelfTest(const Bus &bus, unsigned char interfaceIndex);
+        virtual void saveNetworkInterfaceConnectionSettings(const Bus &bus, unsigned char interfaceIndex);
 
     };
   }

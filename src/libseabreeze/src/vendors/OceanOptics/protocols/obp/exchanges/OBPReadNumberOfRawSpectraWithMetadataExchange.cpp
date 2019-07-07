@@ -92,7 +92,6 @@ unsigned int OBPReadNumberOfRawSpectraWithMetadataExchange::isLegalMessageType(u
 }
 
 Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) 
 {
     Data *xfer;
     OBPMessage *message = NULL;

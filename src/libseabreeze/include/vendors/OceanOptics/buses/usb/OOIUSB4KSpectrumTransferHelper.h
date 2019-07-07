@@ -47,8 +47,7 @@ namespace seabreeze {
         virtual ~OOIUSB4KSpectrumTransferHelper();
 
         /* Inherited */
-        virtual int receive(std::vector<byte> &buffer, unsigned int length)
-            throw (BusTransferException);
+        virtual int receive(std::vector<byte> &buffer, unsigned int length);
 
     private:
         int secondaryHighSpeedEP;

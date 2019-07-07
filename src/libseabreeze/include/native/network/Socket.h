@@ -47,29 +47,22 @@ namespace seabreeze {
         
         virtual ~Socket();
         
-        virtual void connect(Inet4Address &addr, int port)
-                throw (UnknownHostException, BusConnectException) = 0;
-        virtual void connect(const std::string host, int port)
-                throw (UnknownHostException, BusConnectException) = 0;
+        virtual void connect(Inet4Address &addr, int port) = 0;
+        virtual void connect(const std::string host, int port) = 0;
         
-        virtual void close() throw (BusException) = 0;
+        virtual void close() = 0;
         virtual bool isClosed() = 0;
         virtual bool isBound() = 0;
         
         /* Socket options */
-        virtual int getSOLinger() throw (SocketException) = 0;
-        virtual void setSOLinger(bool enable, int linger)
-            throw (SocketException) = 0;
-        virtual unsigned long getReadTimeoutMillis()
-            throw (SocketException) = 0;
-        virtual void setReadTimeoutMillis(unsigned long timeout)
-            throw (SocketException) = 0;
+        virtual int getSOLinger() = 0;
+        virtual void setSOLinger(bool enable, int linger) = 0;
+        virtual unsigned long getReadTimeoutMillis() = 0;
+        virtual void setReadTimeoutMillis(unsigned long timeout) = 0;
         
         /* Data transfer */
-        virtual int read(unsigned char *buffer, unsigned long length)
-            throw (BusTransferException) = 0;
-        virtual int write(const unsigned char *buffer, unsigned long length)
-            throw (BusTransferException) = 0;
+        virtual int read(unsigned char *buffer, unsigned long length) = 0;
+        virtual int write(const unsigned char *buffer, unsigned long length) = 0;
         
     };
     

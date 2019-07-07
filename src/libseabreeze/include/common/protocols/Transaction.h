@@ -66,7 +66,7 @@ namespace seabreeze {
         void addTransfer(Transfer *xfer);
 
         /* Inherited from Exchange */
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
 
     protected:
         std::vector<Transfer *> transfers;

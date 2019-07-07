@@ -42,7 +42,7 @@ SaturationEEPROMSlotFeature_MayaPro::~SaturationEEPROMSlotFeature_MayaPro() {
 }
         
 unsigned int SaturationEEPROMSlotFeature_MayaPro::getSaturation(
-        const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+        const Protocol &protocol, const Bus &bus) {
     
     unsigned int saturation;
     

@@ -141,7 +141,6 @@ void OBPSpectrometerProtocol::Initialize(
 }
 
 vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
-        throw (ProtocolException) 
 {
     Data *result;
     TransferHelper *helper;
@@ -177,7 +176,6 @@ vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
 }
 
 vector<byte> *OBPSpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
-throw (ProtocolException) 
 {
 	Data *result;
 	TransferHelper *helper;
@@ -215,8 +213,7 @@ throw (ProtocolException)
 	return retval;
 }
 
-vector<double> *OBPSpectrometerProtocol::readFormattedSpectrum(const Bus &bus)
-        throw (ProtocolException) {
+vector<double> *OBPSpectrometerProtocol::readFormattedSpectrum(const Bus &bus) {
     TransferHelper *helper;
     Data *result;
     unsigned int i;
@@ -274,8 +271,7 @@ vector<double> *OBPSpectrometerProtocol::readFormattedSpectrum(const Bus &bus)
     return retval;
 }
 
-void OBPSpectrometerProtocol::requestFormattedSpectrum(const Bus &bus)
-        throw (ProtocolException) {
+void OBPSpectrometerProtocol::requestFormattedSpectrum(const Bus &bus) {
     TransferHelper *helper;
 
     helper = bus.getHelper(this->requestFormattedSpectrumExchange->getHints());
@@ -289,8 +285,7 @@ void OBPSpectrometerProtocol::requestFormattedSpectrum(const Bus &bus)
     this->requestFormattedSpectrumExchange->transfer(helper);
 }
 
-void OBPSpectrometerProtocol::requestUnformattedSpectrum(const Bus &bus)
-throw (ProtocolException) {
+void OBPSpectrometerProtocol::requestUnformattedSpectrum(const Bus &bus) {
 	TransferHelper *helper;
 
 	helper = bus.getHelper(this->requestUnformattedSpectrumExchange->getHints());
@@ -304,8 +299,7 @@ throw (ProtocolException) {
 	this->requestUnformattedSpectrumExchange->transfer(helper);
 }
 
-void OBPSpectrometerProtocol::requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
-throw (ProtocolException) {
+void OBPSpectrometerProtocol::requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve) {
 	TransferHelper *helper;
 
 	helper = bus.getHelper(this->requestFastBufferSpectrumExchange->getHints());
@@ -324,7 +318,7 @@ throw (ProtocolException) {
 
 
 void OBPSpectrometerProtocol::setIntegrationTimeMicros(const Bus &bus,
-        unsigned long integrationTime_usec) throw (ProtocolException) {
+        unsigned long integrationTime_usec) {
     TransferHelper *helper;
 
     helper = bus.getHelper(this->integrationTimeExchange->getHints());
@@ -340,7 +334,7 @@ void OBPSpectrometerProtocol::setIntegrationTimeMicros(const Bus &bus,
 }
 
 void OBPSpectrometerProtocol::setTriggerMode(const Bus &bus,
-            SpectrometerTriggerMode &mode) throw (ProtocolException) {
+            SpectrometerTriggerMode &mode) {
     TransferHelper *helper;
 
     helper = bus.getHelper(this->triggerModeExchange->getHints());

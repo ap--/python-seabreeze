@@ -39,8 +39,7 @@ namespace seabreeze {
             OBPLampEnableCommand();
             virtual ~OBPLampEnableCommand();
             
-            void setEnable(TransferHelper *helper, bool enable)
-                    throw (ProtocolException);
+            void setEnable(TransferHelper *helper, bool enable);
         };
     } /* end namespace oceanBinaryProtocol */
 } /* end namespace seabreeze */

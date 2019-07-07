@@ -51,7 +51,7 @@ OBPLightSourceProtocol::~OBPLightSourceProtocol() {
 }
 
 bool OBPLightSourceProtocol::isLightSourceEnabled(const Bus &bus,
-        int moduleIndex, int lightSourceIndex) throw (ProtocolException) {
+        int moduleIndex, int lightSourceIndex) {
 
     if(moduleIndex < 0 || moduleIndex >= getModuleCount()) {
         throw ProtocolException("Invalid module index");
@@ -75,8 +75,7 @@ bool OBPLightSourceProtocol::isLightSourceEnabled(const Bus &bus,
 }
 
 void OBPLightSourceProtocol::setLightSourceEnable(const Bus &bus,
-        int moduleIndex, int lightSourceIndex, bool enable)
-        throw (ProtocolException) {
+        int moduleIndex, int lightSourceIndex, bool enable) {
 
     if(moduleIndex < 0 || moduleIndex >= getModuleCount()) {
         throw ProtocolException("Invalid module index");
@@ -110,7 +109,7 @@ OBPLightSourceProtocol_NormalizedIntensity::~OBPLightSourceProtocol_NormalizedIn
 }
 
 double OBPLightSourceProtocol_NormalizedIntensity::getIntensity(const Bus &bus,
-            int moduleIndex, int lightSourceIndex) throw (ProtocolException) {
+            int moduleIndex, int lightSourceIndex) {
 
     if(moduleIndex < 0 || moduleIndex >= getModuleCount()) {
         throw ProtocolException("Invalid module index");
@@ -135,8 +134,7 @@ double OBPLightSourceProtocol_NormalizedIntensity::getIntensity(const Bus &bus,
 }
 
 void OBPLightSourceProtocol_NormalizedIntensity::setIntensity(const Bus &bus,
-            int moduleIndex, int lightSourceIndex, double intensity)
-            throw (ProtocolException) {
+            int moduleIndex, int lightSourceIndex, double intensity) {
 
     if(moduleIndex < 0 || moduleIndex >= getModuleCount()) {
         throw ProtocolException("Invalid module index");

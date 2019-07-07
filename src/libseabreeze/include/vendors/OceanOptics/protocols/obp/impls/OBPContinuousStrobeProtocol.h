@@ -44,11 +44,9 @@ namespace seabreeze {
         virtual ~OBPContinuousStrobeProtocol();
 
         virtual void setContinuousStrobePeriodMicroseconds(const Bus &bus,
-                unsigned short strobe_id, unsigned long period_usec)
-                throw (ProtocolException);
+                unsigned short strobe_id, unsigned long period_usec);
         virtual void setContinuousStrobeEnable(const Bus &bus,
-                unsigned short strobe_id, bool enable)
-                throw (ProtocolException);
+                unsigned short strobe_id, bool enable);
 
     protected:
         OBPContinuousStrobePeriodExchange *setPeriodExchange;

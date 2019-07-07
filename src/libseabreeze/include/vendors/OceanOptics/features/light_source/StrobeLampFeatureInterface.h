@@ -41,7 +41,7 @@ namespace seabreeze {
     public:
         virtual ~StrobeLampFeatureInterface() = 0;
         virtual void setStrobeLampEnable(const Protocol &protocol,
-                const Bus &bus, bool enable) throw (FeatureException) = 0;
+                const Bus &bus, bool enable) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

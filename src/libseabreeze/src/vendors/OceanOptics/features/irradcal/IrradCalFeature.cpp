@@ -61,7 +61,7 @@ int IrradCalFeature::getNumberOfPixels() {
 }
 
 vector<float> *IrradCalFeature::readIrradCalibration(const Protocol &protocol,
-        const Bus &bus) throw (FeatureException) {
+        const Bus &bus) {
 
     vector<float> *data = NULL;
     IrradCalProtocolInterface *cpi = NULL;
@@ -90,7 +90,7 @@ vector<float> *IrradCalFeature::readIrradCalibration(const Protocol &protocol,
 }
 
 int IrradCalFeature::writeIrradCalibration(const Protocol &protocol,
-        const Bus &bus, const vector<float> &calibration) throw (FeatureException) {
+        const Bus &bus, const vector<float> &calibration) {
 
     IrradCalProtocolInterface *cpi = NULL;
     ProtocolHelper *proto;
@@ -136,7 +136,7 @@ int IrradCalFeature::hasCollectionArea(const Protocol &protocol,
 }
 
 double IrradCalFeature::readCollectionArea(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException) {
+            const Bus &bus) {
     IrradCalProtocolInterface *cpi = NULL;
     ProtocolHelper *proto;
     float area;
@@ -164,7 +164,7 @@ double IrradCalFeature::readCollectionArea(const Protocol &protocol,
 }
 
 void IrradCalFeature::writeCollectionArea(const Protocol &protocol,
-            const Bus &bus, double area) throw (FeatureException) {
+            const Bus &bus, double area) {
     IrradCalProtocolInterface *cpi = NULL;
     ProtocolHelper *proto;
 

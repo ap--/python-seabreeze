@@ -51,8 +51,7 @@ DeviceLocatorInterface *USBInterface::getLocation() {
     return this->deviceLocator;
 }
 
-void USBInterface::setLocation(const DeviceLocatorInterface &location)
-        throw (IllegalArgumentException) {
+void USBInterface::setLocation(const DeviceLocatorInterface &location) {
     if(NULL != this->deviceLocator) {
         delete this->deviceLocator;
     }

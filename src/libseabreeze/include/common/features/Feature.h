@@ -58,8 +58,7 @@ namespace seabreeze {
          * This should return true if the feature is ready to be used, and false
          * otherwise.
          */
-        virtual bool initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) = 0;
+        virtual bool initialize(const Protocol &protocol, const Bus &bus) = 0;
 
         virtual FeatureFamily getFeatureFamily() = 0;
     };

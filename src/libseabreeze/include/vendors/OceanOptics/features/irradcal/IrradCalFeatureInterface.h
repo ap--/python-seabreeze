@@ -45,15 +45,15 @@ namespace seabreeze {
         virtual ~IrradCalFeatureInterface() = 0;
         
         virtual std::vector<float> *readIrradCalibration(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException) = 0;
+            const Bus &bus) = 0;
         virtual int writeIrradCalibration(const Protocol &protocol,
-            const Bus &bus, const std::vector<float> &values) throw (FeatureException) = 0;
+            const Bus &bus, const std::vector<float> &values) = 0;
         virtual int hasCollectionArea(const Protocol &protocol,
             const Bus &bus) = 0;
         virtual double readCollectionArea(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException) = 0;
+            const Bus &bus) = 0;
         virtual void writeCollectionArea(const Protocol &protocol,
-            const Bus &bus, double area) throw (FeatureException) = 0;
+            const Bus &bus, double area) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

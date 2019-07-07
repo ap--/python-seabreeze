@@ -42,13 +42,12 @@ namespace seabreeze {
     public:
         virtual ~EEPROMSlotFeatureInterface() = 0;
         virtual std::vector< std::vector<byte> * > *readAllEEPROMSlots(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
 
         virtual std::vector<byte> *readEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot) throw (FeatureException, IllegalArgumentException) = 0;
+                const Bus &bus, unsigned int slot) = 0;
         virtual int writeEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot, const std::vector<byte> &data)
-                throw (FeatureException, IllegalArgumentException) = 0;
+                const Bus &bus, unsigned int slot, const std::vector<byte> &data) = 0;
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */

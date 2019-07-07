@@ -42,8 +42,7 @@ namespace seabreeze {
         OBPNonlinearityCoeffsProtocol();
         virtual ~OBPNonlinearityCoeffsProtocol();
 
-        virtual std::vector<double> *readNonlinearityCoeffs(const Bus &bus)
-                throw (ProtocolException);
+        virtual std::vector<double> *readNonlinearityCoeffs(const Bus &bus);
     };
   }
 }

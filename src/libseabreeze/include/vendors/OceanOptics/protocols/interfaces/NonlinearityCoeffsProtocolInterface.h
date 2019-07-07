@@ -52,8 +52,7 @@ namespace seabreeze {
     public:
         NonlinearityCoeffsProtocolInterface(Protocol *protocol);
         virtual ~NonlinearityCoeffsProtocolInterface();
-        virtual std::vector<double> *readNonlinearityCoeffs(const Bus &bus)
-                throw (ProtocolException) = 0;
+        virtual std::vector<double> *readNonlinearityCoeffs(const Bus &bus) = 0;
     };
 
 }

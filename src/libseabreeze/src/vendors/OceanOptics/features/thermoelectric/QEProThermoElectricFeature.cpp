@@ -48,17 +48,16 @@ QEProThermoElectricFeature::~QEProThermoElectricFeature() {
 }
 
 double QEProThermoElectricFeature::getDefaultSetPointCelsius(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
     return defaultTESetpointCelsius;
 }
 
 bool QEProThermoElectricFeature::getDefaultThermoElectricEnable(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
     return defaultTEEnable;
 }
 
-bool QEProThermoElectricFeature::initialize(const Protocol &protocol, const Bus &bus)
-            throw (FeatureException) {
+bool QEProThermoElectricFeature::initialize(const Protocol &protocol, const Bus &bus) {
     /* This doesn't need to do anything special at this point.  If desired, this
      * could be used to read out the current setting and cache it, but that is
      * not strictly required.

@@ -45,46 +45,45 @@ namespace seabreeze {
 
         /* Request and read out a spectrum formatted into intensity (A/D counts) */
         virtual std::vector<double> *getFormattedSpectrum(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
 
         /* Request and read out the raw spectrum data stream */
         virtual std::vector<byte> *getUnformattedSpectrum(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
 
 		virtual std::vector<byte> *getFastBufferSpectrum(const Protocol &protocol,
-			const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) = 0;
+			const Bus &bus, unsigned int numberOfSamplesToRetrieve) = 0;
 
         /* Request and read out the wavelengths in nanometers as a vector of doubles */
         virtual std::vector<double> *getWavelengths(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
 
         /* Read the raw spectrum data stream.  No request is made first. */
         virtual std::vector<byte> *readUnformattedSpectrum(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
 
 		virtual std::vector<byte> *readFastBufferSpectrum(const Protocol &protocol,
-			const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) = 0;
+			const Bus &bus, unsigned int numberOfSamplesToRetrieve) = 0;
 
         /* Set the integration time of the spectrometer */
         virtual void setIntegrationTimeMicros(const Protocol &protocol,
-                const Bus &bus, unsigned long time_usec)
-                throw (FeatureException, IllegalArgumentException) = 0;
+                const Bus &bus, unsigned long time_usec) = 0;
 
         /* Request that the spectrometer make a spectrum available for
          * reading (e.g. with readUnformattedSpectrum())
          */
         virtual void writeRequestFormattedSpectrum(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) = 0;
+                const Bus &bus) = 0;
 
 		virtual void writeRequestUnformattedSpectrum(const Protocol &protocol,
-			const Bus &bus) throw (FeatureException) = 0;
+			const Bus &bus) = 0;
 
 		virtual void writeRequestFastBufferSpectrum(const Protocol &protocol,
-			const Bus &bus, unsigned int numberOfSamplesToRetrieve) throw (FeatureException) = 0;
+			const Bus &bus, unsigned int numberOfSamplesToRetrieve) = 0;
 
         /* Setting the external trigger mode for the spectrometer */
         virtual void setTriggerMode(const Protocol &protocol,
-                const Bus &bus, SpectrometerTriggerMode &mode) throw (FeatureException) = 0;
+                const Bus &bus, SpectrometerTriggerMode &mode) = 0;
 
         virtual std::vector<SpectrometerTriggerMode *> getTriggerModes() const = 0;
 

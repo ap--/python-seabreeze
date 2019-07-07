@@ -47,24 +47,21 @@ namespace seabreeze
 
 		virtual unsigned char i2cMasterGetNumberOfBuses(
 			const Protocol &protocol,
-			const Bus &bus)
-			throw (FeatureException);
+			const Bus &bus);
 
 		virtual std::vector<unsigned char> i2cMasterReadBus(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char busIndex,
 			unsigned char slaveAddress,
-			unsigned short numberOfBytes)
-			throw (FeatureException);
+			unsigned short numberOfBytes);
 		
 		virtual unsigned short i2cMasterWriteBus(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char busIndex, 
 			unsigned char slaveAddress, 
-			const std::vector<unsigned char> writeData)
-			throw (FeatureException);	
+			const std::vector<unsigned char> writeData);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

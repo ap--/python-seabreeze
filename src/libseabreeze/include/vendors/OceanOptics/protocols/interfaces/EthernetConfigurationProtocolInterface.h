@@ -49,25 +49,21 @@ namespace seabreeze {
         /**
          * Get the MAC address from the device.
          */
-        virtual std::vector<byte> get_MAC_Address(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual std::vector<byte> get_MAC_Address(const Bus &bus, unsigned char interfaceIndex) = 0;
         /**
          *  Set the device MAC address.
          */
-        virtual void set_MAC_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> macAddress)
-            throw (ProtocolException) = 0;
+        virtual void set_MAC_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> macAddress) = 0;
 
         /**
          * Get the GbE enable status from the device.
          */
-        virtual unsigned char get_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char get_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          * Set the GbE enable status on the device
          */
-        virtual void set_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState)
-            throw (ProtocolException) = 0;
+        virtual void set_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) = 0;
 
     };
 

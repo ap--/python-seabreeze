@@ -106,8 +106,7 @@ int OOIWriteIrradCalExchange::setCalibration(const vector<float> &cal) {
     return factors;
 }
 
-Data *OOIWriteIrradCalExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *OOIWriteIrradCalExchange::transfer(TransferHelper *helper) {
     vector<Transfer *>::iterator iter = this->transfers.begin();
 
     /* Iterate over all stored transfers and delegate to the helper to

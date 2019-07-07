@@ -48,7 +48,7 @@ namespace seabreeze {
                 unsigned int numberOfPixels, GainAdjustedSpectrometerFeature *feature);
         virtual ~FlameNIRSpectrumExchange();
 
-        virtual Data *transfer(TransferHelper *helper) throw (ProtocolException);
+        virtual Data *transfer(TransferHelper *helper);
 
     protected:
         GainAdjustedSpectrometerFeature *spectrometerFeature;

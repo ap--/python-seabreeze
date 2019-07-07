@@ -49,16 +49,16 @@ namespace seabreeze {
         virtual ~IrradCalFeature();
         
         virtual std::vector<float> *readIrradCalibration(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);
+            const Bus &bus);
         virtual int writeIrradCalibration(const Protocol &protocol,
-            const Bus &bus, const std::vector<float> &values) throw (FeatureException);
+            const Bus &bus, const std::vector<float> &values);
         int getNumberOfPixels();
         virtual int hasCollectionArea(const Protocol &protocol,
             const Bus &bus);
         virtual double readCollectionArea(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);
+            const Bus &bus);
         virtual void writeCollectionArea(const Protocol &protocol,
-            const Bus &bus, double area) throw (FeatureException);
+            const Bus &bus, double area);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

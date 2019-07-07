@@ -57,8 +57,7 @@ DataBufferCount_t DataBufferFeatureBase::getNumberOfBuffers() {
 }
 
 void DataBufferFeatureBase::clearBuffer(const Protocol &protocol,
-        const Bus &bus, const DataBufferIndex_t bufferIndex)
-        throw (FeatureException) {
+        const Bus &bus, const DataBufferIndex_t bufferIndex) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -85,8 +84,7 @@ void DataBufferFeatureBase::clearBuffer(const Protocol &protocol,
 }
 
 void DataBufferFeatureBase::removeOldestSpectraFromBuffer(const Protocol &protocol,
-        const Bus &bus, const DataBufferIndex_t bufferIndex, unsigned int numberOfSpectra)
-        throw (FeatureException) {
+        const Bus &bus, const DataBufferIndex_t bufferIndex, unsigned int numberOfSpectra) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -114,7 +112,7 @@ void DataBufferFeatureBase::removeOldestSpectraFromBuffer(const Protocol &protoc
 
 DataBufferElementCount_t DataBufferFeatureBase::getNumberOfElements(
     const Protocol &protocol, const Bus &bus,
-    const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+    const DataBufferIndex_t bufferIndex) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -144,7 +142,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getNumberOfElements(
 
 DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacity(
         const Protocol &protocol, const Bus &bus,
-        const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+        const DataBufferIndex_t bufferIndex) {
 
     DataBufferProtocolInterface *buffer = NULL;   
     ProtocolHelper *proto = NULL;
@@ -175,7 +173,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacity(
 
 DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMinimum(
         const Protocol &protocol, const Bus &bus,
-        const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+        const DataBufferIndex_t bufferIndex) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -205,7 +203,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMinimum(
 
 DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMaximum(
         const Protocol &protocol, const Bus &bus,
-        const DataBufferIndex_t bufferIndex) throw (FeatureException) {
+        const DataBufferIndex_t bufferIndex) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
@@ -235,7 +233,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacityMaximum(
 
 void DataBufferFeatureBase::setBufferCapacity(const Protocol &protocol,
         const Bus &bus, const DataBufferIndex_t bufferIndex,
-        const DataBufferElementCount_t bufferSize) throw (FeatureException) {
+        const DataBufferElementCount_t bufferSize) {
 
     DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;

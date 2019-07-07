@@ -57,8 +57,7 @@ ContinuousStrobeFeature_FPGA::~ContinuousStrobeFeature_FPGA() {
 }
 
 void ContinuousStrobeFeature_FPGA::setContinuousStrobePeriodMicroseconds(const Protocol &protocol,
-        const Bus &bus, unsigned short strobe_id, unsigned long period_usec)
-        throw (FeatureException) {
+        const Bus &bus, unsigned short strobe_id, unsigned long period_usec) {
 
     if (0 != strobe_id) {
         throw FeatureException("feature only supports one continuous strobe generator");
@@ -109,8 +108,7 @@ void ContinuousStrobeFeature_FPGA::setContinuousStrobePeriodMicroseconds(const P
 }
 
 void ContinuousStrobeFeature_FPGA::setContinuousStrobeEnable(const Protocol &protocol,
-        const Bus &bus, unsigned short strobe_id, bool enable)
-        throw (FeatureException) {
+        const Bus &bus, unsigned short strobe_id, bool enable) {
     /* This delegates to the OOIStrobeLampProtocol.  Note that (like the rest
      * of this implementation) some devices like the STS will not work if this
      * approach is taken.  A separate generic continous strobe feature is

@@ -56,7 +56,7 @@ OBPDataBufferProtocol::~OBPDataBufferProtocol() {
 }
 
 void OBPDataBufferProtocol::clearBuffer(const Bus &bus,
-        unsigned char bufferIndex) throw (ProtocolException) {
+        unsigned char bufferIndex) {
 
     if(0 != bufferIndex) {
         /* At present, this protocol only knows how to deal with one buffer
@@ -85,7 +85,7 @@ void OBPDataBufferProtocol::clearBuffer(const Bus &bus,
 }
 
 void OBPDataBufferProtocol::removeOldestSpectraFromBuffer(const Bus &bus,
-        unsigned char bufferIndex, unsigned int numberOfSpectra) throw (ProtocolException) {
+        unsigned char bufferIndex, unsigned int numberOfSpectra) {
 
     if(0 != bufferIndex) {
         /* At present, this protocol only knows how to deal with one buffer
@@ -114,7 +114,7 @@ void OBPDataBufferProtocol::removeOldestSpectraFromBuffer(const Bus &bus,
 }
 
 unsigned long OBPDataBufferProtocol::getNumberOfElements(const Bus &bus,
-        unsigned char bufferIndex) throw (ProtocolException) {
+        unsigned char bufferIndex) {
 
     unsigned long elementCount;
     OBPGetDataBufferElementCountExchange exchange;
@@ -140,7 +140,7 @@ unsigned long OBPDataBufferProtocol::getNumberOfElements(const Bus &bus,
 }
 
 unsigned long OBPDataBufferProtocol::getBufferCapacity(const Bus &bus,
-        unsigned char bufferIndex) throw (ProtocolException) {
+        unsigned char bufferIndex) {
 
     unsigned long capacity;
     OBPGetDataBufferCapacityExchange exchange;
@@ -166,8 +166,7 @@ unsigned long OBPDataBufferProtocol::getBufferCapacity(const Bus &bus,
 }
 
 unsigned long OBPDataBufferProtocol::getBufferCapacityMinimum(
-        const Bus &bus, unsigned char bufferIndex)
-        throw (ProtocolException){
+        const Bus &bus, unsigned char bufferIndex){
 
     if(0 != bufferIndex) {
         /* At present, this protocol only knows how to deal with one buffer
@@ -188,7 +187,7 @@ unsigned long OBPDataBufferProtocol::getBufferCapacityMinimum(
 }
 
 unsigned long OBPDataBufferProtocol::getBufferCapacityMaximum(const Bus &bus,
-        unsigned char bufferIndex) throw (ProtocolException) {
+        unsigned char bufferIndex) {
 
     unsigned long maximumCapacity;
     OBPGetDataBufferMaximumCapacityExchange exchange;
@@ -214,8 +213,7 @@ unsigned long OBPDataBufferProtocol::getBufferCapacityMaximum(const Bus &bus,
 }
 
 void OBPDataBufferProtocol::setBufferCapacity(const Bus &bus,
-        unsigned char bufferIndex, const unsigned long capacity)
-        throw (ProtocolException) {
+        unsigned char bufferIndex, const unsigned long capacity) {
 
     if(0 != bufferIndex) {
         /* At present, this protocol only knows how to deal with one buffer

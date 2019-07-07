@@ -49,38 +49,32 @@ namespace seabreeze {
         /**
          * Get the number of network interfaces available
          */
-        virtual unsigned char getNumberOfNetworkInterfaces(const Bus &bus)
-            throw (ProtocolException) = 0;
+        virtual unsigned char getNumberOfNetworkInterfaces(const Bus &bus) = 0;
 
         /**
          *  Get the interface type. 0 = loopback, 1 = wired ethernet, 2= wifi, 3 = cdc ethernet (usb)
          */
-        virtual unsigned char getNetworkInterfaceConnectionType(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char getNetworkInterfaceConnectionType(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          *  Find out if the referenced network interface is enabled
          */
-        virtual unsigned char getNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char getNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          *  Enable or disable a network interface
          */
-        virtual void setNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState)
-            throw (ProtocolException) = 0;
+        virtual void setNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) = 0;
             
         /**
          *  Run a self test on the network interface of interest
          */
-        virtual unsigned char runNetworkInterfaceSelfTest(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char runNetworkInterfaceSelfTest(const Bus &bus, unsigned char interfaceIndex) = 0;
             
         /**
          *  Store all of the settings for the network interface of interest
          */
-        virtual void saveNetworkInterfaceConnectionSettings(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual void saveNetworkInterfaceConnectionSettings(const Bus &bus, unsigned char interfaceIndex) = 0;
 
     };
 

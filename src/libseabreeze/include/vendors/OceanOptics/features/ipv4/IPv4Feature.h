@@ -48,51 +48,43 @@ namespace seabreeze
 		virtual unsigned char get_IPv4_DHCP_Enable_State(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void set_IPv4_DHCP_Enable_State(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char enableState)
-			throw (FeatureException);
+			unsigned char enableState);
 		virtual unsigned char get_Number_Of_IPv4_Addresses(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void get_IPv4_Address(
 			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char addressIndex,
 			std::vector<unsigned char> *IPv4_Address, 
-			unsigned char *netMask)
-			throw (FeatureException);
+			unsigned char *netMask);
 		virtual std::vector<byte> get_IPv4_Default_Gateway(
 			const Protocol &protocol,
 			const Bus &bus, 
-			unsigned char interfaceIndex)
-			throw (FeatureException);
+			unsigned char interfaceIndex);
 		virtual void set_IPv4_Default_Gateway(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> IPv4_Gateway_Address)
-			throw (FeatureException);
+			const std::vector<byte> IPv4_Gateway_Address);
 		virtual void add_IPv4_Address(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<byte> IPv4_Gateway_Address,
-			unsigned char netMask)
-			throw (FeatureException);
+			unsigned char netMask);
 		virtual void delete_IPv4_Address(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			unsigned char addressIndex)
-			throw (FeatureException);
+			unsigned char addressIndex);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

@@ -46,8 +46,7 @@ OOIStrobeLampProtocol::~OOIStrobeLampProtocol() {
     delete this->strobeEnableExchange;
 }
 
-void OOIStrobeLampProtocol::setStrobeLampEnable(const Bus &bus, bool enable)
-        throw (ProtocolException) {
+void OOIStrobeLampProtocol::setStrobeLampEnable(const Bus &bus, bool enable) {
     TransferHelper *helper;
 
     helper = bus.getHelper(this->strobeEnableExchange->getHints());

@@ -40,7 +40,7 @@ namespace seabreeze {
             OBPLightSourceIntensityQuery(int module, int source);
             virtual ~OBPLightSourceIntensityQuery();
 
-            float queryIntensity(TransferHelper *helper) throw (ProtocolException);
+            float queryIntensity(TransferHelper *helper);
 
         private:
             int moduleIndex;

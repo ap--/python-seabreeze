@@ -44,20 +44,13 @@ namespace seabreeze {
 
         /* Inherited from OBPWifiConfigurationProtocolInterface */
         
-        virtual unsigned char getMode(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException);
-        virtual void setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode)
-            throw (ProtocolException);
-        virtual unsigned char getSecurityType(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException);
-        virtual void setSecurityType(const Bus &bus, unsigned char interfaceIndex, unsigned char securityType)
-            throw (ProtocolException);           
-        virtual std::vector<unsigned char> getSSID(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException);
-        virtual void setSSID(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> ssid)
-            throw (ProtocolException);
-        virtual void setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> passPhrase)
-            throw (ProtocolException);
+        virtual unsigned char getMode(const Bus &bus, unsigned char interfaceIndex);
+        virtual void setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode);
+        virtual unsigned char getSecurityType(const Bus &bus, unsigned char interfaceIndex);
+        virtual void setSecurityType(const Bus &bus, unsigned char interfaceIndex, unsigned char securityType);
+        virtual std::vector<unsigned char> getSSID(const Bus &bus, unsigned char interfaceIndex);
+        virtual void setSSID(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> ssid);
+        virtual void setPassPhrase(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> passPhrase);
 
 
     };

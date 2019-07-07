@@ -46,7 +46,7 @@ namespace seabreeze {
         StrayLightCoeffsFeature(std::vector<ProtocolHelper *> helpers);
         virtual ~StrayLightCoeffsFeature();
         virtual std::vector<double> *readStrayLightCoefficients(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException);
+                const Bus &bus);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

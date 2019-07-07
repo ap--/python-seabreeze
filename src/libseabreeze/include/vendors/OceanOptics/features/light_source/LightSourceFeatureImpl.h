@@ -46,7 +46,7 @@ namespace seabreeze {
 
         /* Override from LightSourceFeatureBase */
         virtual int getLightSourceCount(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException);
+            const Bus &bus);
 
     protected:
         int lightSourceCount;

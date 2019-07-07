@@ -42,25 +42,25 @@ namespace seabreeze {
         virtual ~LightSourceFeatureInterface() = 0;
 
         virtual int getLightSourceCount(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException) = 0;
+            const Bus &bus) = 0;
 
         virtual bool hasLightSourceEnable(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex) throw (FeatureException) = 0;
+            const Bus &bus, int lightSourceIndex) = 0;
 
         virtual bool isLightSourceEnabled(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex) throw (FeatureException) = 0;
+            const Bus &bus, int lightSourceIndex) = 0;
 
         virtual void setLightSourceEnable(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex, bool enable) throw (FeatureException) = 0;
+            const Bus &bus, int lightSourceIndex, bool enable) = 0;
 
         virtual bool hasVariableIntensity(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex) throw (FeatureException) = 0;
+            const Bus &bus, int lightSourceIndex) = 0;
 
         virtual double getLightSourceIntensity(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex) throw (FeatureException) = 0;
+            const Bus &bus, int lightSourceIndex) = 0;
 
         virtual void setLightSourceIntensity(const Protocol &protocol,
-            const Bus &bus, int lightSourceIndex, double intensity) throw (FeatureException) = 0;
+            const Bus &bus, int lightSourceIndex, double intensity) = 0;
 
     };
 

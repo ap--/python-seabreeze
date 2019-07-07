@@ -50,51 +50,43 @@ namespace seabreeze {
 	    /**
          * Is the DHCP client enabled for IPv4? 1: enabled, 0: disabled
          */
-        virtual unsigned char get_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char get_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          * Set the enable state for the IPv4 client
          */
-        virtual void set_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState)
-            throw (ProtocolException) = 0;
+        virtual void set_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) = 0;
 
 	    /**
          * Get the number of IPv4 addresses that can be indexed.
          */
-        virtual unsigned char get_Number_Of_IPv4_Addresses(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual unsigned char get_Number_Of_IPv4_Addresses(const Bus &bus, unsigned char interfaceIndex) = 0;
             
         /**
          * Get an IPv4 address by its index
          */
-        virtual void get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex, std::vector<unsigned char> *IPv4_Address, unsigned char *netMask)
-            throw (ProtocolException) = 0;
+        virtual void get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex, std::vector<unsigned char> *IPv4_Address, unsigned char *netMask) = 0;
 
         /**
          * Get the IPv4 gateway for the indexed interface
          */
-        virtual std::vector<byte> get_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex)
-            throw (ProtocolException) = 0;
+        virtual std::vector<byte> get_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          *  Set the gateway address for indexed interface
          */
-        virtual void set_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> IPv4_Gateway_Address)
-            throw (ProtocolException) = 0;
+        virtual void set_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> IPv4_Gateway_Address) = 0;
             
             
         /**
          *  Add an IPv4 address to the indexed interface
          */
-        virtual void add_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> IPv4_Address, unsigned char netMask)
-            throw (ProtocolException) = 0;
+        virtual void add_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> IPv4_Address, unsigned char netMask) = 0;
 
        /**
          *  Remove and IPv4 address from the indexed interface
          */
-        virtual void delete_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex)
-            throw (ProtocolException) = 0;
+        virtual void delete_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex) = 0;
     };
 
 }

@@ -45,7 +45,7 @@ LightSourceFeatureImpl::~LightSourceFeatureImpl() {
 }
 
 int LightSourceFeatureImpl::getLightSourceCount(const Protocol &protocol,
-            const Bus &bus) throw (FeatureException) {
+            const Bus &bus) {
     /* Note: this gets called frequently to provide bounds checking.  If this
      * gets replaced by a call down to the actual device, then the value should
      * be cached and reused to keep things efficient.

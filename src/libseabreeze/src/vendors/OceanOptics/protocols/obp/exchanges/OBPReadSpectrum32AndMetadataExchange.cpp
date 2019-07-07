@@ -48,8 +48,7 @@ OBPReadSpectrum32AndMetadataExchange::~OBPReadSpectrum32AndMetadataExchange() {
     /* Nothing to do here */
 }
 
-Data *OBPReadSpectrum32AndMetadataExchange::transfer(TransferHelper *helper)
-        throw (ProtocolException) {
+Data *OBPReadSpectrum32AndMetadataExchange::transfer(TransferHelper *helper) {
     Data *xfer;
     byte lswlsb;
     byte lswmsb;

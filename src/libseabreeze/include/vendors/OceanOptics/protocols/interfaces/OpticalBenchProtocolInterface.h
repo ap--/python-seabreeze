@@ -52,20 +52,13 @@ namespace seabreeze {
     public:
         OpticalBenchProtocolInterface(Protocol *protocol);
         virtual ~OpticalBenchProtocolInterface();
-        virtual std::string *readOpticalBenchID(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual std::string *readOpticalBenchSerialNumber(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual unsigned short int readOpticalBenchSlitWidthMicrons(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual unsigned short int readOpticalBenchFiberDiameterMicrons(const Bus &bus)
-                throw (ProtocolException) = 0;
-    	virtual std::string *readOpticalBenchGrating(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual std::string *readOpticalBenchFilter(const Bus &bus)
-                throw (ProtocolException) = 0;
-        virtual std::string *readOpticalBenchCoating(const Bus &bus)
-                throw (ProtocolException) = 0;
+        virtual std::string *readOpticalBenchID(const Bus &bus) = 0;
+        virtual std::string *readOpticalBenchSerialNumber(const Bus &bus) = 0;
+        virtual unsigned short int readOpticalBenchSlitWidthMicrons(const Bus &bus) = 0;
+        virtual unsigned short int readOpticalBenchFiberDiameterMicrons(const Bus &bus) = 0;
+    	virtual std::string *readOpticalBenchGrating(const Bus &bus) = 0;
+        virtual std::string *readOpticalBenchFilter(const Bus &bus) = 0;
+        virtual std::string *readOpticalBenchCoating(const Bus &bus) = 0;
     };
 
 }

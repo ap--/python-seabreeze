@@ -57,7 +57,7 @@ OpticalBenchFeature::~OpticalBenchFeature() {
 #endif
 
 
-unsigned short int OpticalBenchFeature::readOpticalBenchFiberDiameterMicrons(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+unsigned short int OpticalBenchFeature::readOpticalBenchFiberDiameterMicrons(const Protocol &protocol, const Bus &bus) {
 
     OpticalBenchProtocolInterface *opticalBenchPI = NULL;
 	unsigned short int fiberDiameter;
@@ -84,7 +84,7 @@ unsigned short int OpticalBenchFeature::readOpticalBenchFiberDiameterMicrons(con
     }
 }
 
-unsigned short int OpticalBenchFeature::readOpticalBenchSlitWidthMicrons(const Protocol &protocol, const Bus &bus) throw (FeatureException) {
+unsigned short int OpticalBenchFeature::readOpticalBenchSlitWidthMicrons(const Protocol &protocol, const Bus &bus) {
 
     OpticalBenchProtocolInterface *opticalBenchPI = NULL;
 	unsigned short int slitWidth;
@@ -112,7 +112,7 @@ unsigned short int OpticalBenchFeature::readOpticalBenchSlitWidthMicrons(const P
 }
 
 string *OpticalBenchFeature::readOpticalBenchID(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     OpticalBenchProtocolInterface *opticalBenchPI= NULL;
     ProtocolHelper *proto = NULL;
@@ -141,7 +141,7 @@ string *OpticalBenchFeature::readOpticalBenchID(const Protocol &protocol,
 }
 
 string *OpticalBenchFeature::readOpticalBenchSerialNumber(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     OpticalBenchProtocolInterface *opticalBenchPI= NULL;
     ProtocolHelper *proto = NULL;
@@ -170,7 +170,7 @@ string *OpticalBenchFeature::readOpticalBenchSerialNumber(const Protocol &protoc
 }
 
 string *OpticalBenchFeature::readOpticalBenchCoating(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     OpticalBenchProtocolInterface *opticalBenchPI= NULL;
     ProtocolHelper *proto = NULL;
@@ -199,7 +199,7 @@ string *OpticalBenchFeature::readOpticalBenchCoating(const Protocol &protocol,
 }
 
 string *OpticalBenchFeature::readOpticalBenchFilter(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     OpticalBenchProtocolInterface *opticalBenchPI= NULL;
     ProtocolHelper *proto = NULL;
@@ -229,7 +229,7 @@ string *OpticalBenchFeature::readOpticalBenchFilter(const Protocol &protocol,
 
 
 string *OpticalBenchFeature::readOpticalBenchGrating(const Protocol &protocol,
-                const Bus &bus) throw (FeatureException) {
+                const Bus &bus) {
 
     OpticalBenchProtocolInterface *opticalBenchPI= NULL;
     ProtocolHelper *proto = NULL;

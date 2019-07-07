@@ -1,7 +1,19 @@
-# -*- coding: utf-8 -*-
-from setuptools import setup, Extension, find_packages
+"""
+python-seabreeze
+================
+
+python module for OceanOptics spectrometers
+
+Author: Andreas Poehlmann
+Email: andreas@poehlmann.io
+
+"""
 import os
 import platform
+from distutils.sysconfig import customize_compiler
+
+from setuptools import setup, Extension, find_packages
+from setuptools.command.build_ext import build_ext
 
 SEABREEZE_VERSION = "0.6.0"
 
@@ -18,21 +30,33 @@ else:
     ignore_subdirs = {'osx', 'winusb', 'windows'}
 
 # Collect all source files for cseabreeze backend
-srcs = ['src/seabreeze/cseabreeze/wrapper.pyx']
+sources = ['src/seabreeze/cseabreeze/wrapper.pyx']
 for root, subdirs, fns in os.walk('src/libseabreeze/src'):
     subdirs[:] = (d for d in subdirs if d not in ignore_subdirs)
-    for fn in fns:
-        print os.path.join(root, fn)
-    srcs.extend((os.path.join(root, fn) for fn in fns))
+    sources.extend((os.path.join(root, fn) for fn in fns))
 
 # define extension
 libseabreeze = Extension('seabreeze.cseabreeze.wrapper',
                          language='c++',
-                         sources=srcs,
+                         sources=sources,
                          include_dirs=['src/libseabreeze/include'],
                          libraries=libs)
-
 extensions = [libseabreeze]
+
+
+# prevent cpp compiler warning
+# - see: https://stackoverflow.com/a/36293331
+# - see: https://github.com/python/cpython/pull/7476/files
+# noinspection PyPep8Naming
+class sb_build_ext(build_ext):
+    def build_extensions(self):
+        customize_compiler(self.compiler)
+        try:
+            self.compiler.compiler_so.remove("-Wstrict-prototypes")
+        except (AttributeError, ValueError):
+            pass
+        build_ext.build_extensions(self)
+
 
 setup(
     name='seabreeze',
@@ -47,11 +71,12 @@ setup(
         'numpy',
         'pyusb>=1.0'
     ],
+    cmdclass={'build_ext': sb_build_ext},
     packages=find_packages(where='src'),
     package_dir={
         '': 'src'
     },
-    description=('Python interface module for oceanoptics spectrometers. '
+    description=('Python interface module for Ocean Optics spectrometers. '
                  'This software is not associated with Ocean Optics. '
                  'Use it at your own risk.'),
     long_description=open('README.md').read(),

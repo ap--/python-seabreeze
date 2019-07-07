@@ -6,3 +6,5 @@ dist/*
 .DS_Store
 .eggs
 .idea
+venv/*
+docs/build/*

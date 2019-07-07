@@ -1,3 +1,7 @@
-python-seabreeze API documentation
-==================================
+API documentation
+=================
+
+.. _api:
+
+ABC
 

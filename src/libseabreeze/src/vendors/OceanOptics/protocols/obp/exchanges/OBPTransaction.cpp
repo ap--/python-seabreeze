@@ -152,8 +152,8 @@ vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
 				{
 					snprintf(message, sizeof(message), "Expected message type 0x%x, but got %x", messageType, response->getMessageType());
 				}
-				throw(ProtocolException(message));
                 delete response;
+				throw ProtocolException(message);
             }
             /* There may be a legitimate reason to not return a message
              * (e.g. tried to read an unprogrammed value).  Just return

@@ -273,7 +273,7 @@ unsigned char GPIOFeature::getEGPIO_CurrentMode(const Protocol &protocol, const 
 {
 	GPIOProtocolInterface *GPIO_PI = NULL;
 	ProtocolHelper *proto;
-	unsigned char mode;
+	unsigned char mode = 0;
 
 	try {
 		proto = lookupProtocolImpl(protocol);

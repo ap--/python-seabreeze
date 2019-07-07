@@ -60,7 +60,7 @@ I2CMasterFeatureAdapter::~I2CMasterFeatureAdapter()
 
 unsigned char I2CMasterFeatureAdapter::i2cMasterGetNumberOfBuses(int *errorCode)
 {
-	unsigned char numberOfBuses;
+	unsigned char numberOfBuses = 0;
 	try {
 		numberOfBuses = this->feature->i2cMasterGetNumberOfBuses(*this->protocol, *this->bus);
 		SET_ERROR_CODE(ERROR_SUCCESS);

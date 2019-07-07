@@ -60,7 +60,7 @@ IPv4FeatureAdapter::~IPv4FeatureAdapter()
 
 unsigned char IPv4FeatureAdapter::get_IPv4_DHCP_Enable_State(int *errorCode, unsigned char interfaceIndex) 
 {
-	unsigned char enableStatus;
+	unsigned char enableStatus = 0;
     try {
 		enableStatus = this->feature->get_IPv4_DHCP_Enable_State(*this->protocol, *this->bus, interfaceIndex);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -85,7 +85,7 @@ void IPv4FeatureAdapter::set_IPv4_DHCP_Enable_State(int *errorCode, unsigned cha
 
 unsigned char IPv4FeatureAdapter::get_Number_Of_IPv4_Addresses(int *errorCode, unsigned char interfaceIndex)
 {
-	unsigned char numberOfAddresses;
+	unsigned char numberOfAddresses = 0;
 	try {
 		numberOfAddresses = this->feature->get_Number_Of_IPv4_Addresses(*this->protocol, *this->bus, interfaceIndex);
 		SET_ERROR_CODE(ERROR_SUCCESS);

@@ -98,7 +98,7 @@ void MulticastFeatureAdapter::setGroupAddress(int *errorCode, unsigned char inte
 
 unsigned char MulticastFeatureAdapter::getEnableState(int *errorCode, unsigned char interfaceIndex) 
 {
-	unsigned char enableState;
+	unsigned char enableState = 0;
     try {
 		enableState = this->feature->getEnableState(*this->protocol, *this->bus, interfaceIndex);
         SET_ERROR_CODE(ERROR_SUCCESS);

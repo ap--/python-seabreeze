@@ -60,7 +60,7 @@ WifiConfigurationFeatureAdapter::~WifiConfigurationFeatureAdapter()
 
 unsigned char WifiConfigurationFeatureAdapter::getMode(int *errorCode, unsigned char interfaceIndex) 
 {
-	unsigned char mode;
+	unsigned char mode = 0;
     try {
 		mode = this->feature->getMode(*this->protocol, *this->bus, interfaceIndex);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -85,7 +85,7 @@ void WifiConfigurationFeatureAdapter::setMode(int *errorCode, unsigned char inte
 
 unsigned char WifiConfigurationFeatureAdapter::getSecurityType(int *errorCode, unsigned char interfaceIndex) 
 {
-	unsigned char securityType;
+	unsigned char securityType = 0;
     try {
 		securityType = this->feature->getSecurityType(*this->protocol, *this->bus, interfaceIndex);
         SET_ERROR_CODE(ERROR_SUCCESS);

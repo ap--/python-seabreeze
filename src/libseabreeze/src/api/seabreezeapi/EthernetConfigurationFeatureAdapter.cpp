@@ -97,7 +97,7 @@ void EthernetConfigurationFeatureAdapter::set_MAC_Address(int *errorCode, unsign
 
 unsigned char EthernetConfigurationFeatureAdapter::get_GbE_Enable_Status(int *errorCode, unsigned char interfaceIndex) 
 {
-	unsigned char enableStatus;
+	unsigned char enableStatus = 0;
     try {
 		enableStatus = this->feature->get_GbE_Enable_Status(*this->protocol, *this->bus, interfaceIndex);
         SET_ERROR_CODE(ERROR_SUCCESS);

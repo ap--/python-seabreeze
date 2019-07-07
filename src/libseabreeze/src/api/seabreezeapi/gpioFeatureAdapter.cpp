@@ -165,7 +165,7 @@ unsigned char gpioFeatureAdapter::getEGPIO_AvailableModes(int *errorCode, unsign
 
 unsigned char gpioFeatureAdapter::getEGPIO_CurrentMode(int *errorCode, unsigned char pinNumber)
 {
-	unsigned char mode;
+	unsigned char mode = 0;
 	try {
 		mode = this->feature->getEGPIO_CurrentMode(*this->protocol, *this->bus, pinNumber);
 		SET_ERROR_CODE(ERROR_SUCCESS);
@@ -191,7 +191,7 @@ void gpioFeatureAdapter::setEGPIO_Mode(int *errorCode, unsigned char pinNumber, 
 
 unsigned int gpioFeatureAdapter::getEGPIO_OutputVector(int *errorCode)
 {
-	unsigned int outputVector;
+	unsigned int outputVector = 0;
 	try {
 		outputVector = this->feature->getEGPIO_OutputVector(*this->protocol, *this->bus);
 		SET_ERROR_CODE(ERROR_SUCCESS);
@@ -217,7 +217,7 @@ void gpioFeatureAdapter::setEGPIO_OutputVector(int *errorCode, unsigned int outp
 
 float gpioFeatureAdapter::getEGPIO_Value(int *errorCode, unsigned char pinNumber)
 {
-	float value;
+	float value = 0;
 	try {
 		value = this->feature->getEGPIO_Value(*this->protocol, *this->bus, pinNumber);
 		SET_ERROR_CODE(ERROR_SUCCESS);

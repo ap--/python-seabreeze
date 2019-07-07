@@ -90,7 +90,7 @@ static __device_instance_t *__add_device_instance(const char *bus_location,
                                            int vendorID, int productID);
 static void __purge_unmarked_device_instances(int vendorID, int productID);
 static void __close_and_dealloc_usb_interface(__usb_interface_t *usb);
-static int __probe_devices();
+static int __probe_devices(void);
 
 /* This function will iterate over the known devices and attempt to match
  * the given ID.  It might be more efficient for the sake of this search
@@ -229,7 +229,7 @@ static void __close_and_dealloc_usb_interface(__usb_interface_t *usb) {
 // Only reason to call this function is for "side-effects" of
 // calling usb_find_busses() and usb_find_devices()
 // (updates global pointer usb_busses)
-static int  __probe_devices() {
+static int  __probe_devices(void) {
     /* Local Variables */
     int bus_count = 0;
     int device_count = 0;

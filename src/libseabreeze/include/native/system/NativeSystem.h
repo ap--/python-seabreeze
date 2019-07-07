@@ -40,8 +40,8 @@ extern "C" {
 /* Native C prototypes */
 
 void sleepMilliseconds(unsigned int msecs);
-int systemInitialize();
-void systemShutdown();
+int systemInitialize(void);
+void systemShutdown(void);
 
 /* End of C prototypes */
 

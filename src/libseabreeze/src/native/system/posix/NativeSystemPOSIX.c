@@ -61,11 +61,11 @@ void sleepMilliseconds(unsigned int msecs) {
     nanosleep(&ts, NULL);
 }
 
-int systemInitialize() {
+int systemInitialize(void) {
     /* There are no system-wide services that need to be warmed up. */
     return 0;
 }
 
-void systemShutdown() {
+void systemShutdown(void) {
     /* There are no system-wide services to shut down. */
 }

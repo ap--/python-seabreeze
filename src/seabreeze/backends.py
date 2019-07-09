@@ -4,12 +4,15 @@ import warnings
 __all__ = ['use', 'get_backend']
 
 
+_log = logging.getLogger(__name__)
+
+
 def _use_cseabreeze():
     # internal: import the libseabreeze cython wrapper -> cseabreeze
     try:
         import seabreeze.cseabreeze as sbb
     except ImportError as err:
-        logging.warn("seabreeze can't load 'cseabreeze' backend - error: '%s'" % str(err), exc_info=True)
+        _log.warn("seabreeze can't load 'cseabreeze' backend - error: '%s'" % str(err), exc_info=True)
         return None
     else:
         sbb.initialize()
@@ -21,7 +24,7 @@ def _use_pyseabreeze():
     try:
         import seabreeze.pyseabreeze as sbb
     except ImportError as err:
-        logging.warn("seabreeze can't load 'pyseabreeze' backend - error: '%s'" % str(err), exc_info=True)
+        _log.warn("seabreeze can't load 'pyseabreeze' backend - error: '%s'" % str(err), exc_info=True)
         return None
     else:
         sbb.initialize()
@@ -35,7 +38,7 @@ _SeaBreezeConfig = {
         'cseabreeze': _use_cseabreeze,
         'pyseabreeze': _use_pyseabreeze
     },
-    'allow_fallback': False
+    'allow_fallback': True  # WARNING: WILL CHANGE TO FALSE IN FUTURE VERSIONS
 }
 
 
@@ -50,10 +53,11 @@ def use(backend, force=None):
     force : bool, optional, default: False
         raises an ImportError when ``seabreeze.get_backend()`` is called
         and the requested backend can not be imported. force=True should
-        be used in user code to make
+        be used in user code to ensure that the correct backend is being
+        loaded.
     """
     if force is None:
-        warnings.warn("seabreeze.use will default to force=True in future versions", FutureWarning)
+        warnings.warn("use() will default to force=True in future versions", FutureWarning)
         force = False
     if backend not in _SeaBreezeConfig['available_backends']:
         raise ValueError('backend not in: {}'.format(', '.join(_SeaBreezeConfig['available_backends'])))

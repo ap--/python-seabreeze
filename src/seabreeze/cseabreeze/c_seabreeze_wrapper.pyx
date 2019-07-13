@@ -592,6 +592,31 @@ cdef class SeaBreezeEEPROMFeature(SeaBreezeFeature):
             PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def eeprom_read_slot(self, int slot_number):
+        """reads a string out of the device's EEPROM slot and returns the result
+
+        Parameters
+        ----------
+        slot_number : int
+            The number of the slot to read out. Possible values are 0 through 17.
+
+        Returns
+        -------
+        eeprom_data: str
+            the data stored in the eeprom slot
+        """
+        cdef int error_code
+        cdef unsigned char cbuf[_MAXBUFLEN]
+        cdef int bytes_written
+        try:
+            bytes_written = self.sbapi.eepromReadSlot(self.device_id, self.feature_id, &error_code,
+                                                      slot_number, cbuf, _MAXBUFLEN)
+        except ValueError:
+            raise SeaBreezeError("EEProm slot out of bounds.")
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return cbuf[:bytes_written]
+
 
 cdef class SeaBreezeLightSourceFeature(SeaBreezeFeature):
 
@@ -1139,19 +1164,6 @@ def continuous_strobe_set_period_micros(SeaBreezeDevice device not None, long fe
     csb.sbapi_continuous_strobe_set_continuous_strobe_period_micros(device.handle, featureID, &error_code, period_micros)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-
-
-def eeprom_read_slot(SeaBreezeDevice device not None, long featureID, int slot_number):
-    cdef int error_code
-    cdef unsigned char cbuf[_MAXBUFLEN]
-    cdef int bytes_written
-    try:
-        bytes_written = csb.sbapi_eeprom_read_slot(device.handle, featureID, &error_code, slot_number, cbuf, _MAXBUFLEN)
-    except ValueError:
-        raise SeaBreezeError("EEProm slot out of bounds.")
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return cbuf[:bytes_written]
 
 
 def irrad_calibration_read(SeaBreezeDevice device not None, long featureID, float[::1] out):

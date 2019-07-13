@@ -172,7 +172,7 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # EEPROM capabilities
         int getNumberOfEEPROMFeatures(long deviceID, int *errorCode)
         int getEEPROMFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       int eepromReadSlot(long deviceID, long featureID, int *errorCode, int slotNumber, unsigned char *buffer, int bufferLength)
+        int eepromReadSlot(long deviceID, long featureID, int *errorCode, int slotNumber, unsigned char *buffer, int bufferLength)
 
         # Light source capabilities
         int getNumberOfLightSourceFeatures(long deviceID, int *errorCode)

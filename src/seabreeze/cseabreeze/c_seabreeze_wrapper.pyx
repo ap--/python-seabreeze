@@ -276,31 +276,34 @@ cdef class SeaBreezeDevice(object):
         # noinspection PyProtectedMember
         feature_registry = SeaBreezeFeature.get_feature_class_registry()
         for identifier, feature_class in feature_registry.items():
-            feature_ids = feature_class.get_feature_ids_from_device(self.handle)
-            features[identifier] = [feature_class(self.handle, feature_id) for feature_id in feature_ids]
+            feature_ids = feature_class.get_feature_ids_from_device(self)
+            features[identifier] = [feature_class(self, feature_id) for feature_id in feature_ids]
         return features
 
 
 cdef class SeaBreezeFeature(object):
 
-    cdef public long device_id
+    cdef SeaBreezeDevice device
+    cdef long device_id
     cdef public long feature_id
     cdef csb.SeaBreezeAPI *sbapi
 
     identifier = "base_feature"
     required = False
 
-    def __cinit__(self, int device_id, int feature_id):
+    def __cinit__(self, SeaBreezeDevice device, int feature_id):
         self.sbapi = csb.SeaBreezeAPI.getInstance()
 
-    def __init__(self, int device_id, int feature_id):
+    def __init__(self, SeaBreezeDevice device, int feature_id):
         if self.identifier == "base_feature":
             raise SeaBreezeError("Don't instantiate SeaBreezeFeature directly. Use derived feature classes.")
-        self.device_id = device_id
+        self.device = device
+        self.device_id = device.handle
         self.feature_id = feature_id
 
     def __repr__(self):
-        return "<{} id={}>".format(self.__class__.__name__, self.feature_id)
+        return "<{}:{}:{} id={}>".format(self.__class__.__name__,
+                                         self.device.model, self.device.serial_number, self.feature_id)
 
     @classmethod
     def get_feature_class_registry(cls):
@@ -308,7 +311,7 @@ cdef class SeaBreezeFeature(object):
         return {feature_class.identifier: feature_class for feature_class in SeaBreezeFeature.__subclasses__()}
 
     @classmethod
-    def get_feature_ids_from_device(cls, long device_id):
+    def get_feature_ids_from_device(cls, SeaBreezeDevice device):
         return []
 
     @classmethod

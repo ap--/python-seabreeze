@@ -716,6 +716,23 @@ class SeaBreezeLampFeature(SeaBreezeFeature):
         PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def enable_lamp(self, state):
+        """sets the strobe enable on the spectrometer
+
+        Parameters
+        ----------
+        state : bool
+            on or off
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        self.sbapi.lampSetLampEnable(self.device_id, self.feature_id, &error_code, bool(state))
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
 
@@ -1305,12 +1322,6 @@ def tec_set_temperature_setpoint_degrees_C(SeaBreezeDevice device not None, long
 def tec_set_enable(SeaBreezeDevice device not None, long featureID, unsigned char tec_enable):
     cdef int error_code
     csb.sbapi_tec_set_enable(device.handle, featureID, &error_code, tec_enable)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-def lamp_set_lamp_enable(SeaBreezeDevice device not None, long featureID, unsigned char lamp_enable):
-    cdef int error_code
-    csb.sbapi_lamp_set_lamp_enable(device.handle, featureID, &error_code, lamp_enable)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
 

@@ -198,7 +198,7 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Shutter capabilities
         int getNumberOfShutterFeatures(long deviceID, int *errorCode)
         int getShutterFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       void shutterSetShutterOpen(long deviceID, long featureID, int *errorCode, bool opened)
+        void shutterSetShutterOpen(long deviceID, long featureID, int *errorCode, bool opened)
 
         # Nonlinearity coefficient capabilities
         int getNumberOfNonlinearityCoeffsFeatures(long deviceID, int *errorCode)

@@ -787,6 +787,23 @@ class SeaBreezeShutterFeature(SeaBreezeFeature):
         PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def open_shutter(self, state):
+        """sets the shutter state on the device
+
+        Parameters
+        ----------
+        state : bool
+            open or close
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        self.sbapi.shutterSetShutterOpen(self.device_id, self.feature_id, &error_code, bool(state))
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 class SeaBreezeNonlinearityCoeffsFeature(SeaBreezeFeature):
 
@@ -1179,12 +1196,6 @@ def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None
         raise SeaBreezeError(error_code=error_code)
     return indices
 
-
-def shutter_set_shutter_open(SeaBreezeDevice device not None, long featureID, unsigned char opened):
-    cdef int error_code
-    csb.sbapi_shutter_set_shutter_open(device.handle, featureID, &error_code, opened)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
 
 def light_source_get_count(SeaBreezeDevice device not None, long featureID):
     cdef int error_code

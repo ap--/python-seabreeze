@@ -8,8 +8,8 @@ import cython
 import functools
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
-# pythonic version from libseabreeze api/SeaBreezeConstants.h
-cpdef enum Error:
+# from libseabreeze api/SeaBreezeConstants.h
+class ErrorCode:
     SUCCESS = 0
     INVALID_ERROR = 1
     NO_DEVICE = 2
@@ -24,35 +24,49 @@ cpdef enum Error:
     VALUE_NOT_EXPECTED = 11
     INVALID_TRIGGER_MODE = 12
 
+
 # define max length for some strings
-cdef int _MAXBUFLEN = 32
-cdef int _MAXDBUFLEN = 256
+DEF _MAXBUFLEN = 32
+DEF _MAXDBUFLEN = 256
 
 
 class SeaBreezeError(Exception):
 
+    _error_msgs = (
+        "Success",
+        "Error: Undefined error",
+        "Error: No device found",
+        "Error: Could not close device",
+        "Error: Feature not implemented",
+        "Error: No such feature on device",
+        "Error: Data transfer error",
+        "Error: Invalid user buffer provided",
+        "Error: Input was out of bounds",
+        "Error: Spectrometer was saturated",
+        "Error: Value not found",
+        "Error: Value not expected",
+        "Error: Invalid trigger mode"
+    )
+
     def __init__(self, message=None, error_code=None):
-        cdef const char *cmessage
         if error_code is not None:
             if -99999 < error_code < 0:
                 # as defined in libseabreeze api/SeaBreezeAPI.cpp
-                cmessage = "System Error: {:d}".format(error_code)
+                message = "System Error: {:d}".format(error_code)
 
-            elif error_code >= csb.number_error_msgs:
+            elif error_code >= len(self._error_msgs):
                 # not a valid a seabreeze error code
-                cmessage = csb.error_msgs[Error.INVALID_ERROR]
-
+                message = self._error_msgs[ErrorCode.INVALID_ERROR]
             else:
                 # return a seabreeze error message
-                cmessage = csb.error_msgs[error_code]
+                message = self._error_msgs[error_code]
 
-            message = str(cmessage)
         elif message is not None:
             pass
         else:
             message = ""
         # Call the base class constructor with the parameters it needs
-        super(SeaBreezeError, self).__init__(str(message))
+        super(SeaBreezeError, self).__init__(message)
         self.error_code = error_code
 
 
@@ -70,117 +84,40 @@ class SeaBreezeNumFeaturesError(SeaBreezeError):
         super(SeaBreezeNumFeaturesError, self).__init__(message)
 
 
-cdef class SeaBreezeDevice(object):
+cdef class SeaBreezeAPI(object):
 
-    cdef public long handle
-    cdef public str model, serial_number
-    cdef csb.SeaBreezeAPI sbapi
-
-    def __init__(self, handle=-1):
-        self.sbapi = csb.SeaBreezeAPI.getInstance()
-        self.handle = handle
-        if self.is_open:
-            self._get_info()
-        else:
-            self.model = "?"
-            self.serial_number = "?"
-
-    cdef _get_info(self):
-        model = self.get_model()
-        try:
-            self.model = model
-        except TypeError:
-            self.model = model.encode("utf-8")
-        serial_number = self.get_serial_number()
-        try:
-            self.serial_number = serial_number
-        except TypeError:
-            self.serial_number = serial_number.encode("utf-8")
-
-    def __repr__(self):
-        return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial_number)
-
-    def open(self):
-        cdef int error_code
-        cdef int ret
-        ret = self.sbapi.openDevice(self.handle, &error_code)
-        if int(ret) > 0:
-            raise SeaBreezeError(error_code=error_code)
-        self._get_info()
-
-    def close(self):
-        cdef int error_code
-        # always returns 1
-        self.sbapi.closeDevice(self.handle, &error_code)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-
-    @property
-    def is_open(self):
-        try:
-            # this is a hack to figure out if the spectrometer is connected
-            self.get_serial_number()
-        except SeaBreezeError:
-            return False
-        else:
-            return True
-
-    def get_serial_number(self):
-        cdef int error_code
-        cdef int num_serial_number_features
-        num_serial_number_features = self.sbapi.getNumberOfSerialNumberFeatures(self.handle, &error_code)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        if num_serial_number_features != 1:
-            raise SeaBreezeNumFeaturesError("serial number", received_num=num_serial_number_features)
-
-        cdef long feature_id
-        self.sbapi.getSerialNumberFeatures(self.handle, &error_code, &feature_id, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        cdef unsigned char max_length
-        self.sbapi.getSerialNumberMaximumLength(self.handle, feature_id, &error_code)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        cdef char cbuf[_MAXBUFLEN]
-        cdef int bytes_written
-        bytes_written = self.sbapi.getSerialNumber(self.handle, feature_id, &error_code, cbuf, max_length)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        serial = cbuf[:bytes_written]
-        return serial.decode("utf-8").rstrip('\x00')
-
-    def get_model(self):
-        cdef int error_code
-        cdef char cbuf[_MAXBUFLEN]
-        cdef int bytes_written
-        bytes_written = self.sbapi.getDeviceType(self.handle, &error_code, cbuf, _MAXBUFLEN)
-        model = cbuf[:bytes_written]
-        if model == "NONE":
-            raise SeaBreezeError(error_code=error_code)
-        return model.decode("utf-8")
-
-
-class SeaBreezeAPI(object):
-
-    cdef csb.SeaBreezeAPI sbapi
+    cdef csb.SeaBreezeAPI *sbapi
 
     def __init__(self, initialize=True):
-        self.sbapi = None
+        self.sbapi = NULL
         if initialize:
             self.initialize()
 
     def initialize(self):
+        """initialize the api backend
+
+        normally this function does not have to be called directly by the user
+        """
         self.sbapi = csb.SeaBreezeAPI.getInstance()
 
     def shutdown(self):
+        """shutdown the api backend
+
+        normally this function does not have to be called directly by the user
+        """
         csb.SeaBreezeAPI.shutdown()
-        self.sbapi = None
+        self.sbapi = NULL
 
-    cdef list_devices(self):
-        """list_devices returns all available SeaBreezeDevices
+    def list_devices(self):
+        """returns available SeaBreezeDevices
 
-        return a list of all connected oceanoptics devices.
+        list all connected Ocean Optics devices supported
+        by libseabreeze.
+
+        Returns
+        -------
+        devices: list of SeaBreezeDevice
+            connected Spectrometer instances
         """
         # Probe Devices on all Buses
         self.sbapi.probeDevices()
@@ -212,32 +149,207 @@ class SeaBreezeAPI(object):
         return devices
 
 
+cdef class SeaBreezeDevice(object):
+
+    cdef public long handle
+    cdef public str model, serial_number
+    cdef csb.SeaBreezeAPI *sbapi
+
+    def __init__(self, handle=-1):
+        self.sbapi = csb.SeaBreezeAPI.getInstance()
+        self.handle = handle
+        if self.is_open:
+            self._get_info()
+        else:
+            self.model = "?"
+            self.serial_number = "?"
+
+    cdef _get_info(self):
+        """populate model and serial_number attributes (internal)"""
+        model = self.get_model()
+        try:
+            self.model = model
+        except TypeError:
+            self.model = model.encode("utf-8")
+        serial_number = self.get_serial_number()
+        try:
+            self.serial_number = serial_number
+        except TypeError:
+            self.serial_number = serial_number.encode("utf-8")
+
+    def __repr__(self):
+        return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial_number)
+
+    def open(self):
+        """open the spectrometer usb connection
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef int ret
+        ret = self.sbapi.openDevice(self.handle, &error_code)
+        if int(ret) > 0:
+            raise SeaBreezeError(error_code=error_code)
+        self._get_info()
+
+    def close(self):
+        """close the spectrometer usb connection
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        # always returns 1
+        self.sbapi.closeDevice(self.handle, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    @property
+    def is_open(self):
+        """returns if the spectrometer device usb connection is opened
+
+        Returns
+        -------
+        bool
+        """
+        try:
+            # this is a hack to figure out if the spectrometer is connected
+            self.get_serial_number()
+        except SeaBreezeError:
+            return False
+        else:
+            return True
+
+    def get_serial_number(self):
+        """return the serial number string of the spectrometer
+
+        Returns
+        -------
+        serial_number: str
+        """
+        cdef int error_code
+        cdef int num_serial_number_features
+        num_serial_number_features = self.sbapi.getNumberOfSerialNumberFeatures(self.handle, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_serial_number_features != 1:
+            raise SeaBreezeNumFeaturesError("serial number", received_num=num_serial_number_features)
+
+        cdef long feature_id
+        self.sbapi.getSerialNumberFeatures(self.handle, &error_code, &feature_id, 1)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        cdef unsigned char max_length
+        max_length = self.sbapi.getSerialNumberMaximumLength(self.handle, feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        cdef char cbuf[_MAXBUFLEN]
+        cdef int bytes_written
+        bytes_written = self.sbapi.getSerialNumber(self.handle, feature_id, &error_code, cbuf, max_length)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        serial = cbuf[:bytes_written]
+        return serial.decode("utf-8").rstrip('\x00')
+
+    def get_model(self):
+        """return the model string of the spectrometer
+
+        Returns
+        -------
+        model: str
+        """
+        cdef int error_code
+        cdef char cbuf[_MAXBUFLEN]
+        cdef int bytes_written
+        bytes_written = self.sbapi.getDeviceType(self.handle, &error_code, cbuf, _MAXBUFLEN)
+        model = cbuf[:bytes_written]
+        if model == "NONE":
+            raise SeaBreezeError(error_code=error_code)
+        return model.decode("utf-8")
+
+
+    def get_features_of_type(self, SeaBreezeFeature feature_class):
+        cdef int num_features
+        cdef int error_code
+        num_features = feature_class.c_get_num_feature(self.handle, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if feature_class.required:
+                # there must be a spectrometer feature
+                raise SeaBreezeNumFeaturesError(feature_class.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        feature_class.c_get_feature_ids(self.handle, &error_code, feature_ids, num_features)
+        features = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            feature = feature_class(device_id=self.handle, feature_id=feature_id)
+            features.append(feature)
+        PyMem_Free(feature_ids)
+        return features
+
+    def get_raw_usb_access_features(self):
+        return self.get_features_of_type(SeaBreezeRawUSBAccessFeature)
+
+    def get_spectrometer_features(self):
+        return self.get_features_of_type(SeaBreezeSpectrometerFeature)
+
+
+# define function pointer types for features
+ctypedef int (*sbapi_get_num_feature_func)(long device_id, int *error_code)
+ctypedef int (*sbapi_get_feature_ids_func)(long device_id, int *error_code, long *device_ids, unsigned int max_length)
+
+
+cdef class SeaBreezeFeature(object):
+
+    cdef public long device_id
+    cdef public long feature_id
+    cdef csb.SeaBreezeAPI *sbapi
+
+    cdef sbapi_get_num_feature_func c_get_num_feature
+    cdef sbapi_get_feature_ids_func c_get_feature_ids
+
+    identifier = "base_feature"
+    required = False
+
+    def __cinit__(self, int device_id, int feature_id):
+        self.sbapi = csb.SeaBreezeAPI.getInstance()
+
+    def __init__(self, int device_id, int feature_id):
+        if self.identifier == "base_feature":
+            raise SeaBreezeError("Don't instantiate SeaBreezeFeature directly. Use derived feature classes.")
+        self.device_id = device_id
+        self.feature_id = feature_id
+
+
+class SeaBreezeRawUSBAccessFeature(SeaBreezeFeature):
+
+    identifier = "raw_usb_access"
+    required = True
+
+    def __cinit__(self, int device_id, int feature_id):
+        self.c_get_num_feature = self.sbapi.getNumberOfRawUSBBusAccessFeatures
+        self.c_get_feature_ids = self.sbapi.getRawUSBBusAccessFeatures
+
+
+class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
+
+    identifier = "spectrometer"
+    required = True
+
+    def __cinit__(self, int device_id, int feature_id):
+        self.c_get_num_feature = self.sbapi.getNumberOfSpectrometerFeatures
+        self.c_get_feature_ids = self.sbapi.getSpectrometerFeatures
+
+
+
 
 
 '''
-
-
-
-
-def device_get_spectrometer_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_spectrometer_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_spectrometer_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d spectrometer features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
-
 def spectrometer_set_trigger_mode(SeaBreezeDevice device not None, long featureID, int mode):
     cdef int error_code
     with nogil:

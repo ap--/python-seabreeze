@@ -17,16 +17,14 @@ cdef extern from "api/USBEndpointTypes.h":
         kEndpointTypeSecondaryIn,  # could be high speed
         kEndpointTypeSecondaryIn2  # generally high speed
 
-cdef extern:
-    cdef const char *error_msgs[]
-    cdef int number_error_msgs
 
-
-cdef extern from "api/SeaBreezeAPI.h":
+cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
     # noinspection PyPep8Naming,PyShadowingBuiltins
     cdef cppclass SeaBreezeAPI:
 
+        @staticmethod
         SeaBreezeAPI* getInstance() except +
+        @staticmethod
         void shutdown() except +
 
         int probeDevices()
@@ -46,16 +44,16 @@ cdef extern from "api/SeaBreezeAPI.h":
         unsigned char getSerialNumberMaximumLength(long deviceID, long featureID, int *errorCode)
 
 #       # Get raw usb access capabilities
-#       int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode)
-#       int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+        int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode)
+        int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
 #       unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType)
 #       int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
 #       int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
 
 
 #       # Spectrometer capabilities
-#       int getNumberOfSpectrometerFeatures(long id, int *errorCode)
-#       int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+        int getNumberOfSpectrometerFeatures(long id, int *errorCode)
+        int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
 #       void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode)
 #       void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros)
 #       unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode)
@@ -71,8 +69,8 @@ cdef extern from "api/SeaBreezeAPI.h":
 #       int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length)
 
 #       # Pixel binning capabilities
-#       int getNumberOfPixelBinningFeatures(long id, int *errorCode)
-#       int getPixelBinningFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
+        int getNumberOfPixelBinningFeatures(long id, int *errorCode)
+        int getPixelBinningFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
 #       void binningSetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor)
 #       unsigned char binningGetPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode)
 #       void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode, const unsigned char binningFactor)

@@ -690,9 +690,9 @@ class SeaBreezeLightSourceFeature(SeaBreezeFeature):
         return py_feature_ids
 
 
-class SeaBreezeLampFeature(SeaBreezeFeature):
+class SeaBreezeStrobeLampFeature(SeaBreezeFeature):
 
-    identifier = "lamp"
+    identifier = "strobe_lamp"
     required = False
 
     @classmethod

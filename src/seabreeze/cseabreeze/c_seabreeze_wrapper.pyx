@@ -4,12 +4,10 @@ Author: Andreas Poehlmann
 
 """
 cimport c_seabreeze as csb
-import cython
-import functools
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
 # from libseabreeze api/SeaBreezeConstants.h
-class ErrorCode:
+class ErrorCode(object):
     SUCCESS = 0
     INVALID_ERROR = 1
     NO_DEVICE = 2
@@ -155,7 +153,9 @@ cdef class SeaBreezeDevice(object):
     cdef public str model, serial_number
     cdef csb.SeaBreezeAPI *sbapi
 
-    def __init__(self, handle=-1):
+    def __init__(self, handle=None):
+        if handle is None:
+            raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
         self.sbapi = csb.SeaBreezeAPI.getInstance()
         self.handle = handle
         if self.is_open:
@@ -270,38 +270,15 @@ cdef class SeaBreezeDevice(object):
             raise SeaBreezeError(error_code=error_code)
         return model.decode("utf-8")
 
-
-    def get_features_of_type(self, SeaBreezeFeature feature_class):
-        cdef int num_features
-        cdef int error_code
-        num_features = feature_class.c_get_num_feature(self.handle, &error_code)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        if num_features == 0:
-            if feature_class.required:
-                # there must be a spectrometer feature
-                raise SeaBreezeNumFeaturesError(feature_class.identifier, num_features)
-            return []
-        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-        feature_class.c_get_feature_ids(self.handle, &error_code, feature_ids, num_features)
-        features = []
-        for i in range(num_features):
-            feature_id = feature_ids[i]
-            feature = feature_class(device_id=self.handle, feature_id=feature_id)
-            features.append(feature)
-        PyMem_Free(feature_ids)
+    @property
+    def features(self):
+        features = {}
+        # noinspection PyProtectedMember
+        feature_registry = SeaBreezeFeature.get_feature_class_registry()
+        for identifier, feature_class in feature_registry.items():
+            feature_ids = feature_class.get_feature_ids_from_device(device_id=self.handle)
+            features[identifier] = [feature_class(self.handle, feature_id) for feature_id in feature_ids]
         return features
-
-    def get_raw_usb_access_features(self):
-        return self.get_features_of_type(SeaBreezeRawUSBAccessFeature)
-
-    def get_spectrometer_features(self):
-        return self.get_features_of_type(SeaBreezeSpectrometerFeature)
-
-
-# define function pointer types for features
-ctypedef int (*sbapi_get_num_feature_func)(long device_id, int *error_code)
-ctypedef int (*sbapi_get_feature_ids_func)(long device_id, int *error_code, long *device_ids, unsigned int max_length)
 
 
 cdef class SeaBreezeFeature(object):
@@ -309,9 +286,6 @@ cdef class SeaBreezeFeature(object):
     cdef public long device_id
     cdef public long feature_id
     cdef csb.SeaBreezeAPI *sbapi
-
-    cdef sbapi_get_num_feature_func c_get_num_feature
-    cdef sbapi_get_feature_ids_func c_get_feature_ids
 
     identifier = "base_feature"
     required = False
@@ -325,28 +299,773 @@ cdef class SeaBreezeFeature(object):
         self.device_id = device_id
         self.feature_id = feature_id
 
+    def __repr__(self):
+        return "<{} id={}>".format(self.__class__.__name__, self.feature_id)
 
-class SeaBreezeRawUSBAccessFeature(SeaBreezeFeature):
+    @classmethod
+    def get_feature_class_registry(cls):
+        # noinspection PyUnresolvedReferences
+        return {feature_class.identifier: feature_class for feature_class in SeaBreezeFeature.__subclasses__()}
 
-    identifier = "raw_usb_access"
-    required = True
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        return []
 
-    def __cinit__(self, int device_id, int feature_id):
-        self.c_get_num_feature = self.sbapi.getNumberOfRawUSBBusAccessFeatures
-        self.c_get_feature_ids = self.sbapi.getRawUSBBusAccessFeatures
+
+class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
+
+    identifier = "raw_usb_bus_access"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfRawUSBBusAccessFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getRawUSBBusAccessFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
 
 
 class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 
     identifier = "spectrometer"
-    required = True
+    required = False
 
-    def __cinit__(self, int device_id, int feature_id):
-        self.c_get_num_feature = self.sbapi.getNumberOfSpectrometerFeatures
-        self.c_get_feature_ids = self.sbapi.getSpectrometerFeatures
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfSpectrometerFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getSpectrometerFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
 
 
+class SeaBreezePixelBinningFeature(SeaBreezeFeature):
 
+    identifier = "pixel_binning"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfPixelBinningFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getPixelBinningFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
+
+    identifier = "thermo_electric"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfThermoElectricFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getThermoElectricFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeIrradCalFeature(SeaBreezeFeature):
+
+    identifier = "irrad_cal"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfIrradCalFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getIrradCalFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
+
+    identifier = "ethernet_configuration"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfEthernetConfigurationFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getEthernetConfigurationFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeMulticastFeature(SeaBreezeFeature):
+
+    identifier = "multicast"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfMulticastFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getMulticastFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeIPv4Feature(SeaBreezeFeature):
+
+    identifier = "ipv4"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfIPv4Features(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getIPv4Features(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
+
+    identifier = "dhcp_server"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfDHCPServerFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getDHCPServerFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
+
+    identifier = "network_configuration"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfNetworkConfigurationFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getNetworkConfigurationFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
+
+    identifier = "wifi_configuration"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfWifiConfigurationFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getWifiConfigurationFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeGPIOFeature(SeaBreezeFeature):
+
+    identifier = "gpio"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfGPIOFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getGPIOFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeEEPROMFeature(SeaBreezeFeature):
+
+    identifier = "eeprom"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfEEPROMFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getEEPROMFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeLightSourceFeature(SeaBreezeFeature):
+
+    identifier = "light_source"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfLightSourceFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getLightSourceFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeLampFeature(SeaBreezeFeature):
+
+    identifier = "lamp"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfLampFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getLampFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
+
+    identifier = "continuous_strobe"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfContinuousStrobeFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getContinuousStrobeFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeShutterFeature(SeaBreezeFeature):
+
+    identifier = "shutter"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfShutterFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getShutterFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeNonlinearityCoeffsFeature(SeaBreezeFeature):
+
+    identifier = "nonlinearity_coeffs"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfNonlinearityCoeffsFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getNonlinearityCoeffsFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeTemperatureFeature(SeaBreezeFeature):
+
+    identifier = "temperature"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfTemperatureFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getTemperatureFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
+
+    identifier = "introspection"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfIntrospectionFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getIntrospectionFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
+
+    identifier = "spectrum_processing"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfSpectrumProcessingFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getSpectrumProcessingFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeRevisionFeature(SeaBreezeFeature):
+
+    identifier = "revision"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfRevisionFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getRevisionFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
+
+    identifier = "optical_bench"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfOpticalBenchFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getOpticalBenchFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeStrayLightCoeffsFeature(SeaBreezeFeature):
+
+    identifier = "stray_light_coeffs"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfStrayLightCoeffsFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getStrayLightCoeffsFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeDataBufferFeature(SeaBreezeFeature):
+
+    identifier = "data_buffer"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfDataBufferFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getDataBufferFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeFastBufferFeature(SeaBreezeFeature):
+
+    identifier = "fast_buffer"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfFastBufferFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getFastBufferFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
+
+    identifier = "acquisition_delay"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfAcquisitionDelayFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getAcquisitionDelayFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
+
+
+class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
+
+    identifier = "i2c_master"
+    required = False
+
+    @classmethod
+    def get_feature_ids_from_device(cls, long device_id):
+        cdef int num_features
+        cdef int error_code
+        cdef csb.SeaBreezeAPI* sbapi = csb.SeaBreezeAPI.getInstance()
+        num_features = sbapi.getNumberOfI2CMasterFeatures(device_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_features == 0:
+            if cls.required:
+                raise SeaBreezeNumFeaturesError(cls.identifier, num_features)
+            return []
+        feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
+        sbapi.getI2CMasterFeatures(device_id, &error_code, feature_ids, num_features)
+        py_feature_ids = []
+        for i in range(num_features):
+            feature_id = feature_ids[i]
+            py_feature_ids.append(feature_id)
+        PyMem_Free(feature_ids)
+        return py_feature_ids
 
 
 '''
@@ -444,50 +1163,11 @@ def spectrometer_get_electric_dark_pixel_indices(SeaBreezeDevice device not None
     return indices
 
 
-def device_get_shutter_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_shutter_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_shutter_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d shutter features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
-
 def shutter_set_shutter_open(SeaBreezeDevice device not None, long featureID, unsigned char opened):
     cdef int error_code
     csb.sbapi_shutter_set_shutter_open(device.handle, featureID, &error_code, opened)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-
-
-def device_get_light_source_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_light_source_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_light_source_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d light source features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
 
 def light_source_get_count(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
@@ -541,26 +1221,6 @@ def light_source_set_intensity(SeaBreezeDevice device not None, long featureID, 
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
 
-
-def device_get_continuous_strobe_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_continuous_strobe_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_continuous_strobe_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d continuous strobe features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
-
 def continuous_strobe_set_enable(SeaBreezeDevice device not None, long featureID, unsigned char strobe_enable):
     cdef int error_code
     csb.sbapi_continuous_strobe_set_continuous_strobe_enable(device.handle, featureID, &error_code, strobe_enable)
@@ -574,25 +1234,6 @@ def continuous_strobe_set_period_micros(SeaBreezeDevice device not None, long fe
         raise SeaBreezeError(error_code=error_code)
 
 
-def device_get_eeprom_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_eeprom_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_eeprom_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d eeprom features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
-
 def eeprom_read_slot(SeaBreezeDevice device not None, long featureID, int slot_number):
     cdef int error_code
     cdef unsigned char cbuf[_MAXBUFLEN]
@@ -605,25 +1246,6 @@ def eeprom_read_slot(SeaBreezeDevice device not None, long featureID, int slot_n
         raise SeaBreezeError(error_code=error_code)
     return cbuf[:bytes_written]
 
-
-def device_get_irrad_calibration_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_irrad_cal_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_irrad_cal_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d irrad cal features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
 
 def irrad_calibration_read(SeaBreezeDevice device not None, long featureID, float[::1] out):
     cdef int error_code
@@ -666,25 +1288,6 @@ def irrad_calibration_write_collection_area(SeaBreezeDevice device not None, lon
         raise SeaBreezeError(error_code=error_code)
 
 
-def device_get_tec_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_thermo_electric_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_thermo_electric_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d tec features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
-
 def tec_read_temperature_degrees_C(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef double temperature
@@ -705,51 +1308,11 @@ def tec_set_enable(SeaBreezeDevice device not None, long featureID, unsigned cha
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
 
-
-def device_get_lamp_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_lamp_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_lamp_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d lamp features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
-
 def lamp_set_lamp_enable(SeaBreezeDevice device not None, long featureID, unsigned char lamp_enable):
     cdef int error_code
     csb.sbapi_lamp_set_lamp_enable(device.handle, featureID, &error_code, lamp_enable)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-
-
-def device_get_nonlinearity_coeffs_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_nonlinearity_coeffs_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_nonlinearity_coeffs_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d nonlinearity coeffs features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
 
 def nonlinearity_coeffs_get(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
@@ -762,25 +1325,6 @@ def nonlinearity_coeffs_get(SeaBreezeDevice device not None, long featureID):
     return coeffs
 
 
-def device_get_stray_light_coeffs_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_stray_light_coeffs_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_stray_light_coeffs_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:  # N_specs > 1
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d stray light coeffs features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
-
 def stray_light_coeffs_get(SeaBreezeDevice device not None, long featureID):
     cdef int error_code
     cdef int values_written
@@ -790,26 +1334,6 @@ def stray_light_coeffs_get(SeaBreezeDevice device not None, long featureID):
         raise SeaBreezeError(error_code=error_code)
     coeffs = [float(ccoeffs[i]) for i in range(values_written)]
     return coeffs
-
-
-def device_get_spectrum_processing_feature_id(SeaBreezeDevice device not None):
-    cdef int N
-    cdef int error_code
-    cdef long featureID
-    N = csb.sbapi_get_number_of_spectrum_processing_features(device.handle, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    if N == 0:
-        return []
-    elif N == 1:
-        csb.sbapi_get_spectrum_processing_features(device.handle, &error_code, &featureID, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        return [featureID]
-    else:
-        raise SeaBreezeError("This should not have happened. Apparently this device has "
-                "%d spectrum_processing features. The code expects it to have 0 or 1. "
-                "Please file a bug report including a description of your device." % N)
 
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
     cdef int error_code
@@ -844,3 +1368,5 @@ def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, lo
     return scans_to_average
     
 '''
+
+

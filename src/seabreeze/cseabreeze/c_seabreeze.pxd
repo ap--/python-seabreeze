@@ -8,6 +8,7 @@
 # seabreeze source: https://github.com/ap--/libseabreeze/tree/libseabreeze-3.0.11.11
 #
 #
+from libcpp cimport bool
 
 cdef extern from "api/USBEndpointTypes.h":
     cpdef enum usbEndpointType:

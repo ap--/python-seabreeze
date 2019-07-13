@@ -203,7 +203,7 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Nonlinearity coefficient capabilities
         int getNumberOfNonlinearityCoeffsFeatures(long deviceID, int *errorCode)
         int getNonlinearityCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       int nonlinearityCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
+        int nonlinearityCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
 
         # Temperature capabilities
         int getNumberOfTemperatureFeatures(long deviceID, int *errorCode)

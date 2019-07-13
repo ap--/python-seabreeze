@@ -831,6 +831,24 @@ class SeaBreezeNonlinearityCoeffsFeature(SeaBreezeFeature):
         PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def get_nonlinearity_coefficients(self):
+        """reads out nonlinearity coefficients from the device's internal memory
+
+        Returns
+        -------
+        nonlinearity_coefficients: list of float
+            nonlinearity coefficients
+        """
+        cdef int error_code
+        cdef int values_written
+        cdef double[_MAXBUFLEN] ccoeffs
+        values_written = self.sbapi.nonlinearityCoeffsGet(self.device_id, self.feature_id, &error_code,
+                                                          &ccoeffs[0], _MAXBUFLEN)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        coeffs = [float(ccoeffs[i]) for i in range(values_written)]
+        return coeffs
+
 
 class SeaBreezeTemperatureFeature(SeaBreezeFeature):
 
@@ -1353,17 +1371,6 @@ def tec_set_enable(SeaBreezeDevice device not None, long featureID, unsigned cha
     csb.sbapi_tec_set_enable(device.handle, featureID, &error_code, tec_enable)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
-
-def nonlinearity_coeffs_get(SeaBreezeDevice device not None, long featureID):
-    cdef int error_code
-    cdef int values_written
-    cdef double[_MAXBUFLEN] ccoeffs
-    values_written = csb.sbapi_nonlinearity_coeffs_get(device.handle, featureID, &error_code, &ccoeffs[0], _MAXBUFLEN)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    coeffs = [float(ccoeffs[i]) for i in range(values_written)]
-    return coeffs
-
 
 
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):

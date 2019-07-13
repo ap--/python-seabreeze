@@ -993,6 +993,24 @@ class SeaBreezeStrayLightCoeffsFeature(SeaBreezeFeature):
         PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def get_stray_light_coefficients(self):
+        """reads out stray light coefficients from the device's internal memory
+
+        Returns
+        -------
+        stray_light_coefficients: list of float
+            the stray light coefficients stored on the device
+        """
+        cdef int error_code
+        cdef int values_written
+        cdef double[_MAXDBUFLEN] ccoeffs
+        values_written = self.sbapi.strayLightCoeffsGet(self.device_id, self.feature_id, &error_code,
+                                                        &ccoeffs[0], _MAXDBUFLEN)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        coeffs = [float(ccoeffs[i]) for i in range(values_written)]
+        return coeffs
+
 
 class SeaBreezeDataBufferFeature(SeaBreezeFeature):
 
@@ -1347,15 +1365,6 @@ def nonlinearity_coeffs_get(SeaBreezeDevice device not None, long featureID):
     return coeffs
 
 
-def stray_light_coeffs_get(SeaBreezeDevice device not None, long featureID):
-    cdef int error_code
-    cdef int values_written
-    cdef double[_MAXDBUFLEN] ccoeffs
-    values_written = csb.sbapi_stray_light_coeffs_get(device.handle, featureID, &error_code, &ccoeffs[0], _MAXDBUFLEN)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    coeffs = [float(ccoeffs[i]) for i in range(values_written)]
-    return coeffs
 
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
     cdef int error_code

@@ -249,7 +249,7 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Stray light coefficient capabilities
         int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode)
         int getStrayLightCoeffsFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       int strayLightCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
+        int strayLightCoeffsGet(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
 
         # Data buffer capabilities
         int getNumberOfDataBufferFeatures(long deviceID, int *errorCode)

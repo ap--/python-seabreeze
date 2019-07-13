@@ -595,13 +595,15 @@ cdef class SeaBreezeEEPROMFeature(SeaBreezeFeature):
             PyMem_Free(feature_ids)
         return py_feature_ids
 
-    def eeprom_read_slot(self, int slot_number):
+    def eeprom_read_slot(self, int slot_number, bool strip_zero_bytes=False):
         """reads a string out of the device's EEPROM slot and returns the result
 
         Parameters
         ----------
         slot_number : int
             The number of the slot to read out. Possible values are 0 through 17.
+        strip_zero_bytes : bool
+            strip \x00 bytes from output (default False)
 
         Returns
         -------
@@ -618,6 +620,8 @@ cdef class SeaBreezeEEPROMFeature(SeaBreezeFeature):
             raise SeaBreezeError("EEProm slot out of bounds.")
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
+        if strip_zero_bytes:
+            return cbuf[:bytes_written].strip('\x00')
         return cbuf[:bytes_written]
 
 

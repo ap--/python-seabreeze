@@ -68,8 +68,11 @@ bool USB::open() {
         }
         return true;
     }
-    else
-    	printf("Could not open device with ID %ld. error=%d\n", deviceID, error);
+    else {
+        if(true == this->verbose) {
+            printf("Could not open device with ID %ld. error=%d\n", deviceID, error);
+        }
+    }
 
     if(true == this->verbose) {
         fprintf(stderr, "Warning: failed to open device with ID %ld, error=%d\n",

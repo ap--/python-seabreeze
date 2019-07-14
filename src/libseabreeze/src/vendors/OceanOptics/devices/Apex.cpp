@@ -81,6 +81,7 @@ Apex::Apex() {
 
     this->features.push_back(new NonlinearityEEPROMSlotFeature());
     this->features.push_back(new StrayLightEEPROMSlotFeature());
+    // TODO: Add RawUSBAccess feature
 }
 
 Apex::~Apex() {

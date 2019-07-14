@@ -300,6 +300,14 @@ cdef class SeaBreezeDevice(object):
             features[identifier] = [feature_class(self, feature_id) for feature_id in feature_ids]
         return features
 
+    @property
+    def f(self):
+        class FeatureAccessHandler(object):
+            def __init__(self, features):
+                for identifier, features in features.items():
+                    setattr(self, identifier, features[0] if features else None)
+        return FeatureAccessHandler(self.features)
+
 
 cdef class SeaBreezeFeature(object):
 

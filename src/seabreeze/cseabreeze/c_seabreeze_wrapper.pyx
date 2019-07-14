@@ -1130,6 +1130,144 @@ cdef class SeaBreezeLightSourceFeature(SeaBreezeFeature):
             PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def get_count(self):
+        """returns the total number of light sources available
+
+        This function gets the number of light sources that are represented by
+        the given featureID.  Such light sources could be individual LEDs,
+        light bulbs, lasers, etc.  Each of these light sources may have different
+        capabilities, such as programmable intensities and enables, which should
+        be queried before they are used.
+
+        Returns
+        -------
+        number_of_light_sources: int
+        """
+        cdef int error_code
+        cdef int ls_count
+        ls_count = self.sbapi.lightSourceGetCount(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(ls_count)
+
+    def has_enable(self, int light_source_index):
+        """returns if light source can be enabled
+
+        Queries whether the indicated light source within the given feature
+        instance has a usable enable/disable control.
+
+        Parameters
+        ----------
+        light_source_index : int
+
+        Returns
+        -------
+        has_enable: bool
+        """
+        cdef int error_code
+        cdef bool_t has_enable
+        has_enable = self.sbapi.lightSourceHasEnable(self.device_id, self.feature_id, &error_code, light_source_index)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(has_enable)
+
+    def is_enabled(self, int light_source_index):
+        """returns if light source is enabled
+
+        Parameters
+        ----------
+        light_source_index : int
+
+        Returns
+        -------
+        is_enabled: bool
+        """
+        cdef int error_code
+        cdef bool_t is_enable
+        is_enabled = self.sbapi.lightSourceIsEnabled(self.device_id, self.feature_id, &error_code, light_source_index)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(is_enabled)
+
+    def set_enable(self, int light_source_index, bool_t enable):
+        """enable or disable the light source
+
+        Attempts to enable or disable the indicated light source. Not all light
+        sources have an enable/disable control, and this capability can be queried
+        with has_enable(). Note that an enabled light source should emit light
+        according to its last (or default) intensity setting which might be the
+        minimum; in this case, the light source might appear to remain off.
+
+        Parameters
+        ----------
+        light_source_index : int
+        enable: bool
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        self.sbapi.lightSourceSetEnable(self.device_id, self.feature_id, &error_code, light_source_index, enable)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    def has_variable_intensity(self, int light_source_index):
+        """returns if light source has variable intensity
+
+        Parameters
+        ----------
+        light_source_index : int
+
+        Returns
+        -------
+        is_enabled: bool
+        """
+        cdef int error_code
+        cdef bool_t has_vi
+        has_vi = self.sbapi.lightSourceHasVariableIntensity(self.device_id, self.feature_id, &error_code,
+                                                            light_source_index)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(has_vi)
+
+    def get_intensity(self, int light_source_index):
+        """queries the normalized intensity level of the indicated light source
+
+        Parameters
+        ----------
+        light_source_index : int
+
+        Returns
+        -------
+        intensity: float
+            The intensity is normalized over the range [0, 1], with 0 as the minimum and 1 as the maximum.
+        """
+        cdef int error_code
+        cdef double intensity
+        intensity = self.sbapi.lightSourceGetIntensity(self.device_id, self.feature_id, &error_code, light_source_index)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return float(intensity)
+
+    def set_intensity(self, int light_source_index, double intensity):
+        """set the normalized intensity level of the indicated light source
+
+        Parameters
+        ----------
+        light_source_index : int
+        intensity: float
+            The intensity is normalized over the range [0, 1], with 0 as the minimum and 1 as the maximum.
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        self.sbapi.lightSourceSetIntensity(self.device_id, self.feature_id, &error_code, light_source_index, intensity)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeStrobeLampFeature(SeaBreezeFeature):
 
@@ -1499,58 +1637,6 @@ cdef class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
 
 
 '''
-
-def light_source_get_count(SeaBreezeDevice device not None, long featureID):
-    cdef int error_code
-    cdef int ls_count
-    ls_count = csb.sbapi_light_source_get_count(device.handle, featureID, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return int(ls_count)
-
-def light_source_has_enable(SeaBreezeDevice device not None, long featureID, int light_source_index):
-    cdef int error_code
-    cdef unsigned char has_enable
-    has_enable = csb.sbapi_light_source_has_enable(device.handle, featureID, &error_code, light_source_index)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return bool(has_enable)
-
-def light_source_is_enabled(SeaBreezeDevice device not None, long featureID, int light_source_index):
-    cdef int error_code
-    cdef unsigned char is_enabled
-    is_enabled = csb.sbapi_light_source_is_enabled(device.handle, featureID, &error_code, light_source_index)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return bool(is_enabled)
-
-def light_source_set_enable(SeaBreezeDevice device not None, long featureID, int light_source_index, unsigned char enable):
-    cdef int error_code
-    csb.sbapi_light_source_set_enable(device.handle, featureID, &error_code, light_source_index, enable)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-def light_source_has_variable_intensity(SeaBreezeDevice device not None, long featureID, int light_source_index):
-    cdef int error_code
-    cdef unsigned char has_vi
-    has_vi = csb.sbapi_light_source_has_variable_intensity(device.handle, featureID, &error_code, light_source_index)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return bool(has_vi)
-
-def light_source_get_intensity(SeaBreezeDevice device not None, long featureID, int light_source_index):
-    cdef int error_code
-    cdef double intensity
-    intensity = csb.sbapi_light_source_get_intensity(device.handle, featureID, &error_code, light_source_index)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return float(intensity)
-
-def light_source_set_intensity(SeaBreezeDevice device not None, long featureID, int light_source_index, double intensity):
-    cdef int error_code
-    csb.sbapi_light_source_set_intensity(device.handle, featureID, &error_code, light_source_index, intensity)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
 
 def continuous_strobe_set_enable(SeaBreezeDevice device not None, long featureID, unsigned char strobe_enable):
     cdef int error_code

@@ -177,13 +177,13 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Light source capabilities
         int getNumberOfLightSourceFeatures(long deviceID, int *errorCode)
         int getLightSourceFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       int lightSourceGetCount(long deviceID, long featureID, int *errorCode)
-#       bool lightSourceHasEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
-#       bool lightSourceIsEnabled(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
-#       void lightSourceSetEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex, bool enable)
-#       bool lightSourceHasVariableIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
-#       double lightSourceGetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
-#       void lightSourceSetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex, double intensity)
+        int lightSourceGetCount(long deviceID, long featureID, int *errorCode)
+        bool lightSourceHasEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
+        bool lightSourceIsEnabled(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
+        void lightSourceSetEnable(long deviceID, long featureID, int *errorCode, int lightSourceIndex, bool enable)
+        bool lightSourceHasVariableIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
+        double lightSourceGetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex)
+        void lightSourceSetIntensity(long deviceID, long featureID, int *errorCode, int lightSourceIndex, double intensity)
 
         # Lamp capabilities
         int getNumberOfLampFeatures(long deviceID, int *errorCode)

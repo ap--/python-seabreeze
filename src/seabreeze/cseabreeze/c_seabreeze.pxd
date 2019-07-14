@@ -47,27 +47,27 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Get raw usb access capabilities
         int getNumberOfRawUSBBusAccessFeatures(long deviceID, int *errorCode)
         int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType)
-#       int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
-#       int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
+        unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType)
+        int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
+        int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
 
 
         # Spectrometer capabilities
         int getNumberOfSpectrometerFeatures(long id, int *errorCode)
         int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode)
-#       void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros)
-#       unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode)
-#       unsigned long spectrometerGetMaximumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode)
-#       double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode)
-#       int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
-#       int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength)
-#       int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *dataBuffer, int dataMaxLength, unsigned int numberOfSampleToRetrieve) # currently 15 max
-#       int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
-#       int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength)
-#       int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length)
-#       int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode)
-#       int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length)
+        void spectrometerSetTriggerMode(long deviceID, long spectrometerFeatureID, int *errorCode, int mode) nogil
+        void spectrometerSetIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned long integrationTimeMicros) nogil
+        unsigned long spectrometerGetMinimumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode)
+        unsigned long spectrometerGetMaximumIntegrationTimeMicros(long deviceID, long spectrometerFeatureID, int *errorCode)
+        double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode)
+        # int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
+        # int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength)
+        # int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *dataBuffer, int dataMaxLength, unsigned int numberOfSampleToRetrieve) # currently 15 max
+        int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
+        int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength)
+        int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length) nogil
+        int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode)
+        int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length)
 
         # Pixel binning capabilities
         int getNumberOfPixelBinningFeatures(long id, int *errorCode)

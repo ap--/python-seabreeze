@@ -111,6 +111,20 @@ cdef class SeaBreezeAPI(object):
         csb.SeaBreezeAPI.shutdown()
         self.sbapi = NULL
 
+    def _list_device_ids(self):
+        cdef int num_devices
+        cdef long* device_ids
+        cdef int found_devices
+        self.sbapi.probeDevices()
+        num_devices = self.sbapi.getNumberOfDeviceIDs()
+        device_ids = <long*> PyMem_Malloc(num_devices * sizeof(long))
+        found_devices = self.sbapi.getDeviceIDs(device_ids, num_devices)
+        devices = []
+        for i in range(found_devices):
+            devices.append(int(device_ids[i]))
+        PyMem_Free(device_ids)
+        return devices
+
     def list_devices(self):
         """returns available SeaBreezeDevices
 
@@ -123,32 +137,25 @@ cdef class SeaBreezeAPI(object):
             connected Spectrometer instances
         """
         # Probe Devices on all Buses
-        self.sbapi.probeDevices()
-
-        cdef int num_devices
-        cdef long* device_ids
-        num_devices = self.sbapi.getNumberOfDeviceIDs()
-        device_ids = <long*> PyMem_Malloc(num_devices * sizeof(long))
-
-        self.sbapi.getDeviceIDs(device_ids, num_devices)
-
+        device_ids = self._list_device_ids()
         devices = []
-
-        for i in range(num_devices):
-            handle = device_ids[i]
+        for handle in device_ids:
             dev = SeaBreezeDevice(handle)
             if dev.is_open:
                 was_open_before = True
             else:
                 was_open_before = False
-                dev.open()
+                try:
+                    dev.open()
+                except SeaBreezeError as err:
+                    if err.error_code == ErrorCode.NO_DEVICE:
+                        # device used by another thread?
+                        continue
             model = dev.model
             serial = dev.serial_number
             if not was_open_before:
                 dev.close()
             devices.append(dev)
-
-        PyMem_Free(device_ids)
         return devices
 
 

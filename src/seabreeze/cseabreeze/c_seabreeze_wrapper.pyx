@@ -1507,6 +1507,58 @@ cdef class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
             PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def get_boxcar_width(self):
+        cdef unsigned char boxcar_width
+        cdef int error_code
+        boxcar_width = self.sbapi.spectrumProcessingBoxcarWidthGet(self.device_id, self.feature_id, &error_code)
+        if boxcar_width < 0 or error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(boxcar_width)
+
+    def set_boxcar_width(self, boxcar_width):
+        """
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char c_boxcar_width
+        c_boxcar_width = int(boxcar_width)
+        self.sbapi.spectrumProcessingBoxcarWidthSet(self.device_id, self.feature_id, &error_code, c_boxcar_width)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    boxcar_width = property(get_boxcar_width, set_boxcar_width)
+
+    def get_scans_to_average(self):
+        cdef unsigned short int scans_to_average
+        cdef int error_code
+        scans_to_average = self.sbapi.spectrumProcessingScansToAverageGet(self.device_id, self.feature_id, &error_code)
+        if scans_to_average < 1 or error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(scans_to_average)
+
+    def set_scans_to_average(self, scans_to_average):
+        """
+
+        Parameters
+        ----------
+        scans_to_average : int
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned short int c_scans_to_average
+        c_scans_to_average = int(scans_to_average)
+        self.sbapi.spectrumProcessingScansToAverageSet(self.device_id, self.feature_id, &error_code, c_scans_to_average)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    scans_to_average = property(get_scans_to_average, set_scans_to_average)
+
 
 cdef class SeaBreezeRevisionFeature(SeaBreezeFeature):
 
@@ -1671,42 +1723,3 @@ cdef class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
             py_feature_ids = [feature_ids[i] for i in range(num_features)]
             PyMem_Free(feature_ids)
         return py_feature_ids
-
-
-
-
-'''
-
-def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
-    cdef int error_code
-    with nogil:
-        csb.sbapi_spectrum_processing_boxcar_width_set(device.handle, featureID, &error_code, boxcar_width)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-def spectrum_processing_set_scans_to_average(SeaBreezeDevice device not None, long featureID, unsigned short int scans_to_average):
-    cdef int error_code
-    with nogil:
-        csb.sbapi_spectrum_processing_scans_to_average_set(device.handle, featureID, &error_code, scans_to_average)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-def spectrum_processing_get_boxcar_width(SeaBreezeDevice device not None, long featureID):
-    cdef unsigned char boxcar_width
-    cdef int error_code
-    with nogil:
-        boxcar_width = csb.sbapi_spectrum_processing_boxcar_width_get(device.handle, featureID, &error_code)
-    if boxcar_width < 0:
-        raise SeaBreezeError(error_code=error_code)
-    return boxcar_width
-
-def spectrum_processing_get_scans_to_average(SeaBreezeDevice device not None, long featureID):
-    cdef unsigned short int scans_to_average
-    cdef int error_code
-    with nogil:
-        scans_to_average = csb.sbapi_spectrum_processing_scans_to_average_get(device.handle, featureID, &error_code)
-    if scans_to_average < 1:
-        raise SeaBreezeError(error_code=error_code)
-    return scans_to_average
-    
-'''

@@ -225,10 +225,10 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Spectrum processing capabilities
         int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode)
         int getSpectrumProcessingFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode)
-#       unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode)
-#       void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth)
-#       void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage)
+        unsigned char spectrumProcessingBoxcarWidthGet(long deviceID, long featureID, int *errorCode)
+        unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode)
+        void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth)
+        void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage)
 
         # Revision capabilities
         int getNumberOfRevisionFeatures(long deviceID, int *errorCode)

@@ -77,8 +77,8 @@ class SeaBreezeNumFeaturesError(SeaBreezeError):
 
     def __init__(self, feature, received_num, expected_num=1):
         message = ("This should not have happened. Apparently this device has "
-                   "{expected_num:d} {feature:s} features. The code expects it "
-                   "to have {received_num:d}. Please file a bug report including "
+                   "{received_num:d} {feature:s} features. The code expects it "
+                   "to have {expected_num:d}. Please file a bug report including "
                    "a description of your device.").format(
             expected_num=expected_num,
             received_num=received_num,

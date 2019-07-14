@@ -653,6 +653,89 @@ cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):
             PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def set_binning_factor(self, factor):
+        """sets the pixel binning factor on the device
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char binning
+        binning = int(factor)
+        self.sbapi.binningSetPixelBinningFactor(self.device_id, self.feature_id, &error_code, binning)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    def get_binning_factor(self):
+        """gets the pixel binning factor on the device
+
+        Returns
+        -------
+        binning_factor: int
+        """
+        cdef int error_code
+        cdef unsigned char binning
+        binning = self.sbapi.binningGetPixelBinningFactor(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(binning)
+
+    def get_max_binning_factor(self):
+        """gets the max pixel binning factor on the device
+
+        Returns
+        -------
+        binning_factor: int
+        """
+        cdef int error_code
+        cdef unsigned char binning
+        binning = self.sbapi.binningGetMaxPixelBinningFactor(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(binning)
+
+    binning_factor = property(get_binning_factor, set_binning_factor)
+    max_binning_factor = property(get_max_binning_factor)
+
+    def set_default_binning_factor(self, factor):
+        """sets the pixel binning factor on the device
+
+        Parameters
+        ----------
+        factor : int or None
+            the desired default pixel binning factor. If None, resets the default.
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char binning
+        if factor is None:
+            self.sbapi.binningSetDefaultPixelBinningFactor(self.device_id, self.feature_id, &error_code)
+        else:
+            binning = int(factor)
+            self.sbapi.binningSetDefaultPixelBinningFactor(self.device_id, self.feature_id, &error_code, binning)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    def get_default_binning_factor(self):
+        """gets the default pixel binning factor on the device
+
+        Returns
+        -------
+        binning_factor: int
+        """
+        cdef int error_code
+        cdef unsigned char binning
+        binning = self.sbapi.binningGetDefaultPixelBinningFactor(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(binning)
+
+    default_binning_factor = property(get_default_binning_factor, set_default_binning_factor)
+
 
 cdef class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
 

@@ -674,6 +674,54 @@ cdef class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
             PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def read_temperature_degrees_C(self):
+        """reads the actual temperature of the TEC in degrees Celsius
+
+        Returns
+        -------
+        temperature: float
+            tec temperature in degrees Celcius
+        """
+        cdef int error_code
+        cdef double temperature
+        temperature = self.sbapi.tecReadTemperatureDegreesC(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return float(temperature)
+
+    def set_temperature_setpoint_degrees_C(self, temperature):
+        """sets the target (setpoint) TEC temperature
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef double temperature_degrees_celsius
+        temperature_degrees_celsius = float(temperature)
+        self.sbapi.tecSetTemperatureSetpointDegreesC(self.device_id, self.feature_id, &error_code,
+                                                     temperature_degrees_celsius)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    def enable_tec(self, state):
+        """enables the TEC feature on the device
+
+        Parameters
+        ----------
+        state : bool
+            on or off
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char enable = 1 if bool(state) else 0
+        self.sbapi.tecSetEnable(self.device_id, self.feature_id, &error_code, enable)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
 
@@ -694,6 +742,92 @@ cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
             py_feature_ids = [feature_ids[i] for i in range(num_features)]
             PyMem_Free(feature_ids)
         return py_feature_ids
+
+    def has_collection_area(self):
+        """checks for an irradiance collection area
+
+        Returns
+        -------
+        has_area: bool
+        """
+        cdef int error_code
+        cdef int has_ca
+        has_ca = self.sbapi.irradCalibrationHasCollectionArea(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(has_ca)
+
+    def read_collection_area(self):
+        """reads an irradiance collection area from the spectrometer
+
+        Returns
+        -------
+        area: float
+        """
+        cdef int error_code
+        cdef float area
+        area = self.sbapi.irradCalibrationReadCollectionArea(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return float(area)
+
+    def write_collection_area(self, area):
+        """writes an irradiance collection area to the spectrometer
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef float c_area = float(area)
+        self.sbapi.irradCalibrationWriteCollectionArea(self.device_id, self.feature_id, &error_code, c_area)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    def read_calibration(self):
+        """
+
+        Returns
+        -------
+        irrad_calibration: `np.ndarray`
+        """
+        cdef int error_code
+        cdef int bytes_written
+        cdef float[::1] out
+        cdef int out_length
+        irrad_calibration = np.zeros((4096,), dtype=np.float32)  # FIXME: not 4096 but Formatted Spectrum Length
+        out = irrad_calibration
+        out_length = irrad_calibration.size
+        bytes_written = self.sbapi.irradCalibrationRead(self.device_id, self.feature_id, &error_code,
+                                                        &out[0], out_length)
+        if error_code != 0:
+             raise SeaBreezeError(error_code=error_code)
+        return irrad_calibration[:bytes_written]
+
+    def write_calibration(self, calibration_array):
+        """
+
+        Parameters
+        ----------
+        calibration_array : `np.ndarray`
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef int bytes_written
+        cdef float[::1] out
+        cdef int out_length
+        arr = np.asarray(calibration_array, dtype=np.float)
+        if not arr.ndim == 1:
+            raise ValueError("calibration_array needs to be 1D")
+        out = arr
+        out_length = arr.size
+        bytes_written = self.sbapi.irradCalibrationWrite(self.device_id, self.feature_id, &error_code,
+                                                         &out[0], out_length)
+        if error_code != 0:
+             raise SeaBreezeError(error_code=error_code)
 
 
 cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
@@ -1344,68 +1478,6 @@ def continuous_strobe_set_enable(SeaBreezeDevice device not None, long featureID
 def continuous_strobe_set_period_micros(SeaBreezeDevice device not None, long featureID, unsigned long period_micros):
     cdef int error_code
     csb.sbapi_continuous_strobe_set_continuous_strobe_period_micros(device.handle, featureID, &error_code, period_micros)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-
-def irrad_calibration_read(SeaBreezeDevice device not None, long featureID, float[::1] out):
-    cdef int error_code
-    cdef int bytes_written
-    cdef int out_length = out.size
-    bytes_written = csb.sbapi_irrad_calibration_read(device.handle, featureID, &error_code, &out[0], out_length)
-    if error_code != 0:
-         raise SeaBreezeError(error_code=error_code)
-    return bytes_written
-
-def irrad_calibration_write(SeaBreezeDevice device not None, long featureID, float[::1] out):
-    cdef int error_code
-    cdef int bytes_written
-    cdef int out_length = out.size
-    bytes_written = csb.sbapi_irrad_calibration_write(device.handle, featureID, &error_code, &out[0], out_length)
-    if error_code != 0:
-         raise SeaBreezeError(error_code=error_code)
-    return bytes_written
-
-def irrad_calibration_has_collection_area(SeaBreezeDevice device not None, long featureID):
-    cdef int error_code
-    cdef int has_ca
-    has_ca = csb.sbapi_irrad_calibration_has_collection_area(device.handle, featureID, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return bool(has_ca)
-
-def irrad_calibration_read_collection_area(SeaBreezeDevice device not None, long featureID):
-    cdef int error_code
-    cdef float area
-    area = csb.sbapi_irrad_calibration_read_collection_area(device.handle, featureID, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return area
-
-def irrad_calibration_write_collection_area(SeaBreezeDevice device not None, long featureID, float area):
-    cdef int error_code
-    csb.sbapi_irrad_calibration_write_collection_area(device.handle, featureID, &error_code, area)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-
-def tec_read_temperature_degrees_C(SeaBreezeDevice device not None, long featureID):
-    cdef int error_code
-    cdef double temperature
-    temperature = csb.sbapi_tec_read_temperature_degrees_C(device.handle, featureID, &error_code)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-    return temperature
-
-def tec_set_temperature_setpoint_degrees_C(SeaBreezeDevice device not None, long featureID, double temperature_degrees_celsius):
-    cdef int error_code
-    csb.sbapi_tec_set_temperature_setpoint_degrees_C(device.handle, featureID, &error_code, temperature_degrees_celsius)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-def tec_set_enable(SeaBreezeDevice device not None, long featureID, unsigned char tec_enable):
-    cdef int error_code
-    csb.sbapi_tec_set_enable(device.handle, featureID, &error_code, tec_enable)
     if error_code != 0:
         raise SeaBreezeError(error_code=error_code)
 

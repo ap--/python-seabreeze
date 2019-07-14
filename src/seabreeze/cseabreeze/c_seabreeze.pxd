@@ -64,7 +64,7 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength)
         # int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *dataBuffer, int dataMaxLength, unsigned int numberOfSampleToRetrieve) # currently 15 max
         int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
-        int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength)
+        int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength) nogil
         int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length) nogil
         int spectrometerGetElectricDarkPixelCount(long deviceID, long spectrometerFeatureID, int *errorCode)
         int spectrometerGetElectricDarkPixelIndices(long deviceID, long spectrometerFeatureID, int *errorCode, int *indices, int length)
@@ -82,18 +82,18 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # TEC capabilities
         int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode)
         int getThermoElectricFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       double tecReadTemperatureDegreesC(long deviceID, long featureID, int *errorCode)
-#       void tecSetTemperatureSetpointDegreesC(long deviceID, long featureID, int *errorCode, double temperatureDegreesCelsius)
-#       void tecSetEnable(long deviceID, long featureID, int *errorCode, unsigned char tecEnable)
+        double tecReadTemperatureDegreesC(long deviceID, long featureID, int *errorCode)
+        void tecSetTemperatureSetpointDegreesC(long deviceID, long featureID, int *errorCode, double temperatureDegreesCelsius)
+        void tecSetEnable(long deviceID, long featureID, int *errorCode, unsigned char tecEnable)
 
         # Irradiance calibration features
         int getNumberOfIrradCalFeatures(long deviceID, int *errorCode)
         int getIrradCalFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       int irradCalibrationRead(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength)
-#       int irradCalibrationWrite(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength)
-#       int irradCalibrationHasCollectionArea(long deviceID, long featureID, int *errorCode)
-#       float irradCalibrationReadCollectionArea(long deviceID, long featureID, int *errorCode)
-#       void irradCalibrationWriteCollectionArea(long deviceID, long featureID, int *errorCode, float area)
+        int irradCalibrationRead(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength)
+        int irradCalibrationWrite(long deviceID, long featureID, int *errorCode, float *buffer, int bufferLength)
+        int irradCalibrationHasCollectionArea(long deviceID, long featureID, int *errorCode)
+        float irradCalibrationReadCollectionArea(long deviceID, long featureID, int *errorCode)
+        void irradCalibrationWriteCollectionArea(long deviceID, long featureID, int *errorCode, float area)
 
         # Ethernet Configuration features
         int getNumberOfEthernetConfigurationFeatures(long deviceID, int *errorCode)

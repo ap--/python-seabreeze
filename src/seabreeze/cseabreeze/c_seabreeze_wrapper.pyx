@@ -165,16 +165,23 @@ cdef class SeaBreezeDevice(object):
     cdef public str model, serial_number
     cdef csb.SeaBreezeAPI *sbapi
 
+    def __cinit__(self, handle):
+        self.sbapi = csb.SeaBreezeAPI.getInstance()
+
     def __init__(self, handle=None):
         if handle is None:
             raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
-        self.sbapi = csb.SeaBreezeAPI.getInstance()
         self.handle = handle
         if self.is_open:
             self._get_info()
         else:
             self.model = "?"
             self.serial_number = "?"
+
+    def __dealloc__(self):
+        cdef int error_code
+        # always returns 1
+        self.sbapi.closeDevice(self.handle, &error_code)
 
     cdef _get_info(self):
         """populate model and serial_number attributes (internal)"""
@@ -202,7 +209,7 @@ cdef class SeaBreezeDevice(object):
         cdef int error_code
         cdef int ret
         ret = self.sbapi.openDevice(self.handle, &error_code)
-        if int(ret) > 0:
+        if int(ret) > 0 or error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         self._get_info()
 
@@ -230,7 +237,8 @@ cdef class SeaBreezeDevice(object):
         try:
             # this is a hack to figure out if the spectrometer is connected
             self.get_serial_number()
-        except SeaBreezeError:
+        except SeaBreezeError as err:
+
             return False
         else:
             return True

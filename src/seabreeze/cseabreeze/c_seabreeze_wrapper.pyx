@@ -1328,6 +1328,45 @@ cdef class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
             PyMem_Free(feature_ids)
         return py_feature_ids
 
+    def set_enable(self, strobe_enable):
+        """enable continuous strobe
+
+        Parameters
+        ----------
+        strobe_enable : bool
+            on or off
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char c_enable
+        c_enable = 0 if not strobe_enable else 1
+        self.sbapi.continuousStrobeSetContinuousStrobeEnable(self.device_id, self.feature_id, &error_code, c_enable)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    def set_period_micros(self, period_micros):
+        """set continuous strobe period in microseconds
+
+        Parameters
+        ----------
+        period_micros : int
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned long c_micros
+        c_micros = int(period_micros)
+        # void (long deviceID, long featureID, int *errorCode, unsigned long strobePeriodMicroseconds)
+        self.sbapi.continuousStrobeSetContinuousStrobePeriodMicroseconds(self.device_id, self.feature_id, &error_code,
+                                                                         c_micros)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeShutterFeature(SeaBreezeFeature):
 
@@ -1637,19 +1676,6 @@ cdef class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
 
 
 '''
-
-def continuous_strobe_set_enable(SeaBreezeDevice device not None, long featureID, unsigned char strobe_enable):
-    cdef int error_code
-    csb.sbapi_continuous_strobe_set_continuous_strobe_enable(device.handle, featureID, &error_code, strobe_enable)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
-def continuous_strobe_set_period_micros(SeaBreezeDevice device not None, long featureID, unsigned long period_micros):
-    cdef int error_code
-    csb.sbapi_continuous_strobe_set_continuous_strobe_period_micros(device.handle, featureID, &error_code, period_micros)
-    if error_code != 0:
-        raise SeaBreezeError(error_code=error_code)
-
 
 def spectrum_processing_set_boxcar_width(SeaBreezeDevice device not None, long featureID, unsigned char boxcar_width):
     cdef int error_code

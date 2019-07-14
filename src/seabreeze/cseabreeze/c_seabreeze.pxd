@@ -193,8 +193,8 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Continuous strobe capabilities
         int getNumberOfContinuousStrobeFeatures(long deviceID, int *errorCode)
         int getContinuousStrobeFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       void continuousStrobeSetContinuousStrobeEnable(long deviceID, long featureID, int *errorCode, bool strobeEnable)
-#       void continuousStrobeSetContinuousStrobePeriodMicroseconds(long deviceID, long featureID, int *errorCode, unsigned long strobePeriodMicroseconds)
+        void continuousStrobeSetContinuousStrobeEnable(long deviceID, long featureID, int *errorCode, bool strobeEnable)
+        void continuousStrobeSetContinuousStrobePeriodMicroseconds(long deviceID, long featureID, int *errorCode, unsigned long strobePeriodMicroseconds)
 
         # Shutter capabilities
         int getNumberOfShutterFeatures(long deviceID, int *errorCode)

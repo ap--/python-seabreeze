@@ -3,12 +3,12 @@
 Author: Andreas Poehlmann
 
 """
-cimport c_seabreeze as csb
-import numpy as np
 cimport cython
+cimport c_seabreeze as csb
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 from libcpp cimport bool as bool_t
 
+import numpy as np
 
 
 # from libseabreeze api/SeaBreezeConstants.h
@@ -317,9 +317,9 @@ cdef class SeaBreezeDevice(object):
     @property
     def f(self):
         class FeatureAccessHandler(object):
-            def __init__(self, features):
-                for identifier, features in features.items():
-                    setattr(self, identifier, features[0] if features else None)
+            def __init__(self, feature_dict):
+                for identifier, features in feature_dict.items():
+                    setattr(self, identifier, features[0] if features else None)  # TODO: raise FeatureNotAvailable?
         return FeatureAccessHandler(self.features)
 
 
@@ -1853,6 +1853,70 @@ cdef class SeaBreezeTemperatureFeature(SeaBreezeFeature):
             finally:
                 PyMem_Free(feature_ids)
         return py_feature_ids
+
+    # unsigned char temperatureCountGet(long deviceID, long featureID, int *errorCode)
+    def count_temperatures(self):
+        """reads out an the number of indexed temperatures available
+
+        Returns
+        -------
+        num_temperatures : int
+        """
+        cdef int error_code
+        cdef unsigned char num_temperatures
+        num_temperatures = self.sbapi.temperatureCountGet(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(num_temperatures)
+
+    # double temperatureGet(long deviceID, long featureID, int *errorCode, int index)
+    def read_temperature(self, index):
+        """read a specific temperature
+
+        Parameters
+        ----------
+        index : int
+            index of the temperature to be received
+
+        Returns
+        -------
+        temperature : double
+        """
+        cdef int error_code
+        cdef double output
+        cdef int c_index
+        c_index = int(index)
+        output = self.sbapi.temperatureGet(self.device_id, self.feature_id, &error_code, c_index)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
+    def temperature_get_all(self):
+        """read all available temperatures
+
+        Returns
+        -------
+        temperatures : tuple of float
+        """
+        cdef int error_code
+        cdef int output
+        cdef double* buffer
+        cdef int maxLength
+        maxLength = self.count_temperatures()
+        buffer = <double *> PyMem_Malloc(maxLength * sizeof(double))
+        if not buffer:
+            raise MemoryError("could not allocate memory for temperatures")
+        temperatures = []
+        try:
+            output = self.sbapi.temperatureGetAll(self.device_id, self.feature_id, &error_code, buffer, maxLength)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            for i in range(output):
+                temperatures.append(float(buffer[i]))
+        finally:
+            PyMem_Free(buffer)
+        return tuple(output)
 
 
 cdef class SeaBreezeIntrospectionFeature(SeaBreezeFeature):

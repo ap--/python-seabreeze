@@ -209,9 +209,9 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Temperature capabilities
         int getNumberOfTemperatureFeatures(long deviceID, int *errorCode)
         int getTemperatureFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned char temperatureCountGet(long deviceID, long featureID, int *errorCode)
-#       double temperatureGet(long deviceID, long featureID, int *errorCode, int index)
-#       int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
+        unsigned char temperatureCountGet(long deviceID, long featureID, int *errorCode)
+        double temperatureGet(long deviceID, long featureID, int *errorCode, int index)
+        int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
 
         # Introspection capabilities
         int getNumberOfIntrospectionFeatures(long deviceID, int *errorCode)

@@ -239,13 +239,13 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Optical Bench capabilities
         int getNumberOfOpticalBenchFeatures(long deviceID, int *errorCode)
         int getOpticalBenchFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned short int opticalBenchGetFiberDiameterMicrons(long deviceID, long featureID, int *errorCode)
-#       unsigned short int opticalBenchGetSlitWidthMicrons(long deviceID, long featureID, int *errorCode)
-#       int opticalBenchGetID(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
-#       int opticalBenchGetSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
-#       int opticalBenchGetCoating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
-#       int opticalBenchGetFilter(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
-#       int opticalBenchGetGrating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+        unsigned short int opticalBenchGetFiberDiameterMicrons(long deviceID, long featureID, int *errorCode)
+        unsigned short int opticalBenchGetSlitWidthMicrons(long deviceID, long featureID, int *errorCode)
+        int opticalBenchGetID(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+        int opticalBenchGetSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+        int opticalBenchGetCoating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+        int opticalBenchGetFilter(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+        int opticalBenchGetGrating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
 
         # Stray light coefficient capabilities
         int getNumberOfStrayLightCoeffsFeatures(long deviceID, int *errorCode)

@@ -2198,6 +2198,126 @@ cdef class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # unsigned short int opticalBenchGetFiberDiameterMicrons(long deviceID, long featureID, int *errorCode)
+    def get_fiber_diameter_microns(self):
+        """return the fiber diameter in micrometers
+
+        Returns
+        -------
+        fiber_diameter : int
+        """
+        cdef int error_code
+        cdef unsigned short int output
+        output = self.sbapi.opticalBenchGetFiberDiameterMicrons(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned short int opticalBenchGetSlitWidthMicrons(long deviceID, long featureID, int *errorCode)
+    def get_slit_width_microns(self):
+        """return the slit width in micrometers
+
+        Returns
+        -------
+        slit_width : int
+        """
+        cdef int error_code
+        cdef unsigned short int output
+        output = self.sbapi.opticalBenchGetSlitWidthMicrons(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # int opticalBenchGetID(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+    def get_id(self):
+        """return the bench id
+
+        Returns
+        -------
+        bench_id : str
+        """
+        cdef int error_code
+        cdef int bytes_written
+        cdef char buffer[_MAXBUFLEN]
+        bytes_written = self.sbapi.opticalBenchGetID(self.device_id, self.feature_id, &error_code,
+                                                     &buffer[0], _MAXBUFLEN)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        assert bytes_written < _MAXBUFLEN, "BUG: should increase hardcoded buffer size"
+        return str(buffer[:bytes_written])
+
+    # int opticalBenchGetSerialNumber(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+    def get_serial_number(self):
+        """return the serial number
+
+        Returns
+        -------
+        serial_number : str
+        """
+        cdef int error_code
+        cdef int bytes_written
+        cdef char buffer[_MAXBUFLEN]
+        bytes_written = self.sbapi.opticalBenchGetSerialNumber(self.device_id, self.feature_id, &error_code,
+                                                               &buffer[0], _MAXBUFLEN)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        assert bytes_written < _MAXBUFLEN, "BUG: should increase hardcoded buffer size"
+        return str(buffer[:bytes_written])
+
+    # int opticalBenchGetCoating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+    def get_coating(self):
+        """return the bench coating
+
+        Returns
+        -------
+        coating : str
+        """
+        cdef int error_code
+        cdef int bytes_written
+        cdef char buffer[_MAXBUFLEN]
+        bytes_written = self.sbapi.opticalBenchGetCoating(self.device_id, self.feature_id, &error_code,
+                                                          &buffer[0], _MAXBUFLEN)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        assert bytes_written < _MAXBUFLEN, "BUG: should increase hardcoded buffer size"
+        return str(buffer[:bytes_written])
+
+    # int opticalBenchGetFilter(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+    def get_filter(self):
+        """return the bench filter
+
+        Returns
+        -------
+        filter : str
+        """
+        cdef int error_code
+        cdef int bytes_written
+        cdef char buffer[_MAXBUFLEN]
+        bytes_written = self.sbapi.opticalBenchGetFilter(self.device_id, self.feature_id, &error_code,
+                                                         &buffer[0], _MAXBUFLEN)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        assert bytes_written < _MAXBUFLEN, "BUG: should increase hardcoded buffer size"
+        return str(buffer[:bytes_written])
+
+    # int opticalBenchGetGrating(long deviceID, long featureID, int *errorCode, char *buffer, int bufferLength)
+    def get_grating(self):
+        """return the bench grating
+
+        Returns
+        -------
+        output : int
+        """
+        cdef int error_code
+        cdef int bytes_written
+        cdef char buffer[_MAXBUFLEN]
+        bytes_written = self.sbapi.opticalBenchGetGrating(self.device_id, self.feature_id, &error_code,
+                                                   &buffer[0], _MAXBUFLEN)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        assert bytes_written < _MAXBUFLEN, "BUG: should increase hardcoded buffer size"
+        return str(buffer[:bytes_written])
+
 
 cdef class SeaBreezeStrayLightCoeffsFeature(SeaBreezeFeature):
 

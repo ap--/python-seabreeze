@@ -233,8 +233,8 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Revision capabilities
         int getNumberOfRevisionFeatures(long deviceID, int *errorCode)
         int getRevisionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned char revisionHardwareGet(long deviceID, long featureID, int *errorCode)
-#       unsigned short int revisionFirmwareGet(long deviceID, long featureID, int *errorCode)
+        unsigned char revisionHardwareGet(long deviceID, long featureID, int *errorCode)
+        unsigned short int revisionFirmwareGet(long deviceID, long featureID, int *errorCode)
 
         # Optical Bench capabilities
         int getNumberOfOpticalBenchFeatures(long deviceID, int *errorCode)

@@ -2143,6 +2143,36 @@ cdef class SeaBreezeRevisionFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # unsigned char revisionHardwareGet(long deviceID, long featureID, int *errorCode)
+    def hardware_revision(self):
+        """returns the hardware revision
+
+        Returns
+        -------
+        revision : int
+        """
+        cdef int error_code
+        cdef unsigned char output
+        output = self.sbapi.revisionHardwareGet(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned short int revisionFirmwareGet(long deviceID, long featureID, int *errorCode)
+    def revision_firmware_get(self):
+        """returns the firmware revision
+
+        Returns
+        -------
+        output : int
+        """
+        cdef int error_code
+        cdef unsigned short int output
+        output = self.sbapi.revisionFirmwareGet(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
 
 cdef class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
 

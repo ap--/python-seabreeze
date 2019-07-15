@@ -266,10 +266,10 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Fast Buffer capabilities
         int getNumberOfFastBufferFeatures(long deviceID, int *errorCode)
         int getFastBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned char fastBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode)
-#       void fastBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled)
-#       unsigned int fastBufferGetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode)
-#       void fastBufferSetConsecutiveSampleCount (long deviceID, long featureID, int *errorCode, unsigned int consecutiveSampleCount)
+        unsigned char fastBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode)
+        void fastBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled)
+        unsigned int fastBufferGetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode)
+        void fastBufferSetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode, unsigned int consecutiveSampleCount)
 
         # Acquisition delay capabilities
         int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode)

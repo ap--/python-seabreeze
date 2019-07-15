@@ -2528,6 +2528,73 @@ cdef class SeaBreezeFastBufferFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # unsigned char fastBufferGetBufferingEnable(long deviceID, long featureID, int *errorCode)
+    def get_buffering_enable(self):
+        """returns the fast buffer enable state
+
+        Returns
+        -------
+        state : bool
+        """
+        cdef int error_code
+        cdef unsigned char output
+        output = self.sbapi.fastBufferGetBufferingEnable(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return False if output == 0 else True
+
+    # void fastBufferSetBufferingEnable(long deviceID, long featureID, int *errorCode, unsigned char isEnabled)
+    def set_buffering_enable(self, is_enabled):
+        """
+        Parameters
+        ----------
+        is_enabled : bool
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char isEnabled
+        isEnabled = 0 if not is_enabled else 1
+        self.sbapi.fastBufferSetBufferingEnable(self.device_id, self.feature_id, &error_code, isEnabled)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned int fastBufferGetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode)
+    def get_consecutive_sample_count(self):
+        """returns the number of consecutive samples
+
+        Returns
+        -------
+        num_samples : int
+        """
+        cdef int error_code
+        cdef unsigned int output
+        output = self.sbapi.fastBufferGetConsecutiveSampleCount(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # void fastBufferSetConsecutiveSampleCount(long deviceID, long featureID, int *errorCode, unsigned int consecutiveSampleCount)
+    def set_consecutive_sample_count(self, consecutive_sample_count):
+        """set the number of consecutive samples
+
+        Parameters
+        ----------
+        consecutive_sample_count : int
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned int consecutiveSampleCount
+        consecutiveSampleCount = int(consecutive_sample_count)
+        self.sbapi.fastBufferSetConsecutiveSampleCount(self.device_id, self.feature_id, &error_code, consecutiveSampleCount)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
 

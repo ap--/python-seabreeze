@@ -255,13 +255,13 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Data buffer capabilities
         int getNumberOfDataBufferFeatures(long deviceID, int *errorCode)
         int getDataBufferFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       void dataBufferClear(long deviceID, long featureID, int *errorCode)
-#       void dataBufferRemoveOldestSpectra(long deviceID, long featureID, int *errorCode, unsigned int numberOfSpectra)
-#       unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode)
-#       unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode)
-#       unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode)
-#       unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode)
-#       void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity)
+        void dataBufferClear(long deviceID, long featureID, int *errorCode)
+        void dataBufferRemoveOldestSpectra(long deviceID, long featureID, int *errorCode, unsigned int numberOfSpectra)
+        unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode)
+        unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode)
+        unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode)
+        unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode)
+        void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity)
 
         # Fast Buffer capabilities
         int getNumberOfFastBufferFeatures(long deviceID, int *errorCode)

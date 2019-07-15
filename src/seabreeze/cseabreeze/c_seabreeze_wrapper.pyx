@@ -2386,6 +2386,123 @@ cdef class SeaBreezeDataBufferFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # void dataBufferClear(long deviceID, long featureID, int *errorCode)
+    def clear(self):
+        """clear the data buffer
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        self.sbapi.dataBufferClear(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # void dataBufferRemoveOldestSpectra(long deviceID, long featureID, int *errorCode, unsigned int numberOfSpectra)
+    def remove_oldest_spectra(self, number_of_spectra):
+        """remove the oldest data from the buffer
+
+        Parameters
+        ----------
+        number_of_spectra : int
+            Number of spectra from oldest to newest to remove
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned int numberOfSpectra
+        numberOfSpectra = int(number_of_spectra)
+        self.sbapi.dataBufferRemoveOldestSpectra(self.device_id, self.feature_id, &error_code, numberOfSpectra)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned long dataBufferGetNumberOfElements(long deviceID, long featureID, int *errorCode)
+    def get_number_of_elements(self):
+        """get the number of data elements currently in the buffer
+
+        Returns
+        -------
+        num_elements : int
+        """
+        cdef int error_code
+        cdef unsigned long output
+        output = self.sbapi.dataBufferGetNumberOfElements(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned long dataBufferGetBufferCapacity(long deviceID, long featureID, int *errorCode)
+    def get_buffer_capacity(self):
+        """get the present limit of how many data elements will be retained by the buffer.
+
+        This value can be changed with `set_buffer_capacity`
+
+        Returns
+        -------
+        buffer_capacity : int
+        """
+        cdef int error_code
+        cdef unsigned long output
+        output = self.sbapi.dataBufferGetBufferCapacity(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # void dataBufferSetBufferCapacity(long deviceID, long featureID, int *errorCode, unsigned long capacity)
+    def set_buffer_capacity(self, capacity):
+        """set the number of data elements that the buffer should retain
+
+        Parameters
+        ----------
+        capacity : int
+            Limit on the number of data elements to store.  This is
+            bounded by what is returned by get_buffer_capacity_minimum()
+            and get_buffer_capacity_maximum().
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned long c_capacity
+        c_capacity = int(capacity)
+        self.sbapi.dataBufferSetBufferCapacity(self.device_id, self.feature_id, &error_code, c_capacity)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned long dataBufferGetBufferCapacityMaximum(long deviceID, long featureID, int *errorCode)
+    def get_buffer_capacity_maximum(self):
+        """get the maximum possible configurable size for the data buffer
+
+        Returns
+        -------
+        max_capacity : int
+        """
+        cdef int error_code
+        cdef unsigned long output
+        output = self.sbapi.dataBufferGetBufferCapacityMaximum(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned long dataBufferGetBufferCapacityMinimum(long deviceID, long featureID, int *errorCode)
+    def get_buffer_capacity_minimum(self):
+        """get the minimum possible configurable size for the data buffer
+
+        Returns
+        -------
+        min_capacity : int
+        """
+        cdef int error_code
+        cdef unsigned long output
+        output = self.sbapi.dataBufferGetBufferCapacityMinimum(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
 
 cdef class SeaBreezeFastBufferFeature(SeaBreezeFeature):
 

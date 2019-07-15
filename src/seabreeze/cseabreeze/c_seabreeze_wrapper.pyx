@@ -1943,6 +1943,104 @@ cdef class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # unsigned short int introspectionNumberOfPixelsGet(long deviceID, long featureID, int *errorCode)
+    def number_of_pixels(self):
+        """read the number of detector pixels available
+
+        Returns
+        -------
+        num_pixels : int
+        """
+        cdef int error_code
+        cdef unsigned short int num_pixels
+        num_pixels = self.sbapi.introspectionNumberOfPixelsGet(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(num_pixels)
+
+    # int introspectionActivePixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
+    def get_active_pixel_ranges(self):
+        """return the active pixel indicess of a device
+
+        Returns
+        -------
+        output : tuple of int
+        """
+        cdef int error_code
+        cdef int output
+        cdef unsigned int* pixelIndexPairs
+        cdef int maxLength
+        maxLength = self.number_of_pixels()
+        pixelIndexPairs = <unsigned int*> PyMem_Malloc(maxLength * sizeof(unsigned int))
+        if not pixelIndexPairs:
+            raise MemoryError("can't allocate memory for pixelIndexPairs")
+        active_pixels = []
+        try:
+            output = self.sbapi.introspectionActivePixelRangesGet(self.device_id, self.feature_id, &error_code, pixelIndexPairs, maxLength)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            for i in range(output):
+                active_pixels.append(int(pixelIndexPairs[i]))
+        finally:
+            PyMem_Free(pixelIndexPairs)
+        return tuple(active_pixels)
+
+    # int introspectionOpticalDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
+    def get_optical_dark_pixel_ranges(self):
+        """return the optical dark pixel indicess of a device
+
+        Returns
+        -------
+        output : tuple of int
+        """
+        cdef int error_code
+        cdef int output
+        cdef unsigned int* pixelIndexPairs
+        cdef  int maxLength
+        maxLength = self.number_of_pixels()
+        pixelIndexPairs = <unsigned int*> PyMem_Malloc(maxLength * sizeof(unsigned int))
+        if not pixelIndexPairs:
+            raise MemoryError("can't allocate memory for pixelIndexPairs")
+        dark_pixels = []
+        try:
+            output = self.sbapi.introspectionOpticalDarkPixelRangesGet(self.device_id, self.feature_id, &error_code,
+                                                                       pixelIndexPairs, maxLength)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            for i in range(output):
+                dark_pixels.append(int(pixelIndexPairs[i]))
+        finally:
+            PyMem_Free(pixelIndexPairs)
+        return tuple(dark_pixels)
+
+    # int introspectionElectricDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
+    def get_electric_dark_pixel_ranges(self):
+        """return the electric dark pixel indicess of a device
+
+        Returns
+        -------
+        output : tuple of int
+        """
+        cdef int error_code
+        cdef int output
+        cdef unsigned int* pixelIndexPairs
+        cdef  int maxLength
+        maxLength = self.number_of_pixels()
+        pixelIndexPairs = <unsigned int*> PyMem_Malloc(maxLength * sizeof(unsigned int))
+        if not pixelIndexPairs:
+            raise MemoryError("can't allocate memory for pixelIndexPairs")
+        electric_dark_pixels = []
+        try:
+            output = self.sbapi.introspectionElectricDarkPixelRangesGet(self.device_id, self.feature_id, &error_code,
+                                                                        pixelIndexPairs, maxLength)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            for i in range(output):
+                electric_dark_pixels.append(int(pixelIndexPairs[i]))
+        finally:
+            PyMem_Free(pixelIndexPairs)
+        return tuple(electric_dark_pixels)
+
 
 cdef class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
 

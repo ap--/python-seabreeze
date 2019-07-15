@@ -216,10 +216,10 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Introspection capabilities
         int getNumberOfIntrospectionFeatures(long deviceID, int *errorCode)
         int getIntrospectionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned short int introspectionNumberOfPixelsGet(long deviceID, long featureID, int *errorCode)
-#       int introspectionActivePixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
-#       int introspectionOpticalDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
-#       int introspectionElectricDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
+        unsigned short int introspectionNumberOfPixelsGet(long deviceID, long featureID, int *errorCode)
+        int introspectionActivePixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
+        int introspectionOpticalDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
+        int introspectionElectricDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
 
 
         # Spectrum processing capabilities

@@ -112,18 +112,32 @@ cdef class SeaBreezeAPI(object):
         self.sbapi = NULL
 
     def _list_device_ids(self):
+        """list device ids for all available spectrometers
+
+        Note: this includes spectrometers that are currently opened in other
+        processes on the machine.
+
+        Returns
+        -------
+        device_ids : list of ints
+            unique device_ids for each available specrometer
+        """
         cdef int num_devices
-        cdef long* device_ids
+        cdef long* c_device_ids
         cdef int found_devices
         self.sbapi.probeDevices()
         num_devices = self.sbapi.getNumberOfDeviceIDs()
-        device_ids = <long*> PyMem_Malloc(num_devices * sizeof(long))
-        found_devices = self.sbapi.getDeviceIDs(device_ids, num_devices)
-        devices = []
-        for i in range(found_devices):
-            devices.append(int(device_ids[i]))
-        PyMem_Free(device_ids)
-        return devices
+        c_device_ids = <long*> PyMem_Malloc(num_devices * sizeof(long))
+        if not c_device_ids:
+            raise MemoryError("could not allocate memory for device_ids")
+        try:
+            found_devices = self.sbapi.getDeviceIDs(c_device_ids, num_devices)
+            device_ids = []
+            for i in range(found_devices):
+                device_ids.append(int(c_device_ids[i]))
+            return device_ids
+        finally:
+            PyMem_Free(c_device_ids)
 
     def list_devices(self):
         """returns available SeaBreezeDevices
@@ -365,10 +379,14 @@ cdef class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getRawUSBBusAccessFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getRawUSBBusAccessFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     cdef unsigned char _get_device_endpoint(self, endpoint):
@@ -396,17 +414,17 @@ cdef class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
         cdef int error_code
         cdef int bytes_written
         cdef unsigned char ep = self._get_device_endpoint(endpoint)
-
+        buffer = <unsigned char*> PyMem_Malloc(buffer_length * sizeof(unsigned char))
+        if not buffer:
+            raise MemoryError("could not allocate memory for buffer")
         try:
-            buffer = <unsigned char*> PyMem_Malloc(buffer_length * sizeof(unsigned char))
             bytes_written = self.sbapi.rawUSBBusAccessRead(self.device_id, self.feature_id, &error_code,
                                                            &buffer[0], buflen, ep)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             data = buffer[:bytes_written]
         finally:
-            if buffer is not NULL:
-                PyMem_Free(buffer)
+            PyMem_Free(buffer)
         return data
 
     def raw_usb_write(self, data, endpoint):
@@ -444,10 +462,14 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getSpectrometerFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getSpectrometerFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def set_trigger_mode(self, mode):
@@ -545,13 +567,17 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         if dp_count == 0:
             return []
         cindices = <int*> PyMem_Malloc(dp_count * sizeof(int))
-        written = self.sbapi.spectrometerGetElectricDarkPixelIndices(self.device_id, self.feature_id, &error_code,
-                                                                     &cindices[0], dp_count)
-        assert int(written) == int(dp_count)
-        indices = [int(cindices[i]) for i in range(dp_count)]
-        PyMem_Free(cindices)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
+        if not cindices:
+            raise MemoryError("could not allocate memory for cindices")
+        try:
+            written = self.sbapi.spectrometerGetElectricDarkPixelIndices(self.device_id, self.feature_id, &error_code,
+                                                                         &cindices[0], dp_count)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            assert int(written) == int(dp_count)
+            indices = [int(cindices[i]) for i in range(dp_count)]
+        finally:
+            PyMem_Free(cindices)
         return indices
 
     @property
@@ -647,10 +673,14 @@ cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getPixelBinningFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getPixelBinningFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def set_binning_factor(self, factor):
@@ -751,10 +781,14 @@ cdef class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getThermoElectricFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getThermoElectricFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def read_temperature_degrees_C(self):
@@ -820,10 +854,14 @@ cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getIrradCalFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getIrradCalFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def has_collection_area(self):
@@ -927,10 +965,14 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getEthernetConfigurationFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getEthernetConfigurationFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -948,10 +990,14 @@ cdef class SeaBreezeMulticastFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getMulticastFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getMulticastFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -969,10 +1015,14 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getIPv4Features(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getIPv4Features(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -990,10 +1040,14 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getDHCPServerFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getDHCPServerFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1011,10 +1065,14 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getNetworkConfigurationFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getNetworkConfigurationFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1032,10 +1090,14 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getWifiConfigurationFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getWifiConfigurationFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1062,10 +1124,14 @@ cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getGPIOFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getGPIOFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     # unsigned char getGPIO_NumberOfPins(long deviceID, long featureID, int *errorCode)
@@ -1203,16 +1269,20 @@ cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
         # this might be wrong, at most use 256
         n_max_mode_count = min(2 * len(self.modes), 256)
         availableModes = <unsigned char*> PyMem_Malloc(n_max_mode_count * sizeof(unsigned char))
-        maxModeCount = n_max_mode_count
-        modes_written = self.sbapi.getEGPIO_AvailableModes(self.device_id, self.feature_id, &error_code,
-                                                           pinNumber, availableModes, maxModeCount)
-        assert modes_written < n_max_mode_count, "BUG: probably more modes available for pin"
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        modes = set()
-        for i in range(modes_written):
-            modes.add(int(availableModes[i]))
-        PyMem_Free(availableModes)
+        if not availableModes:
+            raise MemoryError("could not allocate memory for availableModes")
+        try:
+            maxModeCount = n_max_mode_count
+            modes_written = self.sbapi.getEGPIO_AvailableModes(self.device_id, self.feature_id, &error_code,
+                                                               pinNumber, availableModes, maxModeCount)
+            assert modes_written < n_max_mode_count, "BUG: probably more modes available for pin"
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            modes = set()
+            for i in range(modes_written):
+                modes.add(int(availableModes[i]))
+        finally:
+            PyMem_Free(availableModes)
         return modes
 
     # unsigned char getEGPIO_CurrentMode(long deviceID, long featureID, int *errorCode, unsigned char pinNumber)
@@ -1365,10 +1435,14 @@ cdef class SeaBreezeEEPROMFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getEEPROMFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getEEPROMFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def eeprom_read_slot(self, int slot_number, bool_t strip_zero_bytes=False):
@@ -1415,10 +1489,14 @@ cdef class SeaBreezeLightSourceFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getLightSourceFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getLightSourceFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def get_count(self):
@@ -1574,10 +1652,14 @@ cdef class SeaBreezeStrobeLampFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getLampFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getLampFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def enable_lamp(self, state):
@@ -1613,10 +1695,14 @@ cdef class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getContinuousStrobeFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getContinuousStrobeFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def set_enable(self, strobe_enable):
@@ -1673,10 +1759,14 @@ cdef class SeaBreezeShutterFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getShutterFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getShutterFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def set_shutter_open(self, state):
@@ -1711,10 +1801,14 @@ cdef class SeaBreezeNonlinearityCoeffsFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getNonlinearityCoeffsFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getNonlinearityCoeffsFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def get_nonlinearity_coefficients(self):
@@ -1750,10 +1844,14 @@ cdef class SeaBreezeTemperatureFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getTemperatureFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getTemperatureFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1771,10 +1869,14 @@ cdef class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getIntrospectionFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getIntrospectionFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1792,10 +1894,14 @@ cdef class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getSpectrumProcessingFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getSpectrumProcessingFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def get_boxcar_width(self):
@@ -1865,10 +1971,14 @@ cdef class SeaBreezeRevisionFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getRevisionFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getRevisionFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1886,10 +1996,14 @@ cdef class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getOpticalBenchFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getOpticalBenchFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1907,10 +2021,14 @@ cdef class SeaBreezeStrayLightCoeffsFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getStrayLightCoeffsFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getStrayLightCoeffsFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
     def get_stray_light_coefficients(self):
@@ -1946,10 +2064,14 @@ cdef class SeaBreezeDataBufferFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getDataBufferFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getDataBufferFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1967,10 +2089,14 @@ cdef class SeaBreezeFastBufferFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getFastBufferFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getFastBufferFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -1988,10 +2114,14 @@ cdef class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getAcquisitionDelayFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getAcquisitionDelayFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids
 
 
@@ -2009,8 +2139,12 @@ cdef class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
         py_feature_ids = []
         if num_features != 0:
             feature_ids = <long*> PyMem_Malloc(num_features * sizeof(long))
-            sbapi.getI2CMasterFeatures(device.handle, &error_code, feature_ids, num_features)
-            cls._raise_if_error(error_code, num_features)
-            py_feature_ids = [feature_ids[i] for i in range(num_features)]
-            PyMem_Free(feature_ids)
+            if not feature_ids:
+                raise MemoryError("could not allocate memory for feature_ids")
+            try:
+                sbapi.getI2CMasterFeatures(device.handle, &error_code, feature_ids, num_features)
+                cls._raise_if_error(error_code, num_features)
+                py_feature_ids = [feature_ids[i] for i in range(num_features)]
+            finally:
+                PyMem_Free(feature_ids)
         return py_feature_ids

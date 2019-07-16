@@ -2620,6 +2620,87 @@ cdef class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # void acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID, int *errorCode, unsigned long delay_usec)
+    def set_delay_microseconds(self, delay_usec):
+        """set the acquisition delay in microseconds
+
+        Parameters
+        ----------
+        delay_usec : int
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned long c_delay_usec
+        c_delay_usec = int(delay_usec)
+        self.sbapi.acquisitionDelaySetDelayMicroseconds(self.device_id, self.feature_id, &error_code, c_delay_usec)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned long acquisitionDelayGetDelayMicroseconds(long deviceID, long featureID, int *errorCode)
+    def get_delay_microseconds(self):
+        """get the acquisition delay in microseconds
+
+        Returns
+        -------
+        delay : int
+        """
+        cdef int error_code
+        cdef unsigned long delay
+        delay = self.sbapi.acquisitionDelayGetDelayMicroseconds(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(delay)
+
+    delay_microseconds = property(get_delay_microseconds, set_delay_microseconds)
+
+    # unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long deviceID, long featureID, int *errorCode)
+    def get_delay_increment_microseconds(self):
+        """get the acquisition delay increment in microseconds
+
+        Returns
+        -------
+        delay increment : int
+        """
+        cdef int error_code
+        cdef unsigned long output
+        output = self.sbapi.acquisitionDelayGetDelayIncrementMicroseconds(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID, long featureID, int *errorCode)
+    def get_maximum_delay_microseconds(self):
+        """get the maximum acquisition delay in microseconds
+
+        Returns
+        -------
+        maximum_delay : int
+        """
+        cdef int error_code
+        cdef unsigned long output
+        output = self.sbapi.acquisitionDelayGetDelayMaximumMicroseconds(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID, long featureID, int *errorCode)
+    def get_minimum_delay_microseconds(self):
+        """get the minimum acquisition delay in microseconds
+
+        Returns
+        -------
+        minimum_delay : int
+        """
+        cdef int error_code
+        cdef unsigned long output
+        output = self.sbapi.acquisitionDelayGetDelayMinimumMicroseconds(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
 
 cdef class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
 

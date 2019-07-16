@@ -274,11 +274,11 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Acquisition delay capabilities
         int getNumberOfAcquisitionDelayFeatures(long deviceID, int *errorCode)
         int getAcquisitionDelayFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       void acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID, int *errorCode, unsigned long delay_usec)
-#       unsigned long acquisitionDelayGetDelayMicroseconds(long deviceID, long featureID, int *errorCode)
-#       unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long deviceID, long featureID, int *errorCode)
-#       unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID, long featureID, int *errorCode)
-#       unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID, long featureID, int *errorCode)
+        void acquisitionDelaySetDelayMicroseconds(long deviceID, long featureID, int *errorCode, unsigned long delay_usec)
+        unsigned long acquisitionDelayGetDelayMicroseconds(long deviceID, long featureID, int *errorCode)
+        unsigned long acquisitionDelayGetDelayIncrementMicroseconds(long deviceID, long featureID, int *errorCode)
+        unsigned long acquisitionDelayGetDelayMaximumMicroseconds(long deviceID, long featureID, int *errorCode)
+        unsigned long acquisitionDelayGetDelayMinimumMicroseconds(long deviceID, long featureID, int *errorCode)
 
         # i2c master features
         int getNumberOfI2CMasterFeatures(long deviceID, int *errorCode)

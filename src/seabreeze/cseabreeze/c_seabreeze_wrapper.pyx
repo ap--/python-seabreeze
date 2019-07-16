@@ -2725,3 +2725,90 @@ cdef class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
             finally:
                 PyMem_Free(feature_ids)
         return py_feature_ids
+
+    # unsigned char i2cMasterGetNumberOfBuses(long deviceID, long featureID, int *errorCode)
+    def get_number_of_buses(self):
+        """return the number of i2c buses
+
+        Returns
+        -------
+        num_buses : int
+        """
+        cdef int error_code
+        cdef unsigned char output
+        output = self.sbapi.i2cMasterGetNumberOfBuses(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned short i2cMasterReadBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
+    def read_bus(self, bus_index, slave_address, buffer_length=1024):
+        """read data from the i2c bus
+
+        Parameters
+        ----------
+        bus_index : int
+        slave_address : int
+        buffer_length : int, optional
+
+        Returns
+        -------
+        data : str
+        """
+        cdef int error_code
+        cdef unsigned short output
+        cdef unsigned char busIndex
+        cdef unsigned char slaveAddress
+        cdef unsigned char* readData
+        cdef unsigned short numberOfBytes
+        busIndex = int(bus_index)
+        slaveAddress = int(slave_address)
+        readData = <unsigned char*> PyMem_Malloc(buffer_length * sizeof(unsigned char))
+        numberOfBytes = buffer_length
+        if not readData:
+            raise MemoryError("can't allocate memory for data")
+        try:
+            output = self.sbapi.i2cMasterReadBus(self.device_id, self.feature_id, &error_code, busIndex, slaveAddress,
+                                                 readData, numberOfBytes)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            assert output <= buffer_length, "BUG: buffer_length probably to small"
+            out = readData[:output]
+        finally:
+            PyMem_Free(readData)
+        return out
+
+    # unsigned short i2cMasterWriteBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)
+    def write_bus(self, bus_index, slave_address, data):
+        """write data to i2c bus
+
+        Parameters
+        ----------
+        bus_index : int
+        slave_address : int
+        data : str
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+
+        cdef unsigned short output
+        cdef unsigned char busIndex
+        cdef unsigned char slaveAddress
+        cdef const unsigned char* writeData
+        cdef unsigned short numberOfBytes
+        assert 0 <= int(bus_index) <= 256
+        assert 0 <= int(slave_address) <= 256
+        busIndex = int(bus_index)
+        slaveAddress = int(slave_address)
+        numberOfBytes = len(data)
+        bdata = bytes(data)
+        writeData = bdata
+        output = self.sbapi.i2cMasterWriteBus(self.device_id, self.feature_id, &error_code, busIndex,
+                                              slaveAddress, writeData, numberOfBytes)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        assert output == numberOfBytes, "BUG: didn't write all data"
+

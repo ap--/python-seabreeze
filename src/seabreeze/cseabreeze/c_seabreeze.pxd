@@ -283,8 +283,6 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # i2c master features
         int getNumberOfI2CMasterFeatures(long deviceID, int *errorCode)
         int getI2CMasterFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned char i2cMasterGetNumberOfBuses(long deviceID, long featureID, int *errorCode)
-#       unsigned short i2cMasterReadBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
-#       unsigned short i2cMasterWriteBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)
-
-
+        unsigned char i2cMasterGetNumberOfBuses(long deviceID, long featureID, int *errorCode)
+        unsigned short i2cMasterReadBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, unsigned char *readData, unsigned short numberOfBytes)
+        unsigned short i2cMasterWriteBus(long deviceID, long featureID, int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)

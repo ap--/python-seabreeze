@@ -98,10 +98,10 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Ethernet Configuration features
         int getNumberOfEthernetConfigurationFeatures(long deviceID, int *errorCode)
         int getEthernetConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       void ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
-#       void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
-#       unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
-#       void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+        void ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
+        void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
+        unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+        void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
 
         # Multicast features
         int getNumberOfMulticastFeatures(long deviceID, int *errorCode)

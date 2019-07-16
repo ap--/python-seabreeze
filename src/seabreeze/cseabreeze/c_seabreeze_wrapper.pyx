@@ -975,6 +975,115 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # void ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
+    def get_mac_address(self, interface_index):
+        """get mac address of interface
+
+        Parameters
+        ----------
+        interface_index : int
+        (macAddress),  unsigned char (*macAddress)[6]
+
+        Returns
+        -------
+        mac_address : str
+        """
+        cdef int error_code
+        cdef unsigned char (*mac_address)[6]
+        cdef unsigned char *view_mac_address
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        mac_address = <unsigned char(*)[6]> PyMem_Malloc(sizeof(unsigned char(*)[6]))
+        if not mac_address:
+            raise MemoryError("can't allocate memory for mac_address")
+        try:
+            self.sbapi.ethernetConfiguration_Get_MAC_Address(self.device_id, self.feature_id, &error_code,
+                                                             interfaceIndex, mac_address)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            view_mac_address = <unsigned char*> mac_address
+            mbytes = []
+            for i in range(6):
+                mbytes.append("%0.2X" % int(view_mac_address[i]))
+            return ":".join(mbytes)
+        finally:
+            PyMem_Free(mac_address)
+
+    # void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
+    def set_mac_address(self, interface_index, mac_address):
+        """set mac address of interface
+
+        Parameters
+        ----------
+        interface_index : int
+        mac_address : str
+            mac_address XX:XX:XX:XX:XX:XX
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        # convert macaddress
+        mbytes = map(lambda x: chr(int(x, 16)), mac_address.split(':'))
+        assert len(mbytes) == 6
+        cbytes = bytes("".join(mbytes))[:6]
+        cdef unsigned char macAddress[6]
+        macAddress = <const unsigned char*> PyMem_Malloc(6 * sizeof(unsigned char))
+        try:
+            for i in range(6):
+                macAddress[i] = cbytes[i]
+            self.sbapi.ethernetConfiguration_Set_MAC_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, macAddress)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+        finally:
+            PyMem_Free(macAddress)
+
+    # unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_gbe_enable_status(self, interface_index):
+        """reads the GbE enable status from the device's internal memory
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        gbe_enabled : bool
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.ethernetConfiguration_Get_GbE_Enable_Status(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(output)
+
+    # void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    def set_gbe_enable_status(self, interface_index, enable_state):
+        """writes the GbE enable status to the spectrometer's internal memory
+
+        Parameters
+        ----------
+        interface_index : int
+        enable_state : bool
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char enableState
+        interfaceIndex = int(interface_index)
+        enableState = 1 if enable_state else 0
+        self.sbapi.ethernetConfiguration_Set_GbE_Enable_Status(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeMulticastFeature(SeaBreezeFeature):
 

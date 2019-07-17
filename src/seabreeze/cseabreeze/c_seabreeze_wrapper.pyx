@@ -1187,6 +1187,240 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # unsigned char get_IPv4_DHCP_Enable_State(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_dhcp_enable_state(self, interface_index):
+        """get dhcp enable state
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        enabled : bool
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.get_IPv4_DHCP_Enable_State(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(output)
+
+    # void set_IPv4_DHCP_Enable_State(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled)
+    def set_dhcp_enable_state(self, interface_index, is_enabled):
+        """set dhcp enable state
+
+        Parameters
+        ----------
+        interface_index : int
+        is_enabled : bool
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char isEnabled
+        interfaceIndex = int(interface_index)
+        isEnabled = 1 if bool(is_enabled) else 0
+        self.sbapi.set_IPv4_DHCP_Enable_State(self.device_id, self.feature_id, &error_code, interfaceIndex, isEnabled)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned char get_Number_Of_IPv4_Addresses(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_number_of_ipv4_addresses(self, interface_index):
+        """get number of ipv4 addresses for interface
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        num_addresses : int
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.get_Number_Of_IPv4_Addresses(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # void get_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex,
+    #                       unsigned char addressIndex, unsigned char(*IPv4_Address)[4], unsigned char *netMask)
+    def get_ipv4_address(self, interface_index, address_index):
+        """get ipv4 address
+
+        Parameters
+        ----------
+        interface_index : int
+        address_index : int
+        char(IPv_Address)
+
+        Returns
+        -------
+        ipv4_address : str
+            in format XXX.XXX.XXX.XXX/MM
+        """
+        cdef int error_code
+
+        cdef unsigned char interfaceIndex
+        cdef unsigned char addressIndex
+        cdef unsigned char(*ipv4_address)[4]
+        cdef unsigned char* netMask
+        cdef unsigned char* view_addr
+        interfaceIndex = int(interface_index)
+        addressIndex = int(address_index)
+        ipv4_address = <unsigned char(*)[4]> PyMem_Malloc(sizeof(unsigned char[4]))
+        if not ipv4_address:
+            raise MemoryError("can't allocate memory for ipv4 address")
+        net_mask = <unsigned char*> PyMem_Malloc(sizeof(unsigned char))
+        if not net_mask:
+            raise MemoryError("can't allocate memory for ipv4 netmask")
+        try:
+            self.sbapi.get_IPv4_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, addressIndex,
+                                        ipv4_address, net_mask)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            view_addr = <unsigned char*> ipv4_address
+            ip = []
+            for i in range(4):
+                ip.append(int(view_addr[i]))
+            mask = int(*net_mask)
+            return "{ip[0]:d}.{ip[1]:d}.{ip[2]:d}.{ip[3]:d}/{netmask:d}".format(ip=ip, netmask=mask)
+        finally:
+            PyMem_Free(ipv4_address)
+            PyMem_Free(net_mask)
+
+    # void get_IPv4_Default_Gateway(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4])
+    def get_default_gateway(self, interface_index):
+        """get gateway address
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        gateway_address : str
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char(*address)[4]
+        cdef unsigned char* view_addr
+        interfaceIndex = int(interface_index)
+        address = <unsigned char(*)[4]> PyMem_Malloc(sizeof(unsigned char[4]))
+        if not address:
+            raise MemoryError("can't allocate memory for ipv4 address")
+        try:
+            self.sbapi.get_IPv4_Default_Gateway(self.device_id, self.feature_id, &error_code, interfaceIndex, address)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            view_addr = <unsigned char*> address
+            ip = []
+            for i in range(4):
+                ip.append(int(view_addr[i]))
+            return "{ip[0]:d}.{ip[1]:d}.{ip[2]:d}.{ip[3]:d}".format(ip=ip)
+        finally:
+            PyMem_Free(address)
+
+    # void set_IPv4_Default_Gateway(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4])
+    def set_default_gateway(self, interface_index, default_gateway_address):
+        """set default gateway
+
+        Parameters
+        ----------
+        interface_index : int
+        default_gateway_address : str
+            format xxx.xxx.xxx.xxx
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char address[4]
+        interfaceIndex = int(interface_index)
+        mbytes = map(int, default_gateway_address.split('.'))
+        assert len(mbytes) == 4
+        cbytes = bytes("".join(mbytes))[:4]
+        address = <const unsigned char*> PyMem_Malloc(4 * sizeof(unsigned char))
+        try:
+            for i in range(4):
+                address[i] = cbytes[i]
+            self.sbapi.set_IPv4_Default_Gateway(self.device_id, self.feature_id, &error_code, interfaceIndex, address)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+        finally:
+            PyMem_Free(address)
+
+    # void add_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask)
+    def add_ipv4_address(self, interface_index, ipv4_address):
+        """add a ipv4 address
+
+        Parameters
+        ----------
+        interface_index : int
+        ipv4_address : str
+            format xxx.xxx.xxx.xxx/nm
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char address[4]
+        cdef  unsigned char netMask
+        interfaceIndex = int(interface_index)
+
+        addr_nm = ipv4_address.split('/')
+        if len(addr_nm) == 1:
+            nm = 24  # default netmask
+        else:
+            nm = int(addr_nm[1])
+        netMask = nm
+        mbytes = map(int, addr_nm[0].split('.'))
+        assert len(mbytes) == 4
+        cbytes = bytes("".join(mbytes))[:4]
+        address = <const unsigned char*> PyMem_Malloc(4 * sizeof(unsigned char))
+        try:
+            for i in range(4):
+                address[i] = cbytes[i]
+            self.sbapi.add_IPv4_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, address, netMask)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+        finally:
+            PyMem_Free(address)
+
+    # void delete_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex)
+    def delete_ipv4_address(self, interface_index, address_index):
+        """delete a ipv4 address
+
+        Parameters
+        ----------
+        interface_index : int
+        address_index : int
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char addressIndex
+        interfaceIndex = int(interface_index)
+        addressIndex = int(address_index)
+        self.sbapi.delete_IPv4_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, addressIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
 

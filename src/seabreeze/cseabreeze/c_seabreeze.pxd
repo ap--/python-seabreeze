@@ -106,10 +106,10 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Multicast features
         int getNumberOfMulticastFeatures(long deviceID, int *errorCode)
         int getMulticastFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       #void getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&macAddress)[6])
-#       #void setMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
-#       unsigned char getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
-#       void setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+        # void getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&macAddress)[6])
+        # void setMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
+        unsigned char getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+        void setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
 
         # IPv4 features
         int getNumberOfIPv4Features(long deviceID, int *errorCode)

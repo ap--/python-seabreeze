@@ -1109,6 +1109,59 @@ cdef class SeaBreezeMulticastFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # Both multicast address methods are commented out in libseabreeze
+    #
+    # void getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&macAddress)[6])
+    # def get_multicast_group_address(self, interfaceIndex,  unsigned char(&macAddress)[6]):
+    #     output = self.sbapi.getMulticastGroupAddress(self.device_id, self.feature_id, &error_code, interfaceIndex, char(&macAddress))
+    #
+    # void setMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
+    # def set_multicast_group_address(self, interfaceIndex,  const unsigned char macAddress[6]):
+    #     output = self.sbapi.setMulticastGroupAddress(self.device_id, self.feature_id, &error_code, interfaceIndex, macAddress)
+
+    # unsigned char getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_multicast_enable_state(self, interface_index):
+        """get multicast enable state
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        enabled : bool
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.getMulticastEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(output)
+
+    # void setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    def set_multicast_enable_state(self, interface_index, enable_state):
+        """set multicast enable state
+
+        Parameters
+        ----------
+        interface_index : int
+        enable_state : int
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char enableState
+        interfaceIndex = int(interface_index)
+        enableState = 1 if bool(enable_state) else 0
+        self.sbapi.setMulticastEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
 

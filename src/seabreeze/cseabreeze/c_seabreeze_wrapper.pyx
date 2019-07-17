@@ -1446,6 +1446,128 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # void dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask)
+    def get_address(self, interface_index):
+        """get dhcp server address
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        server_address : str
+            format xxx.xxx.xxx.xxx/nm
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char(*server_address)[4]
+        cdef unsigned char* netMask
+        cdef unsigned char* view_addr
+        interfaceIndex = int(interface_index)
+        server_address = <unsigned char(*)[4]> PyMem_Malloc(sizeof(unsigned char[4]))
+        if not server_address:
+            raise MemoryError("can't allocate memory for ipv4 address")
+        netMask = <unsigned char*> PyMem_Malloc(sizeof(unsigned char))
+        if not netMask:
+            raise MemoryError("can't allocate memory for ipv4 netmask")
+        try:
+            self.sbapi.dhcpServerGetAddress(self.device_id, self.feature_id, &error_code, interfaceIndex,
+                                            server_address, netMask)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            view_addr = <unsigned char*> server_address
+            ip = []
+            for i in range(4):
+                ip.append(int(view_addr[i]))
+            mask = int(*netMask)
+            return "{ip[0]:d}.{ip[1]:d}.{ip[2]:d}.{ip[3]:d}/{netmask:d}".format(ip=ip, netmask=mask)
+        finally:
+            PyMem_Free(server_address)
+            PyMem_Free(netMask)
+
+    # void dhcpServerSetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask)
+    def set_address(self, interface_index, server_address):
+        """set dhcp server address
+
+        Parameters
+        ----------
+        interface_index : int
+        server_address : str
+            format xxx.xxx.xxx.xxx/nm, default nm=24
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char address[4]
+        cdef unsigned char netMask
+        interfaceIndex = int(interface_index)
+
+        addr_nm = server_address.split('/')
+        if len(addr_nm) == 1:
+            nm = 24  # default netmask
+        else:
+            nm = int(addr_nm[1])
+        netMask = nm
+        mbytes = map(int, addr_nm[0].split('.'))
+        assert len(mbytes) == 4
+        cbytes = bytes("".join(mbytes))[:4]
+        address = <const unsigned char*> PyMem_Malloc(4 * sizeof(unsigned char))
+        try:
+            for i in range(4):
+                address[i] = cbytes[i]
+            self.sbapi.dhcpServerSetAddress(self.device_id, self.feature_id, &error_code, interfaceIndex, address, netMask)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+        finally:
+            PyMem_Free(address)
+
+    # unsigned char dhcpServerGetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_enable_state(self, interface_index):
+        """get dhcp server enable state
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        enabled : bool
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.dhcpServerGetEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(output)
+
+    # void dhcpServerSetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    def set_enable_state(self, interface_index, enable_state):
+        """set dhcp server enable state
+
+        Parameters
+        ----------
+        interface_index : int
+        enable_state : bool
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char enableState
+        interfaceIndex = int(interface_index)
+        enableState = 1 if bool(enable_state) else 0
+        self.sbapi.dhcpServerSetEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
 

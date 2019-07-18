@@ -995,7 +995,7 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         cdef unsigned char *view_mac_address
         cdef unsigned char interfaceIndex
         interfaceIndex = int(interface_index)
-        mac_address = <unsigned char(*)[6]> PyMem_Malloc(sizeof(unsigned char(*)[6]))
+        mac_address = <unsigned char(*)[6]> PyMem_Malloc(sizeof(unsigned char[6]))
         if not mac_address:
             raise MemoryError("can't allocate memory for mac_address")
         try:

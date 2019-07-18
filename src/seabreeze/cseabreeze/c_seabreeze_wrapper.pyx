@@ -1846,11 +1846,12 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         cdef unsigned char interfaceIndex
         cdef unsigned char(*ssid)[32]
         cdef unsigned char* ssid_view
+        interfaceIndex = int(interface_index)
         ssid = <unsigned char(*)[32]> PyMem_Malloc(sizeof(unsigned char[32]))
         if not ssid:
             raise MemoryError("can't allocate memory for ssid")
         try:
-            output = self.sbapi.getWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, char(ssid))
+            output = self.sbapi.getWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, ssid)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             ssid_view = <unsigned char*> ssid
@@ -1873,7 +1874,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char interfaceIndex
-        cdef unsigned char ssid[32]
+        cdef unsigned char c_ssid[32]
         cdef unsigned char length
         interfaceIndex = int(interface_index)
         length = len(ssid)
@@ -1881,8 +1882,8 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
             raise ValueError("maxlength ssid is 32")
         cbytes = bytes(ssid)
         for i in range(length):
-            ssid[i] = cbytes[i]
-        self.sbapi.setWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, ssid, length)
+            c_ssid[i] = cbytes[i]
+        self.sbapi.setWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, c_ssid, length)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
@@ -1907,7 +1908,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         interfaceIndex = int(interface_index)
         passPhraseLength = len(pass_phrase)
         cbytes = bytes(pass_phrase)
-        passPhrase = PyMem_Malloc(passPhraseLength * sizeof(unsigned char))
+        passPhrase = <unsigned char*> PyMem_Malloc(passPhraseLength * sizeof(unsigned char))
         if not passPhrase:
             raise MemoryError("can't allocate memory for passPhrase")
         try:

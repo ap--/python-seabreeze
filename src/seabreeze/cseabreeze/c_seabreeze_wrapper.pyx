@@ -1593,6 +1593,125 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # unsigned char getNumberOfNetworkInterfaces(long deviceID, long featureID, int *errorCode)
+    def get_number_of_network_interfaces(self):
+        """return the number of network interfaces
+
+        Returns
+        -------
+        num_interfaces : int
+        """
+        cdef int error_code
+        cdef unsigned char output
+        output = self.sbapi.getNumberOfNetworkInterfaces(self.device_id, self.feature_id, &error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned char getNetworkInterfaceConnectionType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_network_interface_connection_type(self, interface_index):
+        """get the network interface connection type
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        network_type : int
+            {0: 'loopback', 1: 'wired ethernet', 2: 'wifi', 3: 'cdc ethernet (usb)'}
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.getNetworkInterfaceConnectionType(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # unsigned char getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_network_interface_enable_state(self, interface_index):
+        """get network interface enable state
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        enabled : bool
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.getNetworkInterfaceEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(output)
+
+    # void setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    def set_network_interface_enable_state(self, interface_index, enable_state):
+        """
+        Parameters
+        ----------
+        interface_index : int
+        enable_state : bool
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef  unsigned char enableState
+        interfaceIndex = int(interface_index)
+        enableState = 1 if enable_state else 0
+        self.sbapi.setNetworkInterfaceEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned char runNetworkInterfaceSelfTest(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def run_network_interface_self_test(self, interface_index):
+        """run network interface self test
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        passed_test : bool
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.runNetworkInterfaceSelfTest(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return bool(output)
+
+    # void saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def save_network_interface_connection_settings(self, interface_index):
+        """save network interface connection settings
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        self.sbapi.saveNetworkInterfaceConnectionSettings(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
 
 cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
 

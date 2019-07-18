@@ -134,12 +134,12 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         # Network Configuration features
         int getNumberOfNetworkConfigurationFeatures(long deviceID, int *errorCode)
         int getNetworkConfigurationFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
-#       unsigned char getNumberOfNetworkInterfaces(long deviceID, long featureID, int *errorCode)
-#       unsigned char getNetworkInterfaceConnectionType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
-#       unsigned char getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
-#       unsigned char runNetworkInterfaceSelfTest(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
-#       void setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
-#       void saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+        unsigned char getNumberOfNetworkInterfaces(long deviceID, long featureID, int *errorCode)
+        unsigned char getNetworkInterfaceConnectionType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+        unsigned char getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+        unsigned char runNetworkInterfaceSelfTest(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+        void setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+        void saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
 
         # wifi configuration features
         int getNumberOfWifiConfigurationFeatures(long deviceID, int *errorCode)

@@ -653,6 +653,8 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         raise NotImplementedError("unformatted spectrum")
 
     def _get_fast_buffer_spectrum(self):
+        # TODO: requires wrapping of OBP command GetRawSpectrumWithMetadata
+        #       which returns N raw spectra each with a 64 byte metadata prefix
         # int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
         #                                       unsigned char *dataBuffer, int dataMaxLength,
         #                                       unsigned int numberOfSampleToRetrieve) # currently 15 max

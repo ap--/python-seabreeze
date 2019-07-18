@@ -1370,7 +1370,7 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         ----------
         interface_index : int
         ipv4_address : str
-            format xxx.xxx.xxx.xxx/nm
+            format xxx.xxx.xxx.xxx/nm, default nm=24
 
         Returns
         -------

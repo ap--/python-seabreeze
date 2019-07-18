@@ -111,6 +111,60 @@ cdef class SeaBreezeAPI(object):
         csb.SeaBreezeAPI.shutdown()
         self.sbapi = NULL
 
+    def add_rs232_device_location(self, device_type, bus_path, baudrate):
+        """add RS232 device location
+
+        Parameters
+        ----------
+        device_type : str
+        bus_path : str
+            This will be a platform-specific location.  Under Windows, this may
+            be COM1, COM2, etc.  Under Linux, this might be /dev/ttyS0, /dev/ttyS1,
+            etc.
+        baudrate : int
+
+        Returns
+        -------
+        success : bool
+        """
+        cdef int output
+        cdef bytes c_devtype
+        cdef bytes c_buspath
+        cdef unsigned int c_baudrate
+        c_devtype = bytes(device_type)
+        c_buspath = bytes(bus_path)
+        c_baudrate = int(baudrate)
+        cdef char* p_devtype = c_devtype
+        cdef char* p_buspath = c_buspath
+        output = self.sbapi.addRS232DeviceLocation(p_devtype, p_buspath, c_baudrate)
+        return not bool(output)
+
+    def add_ipv4_device_location(self, device_type, ip_address, port):
+        """add ipv4 device location
+
+        Parameters
+        ----------
+        device_type : str
+        ip_address : str
+            format XXX.XXX.XXX.XXX
+        port : int
+
+        Returns
+        -------
+        success : bool
+        """
+        cdef int output
+        cdef bytes c_devtype
+        cdef bytes c_buspath
+        cdef int c_port
+        c_devtype = bytes(device_type)
+        c_ipaddr = bytes(ip_address)
+        c_port = int(port)
+        cdef char* p_devtype = c_devtype
+        cdef char* p_ipaddr = c_ipaddr
+        output = self.sbapi.addRS232DeviceLocation(p_devtype, p_ipaddr, c_port)
+        return not bool(output)
+
     def _list_device_ids(self):
         """list device ids for all available spectrometers
 

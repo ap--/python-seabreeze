@@ -29,8 +29,8 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         void shutdown() except +
 
         int probeDevices()
-#       int addTCPIPv4DeviceLocation(char *deviceTypeName, char *ipAddr, int port)
-#       int addRS232DeviceLocation(char *deviceTypeName, char *deviceBusPath, unsigned int baud)
+        int addTCPIPv4DeviceLocation(char *deviceTypeName, char *ipAddr, int port)
+        int addRS232DeviceLocation(char *deviceTypeName, char *deviceBusPath, unsigned int baud)
         int getNumberOfDeviceIDs()
         int getDeviceIDs(long *ids, unsigned long maxLength)
         int getDeviceType(long id, int *errorCode, char *buffer, unsigned int length)

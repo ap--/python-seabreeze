@@ -174,7 +174,7 @@ cdef class SeaBreezeAPI(object):
         Returns
         -------
         device_ids : list of ints
-            unique device_ids for each available specrometer
+            unique device_ids for each available spectrometer
         """
         cdef int num_devices
         cdef long* c_device_ids
@@ -334,12 +334,12 @@ cdef class SeaBreezeDevice(object):
         max_length = self.sbapi.getSerialNumberMaximumLength(self.handle, feature_id, &error_code)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-        cdef char cbuf[_MAXBUFLEN]
+        cdef char c_buffer[_MAXBUFLEN]
         cdef int bytes_written
-        bytes_written = self.sbapi.getSerialNumber(self.handle, feature_id, &error_code, cbuf, max_length)
+        bytes_written = self.sbapi.getSerialNumber(self.handle, feature_id, &error_code, c_buffer, max_length)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-        serial = cbuf[:bytes_written]
+        serial = c_buffer[:bytes_written]
         return serial.decode("utf-8").rstrip('\x00')
 
     def get_model(self):
@@ -350,10 +350,10 @@ cdef class SeaBreezeDevice(object):
         model: str
         """
         cdef int error_code
-        cdef char cbuf[_MAXBUFLEN]
+        cdef char c_buffer[_MAXBUFLEN]
         cdef int bytes_written
-        bytes_written = self.sbapi.getDeviceType(self.handle, &error_code, cbuf, _MAXBUFLEN)
-        model = cbuf[:bytes_written]
+        bytes_written = self.sbapi.getDeviceType(self.handle, &error_code, c_buffer, _MAXBUFLEN)
+        model = c_buffer[:bytes_written]
         if model == "NONE":
             raise SeaBreezeError(error_code=error_code)
         return model.decode("utf-8")
@@ -463,35 +463,35 @@ cdef class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
         return out
 
     def raw_usb_read(self, endpoint, buffer_length=1024):
-        cdef unsigned char* buffer = NULL
+        cdef unsigned char* c_buffer = NULL
         cdef unsigned int buflen = int(buffer_length)
         cdef int error_code
         cdef int bytes_written
         cdef unsigned char ep = self._get_device_endpoint(endpoint)
-        buffer = <unsigned char*> PyMem_Malloc(buffer_length * sizeof(unsigned char))
-        if not buffer:
+        c_buffer = <unsigned char*> PyMem_Malloc(buffer_length * sizeof(unsigned char))
+        if not c_buffer:
             raise MemoryError("could not allocate memory for buffer")
         try:
             bytes_written = self.sbapi.rawUSBBusAccessRead(self.device_id, self.feature_id, &error_code,
-                                                           &buffer[0], buflen, ep)
+                                                           &c_buffer[0], buflen, ep)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
-            data = buffer[:bytes_written]
+            data = c_buffer[:bytes_written]
         finally:
-            PyMem_Free(buffer)
+            PyMem_Free(c_buffer)
         return data
 
     def raw_usb_write(self, data, endpoint):
-        cdef unsigned char* buffer
-        cdef unsigned int buffer_length
+        cdef unsigned char* c_buffer
+        cdef unsigned int c_buffer_length
         cdef int error_code
         cdef int bytes_written
         cdef unsigned char ep = self._get_device_endpoint(endpoint)
         bdata = bytes(data)
-        buffer = bdata
-        buffer_length = len(data)
+        c_buffer = bdata
+        c_buffer_length = len(data)
         bytes_written = self.sbapi.rawUSBBusAccessWrite(self.device_id, self.feature_id, &error_code,
-                                                        &buffer[0], buffer_length, ep)
+                                                        &c_buffer[0], c_buffer_length, ep)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return bytes_written
@@ -690,15 +690,15 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         cdef double[::1] out
         cdef int out_length
 
-        wavelengths = np.zeros((self._spectrum_length, ), dtype=np.double)
-        out = wavelengths
-        out_length = wavelengths.size
+        intensities = np.zeros((self._spectrum_length, ), dtype=np.double)
+        out = intensities
+        out_length = intensities.size
         with nogil:
             bytes_written = self.sbapi.spectrometerGetFormattedSpectrum(self.device_id, self.feature_id, &error_code,
                                                                         &out[0], out_length)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-        return wavelengths
+        return intensities
 
     def _get_spectrum_raw(self):
         # int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
@@ -847,13 +847,13 @@ cdef class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
-    def read_temperature_degrees_C(self):
+    def read_temperature_degrees_celsius(self):
         """reads the actual temperature of the TEC in degrees Celsius
 
         Returns
         -------
         temperature: float
-            tec temperature in degrees Celcius
+            tec temperature in degrees Celsius
         """
         cdef int error_code
         cdef double temperature
@@ -862,7 +862,7 @@ cdef class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
             raise SeaBreezeError(error_code=error_code)
         return float(temperature)
 
-    def set_temperature_setpoint_degrees_C(self, temperature):
+    def set_temperature_setpoint_degrees_celsius(self, temperature):
         """sets the target (setpoint) TEC temperature
 
         Returns
@@ -1031,7 +1031,7 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
-    # void ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
+    # void ethernetConfiguration_Get_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char (*macAddress)[6])
     def get_mac_address(self, interface_index):
         """get mac address of interface
 
@@ -1047,14 +1047,14 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         cdef int error_code
         cdef unsigned char (*mac_address)[6]
         cdef unsigned char *view_mac_address
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
         mac_address = <unsigned char(*)[6]> PyMem_Malloc(sizeof(unsigned char[6]))
         if not mac_address:
             raise MemoryError("can't allocate memory for mac_address")
         try:
             self.sbapi.ethernetConfiguration_Get_MAC_Address(self.device_id, self.feature_id, &error_code,
-                                                             interfaceIndex, mac_address)
+                                                             c_interface_index, mac_address)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             view_mac_address = <unsigned char*> mac_address
@@ -1065,7 +1065,7 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         finally:
             PyMem_Free(mac_address)
 
-    # void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
+    # void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, const unsigned char macAddress[6])
     def set_mac_address(self, interface_index, mac_address):
         """set mac address of interface
 
@@ -1080,9 +1080,9 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        # convert macaddress
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        # convert mac address
         mbytes = map(lambda x: chr(int(x, 16)), mac_address.split(':'))
         assert len(mbytes) == 6
         cbytes = bytes("".join(mbytes))[:6]
@@ -1091,13 +1091,13 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         try:
             for i in range(6):
                 macAddress[i] = cbytes[i]
-            self.sbapi.ethernetConfiguration_Set_MAC_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, macAddress)
+            self.sbapi.ethernetConfiguration_Set_MAC_Address(self.device_id, self.feature_id, &error_code, c_interface_index, macAddress)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
         finally:
             PyMem_Free(macAddress)
 
-    # unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_gbe_enable_status(self, interface_index):
         """reads the GbE enable status from the device's internal memory
 
@@ -1111,14 +1111,14 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.ethernetConfiguration_Get_GbE_Enable_Status(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.ethernetConfiguration_Get_GbE_Enable_Status(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return bool(output)
 
-    # void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    # void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char enableState)
     def set_gbe_enable_status(self, interface_index, enable_state):
         """writes the GbE enable status to the spectrometer's internal memory
 
@@ -1132,11 +1132,11 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char enableState
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         enableState = 1 if enable_state else 0
-        self.sbapi.ethernetConfiguration_Set_GbE_Enable_Status(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        self.sbapi.ethernetConfiguration_Set_GbE_Enable_Status(self.device_id, self.feature_id, &error_code, c_interface_index, enableState)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
@@ -1167,15 +1167,15 @@ cdef class SeaBreezeMulticastFeature(SeaBreezeFeature):
 
     # Both multicast address methods are commented out in libseabreeze
     #
-    # void getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(&macAddress)[6])
-    # def get_multicast_group_address(self, interfaceIndex,  unsigned char(&macAddress)[6]):
-    #     output = self.sbapi.getMulticastGroupAddress(self.device_id, self.feature_id, &error_code, interfaceIndex, char(&macAddress))
+    # void getMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char(&macAddress)[6])
+    # def get_multicast_group_address(self, c_interface_index,  unsigned char(&macAddress)[6]):
+    #     output = self.sbapi.getMulticastGroupAddress(self.device_id, self.feature_id, &error_code, c_interface_index, char(&macAddress))
     #
-    # void setMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
-    # def set_multicast_group_address(self, interfaceIndex,  const unsigned char macAddress[6]):
-    #     output = self.sbapi.setMulticastGroupAddress(self.device_id, self.feature_id, &error_code, interfaceIndex, macAddress)
+    # void setMulticastGroupAddress(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, const unsigned char macAddress[6])
+    # def set_multicast_group_address(self, c_interface_index,  const unsigned char macAddress[6]):
+    #     output = self.sbapi.setMulticastGroupAddress(self.device_id, self.feature_id, &error_code, c_interface_index, macAddress)
 
-    # unsigned char getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char getMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_multicast_enable_state(self, interface_index):
         """get multicast enable state
 
@@ -1189,14 +1189,14 @@ cdef class SeaBreezeMulticastFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.getMulticastEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.getMulticastEnableState(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return bool(output)
 
-    # void setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    # void setMulticastEnableState(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char enableState)
     def set_multicast_enable_state(self, interface_index, enable_state):
         """set multicast enable state
 
@@ -1210,11 +1210,11 @@ cdef class SeaBreezeMulticastFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char enableState
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         enableState = 1 if bool(enable_state) else 0
-        self.sbapi.setMulticastEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        self.sbapi.setMulticastEnableState(self.device_id, self.feature_id, &error_code, c_interface_index, enableState)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
@@ -1243,7 +1243,7 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
-    # unsigned char get_IPv4_DHCP_Enable_State(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char get_IPv4_DHCP_Enable_State(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_dhcp_enable_state(self, interface_index):
         """get dhcp enable state
 
@@ -1257,14 +1257,14 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.get_IPv4_DHCP_Enable_State(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.get_IPv4_DHCP_Enable_State(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return bool(output)
 
-    # void set_IPv4_DHCP_Enable_State(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char isEnabled)
+    # void set_IPv4_DHCP_Enable_State(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char isEnabled)
     def set_dhcp_enable_state(self, interface_index, is_enabled):
         """set dhcp enable state
 
@@ -1278,15 +1278,15 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char isEnabled
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         isEnabled = 1 if bool(is_enabled) else 0
-        self.sbapi.set_IPv4_DHCP_Enable_State(self.device_id, self.feature_id, &error_code, interfaceIndex, isEnabled)
+        self.sbapi.set_IPv4_DHCP_Enable_State(self.device_id, self.feature_id, &error_code, c_interface_index, isEnabled)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
-    # unsigned char get_Number_Of_IPv4_Addresses(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char get_Number_Of_IPv4_Addresses(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_number_of_ipv4_addresses(self, interface_index):
         """get number of ipv4 addresses for interface
 
@@ -1300,14 +1300,14 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.get_Number_Of_IPv4_Addresses(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.get_Number_Of_IPv4_Addresses(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return int(output)
 
-    # void get_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex,
+    # void get_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index,
     #                       unsigned char addressIndex, unsigned char(*IPv4_Address)[4], unsigned char *netMask)
     def get_ipv4_address(self, interface_index, address_index):
         """get ipv4 address
@@ -1325,12 +1325,12 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         """
         cdef int error_code
 
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char addressIndex
         cdef unsigned char(*ipv4_address)[4]
         cdef unsigned char* netMask
         cdef unsigned char* view_addr
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         addressIndex = int(address_index)
         ipv4_address = <unsigned char(*)[4]> PyMem_Malloc(sizeof(unsigned char[4]))
         if not ipv4_address:
@@ -1339,7 +1339,7 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         if not net_mask:
             raise MemoryError("can't allocate memory for ipv4 netmask")
         try:
-            self.sbapi.get_IPv4_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, addressIndex,
+            self.sbapi.get_IPv4_Address(self.device_id, self.feature_id, &error_code, c_interface_index, addressIndex,
                                         ipv4_address, net_mask)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
@@ -1353,7 +1353,7 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
             PyMem_Free(ipv4_address)
             PyMem_Free(net_mask)
 
-    # void get_IPv4_Default_Gateway(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*defaultGatewayAddress)[4])
+    # void get_IPv4_Default_Gateway(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char(*defaultGatewayAddress)[4])
     def get_default_gateway(self, interface_index):
         """get gateway address
 
@@ -1366,15 +1366,15 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         gateway_address : str
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char(*address)[4]
         cdef unsigned char* view_addr
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         address = <unsigned char(*)[4]> PyMem_Malloc(sizeof(unsigned char[4]))
         if not address:
             raise MemoryError("can't allocate memory for ipv4 address")
         try:
-            self.sbapi.get_IPv4_Default_Gateway(self.device_id, self.feature_id, &error_code, interfaceIndex, address)
+            self.sbapi.get_IPv4_Default_Gateway(self.device_id, self.feature_id, &error_code, c_interface_index, address)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             view_addr = <unsigned char*> address
@@ -1385,7 +1385,7 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         finally:
             PyMem_Free(address)
 
-    # void set_IPv4_Default_Gateway(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char defaultGatewayAddress[4])
+    # void set_IPv4_Default_Gateway(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, const unsigned char defaultGatewayAddress[4])
     def set_default_gateway(self, interface_index, default_gateway_address):
         """set default gateway
 
@@ -1400,9 +1400,9 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char address[4]
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         mbytes = map(int, default_gateway_address.split('.'))
         assert len(mbytes) == 4
         cbytes = bytes("".join(mbytes))[:4]
@@ -1410,13 +1410,13 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         try:
             for i in range(4):
                 address[i] = cbytes[i]
-            self.sbapi.set_IPv4_Default_Gateway(self.device_id, self.feature_id, &error_code, interfaceIndex, address)
+            self.sbapi.set_IPv4_Default_Gateway(self.device_id, self.feature_id, &error_code, c_interface_index, address)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
         finally:
             PyMem_Free(address)
 
-    # void add_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask)
+    # void add_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, const unsigned char IPv4_Address[4], unsigned char netMask)
     def add_ipv4_address(self, interface_index, ipv4_address):
         """add a ipv4 address
 
@@ -1431,10 +1431,10 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char address[4]
         cdef  unsigned char netMask
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
 
         addr_nm = ipv4_address.split('/')
         if len(addr_nm) == 1:
@@ -1449,13 +1449,13 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         try:
             for i in range(4):
                 address[i] = cbytes[i]
-            self.sbapi.add_IPv4_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, address, netMask)
+            self.sbapi.add_IPv4_Address(self.device_id, self.feature_id, &error_code, c_interface_index, address, netMask)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
         finally:
             PyMem_Free(address)
 
-    # void delete_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex)
+    # void delete_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char addressIndex)
     def delete_ipv4_address(self, interface_index, address_index):
         """delete a ipv4 address
 
@@ -1469,11 +1469,11 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char addressIndex
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         addressIndex = int(address_index)
-        self.sbapi.delete_IPv4_Address(self.device_id, self.feature_id, &error_code, interfaceIndex, addressIndex)
+        self.sbapi.delete_IPv4_Address(self.device_id, self.feature_id, &error_code, c_interface_index, addressIndex)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
@@ -1502,7 +1502,7 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
-    # void dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask)
+    # void dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char(*serverAddress)[4], unsigned char *netMask)
     def get_address(self, interface_index):
         """get dhcp server address
 
@@ -1516,11 +1516,11 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
             format xxx.xxx.xxx.xxx/nm
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char(*server_address)[4]
         cdef unsigned char* netMask
         cdef unsigned char* view_addr
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         server_address = <unsigned char(*)[4]> PyMem_Malloc(sizeof(unsigned char[4]))
         if not server_address:
             raise MemoryError("can't allocate memory for ipv4 address")
@@ -1528,7 +1528,7 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         if not netMask:
             raise MemoryError("can't allocate memory for ipv4 netmask")
         try:
-            self.sbapi.dhcpServerGetAddress(self.device_id, self.feature_id, &error_code, interfaceIndex,
+            self.sbapi.dhcpServerGetAddress(self.device_id, self.feature_id, &error_code, c_interface_index,
                                             server_address, netMask)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
@@ -1542,7 +1542,7 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
             PyMem_Free(server_address)
             PyMem_Free(netMask)
 
-    # void dhcpServerSetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask)
+    # void dhcpServerSetAddress(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, const unsigned char serverAddress[4], unsigned char netMask)
     def set_address(self, interface_index, server_address):
         """set dhcp server address
 
@@ -1557,10 +1557,10 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char address[4]
         cdef unsigned char netMask
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
 
         addr_nm = server_address.split('/')
         if len(addr_nm) == 1:
@@ -1575,13 +1575,13 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         try:
             for i in range(4):
                 address[i] = cbytes[i]
-            self.sbapi.dhcpServerSetAddress(self.device_id, self.feature_id, &error_code, interfaceIndex, address, netMask)
+            self.sbapi.dhcpServerSetAddress(self.device_id, self.feature_id, &error_code, c_interface_index, address, netMask)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
         finally:
             PyMem_Free(address)
 
-    # unsigned char dhcpServerGetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char dhcpServerGetEnableState(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_enable_state(self, interface_index):
         """get dhcp server enable state
 
@@ -1595,14 +1595,14 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.dhcpServerGetEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.dhcpServerGetEnableState(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return bool(output)
 
-    # void dhcpServerSetEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    # void dhcpServerSetEnableState(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char enableState)
     def set_enable_state(self, interface_index, enable_state):
         """set dhcp server enable state
 
@@ -1616,11 +1616,11 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char enableState
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         enableState = 1 if bool(enable_state) else 0
-        self.sbapi.dhcpServerSetEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        self.sbapi.dhcpServerSetEnableState(self.device_id, self.feature_id, &error_code, c_interface_index, enableState)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
@@ -1664,7 +1664,7 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
             raise SeaBreezeError(error_code=error_code)
         return int(output)
 
-    # unsigned char getNetworkInterfaceConnectionType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char getNetworkInterfaceConnectionType(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_network_interface_connection_type(self, interface_index):
         """get the network interface connection type
 
@@ -1679,14 +1679,14 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.getNetworkInterfaceConnectionType(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.getNetworkInterfaceConnectionType(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return int(output)
 
-    # unsigned char getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char getNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_network_interface_enable_state(self, interface_index):
         """get network interface enable state
 
@@ -1700,14 +1700,14 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.getNetworkInterfaceEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.getNetworkInterfaceEnableState(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return bool(output)
 
-    # void setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
+    # void setNetworkInterfaceEnableState(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char enableState)
     def set_network_interface_enable_state(self, interface_index, enable_state):
         """
         Parameters
@@ -1720,15 +1720,15 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef  unsigned char enableState
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         enableState = 1 if enable_state else 0
-        self.sbapi.setNetworkInterfaceEnableState(self.device_id, self.feature_id, &error_code, interfaceIndex, enableState)
+        self.sbapi.setNetworkInterfaceEnableState(self.device_id, self.feature_id, &error_code, c_interface_index, enableState)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
-    # unsigned char runNetworkInterfaceSelfTest(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char runNetworkInterfaceSelfTest(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def run_network_interface_self_test(self, interface_index):
         """run network interface self test
 
@@ -1742,14 +1742,14 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.runNetworkInterfaceSelfTest(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.runNetworkInterfaceSelfTest(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return bool(output)
 
-    # void saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # void saveNetworkInterfaceConnectionSettings(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def save_network_interface_connection_settings(self, interface_index):
         """save network interface connection settings
 
@@ -1762,9 +1762,9 @@ cdef class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        self.sbapi.saveNetworkInterfaceConnectionSettings(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        self.sbapi.saveNetworkInterfaceConnectionSettings(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
@@ -1793,7 +1793,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
-    # unsigned char getWifiConfigurationMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char getWifiConfigurationMode(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_wifi_mode(self, interface_index):
         """get wifi configuration mode
 
@@ -1808,14 +1808,14 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.getWifiConfigurationMode(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.getWifiConfigurationMode(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return int(output)
 
-    # void setWifiConfigurationMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char mode)
+    # void setWifiConfigurationMode(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char mode)
     def set_wifi_mode(self, interface_index, wifi_mode):
         """set wifi mode
 
@@ -1830,15 +1830,15 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char mode
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         mode = int(wifi_mode)
-        self.sbapi.setWifiConfigurationMode(self.device_id, self.feature_id, &error_code, interfaceIndex, mode)
+        self.sbapi.setWifiConfigurationMode(self.device_id, self.feature_id, &error_code, c_interface_index, mode)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
-    # unsigned char getWifiConfigurationSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    # unsigned char getWifiConfigurationSecurityType(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index)
     def get_wifi_security_type(self, interface_index):
         """get wifi security type
 
@@ -1853,14 +1853,14 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
-        interfaceIndex = int(interface_index)
-        output = self.sbapi.getWifiConfigurationSecurityType(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        cdef unsigned char c_interface_index
+        c_interface_index = int(interface_index)
+        output = self.sbapi.getWifiConfigurationSecurityType(self.device_id, self.feature_id, &error_code, c_interface_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return int(output)
 
-    # void   setWifiConfigurationSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
+    # void   setWifiConfigurationSecurityType(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char securityType)
     def set_wifi_security_type(self, interface_index, security_type):
         """set wifi security type
 
@@ -1875,15 +1875,15 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char securityType
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         securityType = int(security_type)
-        self.sbapi.setWifiConfigurationSecurityType(self.device_id, self.feature_id, &error_code, interfaceIndex, securityType)
+        self.sbapi.setWifiConfigurationSecurityType(self.device_id, self.feature_id, &error_code, c_interface_index, securityType)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
-    # unsigned char   getWifiConfigurationSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*ssid)[32])
+    # unsigned char   getWifiConfigurationSSID(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, unsigned char(*ssid)[32])
     def get_wifi_ssid(self, interface_index):
         """get wifi ssid
 
@@ -1897,15 +1897,15 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef unsigned char output
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char(*ssid)[32]
         cdef unsigned char* ssid_view
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         ssid = <unsigned char(*)[32]> PyMem_Malloc(sizeof(unsigned char[32]))
         if not ssid:
             raise MemoryError("can't allocate memory for ssid")
         try:
-            output = self.sbapi.getWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, ssid)
+            output = self.sbapi.getWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, c_interface_index, ssid)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             ssid_view = <unsigned char*> ssid
@@ -1913,7 +1913,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         finally:
             PyMem_Free(ssid)
 
-    # void setWifiConfigurationSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length)
+    # void setWifiConfigurationSSID(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index, const unsigned char ssid[32], unsigned char length)
     def set_wifi_ssid(self, interface_index, ssid):
         """set wifi ssid
 
@@ -1927,21 +1927,21 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char c_ssid[32]
         cdef unsigned char length
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         length = len(ssid)
         if length > 32:
             raise ValueError("maxlength ssid is 32")
         cbytes = bytes(ssid)
         for i in range(length):
             c_ssid[i] = cbytes[i]
-        self.sbapi.setWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, c_ssid, length)
+        self.sbapi.setWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, c_interface_index, c_ssid, length)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
-    # void setWifiConfigurationPassPhrase(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex,
+    # void setWifiConfigurationPassPhrase(long deviceID, long featureID, int *errorCode, unsigned char c_interface_index,
     #                                     const unsigned char *passPhrase, unsigned char passPhraseLength)
     def set_wifi_pass_phrase(self, interface_index, pass_phrase):
         """set wifi pass phrase
@@ -1956,10 +1956,10 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef unsigned char interfaceIndex
+        cdef unsigned char c_interface_index
         cdef unsigned char* passPhrase
         cdef unsigned char passPhraseLength
-        interfaceIndex = int(interface_index)
+        c_interface_index = int(interface_index)
         passPhraseLength = len(pass_phrase)
         cbytes = bytes(pass_phrase)
         passPhrase = <unsigned char*> PyMem_Malloc(passPhraseLength * sizeof(unsigned char))
@@ -1968,7 +1968,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         try:
             for i in range(passPhraseLength):
                 passPhrase[i] = cbytes[i]
-            self.sbapi.setWifiConfigurationPassPhrase(self.device_id, self.feature_id, &error_code, interfaceIndex, passPhrase, passPhraseLength)
+            self.sbapi.setWifiConfigurationPassPhrase(self.device_id, self.feature_id, &error_code, c_interface_index, passPhrase, passPhraseLength)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
         finally:
@@ -2211,7 +2211,7 @@ cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
 
     # unsigned int getEGPIO_OutputVector(long deviceID, long featureID, int *errorCode)
     def get_egpio_output_vector_vector(self):
-        """return the epgio output vector
+        """return the egpio output vector
 
         Returns
         -------
@@ -2335,18 +2335,18 @@ cdef class SeaBreezeEEPROMFeature(SeaBreezeFeature):
             the data stored in the eeprom slot
         """
         cdef int error_code
-        cdef unsigned char cbuf[_MAXBUFLEN]
+        cdef unsigned char c_buffer[_MAXBUFLEN]
         cdef int bytes_written
         try:
             bytes_written = self.sbapi.eepromReadSlot(self.device_id, self.feature_id, &error_code,
-                                                      slot_number, cbuf, _MAXBUFLEN)
+                                                      slot_number, c_buffer, _MAXBUFLEN)
         except ValueError:
             raise SeaBreezeError("EEProm slot out of bounds.")
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         if strip_zero_bytes:
-            return cbuf[:bytes_written].strip('\x00')
-        return cbuf[:bytes_written]
+            return c_buffer[:bytes_written].strip('\x00')
+        return c_buffer[:bytes_written]
 
 
 cdef class SeaBreezeLightSourceFeature(SeaBreezeFeature):
@@ -2661,9 +2661,9 @@ cdef class SeaBreezeShutterFeature(SeaBreezeFeature):
             raise SeaBreezeError(error_code=error_code)
 
 
-cdef class SeaBreezeNonlinearityCoeffsFeature(SeaBreezeFeature):
+cdef class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
 
-    identifier = "nonlinearity_coeffs"
+    identifier = "nonlinearity_coefficients"
     required = False
 
     @classmethod
@@ -2775,21 +2775,21 @@ cdef class SeaBreezeTemperatureFeature(SeaBreezeFeature):
         """
         cdef int error_code
         cdef int output
-        cdef double* buffer
+        cdef double* c_buffer
         cdef int maxLength
         maxLength = self.count_temperatures()
-        buffer = <double *> PyMem_Malloc(maxLength * sizeof(double))
-        if not buffer:
+        c_buffer = <double *> PyMem_Malloc(maxLength * sizeof(double))
+        if not c_buffer:
             raise MemoryError("could not allocate memory for temperatures")
         temperatures = []
         try:
-            output = self.sbapi.temperatureGetAll(self.device_id, self.feature_id, &error_code, buffer, maxLength)
+            output = self.sbapi.temperatureGetAll(self.device_id, self.feature_id, &error_code, c_buffer, maxLength)
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             for i in range(output):
-                temperatures.append(float(buffer[i]))
+                temperatures.append(float(c_buffer[i]))
         finally:
-            PyMem_Free(buffer)
+            PyMem_Free(c_buffer)
         return tuple(output)
 
 
@@ -2834,7 +2834,7 @@ cdef class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
 
     # int introspectionActivePixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
     def get_active_pixel_ranges(self):
-        """return the active pixel indicess of a device
+        """return the active pixel indices of a device
 
         Returns
         -------
@@ -2861,7 +2861,7 @@ cdef class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
 
     # int introspectionOpticalDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
     def get_optical_dark_pixel_ranges(self):
-        """return the optical dark pixel indicess of a device
+        """return the optical dark pixel indices of a device
 
         Returns
         -------
@@ -2889,7 +2889,7 @@ cdef class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
 
     # int introspectionElectricDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
     def get_electric_dark_pixel_ranges(self):
-        """return the electric dark pixel indicess of a device
+        """return the electric dark pixel indices of a device
 
         Returns
         -------
@@ -3193,9 +3193,9 @@ cdef class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
         return str(buffer[:bytes_written])
 
 
-cdef class SeaBreezeStrayLightCoeffsFeature(SeaBreezeFeature):
+cdef class SeaBreezeStrayLightCoefficientsFeature(SeaBreezeFeature):
 
-    identifier = "stray_light_coeffs"
+    identifier = "stray_light_coefficients"
     required = False
 
     @classmethod
@@ -3232,8 +3232,8 @@ cdef class SeaBreezeStrayLightCoeffsFeature(SeaBreezeFeature):
                                                         &ccoeffs[0], _MAXDBUFLEN)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-        coeffs = [float(ccoeffs[i]) for i in range(values_written)]
-        return coeffs
+        coefficients = [float(ccoeffs[i]) for i in range(values_written)]
+        return coefficients
 
 
 cdef class SeaBreezeDataBufferFeature(SeaBreezeFeature):

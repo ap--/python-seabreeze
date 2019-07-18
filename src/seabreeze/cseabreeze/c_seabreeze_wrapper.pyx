@@ -1737,6 +1737,186 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
                 PyMem_Free(feature_ids)
         return py_feature_ids
 
+    # unsigned char getWifiConfigurationMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_wifi_mode(self, interface_index):
+        """get wifi configuration mode
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        wifi_mode : int
+	        mode `{0: 'client', 1: 'access point'}`
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.getWifiConfigurationMode(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # void setWifiConfigurationMode(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char mode)
+    def set_wifi_mode(self, interface_index, wifi_mode):
+        """set wifi mode
+
+        Parameters
+        ----------
+        interface_index : int
+        wifi_mode : int
+	        mode `{0: 'client', 1: 'access point'}`
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char mode
+        interfaceIndex = int(interface_index)
+        mode = int(wifi_mode)
+        self.sbapi.setWifiConfigurationMode(self.device_id, self.feature_id, &error_code, interfaceIndex, mode)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned char getWifiConfigurationSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex)
+    def get_wifi_security_type(self, interface_index):
+        """get wifi security type
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        security_type : int
+	        security_type `{0: 'open', 1: 'WPA2'}`
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        interfaceIndex = int(interface_index)
+        output = self.sbapi.getWifiConfigurationSecurityType(self.device_id, self.feature_id, &error_code, interfaceIndex)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        return int(output)
+
+    # void   setWifiConfigurationSecurityType(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
+    def set_wifi_security_type(self, interface_index, security_type):
+        """set wifi security type
+
+        Parameters
+        ----------
+        interface_index : int
+        security_type : int
+	        security_type `{0: 'open', 1: 'WPA2'}`
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char securityType
+        interfaceIndex = int(interface_index)
+        securityType = int(security_type)
+        self.sbapi.setWifiConfigurationSecurityType(self.device_id, self.feature_id, &error_code, interfaceIndex, securityType)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # unsigned char   getWifiConfigurationSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*ssid)[32])
+    def get_wifi_ssid(self, interface_index):
+        """get wifi ssid
+
+        Parameters
+        ----------
+        interface_index : int
+
+        Returns
+        -------
+        ssid : str
+        """
+        cdef int error_code
+        cdef unsigned char output
+        cdef unsigned char interfaceIndex
+        cdef unsigned char(*ssid)[32]
+        cdef unsigned char* ssid_view
+        ssid = <unsigned char(*)[32]> PyMem_Malloc(sizeof(unsigned char[32]))
+        if not ssid:
+            raise MemoryError("can't allocate memory for ssid")
+        try:
+            output = self.sbapi.getWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, char(ssid))
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+            ssid_view = <unsigned char*> ssid
+            return str(ssid_view[:output])
+        finally:
+            PyMem_Free(ssid)
+
+    # void setWifiConfigurationSSID(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char ssid[32], unsigned char length)
+    def set_wifi_ssid(self, interface_index, ssid):
+        """set wifi ssid
+
+        Parameters
+        ----------
+        interface_index : int
+        ssid : str
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char ssid[32]
+        cdef unsigned char length
+        interfaceIndex = int(interface_index)
+        length = len(ssid)
+        if length > 32:
+            raise ValueError("maxlength ssid is 32")
+        cbytes = bytes(ssid)
+        for i in range(length):
+            ssid[i] = cbytes[i]
+        self.sbapi.setWifiConfigurationSSID(self.device_id, self.feature_id, &error_code, interfaceIndex, ssid, length)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    # void setWifiConfigurationPassPhrase(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex,
+    #                                     const unsigned char *passPhrase, unsigned char passPhraseLength)
+    def set_wifi_pass_phrase(self, interface_index, pass_phrase):
+        """set wifi pass phrase
+
+        Parameters
+        ----------
+        interface_index : int
+        pass_phrase : str
+
+        Returns
+        -------
+        None
+        """
+        cdef int error_code
+        cdef unsigned char interfaceIndex
+        cdef unsigned char* passPhrase
+        cdef unsigned char passPhraseLength
+        interfaceIndex = int(interface_index)
+        passPhraseLength = len(pass_phrase)
+        cbytes = bytes(pass_phrase)
+        passPhrase = PyMem_Malloc(passPhraseLength * sizeof(unsigned char))
+        if not passPhrase:
+            raise MemoryError("can't allocate memory for passPhrase")
+        try:
+            for i in range(passPhraseLength):
+                passPhrase[i] = cbytes[i]
+            self.sbapi.setWifiConfigurationPassPhrase(self.device_id, self.feature_id, &error_code, interfaceIndex, passPhrase, passPhraseLength)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+        finally:
+            PyMem_Free(passPhrase)
+
 
 cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
 
@@ -3448,4 +3628,3 @@ cdef class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         assert output == numberOfBytes, "BUG: didn't write all data"
-

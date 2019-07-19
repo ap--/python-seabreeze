@@ -41,6 +41,7 @@ libseabreeze = Extension('seabreeze.cseabreeze.wrapper',
                          sources=sources,
                          include_dirs=['src/libseabreeze/include'],
                          libraries=libs)
+libseabreeze.cython_directives = {'embedsignature': True}
 extensions = [libseabreeze]
 
 

@@ -8,15 +8,23 @@ Author: Andreas Poehlmann
 Email: andreas@poehlmann.io
 
 """
+import logging
 import os
 import platform
+import sys
 from distutils.sysconfig import customize_compiler
 
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 
-SEABREEZE_VERSION = "0.6.0"
+try:
+    import Cython
+except ImportError:
+    WARN_NO_CYTHON = True
+else:
+    WARN_NO_CYTHON = False
 
+SEABREEZE_VERSION = "0.6.1"
 
 # Platform specific libraries and source files
 if platform.system() == "Windows":
@@ -30,18 +38,23 @@ else:
     ignore_subdirs = {'osx', 'winusb', 'windows'}
 
 # Collect all source files for cseabreeze backend
-sources = ['src/seabreeze/cseabreeze/wrapper.pyx']
+sources = ['src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx']
 for root, subdirs, fns in os.walk('src/libseabreeze/src'):
     subdirs[:] = (d for d in subdirs if d not in ignore_subdirs)
     sources.extend((os.path.join(root, fn) for fn in fns))
 
 # define extension
-libseabreeze = Extension('seabreeze.cseabreeze.wrapper',
+libseabreeze = Extension('seabreeze.cseabreeze._wrapper',
                          language='c++',
                          sources=sources,
                          include_dirs=['src/libseabreeze/include'],
                          libraries=libs)
-libseabreeze.cython_directives = {'embedsignature': True}
+# This is a bit
+building_sphinx_documentation = True
+libseabreeze.cython_directives = {
+    'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
+    'embedsignature': not building_sphinx_documentation,  # add function signature to docstring for ipython
+}
 extensions = [libseabreeze]
 
 
@@ -59,20 +72,33 @@ class sb_build_ext(build_ext):
         build_ext.build_extensions(self)
 
 
+if WARN_NO_CYTHON:
+    logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+    log = logging.getLogger('setup')
+    log.info("if error `unknown file type '.pyx'` occurs try `pip install cython` and rerun")
+
 setup(
     name='seabreeze',
     version=SEABREEZE_VERSION,
     author='Andreas Poehlmann',
     author_email='andreas@poehlmann.io',
     setup_requires=[
+        'setuptools>=18.0',
         'cython>=0.18',
-        'numpy'
+        "numpy<1.17; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
+        "numpy; python_version>='3.6'",
     ],
     install_requires=[
-        'numpy',
-        'pyusb>=1.0'
+        "numpy<1.17; python_version<'3.6'",
+        "numpy; python_version>='3.6'",
     ],
-    cmdclass={'build_ext': sb_build_ext},
+    extras_require={
+        'cseabreeze': [],
+        'pyseabreeze': ['pyusb >=1.0']
+    },
+    cmdclass={
+        'build_ext': sb_build_ext
+    },
     packages=find_packages(where='src'),
     package_dir={
         '': 'src'

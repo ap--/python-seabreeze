@@ -1,4 +1,4 @@
-"""This is the cython Wrapper for the seabreeze library
+"""This is the cython wrapper for the seabreeze library
 
 Author: Andreas Poehlmann
 
@@ -88,6 +88,7 @@ class SeaBreezeNumFeaturesError(SeaBreezeError):
 
 
 cdef class SeaBreezeAPI(object):
+    """SeaBreeze API interface"""
 
     cdef csb.SeaBreezeAPI *sbapi
 
@@ -118,7 +119,7 @@ cdef class SeaBreezeAPI(object):
         ----------
         device_type : str
         bus_path : str
-            This will be a platform-specific location.  Under Windows, this may
+            This will be a platform-specific location. Under Windows, this may
             be COM1, COM2, etc.  Under Linux, this might be /dev/ttyS0, /dev/ttyS1,
             etc.
         baudrate : int
@@ -1038,7 +1039,6 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         Parameters
         ----------
         interface_index : int
-        (macAddress),  unsigned char (*macAddress)[6]
 
         Returns
         -------

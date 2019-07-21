@@ -229,7 +229,13 @@ cdef class SeaBreezeAPI(object):
 
 
 cdef class SeaBreezeDevice(object):
+    """SeaBreezeDevice class for handling all spectrometers
 
+    This is the default cseabreeze class interface for all supported spectrometers.
+    Users don't instantiate it directly, but retrieve instances via
+    :func:`seabreeze.cseabreeze.SeaBreezeAPI.list_devices`
+
+    """
     cdef readonly long handle
     cdef readonly str model, serial_number
     cdef csb.SeaBreezeAPI *sbapi
@@ -361,6 +367,15 @@ cdef class SeaBreezeDevice(object):
 
     @property
     def features(self):
+        """return a dictionary of all supported features
+
+        this returns a dictionary with all supported Features of the spectrometer
+
+        Returns
+        -------
+        features : `dict` [`str`, `seabreeze.cseabreeze.SeaBreezeFeature`]
+        """
+        # TODO: make this a cached property
         features = {}
         # noinspection PyProtectedMember
         feature_registry = SeaBreezeFeature.get_feature_class_registry()
@@ -371,6 +386,16 @@ cdef class SeaBreezeDevice(object):
 
     @property
     def f(self):
+        """convenience assess to features via attributes
+
+        this allows you to access a feature like this::
+
+            # via .features
+            device.features['spectrometer'][0].get_intensities()
+            # via .f
+            device.f.spectrometer.get_intensities()
+
+        """
         class FeatureAccessHandler(object):
             def __init__(self, feature_dict):
                 for identifier, features in feature_dict.items():
@@ -379,7 +404,10 @@ cdef class SeaBreezeDevice(object):
 
 
 cdef class SeaBreezeFeature(object):
+    """BaseClass for SeaBreezeFeatures
 
+    defines the minimum class interface for all features
+    """
     cdef SeaBreezeDevice device
     cdef long device_id
     cdef readonly long feature_id
@@ -404,11 +432,22 @@ cdef class SeaBreezeFeature(object):
 
     @classmethod
     def get_feature_class_registry(cls):
+        """return a class registry dictionary
+
+        creates a dictionary of all derived classes of `SeaBreezeFeature` and
+        returns a {SeaBreezeFeature.identifier: DerivedSeabreezeFeature} mapping.
+        """
         # noinspection PyUnresolvedReferences
         return {feature_class.identifier: feature_class for feature_class in SeaBreezeFeature.__subclasses__()}
 
     @classmethod
     def get_feature_ids_from_device(cls, SeaBreezeDevice device):
+        """return feature_id from a `SeaBreezeDevice`
+
+        all `SeaBreezeFeatures` have this classmethod and return their
+        individual feature ids if the provided `SeaBreezeDevice` supports
+        the feature.
+        """
         return []
 
     @classmethod
@@ -464,6 +503,20 @@ cdef class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
         return out
 
     def raw_usb_read(self, endpoint, buffer_length=1024):
+        """read raw data from usb
+
+        Parameters
+        ----------
+        endpoint : str
+            one of {'primary_out', 'primary_in', 'secondary_out', 'secondary_in', 'secondary_in2'}
+        buffer_length : int, default=1024
+            length of the allocated outputbuffer
+
+        Returns
+        -------
+        data: str
+            raw readout from usb
+        """
         cdef unsigned char* c_buffer = NULL
         cdef unsigned int buflen = int(buffer_length)
         cdef int error_code
@@ -483,6 +536,19 @@ cdef class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
         return data
 
     def raw_usb_write(self, data, endpoint):
+        """send raw data to usb
+
+        Parameters
+        ----------
+        data : str
+            raw data that should be transfered to spectrometer
+        endpoint : str
+            one of {'primary_out', 'primary_in', 'secondary_out', 'secondary_in', 'secondary_in2'}
+
+        Returns
+        -------
+        bytes_written : int
+        """
         cdef unsigned char* c_buffer
         cdef unsigned int c_buffer_length
         cdef int error_code
@@ -495,7 +561,7 @@ cdef class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
                                                         &c_buffer[0], c_buffer_length, ep)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-        return bytes_written
+        return int(bytes_written)
 
 
 cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):

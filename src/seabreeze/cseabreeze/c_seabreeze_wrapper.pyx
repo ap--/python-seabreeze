@@ -12,7 +12,7 @@ import numpy as np
 
 
 # from libseabreeze api/SeaBreezeConstants.h
-class ErrorCode(object):
+class _ErrorCode(object):
     SUCCESS = 0
     INVALID_ERROR = 1
     NO_DEVICE = 2
@@ -59,7 +59,7 @@ class SeaBreezeError(Exception):
 
             elif error_code >= len(self._error_msgs):
                 # not a valid a seabreeze error code
-                message = self._error_msgs[ErrorCode.INVALID_ERROR]
+                message = self._error_msgs[_ErrorCode.INVALID_ERROR]
             else:
                 # return a seabreeze error message
                 message = self._error_msgs[error_code]
@@ -217,7 +217,7 @@ cdef class SeaBreezeAPI(object):
                 try:
                     dev.open()
                 except SeaBreezeError as err:
-                    if err.error_code == ErrorCode.NO_DEVICE:
+                    if err.error_code == _ErrorCode.NO_DEVICE:
                         # device used by another thread?
                         continue
             model = dev.model

@@ -49,7 +49,8 @@ libseabreeze = Extension('seabreeze.cseabreeze._wrapper',
                          sources=sources,
                          include_dirs=['src/libseabreeze/include'],
                          libraries=libs)
-# This is a bit
+
+# TODO: detect if running on rtd?
 building_sphinx_documentation = True
 libseabreeze.cython_directives = {
     'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
@@ -85,12 +86,12 @@ setup(
     setup_requires=[
         'setuptools>=18.0',
         'cython>=0.18',
-        "numpy<1.17; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
-        "numpy; python_version>='3.6'",
+        "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
+        "numpy ; python_version>='3.6'",
     ],
     install_requires=[
-        "numpy<1.17; python_version<'3.6'",
-        "numpy; python_version>='3.6'",
+        "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
+        "numpy ; python_version>='3.6'", 'numpy'
     ],
     extras_require={
         'cseabreeze': [],

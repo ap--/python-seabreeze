@@ -99,6 +99,7 @@ SeaBreezeAPI::~SeaBreezeAPI() {
     
 }
 
+#if 0
 /**************************************************************************************/
 //  C language wrapper for Device control 
 /**************************************************************************************/
@@ -1825,3 +1826,4 @@ unsigned short sbapi_i2c_master_write_bus(long deviceID, long featureID, int *er
 	return wrapper->i2cMasterWriteBus(deviceID, featureID, error_code, busIndex, slaveAddress, writeData, numberOfBytes);
 }
 
+#endif

@@ -30,7 +30,7 @@
 #ifndef SEABREEZE_LOG_H
 #define SEABREEZE_LOG_H
 
-#include "api/DllDecl.h"
+// #include "api/DllDecl.h"
 
 #include <string>
 #include <stack>
@@ -82,7 +82,7 @@
 *
 * Provides automatic heirarchical call-stack indentation.
 */
-class DLL_DECL Log
+class Log
 {
     public:
         Log(const char *s);
@@ -113,9 +113,10 @@ class DLL_DECL Log
         void trace(const char *fmt, ...);
 };
 
-extern "C" {
+// extern "C" {
 #endif /* __cplusplus */
 
+#if 0
 // We need the flattened C interface if we want to call from Cygwin (mainly
 // to set log level)...see http://cygwin.com/ml/cygwin/2006-04/msg00251.html
 void DLL_DECL seabreeze_log_set_level_int(int lvl);
@@ -125,8 +126,10 @@ void DLL_DECL seabreeze_log_info (const char *fmt, ...);
 void DLL_DECL seabreeze_log_warn (const char *fmt, ...);
 void DLL_DECL seabreeze_log_error(const char *fmt, ...);
 
+#endif
+
 #ifdef __cplusplus
-};
+// };
 
 #endif /* __cplusplus */
 #endif

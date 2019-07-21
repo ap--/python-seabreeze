@@ -36,7 +36,7 @@
 #ifndef SEABREEZEAPI_H
 #define SEABREEZEAPI_H
 
-#include "api/DllDecl.h"
+// #include "api/DllDecl.h"
 #include "api/USBEndpointTypes.h"
 
 #ifdef __cplusplus
@@ -50,7 +50,7 @@
     @note   Detailed method documentation is available in
             the analogous C functions in SeaBreezeAPI.h
 */
-class DLL_DECL SeaBreezeAPI {
+class SeaBreezeAPI {
 public:
     /**
      * No public constructor.  To use this class in C++,
@@ -376,8 +376,10 @@ private:
     static SeaBreezeAPI *instance;
 };
 
-extern "C" {
+// extern "C" {
 #endif /* __cplusplus */
+
+#if 0
 
     /* All of these C functions start with sbapi_ to prevent namespace
      * collisions.
@@ -3687,7 +3689,9 @@ extern "C" {
 
 
 #ifdef __cplusplus
-}
+// }
 #endif /* __cplusplus */
+
+#endif
 
 #endif /* SEABREEZEAPI_H */

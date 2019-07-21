@@ -77,6 +77,8 @@ exclude_patterns = []
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
 
+napoleon_use_rtype = False
+
 
 # -- Options for HTML output -------------------------------------------------
 

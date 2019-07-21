@@ -1,3 +1,4 @@
+================
 python-seabreeze
 ================
 
@@ -18,46 +19,78 @@ the :ref:`Quickstart Guide <quickstart>` and the :ref:`API documentation <api>`.
 out the :ref:`Contributing Guide <contrib>` if you want to learn how to contribute to the project.
 
 
-TL;DR;
-------
+.. figure:: _static/overview.png
+    :figwidth: image
+    :align: center
 
-If you know how to install python modules with binary extensions and you know how to
-access usb devices from user space with your operating system of choice, here's
-all you need to know to read a spectrum::
-
-    $ pip install python-seabreeze
-
-.. admonition:: if windows
-
-    force your spectrometer to use a driver from :module:`system/windows-driver-files.zip`
-
-.. admonition:: if linux
-
-    install udev rules from :module:`system/10-oceanoptics.rules`
-
-.. code-block:: python
-
-    >>> import seabreeze.spectrometers as sb
-    >>> spec = sb.Spectrometer.from_serial_number()
-    >>> spec.integration_time_micros(20000)
-    >>> spec.wavelengths()
-    array([  340.32581   ,   340.70321186,   341.08058305, ...,  1024.84940994,
-            1025.1300678 ,  1025.4106617 ])
-    >>> spec.intensities()
-    array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
-             6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
+    python-seabreeze module structure
 
 
 
+python-seabreeze in the wild
+============================
+
+python-seabreeze is used in many labs around the world. One of the cool experiments I know of was
+a `student project measuring fluorescence spectra (#17)
+<https://www.spacestationexplorers.org/new-student-experiments-reach-iss-on-spacex-crs-14>`_ with a
+``Spark`` spectrometer controlled by a raspberry pi zero, which was sent to the International
+Space Station on the SpaceX CRS-14 resupply mission. *(space proof)*
+
+.. tip::
+
+    If you want me to add your project here, let me know. Happy to add it.
+
+.. rubric:: projects
+
+- SeaBreeze_ - Ocean Optics' SeaBreeze C library.
+- libseabreeze_ - github clone of the C library. *internal use only* (has pre-built libraries if you know what you're doing)
+- python-seabreeze-feedstock_ - anaconda feedstock for automated package deployment. *internal use only*
+
+.. _libseabreeze: https://github.com/ap--/libseabreeze
+.. _python-seabreeze-feedstock: https://github.com/ap--/python-seabreeze
+
+
+---------------------------------------------------------------------------------------------------
+
+.. sidebar:: A note from the author
+    :subtitle: (ノ\*-_-\*)ノ┴—┴
+
+    Over the years, maintaining this project made me realize that supporting the authors of
+    open source projects is a crucial (but mostly ignored) part of the open source community.
+    If python-seabreeze_ saved you some development time, consider contributing to the
+    project, or send me an email and tell me about your project, or consider buying me coffee,
+    or support me via paypal. Something small like that puts a smile on my face for weeks, and
+    it's extremely motivating.
+
+    .. rubric:: Anyways, enough ranting (^_^") let's science!
+
+.. _python-seabreeze: https://github.com/ap--/python-seabreeze
+
+
+========
+Contents
+========
 
 .. toctree::
+   :caption: Introduction:
    :maxdepth: 3
-   :caption: Contents:
 
+   tldr.rst
    install.rst
    quickstart.rst
+
+.. toctree::
+   :caption: Development:
+
    api.rst
+   backend_api.rst
+
+.. toctree::
+   :caption: Support:
+
    contributing.rst
+
+
 
 Indices and tables
 ==================

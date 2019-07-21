@@ -1,4 +1,4 @@
-Copyright (C) 2012-2016 Andreas Poehlmann       
+Copyright (C) 2012-2019 Andreas Poehlmann <andreas@poehlmann.io>
 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

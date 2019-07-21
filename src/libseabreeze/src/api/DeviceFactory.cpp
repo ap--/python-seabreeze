@@ -90,7 +90,7 @@ void DeviceFactory::shutdown() {
 DeviceFactory::DeviceFactory()
 {
     nameToCreator.insert(make_pair("Apex",        (creatorFunction) &deviceFactory<Apex       >));
-    nameToCreator.insert(make_pair("FlameX",       (creatorFunction) &deviceFactory<FlameX      >));
+    nameToCreator.insert(make_pair("FlameX",      (creatorFunction) &deviceFactory<FlameX     >));
     nameToCreator.insert(make_pair("FlameNIR",    (creatorFunction) &deviceFactory<FlameNIR   >));
     nameToCreator.insert(make_pair("HR2000",      (creatorFunction) &deviceFactory<HR2000     >));
     nameToCreator.insert(make_pair("HR2000Plus",  (creatorFunction) &deviceFactory<HR2000Plus >));

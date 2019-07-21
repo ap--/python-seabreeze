@@ -230,8 +230,8 @@ cdef class SeaBreezeAPI(object):
 
 cdef class SeaBreezeDevice(object):
 
-    cdef public long handle
-    cdef public str model, serial_number
+    cdef readonly long handle
+    cdef readonly str model, serial_number
     cdef csb.SeaBreezeAPI *sbapi
 
     def __cinit__(self, handle):
@@ -382,7 +382,7 @@ cdef class SeaBreezeFeature(object):
 
     cdef SeaBreezeDevice device
     cdef long device_id
-    cdef public long feature_id
+    cdef readonly long feature_id
     cdef csb.SeaBreezeAPI *sbapi
 
     identifier = "base_feature"
@@ -503,7 +503,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     identifier = "spectrometer"
     required = False
 
-    cdef public int _cached_spectrum_length
+    cdef readonly int _cached_spectrum_length
 
     def __cinit__(self, SeaBreezeDevice device, int feature_id):
         self._cached_spectrum_length = -1

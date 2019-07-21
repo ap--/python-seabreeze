@@ -14,8 +14,15 @@
 #
 import os
 import sys
+import inspect
+
 sys.path.insert(0, os.path.abspath('./_extensions'))
-sys.path.insert(0, os.path.abspath('../../src'))
+# sys.path.insert(0, os.path.abspath('../../src'))
+
+
+def isfunction(obj):
+    return hasattr(type(obj), "__code__")
+inspect.isfunction = isfunction
 
 
 # -- Project information -----------------------------------------------------

@@ -30,122 +30,134 @@ familiar with python.
 cseabreeze
 ==========
 
+.. currentmodule:: seabreeze.cseabreeze
+
 The C++ libseabreeze API is fully wrapped and exposed to python. If you intend to
-directly use it you start with a :class:`seabreeze.cseabreeze.SeaBreezeAPI` instance
-and retrieve :class:`seabreeze.cseabreeze.SeaBreezeDevice` instances via
-:func:`seabreeze.cseabreeze.SeaBreezeAPI.list_devices`. These instances offer all feature functionality via their
+directly use it you start with a :class:`SeaBreezeAPI` instance
+and retrieve :class:`SeaBreezeDevice` instances via
+:func:`SeaBreezeAPI.list_devices`. These instances offer all feature functionality via their
 ``features`` property or their ``f`` attribute for easy access.
 
 
 SeaBreezeAPI
 ------------
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeAPI
+.. autoclass:: SeaBreezeAPI
 
-    .. automethod:: seabreeze.cseabreeze.SeaBreezeAPI.list_devices
+    .. automethod:: SeaBreezeAPI.list_devices
 
-    .. automethod:: seabreeze.cseabreeze.SeaBreezeAPI.add_rs232_device_location
+    .. automethod:: SeaBreezeAPI.add_rs232_device_location
 
-    .. automethod:: seabreeze.cseabreeze.SeaBreezeAPI.add_ipv4_device_location
+    .. automethod:: SeaBreezeAPI.add_ipv4_device_location
 
-    .. automethod:: seabreeze.cseabreeze.SeaBreezeAPI.initialize
+    .. automethod:: SeaBreezeAPI.initialize
 
-    .. automethod:: seabreeze.cseabreeze.SeaBreezeAPI.shutdown
+    .. automethod:: SeaBreezeAPI.shutdown
 
 SeaBreezeDevice
 ---------------
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeDevice
+.. autoclass:: SeaBreezeDevice
     :members:
+
+    .. autoattribute:: SeaBreezeDevice.model
+
+    .. autoattribute:: SeaBreezeDevice.serial_number
 
 SeaBreezeFeatures
 -----------------
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeFeature
+.. hint::
+
+    :class:`SeaBreezeFeature` classes are not instantiated directly, but provided via
+    :attr:`SeaBreezeDevice.features` or :attr:`SeaBreezeDevice.f`. Their individual
+    class interfaces are documented here:
+
+.. autoclass:: SeaBreezeFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeRawUSBBusAccessFeature
+.. autoclass:: SeaBreezeRawUSBBusAccessFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeSpectrometerFeature
+.. autoclass:: SeaBreezeSpectrometerFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezePixelBinningFeature
+.. autoclass:: SeaBreezePixelBinningFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeThermoElectricFeature
+.. autoclass:: SeaBreezeThermoElectricFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeIrradCalFeature
+.. autoclass:: SeaBreezeIrradCalFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeEthernetConfigurationFeature
+.. autoclass:: SeaBreezeEthernetConfigurationFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeMulticastFeature
+.. autoclass:: SeaBreezeMulticastFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeIPv4Feature
+.. autoclass:: SeaBreezeIPv4Feature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeDHCPServerFeature
+.. autoclass:: SeaBreezeDHCPServerFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeNetworkConfigurationFeature
+.. autoclass:: SeaBreezeNetworkConfigurationFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeWifiConfigurationFeature
+.. autoclass:: SeaBreezeWifiConfigurationFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeGPIOFeature
+.. autoclass:: SeaBreezeGPIOFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeEEPROMFeature
+.. autoclass:: SeaBreezeEEPROMFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeLightSourceFeature
+.. autoclass:: SeaBreezeLightSourceFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeStrobeLampFeature
+.. autoclass:: SeaBreezeStrobeLampFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeContinuousStrobeFeature
+.. autoclass:: SeaBreezeContinuousStrobeFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeShutterFeature
+.. autoclass:: SeaBreezeShutterFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeNonlinearityCoefficientsFeature
+.. autoclass:: SeaBreezeNonlinearityCoefficientsFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeTemperatureFeature
+.. autoclass:: SeaBreezeTemperatureFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeIntrospectionFeature
+.. autoclass:: SeaBreezeIntrospectionFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeSpectrumProcessingFeature
+.. autoclass:: SeaBreezeSpectrumProcessingFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeRevisionFeature
+.. autoclass:: SeaBreezeRevisionFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeOpticalBenchFeature
+.. autoclass:: SeaBreezeOpticalBenchFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeStrayLightCoefficientsFeature
+.. autoclass:: SeaBreezeStrayLightCoefficientsFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeDataBufferFeature
+.. autoclass:: SeaBreezeDataBufferFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeFastBufferFeature
+.. autoclass:: SeaBreezeFastBufferFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeAcquisitionDelayFeature
+.. autoclass:: SeaBreezeAcquisitionDelayFeature
     :members:
 
-.. autoclass:: seabreeze.cseabreeze.SeaBreezeI2CMasterFeature
+.. autoclass:: SeaBreezeI2CMasterFeature
     :members:
 
 

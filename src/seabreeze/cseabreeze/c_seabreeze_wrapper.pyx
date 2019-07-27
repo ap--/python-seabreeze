@@ -247,11 +247,14 @@ cdef class SeaBreezeDevice(object):
         if handle is None:
             raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
         self.handle = handle
-        if self.is_open:
+        try:
             self._get_info()
-        else:
-            self.model = "?"
-            self.serial_number = "?"
+        except SeaBreezeError:
+            if not self.model:
+                # TODO: warn, getting the model string should always succeed...
+                self.model = "?"
+            if not self.serial_number:
+                self.serial_number = "?"
 
     def __dealloc__(self):
         cdef int error_code
@@ -313,8 +316,9 @@ cdef class SeaBreezeDevice(object):
             # this is a hack to figure out if the spectrometer is connected
             self.get_serial_number()
         except SeaBreezeError as err:
-
-            return False
+            if err.error_code == _ErrorCode.TRANSFER_ERROR:
+                return False
+            raise err
         else:
             return True
 
@@ -432,22 +436,11 @@ cdef class SeaBreezeFeature(object):
 
     @classmethod
     def get_feature_class_registry(cls):
-        """return a class registry dictionary
-
-        creates a dictionary of all derived classes of `SeaBreezeFeature` and
-        returns a {SeaBreezeFeature.identifier: DerivedSeabreezeFeature} mapping.
-        """
         # noinspection PyUnresolvedReferences
         return {feature_class.identifier: feature_class for feature_class in SeaBreezeFeature.__subclasses__()}
 
     @classmethod
     def get_feature_ids_from_device(cls, SeaBreezeDevice device):
-        """return feature_id from a `SeaBreezeDevice`
-
-        all `SeaBreezeFeatures` have this classmethod and return their
-        individual feature ids if the provided `SeaBreezeDevice` supports
-        the feature.
-        """
         return []
 
     @classmethod

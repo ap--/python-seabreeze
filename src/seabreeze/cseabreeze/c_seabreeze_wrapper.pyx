@@ -163,7 +163,7 @@ cdef class SeaBreezeAPI(object):
         c_port = int(port)
         cdef char* p_devtype = c_devtype
         cdef char* p_ipaddr = c_ipaddr
-        output = self.sbapi.addRS232DeviceLocation(p_devtype, p_ipaddr, c_port)
+        output = self.sbapi.addTCPIPv4DeviceLocation(p_devtype, p_ipaddr, c_port)
         return not bool(output)
 
     def _list_device_ids(self):

@@ -1,4 +1,7 @@
 
+from seabreeze.pyseabreeze.exceptions import SeaBreezeError
+from seabreeze.pyseabreeze.features import SeaBreezeFeature
+
 from .common import SeaBreezeError, get_pyseabreeze_decorator
 from .communication import USBCommOOI, USBCommOBP
 from .defines import ModelNames, DarkPixels, TriggerModes
@@ -9,15 +12,122 @@ import struct
 import numpy
 import time
 
-convert_exceptions = get_pyseabreeze_decorator('interfaces.spectrometer')
 
-#==========================#
-# OOI SpectrometerFeatures #
-#==========================#
+class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 
-class SpectrometerFeatureOOI(WavelengthCoefficientsEEPromFeature,
-                             EEPromFeature,
-                             USBCommOOI):
+    identifier = "spectrometer"
+    required = False
+
+    def set_trigger_mode(self, mode):
+        """sets the trigger mode for the spectrometer
+
+        Parameters
+        ----------
+        mode : int
+            trigger mode for spectrometer. Note that requesting an
+            unsupported mode will result in an error.
+
+        Returns
+        -------
+        None
+        """
+        raise NotImplementedError("implement in derived class")
+
+    def set_integration_time_micros(self, integration_time_micros):
+        """sets the integration time for the specified device
+
+        Parameters
+        ----------
+        integration_time_micros : int
+            the integration time in micro seconds
+
+        Returns
+        -------
+        None
+        """
+        raise NotImplementedError("implement in derived class")
+
+    def get_integration_time_micros_limits(self):
+        """returns the smallest and largest valid integration time setting, in microseconds
+
+        Returns
+        -------
+        micros_low: int
+            smallest supported integration time
+        micros_high: int
+            largest supported integration time
+        """
+        raise NotImplementedError("implement in derived class")
+
+    def get_maximum_intensity(self):
+        """returns the maximum pixel intensity for the spectrometer
+
+        Returns
+        -------
+        max_intensity: float
+        """
+        raise NotImplementedError("implement in derived class")
+
+    def get_electric_dark_pixel_indices(self):
+        """returns the electric dark pixel indices for the spectrometer
+
+        This returns a list of indices of the pixels that are electrically active
+        but optically masked (a.k.a. electric dark pixels). Note that not all
+        detectors have optically masked pixels; in that case, an empty list is returned
+
+        Returns
+        -------
+        dark_pixel_idxs: list of int
+        """
+        raise NotImplementedError("implement in derived class")
+
+    @property
+    def _spectrum_length(self):
+        """cached spectrum length
+
+        Returns
+        -------
+        spectrum_length: int
+        """
+        raise NotImplementedError("implement in derived class")
+
+    def get_wavelengths(self):
+        """computes the wavelengths for the spectrometer
+
+        Returns
+        -------
+        wavelengths: `np.ndarray`
+        """
+        raise NotImplementedError("implement in derived class")
+
+    def get_intensities(self):
+        """acquires a spectrum and returns the measured intensities
+
+        In this mode, auto-nulling should be automatically performed
+        for devices that support it.
+
+        Returns
+        -------
+        intensities: `np.ndarray`
+        """
+        raise NotImplementedError("implement in derived class")
+
+    def _get_spectrum_raw(self):
+        # int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
+        # int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
+        #                                        unsigned char *buffer, int bufferLength)
+        raise NotImplementedError("unformatted spectrum")
+
+    def _get_fast_buffer_spectrum(self):
+        # TODO: requires wrapping of OBP command GetRawSpectrumWithMetadata
+        #       which returns N raw spectra each with a 64 byte metadata prefix
+        # int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
+        #                                       unsigned char *dataBuffer, int dataMaxLength,
+        #                                       unsigned int numberOfSampleToRetrieve) # currently 15 max
+        raise NotImplementedError("fast buffer spectrum")
+
+
+class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
 
     _INTEGRATION_TIME_MIN = None
     _INTEGRATION_TIME_MAX = None
@@ -40,7 +150,6 @@ class SpectrometerFeatureOOI(WavelengthCoefficientsEEPromFeature,
         """This function should be used for model specific initializations"""
         pass
 
-    @convert_exceptions("An error occured during opening.")
     def open(self, device):
         # open the usb device with USBCommBase
         self.open_device(device.handle)
@@ -50,24 +159,20 @@ class SpectrometerFeatureOOI(WavelengthCoefficientsEEPromFeature,
         self._initialize_common()
         self._initialize_model_specific()
 
-    @convert_exceptions("An error occured during closing.")
     def close(self):
         # close the usb device with USBCommBase
         self.close_device()
 
-    @convert_exceptions("Is the spectrometer initialized?")
     def get_model(self):
         # return model name with lookuptable
         return ModelNames[self._device.idProduct]
 
-    @convert_exceptions("Trigger mode error.")
     def set_trigger_mode(self, mode):
         if mode in list(TriggerModes[self.get_model()].values()):
             self.usb_send(struct.pack("<BH", 0x0A, mode))
         else:
             raise SeaBreezeError("Only supports: %s" % list(TriggerModes[self.get_model()].keys()))
 
-    @convert_exceptions("Integration time error.")
     def set_integration_time_microsec(self, integration_time_micros):
         if self._INTEGRATION_TIME_MIN <= integration_time_micros < self._INTEGRATION_TIME_MAX:
             itime = int(integration_time_micros / self._INTEGRATION_TIME_BASE)
@@ -76,18 +181,15 @@ class SpectrometerFeatureOOI(WavelengthCoefficientsEEPromFeature,
             raise SeaBreezeError("Integration time must be in range(%d, %d)." %
                                  (self._INTEGRATION_TIME_MIN, self._INTEGRATION_TIME_MAX))
 
-    @convert_exceptions("Is the spectrometer initialized?")
     def get_min_integration_time_microsec(self):
         return self._INTEGRATION_TIME_MIN
 
-    @convert_exceptions("Error while reading raw spectrum.")
     def get_unformatted_spectrum(self, out):
         self.usb_send(struct.pack('<B', 0x09))
         out[:] = self.usb_read_highspeed(size=self._RAW_SPECTRUM_LEN,
                         timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
         return self._RAW_SPECTRUM_LEN  # compatibility
 
-    @convert_exceptions("Error while reading formatted spectrum.")
     def get_formatted_spectrum(self, out):
         tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
         self.get_unformatted_spectrum(tmp)
@@ -95,27 +197,22 @@ class SpectrometerFeatureOOI(WavelengthCoefficientsEEPromFeature,
         out[:] = ret * self._NORMALIZATION_VALUE
         return self._PIXELS  # compatibility
 
-    @convert_exceptions("")
     def get_unformatted_spectrum_length(self):
         return self._RAW_SPECTRUM_LEN
 
-    @convert_exceptions("")
     def get_formatted_spectrum_length(self):
         return self._PIXELS
 
-    @convert_exceptions("")
     def get_wavelengths(self, out):
         indices = numpy.arange(self._PIXELS, dtype=numpy.float64)
         wlcoeff = self.get_wavelength_coefficients()
         out[:] = sum( wl * (indices**i) for i, wl in enumerate(wlcoeff) )
         return self._PIXELS
 
-    @convert_exceptions("Is the spectrometer initialized?")
     def get_electric_dark_pixel_indices(self):
         # return model name with lookuptable
         return numpy.array(DarkPixels[self.get_model()])
 
-    @convert_exceptions("Error when reading serial number.")
     def get_serial_number(self):
         # The serial is stored in slot 0
         return str(self.read_eeprom_slot(0))

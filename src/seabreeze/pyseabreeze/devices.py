@@ -1,4 +1,270 @@
-from .common import SeaBreezeError
+"""
+
+
+"""
+import itertools
+
+from future.utils import with_metaclass
+from seabreeze.pyseabreeze.exceptions import SeaBreezeError
+from seabreeze.pyseabreeze.communication import USBCommBase, USBCommOOI
+
+# spectrometer models for pyseabreeze
+#
+VENDOR_ID = 0x2457
+# NOTE: PRODUCT_IDS and _model_registry will be filled
+#       via the SeaBreezeDevice metaclass below
+PRODUCT_IDS = set()
+_model_class_registry = {}
+
+
+def is_ocean_optics_usb_device(dev):
+    """return if the provided device is a supported ocean optics device
+
+    Parameters
+    ----------
+    dev : usb.core.Device
+
+    Returns
+    -------
+    bool
+    """
+    # noinspection PyUnresolvedReferences
+    return dev.idVendor == VENDOR_ID and dev.idProduct in PRODUCT_IDS
+
+
+class _SeaBreezeDeviceMeta(type):
+    """metaclass for pyseabreeze devices"""
+
+    def __init__(cls, name, bases, attr_dict):
+        if name != 'SeaBreezeDevice':
+            # check if required class attributes are present and correctly typed
+            # > product_id
+            _product_id = attr_dict['product_id']
+            assert isinstance(_product_id, int), "product_od not an int"
+            assert 0 <= _product_id <= 0xFFFF, "product_id not a 16bit int"
+            assert _product_id not in PRODUCT_IDS, "product_id already registered"
+            # > usb endpoint map
+            _endpoint_map = attr_dict['_endpoint_map']
+            assert isinstance(_endpoint_map, _EndPointMap), "no endpoint map provided"
+            # > model name
+            _model_name = attr_dict['_model_name']
+            assert isinstance(_model_name, str), "model name not a str"
+            # > the command interface
+            _interface_cls = attr_dict['_interface_cls']
+            assert isinstance(_interface_cls, USBCommBase), "instance class does not derive from USBCommBase"
+
+            # add to the class registry
+            PRODUCT_IDS.add(_product_id)
+            _model_class_registry[_product_id] = cls
+
+            # make the seabreeze device derive from the interface_cls
+            bases = tuple(b for b in itertools.chain(bases, [_interface_cls]))
+
+        super(_SeaBreezeDeviceMeta, cls).__init__(name, bases, attr_dict)
+
+
+class _EndPointMap(object):
+    """internal endpoint map for spectrometer classes"""
+    def __init__(self, ep_out=None, lowspeed_in=None, highspeed_in=None, highspeed_in2=None):
+        self.primary_out = self.ep_out = ep_out
+        self.primary_in = self.lowspeed_in = lowspeed_in
+        self.secondary_out = ep_out
+        self.secondary_in = self.highspeed_in = highspeed_in
+        self.secondary_in2 = self.highspeed_in2 = highspeed_in2
+
+
+class _DarkPixelRanges(tuple):
+    """internal dark pixel range class"""
+    def __new__(self, *ranges):
+        dp = itertools.chain(*(range(low, high) for (low, high) in ranges))
+        super(_DarkPixelRanges, self).__new__(*dp)
+
+
+class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
+
+    # attributes have to be defined in derived classes
+    _product_id = None
+    _model_name = None
+    _endpoint_map = None
+    _interface_cls = None
+
+    # internal attribute
+    _serial_number = '?'
+
+    def __init__(self, handle=None):
+        if handle is None:
+            raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
+        self.handle = handle
+
+    @property
+    def model(self):
+        return self._model_name
+
+    @property
+    def serial_number(self):
+        return self._serial_number
+
+    def get_serial_number(self):
+        """return the serial number string of the spectrometer
+
+        Returns
+        -------
+        serial_number: str
+        """
+
+    def _get_info(self):
+        """populate model and serial_number attributes (internal)"""
+        serial_number = self.get_serial_number()
+        try:
+            self.serial_number = serial_number
+        except TypeError:
+            self.serial_number = serial_number.encode("utf-8")
+
+    def __repr__(self):
+        return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial_number)
+
+    def open(self):
+        """open the spectrometer usb connection
+
+        Returns
+        -------
+        None
+        """
+        ret = self.sbapi.openDevice(self.handle, error_code)
+        if int(ret) > 0 or error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        self._get_info()
+
+    def close(self):
+        """close the spectrometer usb connection
+
+        Returns
+        -------
+        None
+        """
+        self.sbapi.closeDevice(self.handle, error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+
+    @property
+    def is_open(self):
+        """returns if the spectrometer device usb connection is opened
+
+        Returns
+        -------
+        bool
+        """
+        try:
+            # this is a hack to figure out if the spectrometer is connected
+            self.get_serial_number()
+        except SeaBreezeError as err:
+            if err.error_code == _ErrorCode.TRANSFER_ERROR:
+                return False
+            raise err
+        else:
+            return True
+
+    def get_serial_number(self):
+        """return the serial number string of the spectrometer
+
+        Returns
+        -------
+        serial_number: str
+        """
+        num_serial_number_features = self.sbapi.getNumberOfSerialNumberFeatures(self.handle, error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        if num_serial_number_features != 1:
+            raise SeaBreezeNumFeaturesError("serial number", received_num=num_serial_number_features)
+
+        self.sbapi.getSerialNumberFeatures(self.handle, error_code, feature_id, 1)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        max_length = self.sbapi.getSerialNumberMaximumLength(self.handle, feature_id, error_code)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        bytes_written = self.sbapi.getSerialNumber(self.handle, feature_id)
+        if error_code != 0:
+            raise SeaBreezeError(error_code=error_code)
+        serial = c_buffer[:bytes_written]
+        return serial.decode("utf-8").rstrip('\x00')
+
+    def get_model(self):
+        """return the model string of the spectrometer
+
+        Returns
+        -------
+        model: str
+        """
+        bytes_written = self.sbapi.getDeviceType(self.handle, error_code, c_buffer, _MAXBUFLEN)
+        model = c_buffer[:bytes_written]
+        if model == "NONE":
+            raise SeaBreezeError(error_code=error_code)
+        return model.decode("utf-8")
+
+    @property
+    def features(self):
+        """return a dictionary of all supported features
+
+        this returns a dictionary with all supported Features of the spectrometer
+
+        Returns
+        -------
+        features : `dict` [`str`, `seabreeze.cseabreeze.SeaBreezeFeature`]
+        """
+        # TODO: make this a cached property
+        features = {}
+        # noinspection PyProtectedMember
+        feature_registry = SeaBreezeFeature.get_feature_class_registry()
+        for identifier, feature_class in feature_registry.items():
+            feature_ids = feature_class.get_feature_ids_from_device(self)
+            features[identifier] = [feature_class(self, feature_id) for feature_id in feature_ids]
+        return features
+
+    @property
+    def f(self):
+        """convenience assess to features via attributes
+
+        this allows you to access a feature like this::
+
+            # via .features
+            device.features['spectrometer'][0].get_intensities()
+            # via .f
+            device.f.spectrometer.get_intensities()
+
+        """
+        class FeatureAccessHandler(object):
+            def __init__(self, feature_dict):
+                for identifier, features in feature_dict.items():
+                    setattr(self, identifier, features[0] if features else None)  # TODO: raise FeatureNotAvailable?
+        return FeatureAccessHandler(self.features)
+
+
+# SPECTROMETER DEFINITIONS
+# ========================
+#
+class USB2000PLUS(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x101E
+    model_name = 'USB2000PLUS'
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    interface_cls = USBCommOOI
+
+    # spectrometer config
+    spectrum_num_pixel = 2048  # FIXME
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 65535
+    integration_time_min = 1000
+    integration_time_max = 655350000
+    integration_time_base = 1
+    dark_pixel_indices = _DarkPixelRanges((6, 21))  # as in seabreeze-3.0.9
+
+    features = ()
+
+
+"""
+
 from .spectrometer import (
                             SpectrometerFeatureUSB2000,
                             SpectrometerFeatureHR2000,
@@ -341,3 +607,5 @@ USBInterfaces = {
     0x5000: VENTANA,
 }
 
+
+"""

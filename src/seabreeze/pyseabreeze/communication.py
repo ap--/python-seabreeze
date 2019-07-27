@@ -3,25 +3,23 @@
 One is called 'OBP protocol'  # OceanBinaryProtocol
 the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
 
-The only spectrometers using the OBP protocol via USB are: STS, Ventana and QEPro
-
 """
-#----------------------------------------------------------
-import usb.core
-import usb.util
-import struct
 import hashlib
+import struct
 import warnings
 
-from .common import SeaBreezeError
-#----------------------------------------------------------
+import usb.core
+import usb.util
+from seabreeze.pyseabreeze.exceptions import SeaBreezeError
+
 
 class USBCommBase(object):
-
     _ENDPOINT_MAP = None
     _device = None
     usbtimeout_ms = 0.0
     _mode = 'lowspeed'
+    usb_read = None
+    _opened = None
 
     def open_device(self, device):
         # device.reset()
@@ -43,10 +41,10 @@ class USBCommBase(object):
             self._opened = True
 
     def is_open(self):
-        try:
-            return self._opened
-        except AttributeError:
+        if self._opened is None:
             return False
+        else:
+            return self._opened
 
     def close_device(self):
         usb.util.dispose_resources(self._device)
@@ -74,7 +72,6 @@ class USBCommBase(object):
             self.usb_read = self.usb_read_lowspeed
 
 
-
 class USBCommOOI(USBCommBase):
 
     def send_command(self, msgtype, payload):
@@ -96,9 +93,7 @@ class USBCommOOI(USBCommBase):
         return self.usb_read()
 
 
-
 class USBCommOBP(USBCommBase):
-
     class OBP(object):
         """All relevant constants are stored here"""
 
@@ -142,23 +137,22 @@ class USBCommOBP(USBCommBase):
         NO_CHECKSUM = ""
         FOOTER = 0xC2C3C4C5  # the datasheet specifies it in this order...
 
-        HEADER_FMT = ("<H"    # start_bytes
-                       "H"    # protocol_version
-                       "H"    # flags
-                       "H"    # error number
-                       "L"    # message type
-                       "L"    # regarding
-                       "6s"   # reserved
-                       "B"    # checksum type
-                       "B"    # immediate length
-                       "16s"  # immediate data
-                       "L"    # bytes remaining
-                     )
+        HEADER_FMT = ("<H"  # start_bytes
+                      "H"  # protocol_version
+                      "H"  # flags
+                      "H"  # error number
+                      "L"  # message type
+                      "L"  # regarding
+                      "6s"  # reserved
+                      "B"  # checksum type
+                      "B"  # immediate length
+                      "16s"  # immediate data
+                      "L"  # bytes remaining
+                      )
 
         FOOTER_FMT = ("16s"  # checksum
-                      "L"    # footer
-                     )
-
+                      "L"  # footer
+                      )
 
     def send_command(self, msgtype, payload, timeout=None):
         """OBP command function"""
@@ -171,7 +165,7 @@ class USBCommOBP(USBCommBase):
 
         checksum = self._check_incoming_message_footer(ret[-20:])
         if ((checksumtype == self.OBP.CHECKSUM_TYPE_MD5) and
-            (checksum != hashlib.md5(ret[:-20]).digest())):
+                (checksum != hashlib.md5(ret[:-20]).digest())):
             # TODO: raise Error
             warnings.warn("WARNING OBP: The checksums differ, but we ignore this for now.")
         return
@@ -198,18 +192,16 @@ class USBCommOBP(USBCommBase):
 
         checksum = self._check_incoming_message_footer(ret[-20:])
         if ((checksumtype == self.OBP.CHECKSUM_TYPE_MD5) and
-            (checksum != hashlib.md5(ret[:-20]).digest())):
+                (checksum != hashlib.md5(ret[:-20]).digest())):
             # TODO: raise Error
             warnings.warn("WARNING OBP: The checksums differ, but we ignore this for now.")
         data = self._extract_message_data(ret)
         return data
 
-
     def query(self, msgtype, payload, timeout=None):
         """OBP query function"""
         self.innitiate_query(msgtype, payload)
         return self.receive_query(timeout)
-
 
     def _construct_outgoing_message(self, msgtype, payload, requestACK=False, regarding=None):
         """message layout, see STS datasheet

@@ -1,3 +1,4 @@
+'''
 from .common import SeaBreezeError, get_pyseabreeze_decorator
 from .communication import USBCommOBP
 
@@ -12,3 +13,4 @@ class SpectrumProcessingFeatureOBP(USBCommOBP):
         return [True]
 
     # TODO: implement the feature for STS and Spark
+'''

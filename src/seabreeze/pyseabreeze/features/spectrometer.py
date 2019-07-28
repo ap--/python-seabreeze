@@ -1,17 +1,53 @@
+import struct
+
+import numpy
+
 from seabreeze.pyseabreeze.communication import USBCommOOI
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.features._interface import _SeaBreezeSpectrometerFeatureInterface
 
-import struct
-import numpy
+
+# Definition
+# ==========
+#
+class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
+    identifier = 'spectrometer'
+
+    def set_trigger_mode(self, mode):
+        raise NotImplementedError("implement in derived class")
+
+    def set_integration_time_micros(self, integration_time_micros):
+        raise NotImplementedError("implement in derived class")
+
+    def get_integration_time_micros_limits(self):
+        raise NotImplementedError("implement in derived class")
+
+    def get_maximum_intensity(self):
+        raise NotImplementedError("implement in derived class")
+
+    def get_electric_dark_pixel_indices(self):
+        raise NotImplementedError("implement in derived class")
+
+    def _spectrum_length(self):
+        raise NotImplementedError("implement in derived class")
+
+    def get_wavelengths(self):
+        raise NotImplementedError("implement in derived class")
+
+    def get_intensities(self):
+        raise NotImplementedError("implement in derived class")
+
+    def _get_spectrum_raw(self):
+        raise NotImplementedError("implement in derived class")
+
+    def _get_fast_buffer_spectrum(self):
+        raise NotImplementedError("implement in derived class")
 
 
 # Spectrometer Features based on USBCommOOI
 # =========================================
 #
-class SeaBreezeSpectrometerFeatureOOI(SeaBreezeFeature, _SeaBreezeSpectrometerFeatureInterface):
-    identifier = 'spectrometer'
+class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
     required_interface_cls = USBCommOOI
     required_features = ('eeprom',)
 
@@ -193,8 +229,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGAGainAlt(SeaBreezeSpectrometerFeatureOOI
 # Spectrometer Features based on USBCommOBP
 # =========================================
 #
-class SeaBreezeSpectrometerFeatureOBP(SeaBreezeFeature, _SeaBreezeSpectrometerFeatureInterface):
-    identifier = 'spectrometer'
+class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
     required_interface_cls = USBCommOOI
     required_features = ()
 
@@ -246,7 +281,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeFeature, _SeaBreezeSpectrometerFe
             coeffs.append(struct.unpack("<f", data)[0])
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
+        return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))
 
     def get_intensities(self):
         tmp = self._get_spectrum_raw()
@@ -389,4 +424,3 @@ class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
 
 class SeaBreezeSpectrometerFeatureVENTANA(SeaBreezeSpectrometerFeatureOBP):
     pass
-

@@ -8,8 +8,6 @@ most of this code is based on implementations from
 """
 import usb.core
 import usb.util
-# from .interfaces import defines
-# from .interfaces import SeaBreezeError, USBInterfaces
 from seabreeze.pyseabreeze.devices import is_ocean_optics_usb_device, SeaBreezeDevice
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
@@ -81,77 +79,27 @@ class SeaBreezeAPI(object):
         devices: list of SeaBreezeDevice
             connected Spectrometer instances
         """
-        # Probe Devices on all Buses
-        device_ids = self._list_device_ids()
-        devices = []
-        for handle in device_ids:
-            dev = SeaBreezeDevice(handle)
-            if dev.is_open:
-                was_open_before = True
-            else:
-                was_open_before = False
-                try:
-                    dev.open()
-                except SeaBreezeError as err:
-                    if err.error_code == _ErrorCode.NO_DEVICE:
-                        # device used by another thread?
-                        continue
-            model = dev.model
-            serial = dev.serial_number
-            if not was_open_before:
-                dev.close()
-            devices.append(dev)
-        return devices
-
-    def device_list_devices(self):
-        """returns available SeaBreezeDevices
-
-        list all connected Ocean Optics devices supported
-        by libseabreeze.
-
-        Returns
-        -------
-        devices: list of SeaBreezeDevice
-            connected Spectrometer instances
-        """
         # get all matching devices
         # create the handles and associate protocols
         devices = []
-        for dev in self._list_pyusb_devices():
+        for pyusb_dev in self._list_pyusb_devices():
             # get the correct communication interface
-            dev = SeaBreezeDevice(dev)
+            dev = SeaBreezeDevice(pyusb_dev)
             if dev.is_open:
                 was_open_before = True
             else:
                 was_open_before = False
                 try:
                     dev.open()
-                except SeaBreezeError as err:
-                    if err.error_code == _ErrorCode.NO_DEVICE:
+                except usb.USBError as usberr:
+                    if usberr.errno == 16:
                         # device used by another thread?
                         continue
+                    else:
+                        raise
             model = dev.model
             serial = dev.serial_number
             if not was_open_before:
                 dev.close()
             devices.append(dev)
-
-
-            interface = USBInterfaces[dev.idProduct]()
-            # open the device and get the serial and model numbers
-            try:
-                interface.open_device(dev)
-            except usb.USBError as usberr:
-                if usberr.errno == 16:
-                    wasopen = True
-                else:
-                    raise
-            else:
-                wasopen = False
-            model = interface.get_model()
-            serial = interface.get_serial_number()
-            # close and create list of SeaBreezeDevices
-            if not wasopen:
-                interface.close_device()
-            devices.append(SeaBreezeDevice(dev, model, serial, interface))
         return devices

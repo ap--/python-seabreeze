@@ -167,7 +167,7 @@ class _SeaBreezeSpectrometerSaturationMixin(object):
     # noinspection PyUnresolvedReferences
     def _saturation_get_normalization_value(self):
         """internal only"""
-        ret = self.device.eeprom.eeprom_read_slot(17, raw=True)
+        ret = self.device.f.eeprom.eeprom_read_slot(17, raw=True)
         # ret contains the first two response bytes, then the eeprom data
         saturation = self._saturation_unpack(ret)
         if self._saturation_not_initialized(saturation):

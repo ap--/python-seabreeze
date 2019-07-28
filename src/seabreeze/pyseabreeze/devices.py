@@ -38,7 +38,7 @@ def is_ocean_optics_usb_device(dev):
 class _SeaBreezeDeviceMeta(type):
     """metaclass for pyseabreeze devices"""
 
-    def __new__(cls, name, bases, attr_dict):
+    def __new__(mcs, name, bases, attr_dict):
         if name != 'SeaBreezeDevice':
             # > the command interface
             _interface_cls = attr_dict['interface_cls']
@@ -47,7 +47,7 @@ class _SeaBreezeDeviceMeta(type):
             # make the seabreeze device derive from the interface_cls
             bases = tuple(b for b in itertools.chain(bases, [_interface_cls]))
 
-        return super(_SeaBreezeDeviceMeta, cls).__new__(cls, name, bases, attr_dict)
+        return super(_SeaBreezeDeviceMeta, mcs).__new__(mcs, name, bases, attr_dict)
 
     def __init__(cls, name, bases, attr_dict):
         if name != 'SeaBreezeDevice':
@@ -192,6 +192,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         try:
             if issubclass(self.interface_cls, USBCommOOI):
                 # The serial is stored in slot 0
+                # noinspection PyUnresolvedReferences
                 return str(self.f.eeprom.eeprom_read_slot(0))
 
             elif issubclass(self.interface_cls, USBCommOBP):

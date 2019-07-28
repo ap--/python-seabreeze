@@ -9,6 +9,7 @@ import time
 from future.utils import with_metaclass
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.communication import USBCommBase, USBCommOOI, USBCommOBP
+from seabreeze.pyseabreeze import features as sbfeatures
 
 # spectrometer models for pyseabreeze
 #
@@ -37,6 +38,17 @@ def is_ocean_optics_usb_device(dev):
 class _SeaBreezeDeviceMeta(type):
     """metaclass for pyseabreeze devices"""
 
+    def __new__(cls, name, bases, attr_dict):
+        if name != 'SeaBreezeDevice':
+            # > the command interface
+            _interface_cls = attr_dict['interface_cls']
+            assert issubclass(_interface_cls, USBCommBase), "instance class does not derive from USBCommBase"
+
+            # make the seabreeze device derive from the interface_cls
+            bases = tuple(b for b in itertools.chain(bases, [_interface_cls]))
+
+        return super(_SeaBreezeDeviceMeta, cls).__new__(cls, name, bases, attr_dict)
+
     def __init__(cls, name, bases, attr_dict):
         if name != 'SeaBreezeDevice':
             # check if required class attributes are present and correctly typed
@@ -46,21 +58,15 @@ class _SeaBreezeDeviceMeta(type):
             assert 0 <= _product_id <= 0xFFFF, "product_id not a 16bit int"
             assert _product_id not in PRODUCT_IDS, "product_id already registered"
             # > usb endpoint map
-            _endpoint_map = attr_dict['_endpoint_map']
+            _endpoint_map = attr_dict['endpoint_map']
             assert isinstance(_endpoint_map, _EndPointMap), "no endpoint map provided"
             # > model name
-            _model_name = attr_dict['_model_name']
+            _model_name = attr_dict['model_name']
             assert isinstance(_model_name, str), "model name not a str"
-            # > the command interface
-            _interface_cls = attr_dict['_interface_cls']
-            assert issubclass(_interface_cls, USBCommBase), "instance class does not derive from USBCommBase"
 
             # add to the class registry
             PRODUCT_IDS.add(_product_id)
             _model_class_registry[_product_id] = cls
-
-            # make the seabreeze device derive from the interface_cls
-            bases = tuple(b for b in itertools.chain(bases, [_interface_cls]))
 
         super(_SeaBreezeDeviceMeta, cls).__init__(name, bases, attr_dict)
 
@@ -79,7 +85,7 @@ class _DarkPixelRanges(tuple):
     """internal dark pixel range class"""
     def __new__(cls, *ranges):
         dp = itertools.chain(*(range(low, high) for (low, high) in ranges))
-        super(_DarkPixelRanges, cls).__new__(*dp)
+        return super(_DarkPixelRanges, cls).__new__(_DarkPixelRanges, dp)
 
 
 class _TriggerMode(object):
@@ -104,14 +110,20 @@ class _TriggerMode(object):
 class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 
     # attributes have to be defined in derived classes
-    _product_id = None
-    _model_name = None
-    _endpoint_map = None
-    _interface_cls = None
+    product_id = None
+    model_name = None
+    endpoint_map = None
+    interface_cls = None
 
     # internal attribute
     _serial_number = '?'
     _cached_features = None
+
+    def __new__(cls, handle=None):
+        if handle is None:
+            raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
+        specialized_cls = _model_class_registry[handle.idProduct]
+        return super(SeaBreezeDevice, cls).__new__(specialized_cls, handle)
 
     def __init__(self, handle=None):
         if handle is None:
@@ -124,7 +136,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 
     @property
     def model(self):
-        return self._model_name
+        return self.model_name
 
     @property
     def serial_number(self):
@@ -141,10 +153,15 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         None
         """
         self.open_device(self.handle)
-        if issubclass(self._interface_cls, USBCommOOI):
+        if issubclass(self.interface_cls, USBCommOOI):
             # initialize the spectrometer
             self.usb_send(struct.pack('<B', 0x01))
             time.sleep(0.1)  # wait shortly after init command
+        # cache features
+        self._cached_features = {}
+        _ = self.features
+        # get serial
+        self._serial_number = self.get_serial_number()
 
     def close(self):
         """close the spectrometer usb connection
@@ -163,7 +180,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         bool
         """
-        return super(SeaBreezeDevice, self).is_open()
+        return self._is_open()
 
     def get_serial_number(self):
         """return the serial number string of the spectrometer
@@ -172,15 +189,18 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         serial_number: str
         """
-        if issubclass(self._interface_cls, USBCommOOI):
-            # The serial is stored in slot 0
-            return str(self.device.f.eeprom.eeprom_read_slot(0))
+        try:
+            if issubclass(self.interface_cls, USBCommOOI):
+                # The serial is stored in slot 0
+                return str(self.f.eeprom.eeprom_read_slot(0))
 
-        elif issubclass(self._interface_cls, USBCommOBP):
-            return self.device.query(0x00000100, "")
+            elif issubclass(self.interface_cls, USBCommOBP):
+                return self.query(0x00000100, "")
 
-        else:
-            raise NotImplementedError("No serial number for interface class %s" % str(self._interface_cls))
+            else:
+                raise NotImplementedError("No serial number for interface class %s" % str(self.interface_cls))
+        except AttributeError:
+            raise SeaBreezeError("device not open")
 
     def get_model(self):
         """return the model string of the spectrometer
@@ -189,7 +209,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         model: str
         """
-        return self._model_name
+        return self.model_name
 
     @property
     def features(self):
@@ -202,17 +222,16 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         features : `dict` [`str`, `seabreeze.cseabreeze.SeaBreezeFeature`]
         """
         # TODO: make this a cached property
-        features = {}
-        # noinspection PyProtectedMember
-        feature_registry = SeaBreezeFeature.get_feature_class_registry()
-        for identifier, feature_class in feature_registry.items():
-            feature_ids = feature_class.get_feature_ids_from_device(self)
-            features[identifier] = [feature_class(self, feature_id) for feature_id in feature_ids]
-        return features
+        if not self._cached_features:
+            self._cached_features = {k: [] for k in sbfeatures.SeaBreezeFeature.get_feature_class_registry()}
+            for feature_cls in self.feature_classes:
+                f_list = self._cached_features.setdefault(feature_cls.identifier, [])
+                f_list.append(feature_cls(self, len(f_list)))
+        return self._cached_features
 
     @property
     def f(self):
-        """convenience assess to features via attributes
+        """convenience access to features via attributes
 
         this allows you to access a feature like this::
 

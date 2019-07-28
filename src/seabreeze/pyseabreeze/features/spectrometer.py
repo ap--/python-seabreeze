@@ -1,595 +1,392 @@
-
+from seabreeze.pyseabreeze.communication import USBCommOOI
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
-from seabreeze.pyseabreeze.features import SeaBreezeFeature
-
-from .common import SeaBreezeError, get_pyseabreeze_decorator
-from .communication import USBCommOOI, USBCommOBP
-from .defines import ModelNames, DarkPixels, TriggerModes
-from .wavelength import WavelengthCoefficientsEEPromFeature
-from .eeprom import EEPromFeature
+from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.features._interface import _SeaBreezeSpectrometerFeatureInterface
 
 import struct
 import numpy
-import time
 
 
-class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
+# Spectrometer Features based on USBCommOOI
+# =========================================
+#
+class SeaBreezeSpectrometerFeatureOOI(SeaBreezeFeature, _SeaBreezeSpectrometerFeatureInterface):
+    identifier = 'spectrometer'
+    required_interface_cls = USBCommOOI
+    required_features = ('eeprom',)
 
-    identifier = "spectrometer"
-    required = False
+    _normalization_value = 1.0
+
+    def __init__(self, device, feature_id):
+        super(SeaBreezeSpectrometerFeatureOOI, self).__init__(device, feature_id)
 
     def set_trigger_mode(self, mode):
-        """sets the trigger mode for the spectrometer
-
-        Parameters
-        ----------
-        mode : int
-            trigger mode for spectrometer. Note that requesting an
-            unsupported mode will result in an error.
-
-        Returns
-        -------
-        None
-        """
-        raise NotImplementedError("implement in derived class")
+        if mode in self.device.trigger_modes:
+            self.device.usb_send(struct.pack("<BH", 0x0A, mode))
+        else:
+            raise SeaBreezeError("Only supports: %s" % str(self.device.trigger_modes))
 
     def set_integration_time_micros(self, integration_time_micros):
-        """sets the integration time for the specified device
-
-        Parameters
-        ----------
-        integration_time_micros : int
-            the integration time in micro seconds
-
-        Returns
-        -------
-        None
-        """
-        raise NotImplementedError("implement in derived class")
+        t_min = self.device.integration_time_min
+        t_max = self.device.integration_time_max
+        if t_min <= integration_time_micros < t_max:
+            i_time = int(integration_time_micros / self.device.integration_time_base)
+            self.device.usb_send(struct.pack('<BI', 0x02, i_time))
+        else:
+            raise SeaBreezeError("Integration not in [{:d}, {:d}]".format(t_min, t_max))
 
     def get_integration_time_micros_limits(self):
-        """returns the smallest and largest valid integration time setting, in microseconds
-
-        Returns
-        -------
-        micros_low: int
-            smallest supported integration time
-        micros_high: int
-            largest supported integration time
-        """
-        raise NotImplementedError("implement in derived class")
+        return self.device.integration_time_min, self.device.integration_time_max
 
     def get_maximum_intensity(self):
-        """returns the maximum pixel intensity for the spectrometer
-
-        Returns
-        -------
-        max_intensity: float
-        """
-        raise NotImplementedError("implement in derived class")
+        return self.device.spectrum_max_value
 
     def get_electric_dark_pixel_indices(self):
-        """returns the electric dark pixel indices for the spectrometer
-
-        This returns a list of indices of the pixels that are electrically active
-        but optically masked (a.k.a. electric dark pixels). Note that not all
-        detectors have optically masked pixels; in that case, an empty list is returned
-
-        Returns
-        -------
-        dark_pixel_idxs: list of int
-        """
-        raise NotImplementedError("implement in derived class")
+        return numpy.array(self.device.dark_pixel_indices)
 
     @property
     def _spectrum_length(self):
-        """cached spectrum length
+        return self.device.spectrum_num_pixel
 
-        Returns
-        -------
-        spectrum_length: int
-        """
-        raise NotImplementedError("implement in derived class")
+    @property
+    def _spectrum_raw_length(self):
+        return self.device.spectrum_raw_length
 
     def get_wavelengths(self):
-        """computes the wavelengths for the spectrometer
-
-        Returns
-        -------
-        wavelengths: `np.ndarray`
-        """
-        raise NotImplementedError("implement in derived class")
+        indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
+        # OOI spectrometers store the wavelength calibration in slots 1,2,3,4
+        coeffs = []
+        for i in range(1, 5):
+            coeffs.append(float(self.device.f.eeprom.eeprom_read_slot(i)))
+        return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))
 
     def get_intensities(self):
-        """acquires a spectrum and returns the measured intensities
-
-        In this mode, auto-nulling should be automatically performed
-        for devices that support it.
-
-        Returns
-        -------
-        intensities: `np.ndarray`
-        """
-        raise NotImplementedError("implement in derived class")
+        tmp = self._get_spectrum_raw()
+        ret = numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp[:-1]), dtype=numpy.double)
+        return ret * self._normalization_value
 
     def _get_spectrum_raw(self):
-        # int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
-        # int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
-        #                                        unsigned char *buffer, int bufferLength)
-        raise NotImplementedError("unformatted spectrum")
+        tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
+        self.device.usb_send(struct.pack('<B', 0x09))
+
+        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
+        tmp[:] = self.device.usb_read_highspeed(size=self._spectrum_raw_length,
+                                                timeout=timeout)
+        return tmp
 
     def _get_fast_buffer_spectrum(self):
-        # TODO: requires wrapping of OBP command GetRawSpectrumWithMetadata
-        #       which returns N raw spectra each with a 64 byte metadata prefix
-        # int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
-        #                                       unsigned char *dataBuffer, int dataMaxLength,
-        #                                       unsigned int numberOfSampleToRetrieve) # currently 15 max
-        raise NotImplementedError("fast buffer spectrum")
+        raise NotImplementedError("implement in derived class")
 
 
-class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
+class SeaBreezeSpectrometerFeatureOOI2K(SeaBreezeSpectrometerFeatureOOI):
 
-    _INTEGRATION_TIME_MIN = None
-    _INTEGRATION_TIME_MAX = None
-    _INTEGRATION_TIME_BASE = None
-    _PIXELS = None
-    _RAW_SPECTRUM_LEN = None
-    _MAX_PIXEL_VALUE = None
-    _SATURATION_VALUE = None
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
+        # The byte order is different for some models
+        N_raw = self._spectrum_raw_length - 1
+        N_pix = self._spectrum_length
+        idx = [(i // 2) % 64 + (i % 2) * 64 + (i // 128) * 128 for i in range(N_raw)]
+        # high nibble not guaranteed to be pulled low
+        tsorted = tmp[idx] & numpy.array((0xFF, 0x0F) * N_pix, dtype=numpy.uint8)
+        ret = numpy.array(struct.unpack("<" + "H" * N_pix, tsorted), dtype=numpy.double)
+        # sorted and parsed
+        return ret * self._normalization_value
 
-    def has_spectrometer_feature(self):
-        return [True]
 
-    def _initialize_common(self):
-        if self._SATURATION_VALUE is None:
-            self._NORMALIZATION_VALUE = 1.
+class SeaBreezeSpectrometerFeatureOOIFPGA(SeaBreezeSpectrometerFeatureOOI):
+
+    def __init__(self, device, feature_id):
+        super(SeaBreezeSpectrometerFeatureOOIFPGA, self).__init__(device, feature_id)
+        self.device.usb_send(struct.pack("<B", 0xFE))
+        ret = self.device.usb_read(size=16)
+        data = struct.unpack("<HLBBBBBBBBBB", ret[:])
+        self.device.usbspeed = data[10]
+
+
+class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA):
+
+    def _get_spectrum_raw(self):
+        tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
+        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
+        self.device.usb_send(struct.pack('<B', 0x09))
+        if self.device.usbspeed == 0x00:  # lowspeed
+            tmp[:] = self.device.usb_read_highspeed(size=self._spectrum_raw_length,
+                                                    timeout=timeout)
+        else:  # self.usbspeed == 0x80  highspeed
+            tmp[:2048] = self.device.usb_read_highspeed_alt(size=2048,
+                                                            timeout=timeout)
+            tmp[2048:] = self.device.usb_read_highspeed(size=self._spectrum_raw_length - 2048,
+                                                        timeout=timeout)
+        return tmp
+
+
+class _SeaBreezeSpectrometerSaturationMixin(object):
+
+    def _saturation_unpack(self, ret):
+        return struct.unpack("<H", ret[6:8])[0]
+
+    def _saturation_not_initialized(self, x):
+        return x == 0
+
+    # noinspection PyUnresolvedReferences
+    def _saturation_get_normalization_value(self):
+        """internal only"""
+        ret = self.device.eeprom.eeprom_read_slot(17, raw=True)
+        # ret contains the first two response bytes, then the eeprom data
+        saturation = self._saturation_unpack(ret)
+        if self._saturation_not_initialized(saturation):
+            # pass  # not initialized?
+            return self._normalization_value
         else:
-            self._NORMALIZATION_VALUE = float(self._MAX_PIXEL_VALUE) / self._SATURATION_VALUE
+            return float(self.device.spectrum_max_value) / saturation
 
-    def _initialize_model_specific(self):
-        """This function should be used for model specific initializations"""
-        pass
 
-    def open(self, device):
-        # open the usb device with USBCommBase
-        self.open_device(device.handle)
-        # initialize the spectrometer
-        self.usb_send(struct.pack('<B', 0x01))
-        time.sleep(0.1)  # wait shortly after init command
-        self._initialize_common()
-        self._initialize_model_specific()
+class SeaBreezeSpectrometerFeatureOOIGain(SeaBreezeSpectrometerFeatureOOI,
+                                          _SeaBreezeSpectrometerSaturationMixin):
 
-    def close(self):
-        # close the usb device with USBCommBase
-        self.close_device()
+    def __init__(self, device, feature_id):
+        # set the usbspeed
+        super(SeaBreezeSpectrometerFeatureOOIGain, self).__init__(device, feature_id)
+        # load the saturation value
+        self._normalization_value = self._saturation_get_normalization_value()
 
-    def get_model(self):
-        # return model name with lookuptable
-        return ModelNames[self._device.idProduct]
+
+class SeaBreezeSpectrometerFeatureOOIFPGAGain(SeaBreezeSpectrometerFeatureOOIFPGA,
+                                              _SeaBreezeSpectrometerSaturationMixin):
+
+    def __init__(self, device, feature_id):
+        # set the usbspeed
+        super(SeaBreezeSpectrometerFeatureOOIFPGAGain, self).__init__(device, feature_id)
+        # load the saturation value
+        self._normalization_value = self._saturation_get_normalization_value()
+
+
+class SeaBreezeSpectrometerFeatureOOIFPGA4KGain(SeaBreezeSpectrometerFeatureOOIFPGA4K,
+                                                _SeaBreezeSpectrometerSaturationMixin):
+
+    def __init__(self, device, feature_id):
+        # set the usbspeed
+        super(SeaBreezeSpectrometerFeatureOOIFPGA4KGain, self).__init__(device, feature_id)
+        # get the saturation value
+        self._normalization_value = self._saturation_get_normalization_value()
+
+
+class SeaBreezeSpectrometerFeatureOOIGainAlt(SeaBreezeSpectrometerFeatureOOIGain):
+    # XXX: The NIRQUEST stores this value somewhere else
+    #      and might also not have been programmed yet..
+    # TODO: And this is planned for the QE65000 apparently.
+    def _saturation_unpack(self, ret):
+        return struct.unpack("<L", ret[6:10])[0]
+
+
+class SeaBreezeSpectrometerFeatureOOIFPGAGainAlt(SeaBreezeSpectrometerFeatureOOIFPGAGain):
+    # XXX: The Apex, Maya2000pro, MayaLSL store this value somewhere else
+    #      and might also not have been programmed yet...
+    # ret contains the first two response bytes, then the eeprom data
+    def _saturation_unpack(self, ret):
+        return struct.unpack("<H", ret[2:4])[0]
+
+    def _saturation_not_initialized(self, x):
+        return x <= 32768 or x > self.device.spectrum_max_value
+
+
+# Spectrometer Features based on USBCommOBP
+# =========================================
+#
+class SeaBreezeSpectrometerFeatureOBP(SeaBreezeFeature, _SeaBreezeSpectrometerFeatureInterface):
+    identifier = 'spectrometer'
+    required_interface_cls = USBCommOOI
+    required_features = ()
+
+    _normalization_value = 1.0
+
+    def __init__(self, device, feature_id):
+        super(SeaBreezeSpectrometerFeatureOBP, self).__init__(device, feature_id)
 
     def set_trigger_mode(self, mode):
-        if mode in list(TriggerModes[self.get_model()].values()):
-            self.usb_send(struct.pack("<BH", 0x0A, mode))
+        if mode in self.device.trigger_modes:
+            self.device.send_command(0x00110110, struct.pack("<B", mode))
         else:
-            raise SeaBreezeError("Only supports: %s" % list(TriggerModes[self.get_model()].keys()))
+            raise SeaBreezeError("Only supports: %s" % str(self.device.trigger_modes))
 
-    def set_integration_time_microsec(self, integration_time_micros):
-        if self._INTEGRATION_TIME_MIN <= integration_time_micros < self._INTEGRATION_TIME_MAX:
-            itime = int(integration_time_micros / self._INTEGRATION_TIME_BASE)
-            self.usb_send(struct.pack('<BI', 0x02, itime))
+    def set_integration_time_micros(self, integration_time_micros):
+        t_min = self.device.integration_time_min
+        t_max = self.device.integration_time_max
+        if t_min <= integration_time_micros < t_max:
+            i_time = int(integration_time_micros / self.device.integration_time_base)
+            self.device.send_command(0x00110010, struct.pack("<L", i_time))
         else:
-            raise SeaBreezeError("Integration time must be in range(%d, %d)." %
-                                 (self._INTEGRATION_TIME_MIN, self._INTEGRATION_TIME_MAX))
+            raise SeaBreezeError("Integration not in [{:d}, {:d}]".format(t_min, t_max))
 
-    def get_min_integration_time_microsec(self):
-        return self._INTEGRATION_TIME_MIN
+    def get_integration_time_micros_limits(self):
+        return self.device.integration_time_min, self.device.integration_time_max
 
-    def get_unformatted_spectrum(self, out):
-        self.usb_send(struct.pack('<B', 0x09))
-        out[:] = self.usb_read_highspeed(size=self._RAW_SPECTRUM_LEN,
-                        timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
-        return self._RAW_SPECTRUM_LEN  # compatibility
-
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp[:-1]), dtype=numpy.double)
-        out[:] = ret * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
-
-    def get_unformatted_spectrum_length(self):
-        return self._RAW_SPECTRUM_LEN
-
-    def get_formatted_spectrum_length(self):
-        return self._PIXELS
-
-    def get_wavelengths(self, out):
-        indices = numpy.arange(self._PIXELS, dtype=numpy.float64)
-        wlcoeff = self.get_wavelength_coefficients()
-        out[:] = sum( wl * (indices**i) for i, wl in enumerate(wlcoeff) )
-        return self._PIXELS
+    def get_maximum_intensity(self):
+        return self.device.spectrum_max_value
 
     def get_electric_dark_pixel_indices(self):
-        # return model name with lookuptable
-        return numpy.array(DarkPixels[self.get_model()])
+        return numpy.array(self.device.dark_pixel_indices)
 
-    def get_serial_number(self):
-        # The serial is stored in slot 0
-        return str(self.read_eeprom_slot(0))
+    @property
+    def _spectrum_length(self):
+        return self.device.spectrum_num_pixel
 
+    @property
+    def _spectrum_raw_length(self):
+        return self.device.spectrum_raw_length
 
-class SpectrometerFeatureOOI2K(SpectrometerFeatureOOI):
-
-    @convert_exceptions("Error while reading raw spectrum")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
-        # The byte order is different for some models
-        tsorted = numpy.empty((self._RAW_SPECTRUM_LEN - 1), dtype=numpy.uint8)
-        idx = [(i//2)%64 + (i%2)*64 + (i//(128))*(128) for i in range(self._RAW_SPECTRUM_LEN-1)]
-        tsorted = tmp[idx] & numpy.array((0xFF, 0x0F)*(self._PIXELS), dtype=numpy.uint8)  # high nibble not guaranteed to be pulled low
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tsorted), dtype=numpy.double)
-        # sorted and parsed
-        out[:] = ret * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
-
-
-class SpectrometerFeatureOOIFPGA(SpectrometerFeatureOOI):
-
-    def _initialize_model_specific(self):
-        self.usb_send(struct.pack("<B", 0xFE))
-        ret = self.usb_read(size=16)
-        data = struct.unpack("<HLBBBBBBBBBB", ret[:])
-        self.usbspeed = data[10]
-
-
-class SpectrometerFeatureOOIFPGA4K(SpectrometerFeatureOOIFPGA):
-
-    @convert_exceptions("Error while reading raw spectrum")
-    def get_unformatted_spectrum(self, out):
-        self.usb_send(struct.pack('<B', 0x09))
-        if self.usbspeed == 0x00:  # lowspeed
-            out[:] = self.usb_read_highspeed(size=self._RAW_SPECTRUM_LEN,
-                        timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
-        else: # self.usbspeed == 0x80  highspeed
-            out[:2048] = self.usb_read_highspeed_alt(size=2048,
-                        timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
-            out[2048:] = self.usb_read_highspeed(size=self._RAW_SPECTRUM_LEN - 2048,
-                        timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
-        return self._RAW_SPECTRUM_LEN  # compatibility
-
-
-class SpectrometerFeatureOOIGain(SpectrometerFeatureOOI):
-
-    def _initialize_model_specific(self):
-        # set the usbspeed
-        super(SpectrometerFeatureOOIGain, self)._initialize_model_specific()
-        # get the saturation value
-        ret = self.read_eeprom_slot_raw(17)
-        # ret contains the first two response bytes, then the eeprom data
-        saturation = struct.unpack("<H", ret[6:8])[0]
-        if saturation == 0:
-            pass  # not initialized?
-        else:
-            self._NORMALIZATION_VALUE = float(self._MAX_PIXEL_VALUE) / saturation
-
-
-class SpectrometerFeatureOOIFPGAGain(SpectrometerFeatureOOIFPGA):
-
-    def _initialize_model_specific(self):
-        # set the usbspeed
-        super(SpectrometerFeatureOOIFPGAGain, self)._initialize_model_specific()
-        # get the saturation value
-        ret = self.read_eeprom_slot_raw(17)
-        # ret contains the first two response bytes, then the eeprom data
-        saturation = struct.unpack("<H", ret[6:8])[0]
-        if saturation == 0:
-            pass  # not initialized?
-        else:
-            self._NORMALIZATION_VALUE = float(self._MAX_PIXEL_VALUE) / saturation
-
-
-class SpectrometerFeatureOOIFPGA4KGain(SpectrometerFeatureOOIFPGA4K):
-
-    def _initialize_model_specific(self):
-        # set the usbspeed
-        super(SpectrometerFeatureOOIFPGA4KGain, self)._initialize_model_specific()
-        # get the saturation value
-        ret = self.read_eeprom_slot_raw(17)
-        # ret contains the first two response bytes, then the eeprom data
-        saturation = struct.unpack("<H", ret[6:8])[0]
-        if saturation == 0:
-            pass  # not initialized?
-        else:
-            self._NORMALIZATION_VALUE = float(self._MAX_PIXEL_VALUE) / saturation
-
-
-class SpectrometerFeatureOOIGainAlt(SpectrometerFeatureOOIGain):
-
-    def _initialize_model_specific(self):
-        # set the usbspeed
-        super(SpectrometerFeatureOOIGainAlt, self)._initialize_model_specific()
-        # get the saturation value
-        ret = self.read_eeprom_slot_raw(17)
-        # XXX: The NIRQUEST stores this value somewhere else
-        #      and might also not have been programmed yet..
-        # TODO: And this is planned for the QE65000 apparently.
-        # ret contains the first two response bytes, then the eeprom data
-        saturation = struct.unpack("<L", ret[6:10])[0]
-        if saturation == 0:
-            pass  # not initialized?
-        else:
-            self._NORMALIZATION_VALUE = float(self._MAX_PIXEL_VALUE) / saturation
-
-
-class SpectrometerFeatureOOIFPGAGainAlt(SpectrometerFeatureOOIFPGAGain):
-
-    def _initialize_model_specific(self):
-        # set the usbspeed
-        super(SpectrometerFeatureOOIFPGAGainAlt, self)._initialize_model_specific()
-        # get the saturation value
-        ret = self.read_eeprom_slot_raw(17)
-        # XXX: The Apex, Maya2000pro, MayaLSL store this value somewhere else
-        #      and might also not have been programmed yet...
-        # ret contains the first two response bytes, then the eeprom data
-        saturation = struct.unpack("<H", ret[2:4])[0]
-        if saturation <= 32768 or saturation > self._MAX_PIXEL_VALUE:
-            pass  # not initialized?
-        else:
-            self._NORMALIZATION_VALUE = float(self._MAX_PIXEL_VALUE) / saturation
-
-
-#==========================#
-# OBP SpectrometerFeatures #
-#==========================#
-
-class SpectrometerFeatureOBP(USBCommOBP):
-
-    _INTEGRATION_TIME_MIN = None
-    _INTEGRATION_TIME_MAX = None
-    _INTEGRATION_TIME_BASE = None
-    _PIXELS = None
-    _RAW_SPECTRUM_LEN = None
-    _MAX_PIXEL_VALUE = None
-    _SATURATION_VALUE = None
-
-    def has_spectrometer_feature(self):
-        return [True]
-
-    def _initialize_common(self):
-        pass
-
-    def _initialize_model_specific(self):
-        """This function should be used for model specific initializations"""
-        pass
-
-    @convert_exceptions("An error occured during opening.")
-    def open(self, device):
-        # open the usb device with USBCommBase
-        self.open_device(device.handle)
-        self._initialize_common()
-        self._initialize_model_specific()
-
-    @convert_exceptions("An error occured during closing.")
-    def close(self):
-        # close the usb device with USBCommBase
-        self.close_device()
-
-    @convert_exceptions("Is the spectrometer initialized?")
-    def get_model(self):
-        # return model name with lookuptable
-        return ModelNames[self._device.idProduct]
-
-    @convert_exceptions("Trigger mode error.")
-    def set_trigger_mode(self, mode):
-        if mode in list(TriggerModes[self.get_model()].values()):
-            self.send_command(0x00110110, struct.pack("<B", mode))
-        else:
-            raise SeaBreezeError("Only supports: %s" % list(TriggerModes[self.get_model()].keys()))
-
-    @convert_exceptions("Integration time error.")
-    def set_integration_time_microsec(self, integration_time_micros):
-        if self._INTEGRATION_TIME_MIN <= integration_time_micros < self._INTEGRATION_TIME_MAX:
-            itime = int(integration_time_micros / self._INTEGRATION_TIME_BASE)
-            self.send_command(0x00110010, struct.pack("<L", itime))
-        else:
-            raise SeaBreezeError("Integration time must be in range(%d, %d)." %
-                                 (self._INTEGRATION_TIME_MIN, self._INTEGRATION_TIME_MAX))
-
-    @convert_exceptions("Is the spectrometer initialized?")
-    def get_min_integration_time_microsec(self):
-        return self._INTEGRATION_TIME_MIN
-
-    @convert_exceptions("Error while reading raw spectrum.")
-    def get_unformatted_spectrum(self, out):
-        datastring = self.query(0x00101100, "",
-                    timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
-        out[:] = numpy.fromstring(datastring, dtype=numpy.uint8)
-        return self._RAW_SPECTRUM_LEN  # compatibility
-
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
-        out[:] = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp), dtype=numpy.double)
-        return self._PIXELS  # compatibility
-
-    @convert_exceptions("")
-    def get_unformatted_spectrum_length(self):
-        return self._RAW_SPECTRUM_LEN
-
-    @convert_exceptions("")
-    def get_formatted_spectrum_length(self):
-        return self._PIXELS
-
-    @convert_exceptions("")
-    def get_wavelengths(self, out):
+    def get_wavelengths(self):
         # get number of wavelength coefficients
-        data = self.query(0x00180100, "")
+        data = self.device.query(0x00180100, "")
         N = struct.unpack("<B", data)[0]
         # now query the coefficients
         coeffs = []
         for i in range(N):
-            data = self.query(0x00180101, struct.pack("<B", i))
+            data = self.device.query(0x00180101, struct.pack("<B", i))
             coeffs.append(struct.unpack("<f", data)[0])
         # and generate the wavelength array
-        indices = numpy.arange(self._PIXELS, dtype=numpy.float64)
-        out[:] = sum( wl * (indices**i) for i, wl in enumerate(coeffs) )
-        return self._PIXELS
+        indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
 
-    @convert_exceptions("Is the spectrometer initialized?")
-    def get_electric_dark_pixel_indices(self):
-        # return model name with lookuptable
-        return numpy.array(DarkPixels[self.get_model()])
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
+        # noinspection PyTypeChecker
+        return numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp), dtype=numpy.double)
 
-    @convert_exceptions("Error when reading serial number.")
-    def get_serial_number(self):
-        return self.query(0x00000100, "")
+    def _get_spectrum_raw(self):
+        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
+        datastring = self.device.query(0x00101100, "", timeout=timeout)
+        return numpy.fromstring(datastring, dtype=numpy.uint8)
+
+    def _get_fast_buffer_spectrum(self):
+        raise NotImplementedError("implement in derived class")
 
 
-#========================#
-# Model specific changes #
-#========================#
-class SpectrometerFeatureUSB2000(SpectrometerFeatureOOI2K):
+# Model specific changes
+# ======================
+#
+class SeaBreezeSpectrometerFeatureUSB2000(SeaBreezeSpectrometerFeatureOOI2K):
     pass
 
 
-class SpectrometerFeatureHR2000(SpectrometerFeatureOOI2K):
+class SeaBreezeSpectrometerFeatureHR2000(SeaBreezeSpectrometerFeatureOOI2K):
     pass
 
 
-class SpectrometerFeatureHR4000(SpectrometerFeatureOOIFPGA4K):
+class SeaBreezeSpectrometerFeatureHR4000(SeaBreezeSpectrometerFeatureOOIFPGA4K):
 
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
         # The HR4000 needs to xor with 0x2000
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp[:-1])) ^ 0x2000
-        out[:] = ret.astype(numpy.double) * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
+        ret = numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp[:-1])) ^ 0x2000
+        return ret.astype(numpy.double) * self._normalization_value
 
 
-class SpectrometerFeatureUSB650(SpectrometerFeatureOOI2K):
+class SeaBreezeSpectrometerFeatureUSB650(SeaBreezeSpectrometerFeatureOOI2K):
     pass
 
 
-class SpectrometerFeatureHR2000PLUS(SpectrometerFeatureOOIFPGA):
+class SeaBreezeSpectrometerFeatureHR2000PLUS(SeaBreezeSpectrometerFeatureOOIFPGA):
 
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
-        # The HR2000Plus needs to xor with 0x2000
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp[:-1])) ^ 0x2000
-        out[:] = ret.astype(numpy.double) * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
+        # The HR2000PLUS needs to xor with 0x2000
+        ret = numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp[:-1])) ^ 0x2000
+        return ret.astype(numpy.double) * self._normalization_value
 
 
-class SpectrometerFeatureQE65000(SpectrometerFeatureOOIFPGA):
+class SeaBreezeSpectrometerFeatureQE65000(SeaBreezeSpectrometerFeatureOOIFPGA):
 
-    @convert_exceptions("")
-    def get_wavelengths(self, out):
-        indices = numpy.arange(-10, self._PIXELS - 10, dtype=numpy.float64)
-        wlcoeff = self.get_wavelength_coefficients()
-        out[:] = sum( wl * (indices**i) for i, wl in enumerate(wlcoeff) )
-        return self._PIXELS
+    def get_wavelengths(self):
+        # QE65000 specific override
+        indices = numpy.arange(-10, self._spectrum_length - 10, dtype=numpy.float64)
+        # OOI spectrometers store the wavelength calibration in slots 1,2,3,4
+        coeffs = []
+        for i in range(1, 5):
+            coeffs.append(float(self.device.f.eeprom.eeprom_read_slot(i)))
+        return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))
 
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
         # The QE65000 needs to xor with 0x8000
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp[:-1])) ^ 0x8000
-        out[:] = ret.astype(numpy.double) * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
+        ret = numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp[:-1])) ^ 0x8000
+        return ret.astype(numpy.double) * self._normalization_value
 
 
-class SpectrometerFeatureUSB2000PLUS(SpectrometerFeatureOOIFPGAGain):
+class SeaBreezeSpectrometerFeatureUSB2000PLUS(SeaBreezeSpectrometerFeatureOOIFPGAGain):
     pass
 
 
-class SpectrometerFeatureUSB4000(SpectrometerFeatureOOIFPGA4KGain):
+class SeaBreezeSpectrometerFeatureUSB4000(SeaBreezeSpectrometerFeatureOOIFPGA4KGain):
     pass
 
 
-class SpectrometerFeatureNIRQUEST512(SpectrometerFeatureOOIGainAlt):
+class SeaBreezeSpectrometerFeatureNIRQUEST512(SeaBreezeSpectrometerFeatureOOIGainAlt):
 
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
         # The NIRQUEST512 needs to xor with 0x8000
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp[:-1])) ^ 0x8000
-        out[:] = ret.astype(numpy.double) * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
+        ret = numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp[:-1])) ^ 0x8000
+        return ret.astype(numpy.double) * self._normalization_value
 
-class SpectrometerFeatureNIRQUEST256(SpectrometerFeatureOOIGainAlt):
 
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
+class SeaBreezeSpectrometerFeatureNIRQUEST256(SeaBreezeSpectrometerFeatureOOIGainAlt):
+
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
         # The NIRQUEST256 needs to xor with 0x8000
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp[:-1])) ^ 0x8000
-        out[:] = ret.astype(numpy.double) * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
+        ret = numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp[:-1])) ^ 0x8000
+        return ret.astype(numpy.double) * self._normalization_value
 
 
-class SpectrometerFeatureMAYA2000PRO(SpectrometerFeatureOOIFPGAGainAlt):
+class SeaBreezeSpectrometerFeatureMAYA2000PRO(SeaBreezeSpectrometerFeatureOOIFPGAGainAlt):
     pass
 
 
-class SpectrometerFeatureMAYA2000(SpectrometerFeatureOOIFPGA):
+class SeaBreezeSpectrometerFeatureMAYA2000(SeaBreezeSpectrometerFeatureOOIFPGA):
     pass
 
 
-class SpectrometerFeatureTORUS(SpectrometerFeatureOOIFPGAGain):
+class SeaBreezeSpectrometerFeatureTORUS(SeaBreezeSpectrometerFeatureOOIFPGAGain):
     # The Torus uses the USB2000Plus spec feature
     pass
 
 
-class SpectrometerFeatureAPEX(SpectrometerFeatureOOIFPGAGainAlt):
+class SeaBreezeSpectrometerFeatureAPEX(SeaBreezeSpectrometerFeatureOOIFPGAGainAlt):
     pass
 
 
-class SpectrometerFeatureMAYALSL(SpectrometerFeatureOOIFPGAGainAlt):
+class SeaBreezeSpectrometerFeatureMAYALSL(SeaBreezeSpectrometerFeatureOOIFPGAGainAlt):
     pass
 
 
-class SpectrometerFeatureJAZ(SpectrometerFeatureOOIGain):
+class SeaBreezeSpectrometerFeatureJAZ(SeaBreezeSpectrometerFeatureOOIGain):
 
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
         # XXX: No sync byte for the Jaz
-        ret = numpy.array(struct.unpack("<" + "H"*self._PIXELS, tmp), dtype=numpy.double)
-        out[:] = ret * self._NORMALIZATION_VALUE
-        return self._PIXELS  # compatibility
+        ret = numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp[:]), dtype=numpy.double)
+        return ret * self._normalization_value
 
 
-class SpectrometerFeatureSTS(SpectrometerFeatureOBP):
+class SeaBreezeSpectrometerFeatureSTS(SeaBreezeSpectrometerFeatureOBP):
     pass
 
-class SpectrometerFeatureQEPRO(SpectrometerFeatureOBP):
 
-    @convert_exceptions("Error while reading raw spectrum.")
-    def get_unformatted_spectrum(self, out):
-        datastring = self.query(0x00100928, "",
-                    timeout=int(self._INTEGRATION_TIME_MAX * 1e-3 + self.usbtimeout_ms))
-        out[:] = numpy.fromstring(datastring, dtype=numpy.uint8)
-        return self._RAW_SPECTRUM_LEN  # compatibility
+class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
 
-    @convert_exceptions("Error while reading formatted spectrum.")
-    def get_formatted_spectrum(self, out):
-        tmp = numpy.empty((self._RAW_SPECTRUM_LEN), dtype=numpy.uint8)
-        self.get_unformatted_spectrum(tmp)
+    def _get_spectrum_raw(self):
+        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
+        datastring = self.device.query(0x00100928, "", timeout=timeout)
+        return numpy.fromstring(datastring, dtype=numpy.uint8)
+
+    def get_intensities(self):
+        tmp = self._get_spectrum_raw()
         # 32byte metadata block at beginning
-        out[:] = numpy.array(struct.unpack("<" + "I"*self._PIXELS, tmp[32:]), dtype=numpy.double)
-        return self._PIXELS  # compatibility
+        ret = numpy.array(struct.unpack("<" + "I" * self._spectrum_length, tmp[32:]), dtype=numpy.double)
+        return ret * self._normalization_value
 
-class SpectrometerFeatureVENTANA(SpectrometerFeatureOBP):
+
+class SeaBreezeSpectrometerFeatureVENTANA(SeaBreezeSpectrometerFeatureOBP):
     pass
-
 

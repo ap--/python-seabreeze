@@ -3,10 +3,12 @@
 
 """
 import itertools
+import struct
+import time
 
 from future.utils import with_metaclass
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
-from seabreeze.pyseabreeze.communication import USBCommBase, USBCommOOI
+from seabreeze.pyseabreeze.communication import USBCommBase, USBCommOOI, USBCommOBP
 
 # spectrometer models for pyseabreeze
 #
@@ -51,7 +53,7 @@ class _SeaBreezeDeviceMeta(type):
             assert isinstance(_model_name, str), "model name not a str"
             # > the command interface
             _interface_cls = attr_dict['_interface_cls']
-            assert isinstance(_interface_cls, USBCommBase), "instance class does not derive from USBCommBase"
+            assert issubclass(_interface_cls, USBCommBase), "instance class does not derive from USBCommBase"
 
             # add to the class registry
             PRODUCT_IDS.add(_product_id)
@@ -75,9 +77,28 @@ class _EndPointMap(object):
 
 class _DarkPixelRanges(tuple):
     """internal dark pixel range class"""
-    def __new__(self, *ranges):
+    def __new__(cls, *ranges):
         dp = itertools.chain(*(range(low, high) for (low, high) in ranges))
-        super(_DarkPixelRanges, self).__new__(*dp)
+        super(_DarkPixelRanges, cls).__new__(*dp)
+
+
+class _TriggerMode(object):
+    """internal trigger modes class"""
+    NORMAL = 0x00
+    SOFTWARE = 0x01
+    LEVEL = 0x01
+    SYNCHRONIZATION = 0x02
+    HARDWARE = 0x03
+    EDGE = 0x03
+    SINGLE_SHOT = 0x04
+    SELF_NORMAL = 0x80
+    SELF_SOFTWARE = 0x81
+    SELF_SYNCHRONIZATION = 0x82
+    SELF_HARDWARE = 0x83
+    DISABLED = 0xFF
+    OBP_NORMAL = 0x00
+    OBP_EXTERNAL = 0x01
+    OBP_INTERNAL = 0x02
 
 
 class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
@@ -90,11 +111,16 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 
     # internal attribute
     _serial_number = '?'
+    _cached_features = None
 
     def __init__(self, handle=None):
         if handle is None:
             raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
         self.handle = handle
+        try:
+            self._serial_number = self.get_serial_number()
+        except SeaBreezeError:
+            pass
 
     @property
     def model(self):
@@ -103,22 +129,6 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
     @property
     def serial_number(self):
         return self._serial_number
-
-    def get_serial_number(self):
-        """return the serial number string of the spectrometer
-
-        Returns
-        -------
-        serial_number: str
-        """
-
-    def _get_info(self):
-        """populate model and serial_number attributes (internal)"""
-        serial_number = self.get_serial_number()
-        try:
-            self.serial_number = serial_number
-        except TypeError:
-            self.serial_number = serial_number.encode("utf-8")
 
     def __repr__(self):
         return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial_number)
@@ -130,10 +140,11 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         None
         """
-        ret = self.sbapi.openDevice(self.handle, error_code)
-        if int(ret) > 0 or error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        self._get_info()
+        self.open_device(self.handle)
+        if issubclass(self._interface_cls, USBCommOOI):
+            # initialize the spectrometer
+            self.usb_send(struct.pack('<B', 0x01))
+            time.sleep(0.1)  # wait shortly after init command
 
     def close(self):
         """close the spectrometer usb connection
@@ -142,9 +153,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         None
         """
-        self.sbapi.closeDevice(self.handle, error_code)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
+        self.close_device()
 
     @property
     def is_open(self):
@@ -154,15 +163,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         bool
         """
-        try:
-            # this is a hack to figure out if the spectrometer is connected
-            self.get_serial_number()
-        except SeaBreezeError as err:
-            if err.error_code == _ErrorCode.TRANSFER_ERROR:
-                return False
-            raise err
-        else:
-            return True
+        return super(SeaBreezeDevice, self).is_open()
 
     def get_serial_number(self):
         """return the serial number string of the spectrometer
@@ -171,23 +172,15 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         serial_number: str
         """
-        num_serial_number_features = self.sbapi.getNumberOfSerialNumberFeatures(self.handle, error_code)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        if num_serial_number_features != 1:
-            raise SeaBreezeNumFeaturesError("serial number", received_num=num_serial_number_features)
+        if issubclass(self._interface_cls, USBCommOOI):
+            # The serial is stored in slot 0
+            return str(self.device.f.eeprom.eeprom_read_slot(0))
 
-        self.sbapi.getSerialNumberFeatures(self.handle, error_code, feature_id, 1)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        max_length = self.sbapi.getSerialNumberMaximumLength(self.handle, feature_id, error_code)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        bytes_written = self.sbapi.getSerialNumber(self.handle, feature_id)
-        if error_code != 0:
-            raise SeaBreezeError(error_code=error_code)
-        serial = c_buffer[:bytes_written]
-        return serial.decode("utf-8").rstrip('\x00')
+        elif issubclass(self._interface_cls, USBCommOBP):
+            return self.device.query(0x00000100, "")
+
+        else:
+            raise NotImplementedError("No serial number for interface class %s" % str(self._interface_cls))
 
     def get_model(self):
         """return the model string of the spectrometer
@@ -196,11 +189,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         model: str
         """
-        bytes_written = self.sbapi.getDeviceType(self.handle, error_code, c_buffer, _MAXBUFLEN)
-        model = c_buffer[:bytes_written]
-        if model == "NONE":
-            raise SeaBreezeError(error_code=error_code)
-        return model.decode("utf-8")
+        return self._model_name
 
     @property
     def features(self):
@@ -259,8 +248,17 @@ class USB2000PLUS(SeaBreezeDevice):
     integration_time_max = 655350000
     integration_time_base = 1
     dark_pixel_indices = _DarkPixelRanges((6, 21))  # as in seabreeze-3.0.9
+    trigger_modes = (
+        _TriggerMode.NORMAL,
+        _TriggerMode.SOFTWARE,
+        _TriggerMode.SYNCHRONIZATION,
+        _TriggerMode.HARDWARE,
+    )
 
-    features = ()
+    # features
+    feature_classes = (
+
+    )
 
 
 """

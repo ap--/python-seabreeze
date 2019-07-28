@@ -2,7 +2,7 @@ import struct
 
 import numpy
 
-from seabreeze.pyseabreeze.communication import USBCommOOI
+from seabreeze.pyseabreeze.communication import USBCommOOI, USBCommOBP
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
@@ -230,7 +230,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGAGainAlt(SeaBreezeSpectrometerFeatureOOI
 # =========================================
 #
 class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
-    required_interface_cls = USBCommOOI
+    required_interface_cls = USBCommOBP
     required_features = ()
 
     _normalization_value = 1.0

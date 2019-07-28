@@ -2,10 +2,28 @@ import struct
 
 from seabreeze.pyseabreeze.communication import USBCommOOI, USBCommOBP
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.features._interface import _SeaBreezeThermoElectricFeatureInterface
 
 
-class ThermoElectricFeatureOOI(SeaBreezeFeature, _SeaBreezeThermoElectricFeatureInterface):
+# Definition
+# ==========
+#
+class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
+    identifier = 'thermo_electric'
+
+    def read_temperature_degrees_celsius(self):
+        raise NotImplementedError("implement in derived class")
+
+    def set_temperature_setpoint_degrees_celsius(self, temperature):
+        raise NotImplementedError("implement in derived class")
+
+    def enable_tec(self, state):
+        raise NotImplementedError("implement in derived class")
+
+
+# OOI implementation
+# ==================
+#
+class ThermoElectricFeatureOOI(SeaBreezeThermoElectricFeature):
     required_interface_cls = USBCommOOI
 
     def enable_tec(self, state):
@@ -26,7 +44,10 @@ class ThermoElectricFeatureOOI(SeaBreezeFeature, _SeaBreezeThermoElectricFeature
     #    raise NotImplementedError
 
 
-class ThermoElectricFeatureOBP(SeaBreezeFeature, _SeaBreezeThermoElectricFeatureInterface):
+# OBP implementation
+# ==================
+#
+class ThermoElectricFeatureOBP(SeaBreezeThermoElectricFeature):
     required_interface_cls = USBCommOBP
 
     def enable_tec(self, state):

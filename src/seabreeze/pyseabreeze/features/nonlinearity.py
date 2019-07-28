@@ -2,11 +2,22 @@ import struct
 
 from seabreeze.pyseabreeze.communication import USBCommOOI, USBCommOBP
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.features._interface import _SeaBreezeNonlinearityCoefficientsFeatureInterface
 
 
-class NonlinearityCoefficientsEEPromFeature(SeaBreezeFeature, _SeaBreezeNonlinearityCoefficientsFeatureInterface):
-    identifier = "nonlinearity"
+# Definition
+# ==========
+#
+class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
+    identifier = 'nonlinearity_coefficients'
+
+    def get_nonlinearity_coefficients(self):
+        raise NotImplementedError("implement in derived class")
+
+
+# OOI implementation
+# ==================
+#
+class NonlinearityCoefficientsEEPromFeatureOOI(SeaBreezeNonlinearityCoefficientsFeature):
     required_interface_cls = USBCommOOI
     required_features = ('eeprom',)
 
@@ -19,8 +30,10 @@ class NonlinearityCoefficientsEEPromFeature(SeaBreezeFeature, _SeaBreezeNonlinea
         return coeffs
 
 
-class NonlinearityCoefficientsOBPFeature(SeaBreezeFeature, _SeaBreezeNonlinearityCoefficientsFeatureInterface):
-    identifier = "nonlinearity"
+# OBP implementation
+# ==================
+#
+class NonlinearityCoefficientsFeatureOBP(SeaBreezeNonlinearityCoefficientsFeature):
     required_interface_cls = USBCommOBP
 
     def get_nonlinearity_coefficients(self):

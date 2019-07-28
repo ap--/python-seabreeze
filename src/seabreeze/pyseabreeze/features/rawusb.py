@@ -1,10 +1,9 @@
 from seabreeze.pyseabreeze.communication import USBCommBase
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.features._interface import _SeaBreezeRawUSBBusAccessFeatureInterface
 
 
-class SeaBreezeRawUSBAccessFeature(SeaBreezeFeature, _SeaBreezeRawUSBBusAccessFeatureInterface):
-    identifier = "rawusb"
+class SeaBreezeRawUSBAccessFeature(SeaBreezeFeature):
+    identifier = 'raw_usb_bus_access'
     required_interface_cls = USBCommBase
 
     def raw_usb_write(self, data, endpoint):

@@ -3,11 +3,22 @@ import struct
 from seabreeze.pyseabreeze.communication import USBCommOOI
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.features._interface import _SeaBreezeEEPROMFeatureInterface
 
 
-class SeaBreezeEEPromFeature(SeaBreezeFeature, _SeaBreezeEEPROMFeatureInterface):
+# Definition
+# ==========
+#
+class SeaBreezeEEPROMFeature(SeaBreezeFeature):
     identifier = "eeprom"
+
+    def eeprom_read_slot(self, slot_number, strip_zero_bytes=False):
+        raise NotImplementedError("implement in derived class")
+
+
+# OOI spectrometer implementation
+# ===============================
+#
+class SeaBreezeEEPromFeatureOOI(SeaBreezeEEPROMFeature):
     requires_interface_cls = USBCommOOI
 
     def eeprom_read_slot(self, slot_number, strip_zero_bytes=False, raw=False):

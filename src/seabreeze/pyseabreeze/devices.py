@@ -382,232 +382,362 @@ class HR2000PLUS(SeaBreezeDevice):
     )
 
 
+class USB650(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1014
+    model_name = 'USB650'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges()
+    integration_time_min = 3000
+    integration_time_max = 655350000
+    integration_time_base = 1000
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 4095
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureUSB650,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
 
 
-"""
+class QE65000(SeaBreezeDevice):
 
-class USB650(SpectrometerFeatureUSB650,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['USB650']
-    _PIXELS = 2048  # FIXME
-    _RAW_SPECTRUM_LEN = (2048 * 2) + 1
-    _INTEGRATION_TIME_MIN = 3000
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1000
-    _MAX_PIXEL_VALUE = 4095
+    # communication config
+    product_id = 0x1018
+    model_name = 'QE65000'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
-class QE65000(SpectrometerFeatureQE65000,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             ThermoElectricFeatureOOI,
-             NoShutterFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['QE65000']
-    _PIXELS = 1280  # FIXME
-    _RAW_SPECTRUM_LEN = (1024 + 256)*2 + 1
-    _INTEGRATION_TIME_MIN = 8000
-    _INTEGRATION_TIME_MAX = 1600000000
-    _INTEGRATION_TIME_BASE = 1000
-    _MAX_PIXEL_VALUE = 65535
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((0, 4), (1040, 1044))  # as in seabreeze-3.0.5
+    integration_time_min = 8000
+    integration_time_max = 1600000000
+    integration_time_base = 1000
+    spectrum_num_pixel = 1280
+    spectrum_raw_length = (1024 + 256)*2 + 1
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
 
-class USB2000PLUS(SpectrometerFeatureUSB2000PLUS,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['USB2000PLUS']
-    _PIXELS = 2048  # FIXME
-    _RAW_SPECTRUM_LEN = (2048 * 2) + 1
-    _INTEGRATION_TIME_MIN = 1000
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 65535
-
-class USB4000(SpectrometerFeatureUSB4000,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['USB4000']
-    _PIXELS = 3840  # FIXME
-    _RAW_SPECTRUM_LEN = (3840 * 2) + 1
-    _INTEGRATION_TIME_MIN = 10
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 65535
-
-class NIRQUEST512(SpectrometerFeatureNIRQUEST512,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             ThermoElectricFeatureOOI,
-             NoShutterFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['NIRQUEST512']
-    _PIXELS = 512  # FIXME
-    _RAW_SPECTRUM_LEN = (512 * 2) + 1
-    _INTEGRATION_TIME_MIN = 1000
-    _INTEGRATION_TIME_MAX = 1600000000
-    _INTEGRATION_TIME_BASE = 1000
-    _MAX_PIXEL_VALUE = 65535
-
-class NIRQUEST256(SpectrometerFeatureNIRQUEST256,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             ThermoElectricFeatureOOI,
-             NoShutterFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['NIRQUEST256']
-    _PIXELS = 256  # FIXME
-    _RAW_SPECTRUM_LEN = (256 * 2) + 1
-    _INTEGRATION_TIME_MIN = 1000
-    _INTEGRATION_TIME_MAX = 1600000000
-    _INTEGRATION_TIME_BASE = 1000
-    _MAX_PIXEL_VALUE = 65535
-
-class MAYA2000PRO(SpectrometerFeatureMAYA2000PRO,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['MAYA2000PRO']
-    _PIXELS = 2304  # FIXME
-    _RAW_SPECTRUM_LEN = (2304 * 2) + 1
-    _INTEGRATION_TIME_MIN = 7200
-    _INTEGRATION_TIME_MAX = 65000000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 64000
-
-class MAYA2000(SpectrometerFeatureMAYA2000,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['MAYA2000']
-    _PIXELS = 2304  # FIXME
-    _RAW_SPECTRUM_LEN = (2304 * 2) + 1
-    _INTEGRATION_TIME_MIN = 15000
-    _INTEGRATION_TIME_MAX = 1600000000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 65535
-
-class TORUS(SpectrometerFeatureTORUS,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['TORUS']
-    _PIXELS = 2048  # FIXME
-    _RAW_SPECTRUM_LEN = (2048 * 2) + 1
-    _INTEGRATION_TIME_MIN = 1000
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 65535
-
-class APEX(SpectrometerFeatureAPEX,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['APEX']
-    _PIXELS = 2304  # FIXME
-    _RAW_SPECTRUM_LEN = (2304 * 2) + 1
-    _INTEGRATION_TIME_MIN = 15000
-    _INTEGRATION_TIME_MAX = 1600000000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 64000
-
-class MAYALSL(SpectrometerFeatureMAYALSL,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['MAYALSL']
-    _PIXELS = 2304  # FIXME
-    _RAW_SPECTRUM_LEN = (2304 * 2) + 1
-    _INTEGRATION_TIME_MIN = 7200
-    _INTEGRATION_TIME_MAX = 65000000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 64000
-
-class JAZ(SpectrometerFeatureJAZ,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['JAZ']
-    _PIXELS = 2048  # FIXME
-    _RAW_SPECTRUM_LEN = (2048 * 2)  # XXX: No Sync byte!
-    _INTEGRATION_TIME_MIN = 1000
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 65535
-
-class STS(SpectrometerFeatureSTS,
-             NonlinearityCoefficientsOBPFeature,
-             SpectrumProcessingFeatureOBP,
-             NoEEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['STS']
-    _PIXELS = 1024  # FIXME
-    _RAW_SPECTRUM_LEN = (1024 * 2)  # XXX: No Sync byte!
-    _INTEGRATION_TIME_MIN = 10
-    _INTEGRATION_TIME_MAX = 85000000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 16383
-
-class QEPRO(SpectrometerFeatureQEPRO,
-             ThermoElectricFeatureOBP,
-             NonlinearityCoefficientsOBPFeature,
-             NoEEPromFeature,
-             NoShutterFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['QEPRO']
-    _PIXELS = 1044  # FIXME
-    _RAW_SPECTRUM_LEN = (1044 * 4) + 32  # XXX: Metadata
-    _INTEGRATION_TIME_MIN = 10000
-    _INTEGRATION_TIME_MAX = 1600000000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = (2**18)-1
-
-class VENTANA(SpectrometerFeatureVENTANA,
-             ThermoElectricFeatureOBP,
-             NonlinearityCoefficientsOBPFeature,
-             NoEEPromFeature,
-             NoShutterFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['VENTANA']
-    _PIXELS = 1024  # FIXME
-    _RAW_SPECTRUM_LEN = (1024 * 2)  # XXX: No Sync byte!
-    _INTEGRATION_TIME_MIN = 22000
-    _INTEGRATION_TIME_MAX = 60000000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 65535
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureQE65000,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
 
 
-"""
+class USB4000(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1022
+    model_name = 'USB4000'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((5, 16)),  # as in seabreeze-3.0.9
+    integration_time_min = 10
+    integration_time_max = 655350000
+    integration_time_base = 1
+    spectrum_num_pixel = 3840
+    spectrum_raw_length = (3840 * 2) + 1
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureUSB4000,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class NIRQUEST512(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1026
+    model_name = 'NIRQUEST512'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges(),  # as in seabreeze-3.0.9
+    integration_time_min = 1000
+    integration_time_max = 1600000000
+    integration_time_base = 1000
+    spectrum_num_pixel = 512
+    spectrum_raw_length = (512 * 2) + 1
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureNIRQUEST512,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class NIRQUEST256(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1028
+    model_name = 'NIRQUEST256'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges(),  # as in seabreeze-3.0.9
+    integration_time_min = 1000
+    integration_time_max = 1600000000
+    integration_time_base = 1000
+    spectrum_num_pixel = 256
+    spectrum_raw_length = (256 * 2) + 1
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureNIRQUEST256,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class MAYA2000PRO(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x102a
+    model_name = 'MAYA2000PRO'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((0, 4), (2064, 2068))
+    integration_time_min = 7200
+    integration_time_max = 65000000
+    integration_time_base = 1
+    spectrum_num_pixel = 2304
+    spectrum_raw_length = (2304 * 2) + 1
+    spectrum_max_value = 64000
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureMAYA2000PRO,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class MAYA2000(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x102c
+    model_name = 'MAYA2000'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((0, 8), (2072, 2080))
+    integration_time_min = 15000
+    integration_time_max = 1600000000
+    integration_time_base = 1
+    spectrum_num_pixel = 2304
+    spectrum_raw_length = (2304 * 2) + 1
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureMAYA2000,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class TORUS(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1040
+    model_name = 'TORUS'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges()
+    integration_time_min = 1000
+    integration_time_max = 655350000
+    integration_time_base = 1
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureTORUS,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class APEX(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1044
+    model_name = 'APEX'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((0, 4), (2064, 2068))
+    integration_time_min = 15000
+    integration_time_max = 1600000000
+    integration_time_base = 1
+    spectrum_num_pixel = 2304
+    spectrum_raw_length = (2304 * 2) + 1
+    spectrum_max_value = 64000
+    trigger_modes = ('NORMAL', )
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureAPEX,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class MAYALSL(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1046
+    model_name = 'MAYALSL'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((0, 4), (2064, 2068))
+    integration_time_min = 7200
+    integration_time_max = 65000000
+    integration_time_base = 1
+    spectrum_num_pixel = 2304
+    spectrum_raw_length = (2304 * 2) + 1
+    spectrum_max_value = 64000
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureMAYALSL,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class JAZ(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x2000
+    model_name = 'JAZ'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    integration_time_min = 1000
+    integration_time_max = 655350000
+    integration_time_base = 1
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2)  # XXX: No Sync byte!
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureJAZ,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class STS(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x4000
+    model_name = 'STS'
+    interface_cls = USBCommOBP
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges()
+    integration_time_min = 10
+    integration_time_max = 85000000
+    integration_time_base = 1
+    spectrum_num_pixel = 1024
+    spectrum_raw_length = (1024 * 2)
+    spectrum_max_value = 16383
+    trigger_modes = ('OBP_NORMAL', 'OBP_EXTERNAL', 'OBP_INTERNAL')
+
+    # features
+    feature_classes = (
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureSTS,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class QEPRO(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x4004
+    model_name = 'QEPRO'
+    interface_cls = USBCommOBP
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((0, 4), (1040, 1044))
+    integration_time_min = 10000
+    integration_time_max = 1600000000
+    integration_time_base = 1
+    spectrum_num_pixel = 1044
+    spectrum_raw_length = (1044 * 4) + 32  # XXX: Metadata
+    spectrum_max_value = (2**18)-1
+    trigger_modes = ('NORMAL', 'LEVEL', 'SYNCHRONIZATION', 'EDGE')
+
+    # features
+    feature_classes = (
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureQEPRO,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class VENTANA(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x5000
+    model_name = 'VENTANA'
+    interface_cls = USBCommOBP
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x82)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges()
+    integration_time_min = 22000
+    integration_time_max = 60000000
+    integration_time_base = 1
+    spectrum_num_pixel = 1024
+    spectrum_raw_length = (1024 * 2)  # XXX: No Sync byte!
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'LEVEL', 'SYNCHRONIZATION', 'EDGE')
+
+    # features
+    feature_classes = (
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureVENTANA,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )

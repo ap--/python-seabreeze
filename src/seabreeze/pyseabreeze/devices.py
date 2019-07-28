@@ -256,27 +256,24 @@ class USB2000PLUS(SeaBreezeDevice):
     # communication config
     product_id = 0x101E
     model_name = 'USB2000PLUS'
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
     interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    spectrum_num_pixel = 2048  # FIXME
-    spectrum_raw_length = (2048 * 2) + 1
-    spectrum_max_value = 65535
+    dark_pixel_indices = _DarkPixelRanges((6, 21))  # as in seabreeze-3.0.9
     integration_time_min = 1000
     integration_time_max = 655350000
     integration_time_base = 1
-    dark_pixel_indices = _DarkPixelRanges((6, 21))  # as in seabreeze-3.0.9
-    trigger_modes = (
-        _TriggerMode.NORMAL,
-        _TriggerMode.SOFTWARE,
-        _TriggerMode.SYNCHRONIZATION,
-        _TriggerMode.HARDWARE,
-    )
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 65535
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
-
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureUSB2000PLUS,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
     )
 
 

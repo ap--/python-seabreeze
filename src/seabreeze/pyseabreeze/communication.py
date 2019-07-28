@@ -10,11 +10,12 @@ import warnings
 
 import usb.core
 import usb.util
+
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
 
 class USBCommBase(object):
-    _ENDPOINT_MAP = None
+    endpoint_map = None
     _device = None
     usbtimeout_ms = 0.0
     _mode = 'lowspeed'
@@ -40,7 +41,7 @@ class USBCommBase(object):
         else:
             self._opened = True
 
-    def is_open(self):
+    def _is_open(self):
         if self._opened is None:
             return False
         else:
@@ -54,16 +55,16 @@ class USBCommBase(object):
         self._opened = False
 
     def usb_send(self, data):
-        self._device.write(self._ENDPOINT_MAP.ep_out, data)
+        self._device.write(self.endpoint_map.ep_out, data)
 
     def usb_read_lowspeed(self, size=64, timeout=None):
-        return self._device.read(self._ENDPOINT_MAP.lowspeed_in, size, timeout=timeout)
+        return self._device.read(self.endpoint_map.lowspeed_in, size, timeout=timeout)
 
     def usb_read_highspeed(self, size=512, timeout=None):
-        return self._device.read(self._ENDPOINT_MAP.highspeed_in, size, timeout=timeout)
+        return self._device.read(self.endpoint_map.highspeed_in, size, timeout=timeout)
 
     def usb_read_highspeed_alt(self, size=512, timeout=None):
-        return self._device.read(self._ENDPOINT_MAP.highspeed_in2, size, timeout=timeout)
+        return self._device.read(self.endpoint_map.highspeed_in2, size, timeout=timeout)
 
     def set_default_read(self, mode):
         if mode == "highspeed":

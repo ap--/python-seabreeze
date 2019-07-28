@@ -277,88 +277,113 @@ class USB2000PLUS(SeaBreezeDevice):
     )
 
 
+class USB2000(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1002
+    model_name = 'USB2000'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    integration_time_min = 3000
+    integration_time_max = 655350000
+    integration_time_base = 1000
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 4095
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureUSB2000,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class HR2000(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x100a
+    model_name = 'HR2000'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    integration_time_min = 3000
+    integration_time_max = 655350000
+    integration_time_base = 1000
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 4095
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureHR2000,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class HR4000(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1012
+    model_name = 'HR4000'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((2, 13))
+    integration_time_min = 10
+    integration_time_max = 655350000
+    integration_time_base = 1
+    spectrum_num_pixel = 3840
+    spectrum_raw_length = (3840 * 2) + 1
+    spectrum_max_value = 16383
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureHR4000,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+class HR2000PLUS(SeaBreezeDevice):
+
+    # communication config
+    product_id = 0x1016
+    model_name = 'HR2000PLUS'
+    interface_cls = USBCommOOI
+    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # spectrometer config
+    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    integration_time_min = 1000
+    integration_time_max = 655350000
+    integration_time_base = 1
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 16383
+    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+
+    # features
+    feature_classes = (
+        sbfeatures.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbfeatures.spectrometer.SeaBreezeSpectrometerFeatureHR2000PLUS,
+        sbfeatures.rawusb.SeaBreezeRawUSBAccessFeature,
+    )
+
+
+
+
 """
-
-from .spectrometer import (
-                            SpectrometerFeatureUSB2000,
-                            SpectrometerFeatureHR2000,
-                            SpectrometerFeatureHR4000,
-                            SpectrometerFeatureUSB650,
-                            SpectrometerFeatureHR2000PLUS,
-                            SpectrometerFeatureQE65000,
-                            SpectrometerFeatureUSB2000PLUS,
-                            SpectrometerFeatureUSB4000,
-                            SpectrometerFeatureNIRQUEST512,
-                            SpectrometerFeatureNIRQUEST256,
-                            SpectrometerFeatureMAYA2000PRO,
-                            SpectrometerFeatureMAYA2000,
-                            SpectrometerFeatureTORUS,
-                            SpectrometerFeatureAPEX,
-                            SpectrometerFeatureMAYALSL,
-                            SpectrometerFeatureJAZ,
-                            SpectrometerFeatureSTS,
-                            SpectrometerFeatureQEPRO,
-                            SpectrometerFeatureVENTANA,
-                          )
-
-from .wavelength import WavelengthCoefficientsEEPromFeature
-from .eeprom import EEPromFeature
-from .thermoelectric import ThermoElectricFeatureOOI, ThermoElectricFeatureOBP
-from .nonlinearity import NonlinearityCoefficientsEEPromFeature, NonlinearityCoefficientsOBPFeature
-from .spectrumprocessing import SpectrumProcessingFeatureOBP
-from .defines import EndPoints
-from .common import (
-                      NotImplementedWrapper,
-                      NoShutterFeature,
-                      NoTecFeature,
-                      NoEEPromFeature,
-                    )
-
-
-class USB2000(SpectrometerFeatureUSB2000,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['USB2000']
-    _PIXELS = 2048  # FIXME
-    _RAW_SPECTRUM_LEN = (2048 * 2) + 1
-    _INTEGRATION_TIME_MIN = 3000
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1000
-    _MAX_PIXEL_VALUE = 4095
-
-class HR2000(SpectrometerFeatureHR2000,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['HR2000']
-    _PIXELS = 2048  # FIXME
-    _RAW_SPECTRUM_LEN = (2048 * 2) + 1
-    _INTEGRATION_TIME_MIN = 3000
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1000
-    _MAX_PIXEL_VALUE = 4095
-
-class HR4000(SpectrometerFeatureHR4000,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['HR4000']
-    _PIXELS = 3840  # FIXME
-    _RAW_SPECTRUM_LEN = (3840 * 2) + 1
-    _INTEGRATION_TIME_MIN = 10
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 16383
 
 class USB650(SpectrometerFeatureUSB650,
              WavelengthCoefficientsEEPromFeature,
@@ -374,21 +399,6 @@ class USB650(SpectrometerFeatureUSB650,
     _INTEGRATION_TIME_MAX = 655350000
     _INTEGRATION_TIME_BASE = 1000
     _MAX_PIXEL_VALUE = 4095
-
-class HR2000PLUS(SpectrometerFeatureHR2000PLUS,
-             WavelengthCoefficientsEEPromFeature,
-             NonlinearityCoefficientsEEPromFeature,
-             EEPromFeature,
-             NoShutterFeature,
-             NoTecFeature,
-             NotImplementedWrapper):
-    _ENDPOINT_MAP = EndPoints['HR2000PLUS']
-    _PIXELS = 2048  # FIXME
-    _RAW_SPECTRUM_LEN = (2048 * 2) + 1
-    _INTEGRATION_TIME_MIN = 1000
-    _INTEGRATION_TIME_MAX = 655350000
-    _INTEGRATION_TIME_BASE = 1
-    _MAX_PIXEL_VALUE = 16383
 
 class QE65000(SpectrometerFeatureQE65000,
              WavelengthCoefficientsEEPromFeature,
@@ -597,29 +607,6 @@ class VENTANA(SpectrometerFeatureVENTANA,
     _INTEGRATION_TIME_MAX = 60000000
     _INTEGRATION_TIME_BASE = 1
     _MAX_PIXEL_VALUE = 65535
-
-
-USBInterfaces = {
-    0x1002: USB2000,
-    0x100a: HR2000,
-    0x1012: HR4000,
-    0x1014: USB650,
-    0x1016: HR2000PLUS,
-    0x1018: QE65000,
-    0x101E: USB2000PLUS,
-    0x1022: USB4000,
-    0x1026: NIRQUEST512,
-    0x1028: NIRQUEST256,
-    0x102a: MAYA2000PRO,
-    0x102c: MAYA2000,
-    0x1040: TORUS,
-    0x1044: APEX,
-    0x1046: MAYALSL,
-    0x2000: JAZ,
-    0x4000: STS,
-    0x4004: QEPRO,
-    0x5000: VENTANA,
-}
 
 
 """

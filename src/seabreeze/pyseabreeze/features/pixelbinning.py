@@ -28,6 +28,3 @@ class SeaBreezePixelBinningFeature(SeaBreezeFeature):
         raise NotImplementedError("implement in derived class")
 
     default_binning_factor = property(get_default_binning_factor, set_default_binning_factor)
-
-
-

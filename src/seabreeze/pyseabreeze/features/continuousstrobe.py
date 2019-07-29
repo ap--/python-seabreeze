@@ -14,6 +14,3 @@ class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
 
     def set_period_micros(self, period_micros):
         raise NotImplementedError("implement in derived class")
-
-
-

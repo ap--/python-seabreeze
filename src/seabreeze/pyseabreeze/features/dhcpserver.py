@@ -20,6 +20,3 @@ class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
 
     def set_enable_state(self, interface_index, enable_state):
         raise NotImplementedError("implement in derived class")
-
-
-

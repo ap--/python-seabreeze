@@ -20,6 +20,3 @@ class SeaBreezeFastBufferFeature(SeaBreezeFeature):
 
     def set_consecutive_sample_count(self, consecutive_sample_count):
         raise NotImplementedError("implement in derived class")
-
-
-

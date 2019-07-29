@@ -32,6 +32,3 @@ class SeaBreezeIPv4Feature(SeaBreezeFeature):
 
     def delete_ipv4_address(self, interface_index, address_index):
         raise NotImplementedError("implement in derived class")
-
-
-

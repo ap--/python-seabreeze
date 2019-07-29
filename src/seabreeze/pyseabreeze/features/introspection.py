@@ -20,6 +20,3 @@ class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
 
     def get_electric_dark_pixel_ranges(self):
         raise NotImplementedError("implement in derived class")
-
-
-

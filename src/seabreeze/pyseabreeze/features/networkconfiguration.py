@@ -26,6 +26,3 @@ class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
 
     def save_network_interface_connection_settings(self, interface_index):
         raise NotImplementedError("implement in derived class")
-
-
-

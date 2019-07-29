@@ -17,6 +17,3 @@ class SeaBreezeTemperatureFeature(SeaBreezeFeature):
 
     def temperature_get_all(self):
         raise NotImplementedError("implement in derived class")
-
-
-

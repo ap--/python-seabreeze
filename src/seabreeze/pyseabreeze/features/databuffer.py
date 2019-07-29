@@ -29,6 +29,3 @@ class SeaBreezeDataBufferFeature(SeaBreezeFeature):
 
     def get_buffer_capacity_minimum(self):
         raise NotImplementedError("implement in derived class")
-
-
-

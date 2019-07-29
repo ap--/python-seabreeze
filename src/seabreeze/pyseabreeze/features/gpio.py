@@ -47,6 +47,3 @@ class SeaBreezeGPIOFeature(SeaBreezeFeature):
 
     def set_egpio_value(self, pin_number, value):
         raise NotImplementedError("implement in derived class")
-
-
-

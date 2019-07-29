@@ -25,6 +25,3 @@ class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
 
     def get_minimum_delay_microseconds(self):
         raise NotImplementedError("implement in derived class")
-
-
-

@@ -20,6 +20,3 @@ class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
 
     def set_gbe_enable_status(self, interface_index, enable_state):
         raise NotImplementedError("implement in derived class")
-
-
-

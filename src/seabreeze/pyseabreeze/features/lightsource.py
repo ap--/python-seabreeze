@@ -29,6 +29,3 @@ class SeaBreezeLightSourceFeature(SeaBreezeFeature):
 
     def set_intensity(self, light_source_index, intensity):
         raise NotImplementedError("implement in derived class")
-
-
-

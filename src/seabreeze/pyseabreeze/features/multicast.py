@@ -14,6 +14,3 @@ class SeaBreezeMulticastFeature(SeaBreezeFeature):
 
     def set_multicast_enable_state(self, interface_index, enable_state):
         raise NotImplementedError("implement in derived class")
-
-
-

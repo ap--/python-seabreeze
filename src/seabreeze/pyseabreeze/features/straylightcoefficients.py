@@ -11,6 +11,3 @@ class SeaBreezeStrayLightCoefficientsFeature(SeaBreezeFeature):
 
     def get_stray_light_coefficients(self):
         raise NotImplementedError("implement in derived class")
-
-
-

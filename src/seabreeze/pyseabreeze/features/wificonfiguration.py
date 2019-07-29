@@ -29,6 +29,3 @@ class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
 
     def set_wifi_pass_phrase(self, interface_index, pass_phrase):
         raise NotImplementedError("implement in derived class")
-
-
-

@@ -17,4 +17,3 @@ class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
 
     def write_bus(self, bus_index, slave_address, data):
         raise NotImplementedError("implement in derived class")
-

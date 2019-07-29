@@ -11,6 +11,13 @@ class SeaBreezeFeature(object):
     required_features = ()
 
     def __init__(self, device, feature_id):
+        """SeaBreezeFeature base class
+
+        Parameters
+        ----------
+        device : seabreeze.pyseabreeze.devices.SeaBreezeDevice
+        feature_id : int
+        """
         if self.identifier == "base_feature":
             raise SeaBreezeError("Don't instantiate SeaBreezeFeature directly. Use derived feature classes.")
         if not isinstance(device, self.required_interface_cls):
@@ -28,4 +35,3 @@ class SeaBreezeFeature(object):
     def get_feature_class_registry(cls):
         # noinspection PyUnresolvedReferences
         return {feature_class.identifier: feature_class for feature_class in SeaBreezeFeature.__subclasses__()}
-

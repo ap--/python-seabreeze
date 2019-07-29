@@ -11,6 +11,3 @@ class SeaBreezeStrobeLampFeature(SeaBreezeFeature):
 
     def enable_lamp(self, state):
         raise NotImplementedError("implement in derived class")
-
-
-

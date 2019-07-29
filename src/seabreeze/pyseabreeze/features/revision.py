@@ -14,6 +14,3 @@ class SeaBreezeRevisionFeature(SeaBreezeFeature):
 
     def revision_firmware_get(self):
         raise NotImplementedError("implement in derived class")
-
-
-

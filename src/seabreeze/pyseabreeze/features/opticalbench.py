@@ -29,6 +29,3 @@ class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
 
     def get_grating(self):
         raise NotImplementedError("implement in derived class")
-
-
-

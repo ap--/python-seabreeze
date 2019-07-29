@@ -24,6 +24,3 @@ class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
         raise NotImplementedError("implement in derived class")
 
     scans_to_average = property(get_scans_to_average, set_scans_to_average)
-
-
-

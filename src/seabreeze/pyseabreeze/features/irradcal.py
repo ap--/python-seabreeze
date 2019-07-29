@@ -23,6 +23,3 @@ class SeaBreezeIrradCalFeature(SeaBreezeFeature):
 
     def write_calibration(self, calibration_array):
         raise NotImplementedError("implement in derived class")
-
-
-

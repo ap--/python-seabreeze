@@ -11,6 +11,3 @@ class SeaBreezeShutterFeature(SeaBreezeFeature):
 
     def set_shutter_open(self, state):
         raise NotImplementedError("implement in derived class")
-
-
-

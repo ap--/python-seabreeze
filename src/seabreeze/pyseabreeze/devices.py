@@ -2,6 +2,7 @@
 
 
 """
+import enum
 import itertools
 import struct
 import time
@@ -15,7 +16,7 @@ from seabreeze.pyseabreeze import features as sbf
 #
 VENDOR_ID = 0x2457
 # NOTE: PRODUCT_IDS and _model_registry will be filled
-#       via the SeaBreezeDevice metaclass below
+#       via the _SeaBreezeDeviceMeta metaclass magic below
 PRODUCT_IDS = set()
 _model_class_registry = {}
 
@@ -59,7 +60,7 @@ class _SeaBreezeDeviceMeta(type):
             assert _product_id not in PRODUCT_IDS, "product_id already registered"
             # > usb endpoint map
             _endpoint_map = attr_dict['endpoint_map']
-            assert isinstance(_endpoint_map, _EndPointMap), "no endpoint map provided"
+            assert isinstance(_endpoint_map, EndPointMap), "no endpoint map provided"
             # > model name
             _model_name = attr_dict['model_name']
             assert isinstance(_model_name, str), "model name not a str"
@@ -71,7 +72,7 @@ class _SeaBreezeDeviceMeta(type):
         super(_SeaBreezeDeviceMeta, cls).__init__(name, bases, attr_dict)
 
 
-class _EndPointMap(object):
+class EndPointMap(object):
     """internal endpoint map for spectrometer classes"""
     def __init__(self, ep_out=None, lowspeed_in=None, highspeed_in=None, highspeed_in2=None):
         self.primary_out = self.ep_out = ep_out
@@ -81,15 +82,34 @@ class _EndPointMap(object):
         self.secondary_in2 = self.highspeed_in2 = highspeed_in2
 
 
-class _DarkPixelRanges(tuple):
+class DarkPixelIndices(tuple):
     """internal dark pixel range class"""
-    def __new__(cls, *ranges):
+    def __new__(cls, indices):
+        """dark pixel indices
+
+        Parameters
+        ----------
+        indices : iterable
+            index of electric dark pixel
+        """
+        return super(DarkPixelIndices, cls).__new__(DarkPixelIndices, sorted(set(indices)))
+
+    @classmethod
+    def from_ranges(cls, *ranges):
+        """return dark pixes indices from ranges
+
+        Parameters
+        ----------
+        *ranges : (`int`, `int`)
+            ranges of electric dark pixels
+        """
         dp = itertools.chain(*(range(low, high) for (low, high) in ranges))
-        return super(_DarkPixelRanges, cls).__new__(_DarkPixelRanges, dp)
+        # noinspection PyArgumentList
+        return cls(dp)
 
 
-class _TriggerMode(object):
-    """internal trigger modes class"""
+class TriggerMode(enum.IntEnum):
+    """internal trigger modes enum"""
     NORMAL = 0x00
     SOFTWARE = 0x01
     LEVEL = 0x01
@@ -105,6 +125,10 @@ class _TriggerMode(object):
     OBP_NORMAL = 0x00
     OBP_EXTERNAL = 0x01
     OBP_INTERNAL = 0x02
+
+    @classmethod
+    def supported(cls, *mode_strings):
+        return set(getattr(cls, mode_string) for mode_string in mode_strings)
 
 
 class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
@@ -258,17 +282,17 @@ class USB2000PLUS(SeaBreezeDevice):
     product_id = 0x101E
     model_name = 'USB2000PLUS'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((6, 21))  # as in seabreeze-3.0.9
+    dark_pixel_indices = DarkPixelIndices.from_ranges((6, 21))  # as in seabreeze-3.0.9
     integration_time_min = 1000
     integration_time_max = 655350000
     integration_time_base = 1
     spectrum_num_pixel = 2048
     spectrum_raw_length = (2048 * 2) + 1
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -284,17 +308,17 @@ class USB2000(SeaBreezeDevice):
     product_id = 0x1002
     model_name = 'USB2000'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+    endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
     integration_time_min = 3000
     integration_time_max = 655350000
     integration_time_base = 1000
     spectrum_num_pixel = 2048
     spectrum_raw_length = (2048 * 2) + 1
     spectrum_max_value = 4095
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -310,17 +334,17 @@ class HR2000(SeaBreezeDevice):
     product_id = 0x100a
     model_name = 'HR2000'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+    endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
     integration_time_min = 3000
     integration_time_max = 655350000
     integration_time_base = 1000
     spectrum_num_pixel = 2048
     spectrum_raw_length = (2048 * 2) + 1
     spectrum_max_value = 4095
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -336,17 +360,17 @@ class HR4000(SeaBreezeDevice):
     product_id = 0x1012
     model_name = 'HR4000'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((2, 13))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((2, 13))
     integration_time_min = 10
     integration_time_max = 655350000
     integration_time_base = 1
     spectrum_num_pixel = 3840
     spectrum_raw_length = (3840 * 2) + 1
     spectrum_max_value = 16383
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -362,17 +386,17 @@ class HR2000PLUS(SeaBreezeDevice):
     product_id = 0x1016
     model_name = 'HR2000PLUS'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
     integration_time_min = 1000
     integration_time_max = 655350000
     integration_time_base = 1
     spectrum_num_pixel = 2048
     spectrum_raw_length = (2048 * 2) + 1
     spectrum_max_value = 16383
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -388,17 +412,17 @@ class USB650(SeaBreezeDevice):
     product_id = 0x1014
     model_name = 'USB650'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+    endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges()
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
     integration_time_min = 3000
     integration_time_max = 655350000
     integration_time_base = 1000
     spectrum_num_pixel = 2048
     spectrum_raw_length = (2048 * 2) + 1
     spectrum_max_value = 4095
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -414,17 +438,17 @@ class QE65000(SeaBreezeDevice):
     product_id = 0x1018
     model_name = 'QE65000'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((0, 4), (1040, 1044))  # as in seabreeze-3.0.5
+    dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (1040, 1044))  # as in seabreeze-3.0.5
     integration_time_min = 8000
     integration_time_max = 1600000000
     integration_time_base = 1000
     spectrum_num_pixel = 1280
     spectrum_raw_length = (1024 + 256)*2 + 1
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -440,17 +464,17 @@ class USB4000(SeaBreezeDevice):
     product_id = 0x1022
     model_name = 'USB4000'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((5, 16)),  # as in seabreeze-3.0.9
+    dark_pixel_indices = DarkPixelIndices.from_ranges((5, 16)),  # as in seabreeze-3.0.9
     integration_time_min = 10
     integration_time_max = 655350000
     integration_time_base = 1
     spectrum_num_pixel = 3840
     spectrum_raw_length = (3840 * 2) + 1
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -466,17 +490,17 @@ class NIRQUEST512(SeaBreezeDevice):
     product_id = 0x1026
     model_name = 'NIRQUEST512'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges(),  # as in seabreeze-3.0.9
+    dark_pixel_indices = DarkPixelIndices.from_ranges(),  # as in seabreeze-3.0.9
     integration_time_min = 1000
     integration_time_max = 1600000000
     integration_time_base = 1000
     spectrum_num_pixel = 512
     spectrum_raw_length = (512 * 2) + 1
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -492,17 +516,17 @@ class NIRQUEST256(SeaBreezeDevice):
     product_id = 0x1028
     model_name = 'NIRQUEST256'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges(),  # as in seabreeze-3.0.9
+    dark_pixel_indices = DarkPixelIndices.from_ranges(),  # as in seabreeze-3.0.9
     integration_time_min = 1000
     integration_time_max = 1600000000
     integration_time_base = 1000
     spectrum_num_pixel = 256
     spectrum_raw_length = (256 * 2) + 1
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -518,17 +542,17 @@ class MAYA2000PRO(SeaBreezeDevice):
     product_id = 0x102a
     model_name = 'MAYA2000PRO'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((0, 4), (2064, 2068))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (2064, 2068))
     integration_time_min = 7200
     integration_time_max = 65000000
     integration_time_base = 1
     spectrum_num_pixel = 2304
     spectrum_raw_length = (2304 * 2) + 1
     spectrum_max_value = 64000
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -544,17 +568,17 @@ class MAYA2000(SeaBreezeDevice):
     product_id = 0x102c
     model_name = 'MAYA2000'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((0, 8), (2072, 2080))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((0, 8), (2072, 2080))
     integration_time_min = 15000
     integration_time_max = 1600000000
     integration_time_base = 1
     spectrum_num_pixel = 2304
     spectrum_raw_length = (2304 * 2) + 1
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -570,17 +594,17 @@ class TORUS(SeaBreezeDevice):
     product_id = 0x1040
     model_name = 'TORUS'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges()
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
     integration_time_min = 1000
     integration_time_max = 655350000
     integration_time_base = 1
     spectrum_num_pixel = 2048
     spectrum_raw_length = (2048 * 2) + 1
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -596,17 +620,17 @@ class APEX(SeaBreezeDevice):
     product_id = 0x1044
     model_name = 'APEX'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((0, 4), (2064, 2068))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (2064, 2068))
     integration_time_min = 15000
     integration_time_max = 1600000000
     integration_time_base = 1
     spectrum_num_pixel = 2304
     spectrum_raw_length = (2304 * 2) + 1
     spectrum_max_value = 64000
-    trigger_modes = ('NORMAL', )
+    trigger_modes = TriggerMode.supported('NORMAL', )
 
     # features
     feature_classes = (
@@ -622,17 +646,17 @@ class MAYALSL(SeaBreezeDevice):
     product_id = 0x1046
     model_name = 'MAYALSL'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((0, 4), (2064, 2068))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (2064, 2068))
     integration_time_min = 7200
     integration_time_max = 65000000
     integration_time_base = 1
     spectrum_num_pixel = 2304
     spectrum_raw_length = (2304 * 2) + 1
     spectrum_max_value = 64000
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -648,17 +672,17 @@ class JAZ(SeaBreezeDevice):
     product_id = 0x2000
     model_name = 'JAZ'
     interface_cls = USBCommOOI
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((2, 24))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
     integration_time_min = 1000
     integration_time_max = 655350000
     integration_time_base = 1
     spectrum_num_pixel = 2048
     spectrum_raw_length = (2048 * 2)  # XXX: No Sync byte!
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'SOFTWARE', 'SYNCHRONIZATION', 'HARDWARE')
 
     # features
     feature_classes = (
@@ -674,17 +698,17 @@ class STS(SeaBreezeDevice):
     product_id = 0x4000
     model_name = 'STS'
     interface_cls = USBCommOBP
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges()
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
     integration_time_min = 10
     integration_time_max = 85000000
     integration_time_base = 1
     spectrum_num_pixel = 1024
     spectrum_raw_length = (1024 * 2)
     spectrum_max_value = 16383
-    trigger_modes = ('OBP_NORMAL', 'OBP_EXTERNAL', 'OBP_INTERNAL')
+    trigger_modes = TriggerMode.supported('OBP_NORMAL', 'OBP_EXTERNAL', 'OBP_INTERNAL')
 
     # features
     feature_classes = (
@@ -699,17 +723,17 @@ class QEPRO(SeaBreezeDevice):
     product_id = 0x4004
     model_name = 'QEPRO'
     interface_cls = USBCommOBP
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges((0, 4), (1040, 1044))
+    dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (1040, 1044))
     integration_time_min = 10000
     integration_time_max = 1600000000
     integration_time_base = 1
     spectrum_num_pixel = 1044
     spectrum_raw_length = (1044 * 4) + 32  # XXX: Metadata
     spectrum_max_value = (2**18)-1
-    trigger_modes = ('NORMAL', 'LEVEL', 'SYNCHRONIZATION', 'EDGE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'LEVEL', 'SYNCHRONIZATION', 'EDGE')
 
     # features
     feature_classes = (
@@ -724,17 +748,17 @@ class VENTANA(SeaBreezeDevice):
     product_id = 0x5000
     model_name = 'VENTANA'
     interface_cls = USBCommOBP
-    endpoint_map = _EndPointMap(ep_out=0x01, lowspeed_in=0x82)
+    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x82)
 
     # spectrometer config
-    dark_pixel_indices = _DarkPixelRanges()
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
     integration_time_min = 22000
     integration_time_max = 60000000
     integration_time_base = 1
     spectrum_num_pixel = 1024
     spectrum_raw_length = (1024 * 2)  # XXX: No Sync byte!
     spectrum_max_value = 65535
-    trigger_modes = ('NORMAL', 'LEVEL', 'SYNCHRONIZATION', 'EDGE')
+    trigger_modes = TriggerMode.supported('NORMAL', 'LEVEL', 'SYNCHRONIZATION', 'EDGE')
 
     # features
     feature_classes = (

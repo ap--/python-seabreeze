@@ -1,18 +1,12 @@
-"""Implementation of the USB communication layer
+"""Implementation of the Seabreeze Transport layer.
 
-
-ceanoptics spectrometers use two different communication protocols.
-
-One is called 'OBP protocol'  # OceanBinaryProtocol
-the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
+Some spectrometers can support different transports (usb, network, rs232, etc.)
 
 """
 import warnings
 
 import usb.core
 import usb.util
-
-from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
 
 class TransportInterface(object):
@@ -52,30 +46,12 @@ class TransportInterface(object):
         """close the seabreeze device"""
         raise NotImplementedError("implement in derived transport class")
 
-    def write(self, data):
+    def write(self, data, timeout_ms=None, **kwargs):
         """write data to the device"""
         raise NotImplementedError("implement in derived transport class")
 
-    def read(self, size=None, timeout_ms=None):
-        """read data from the device (in low speed mode)
-
-        Returns
-        -------
-        str
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    def read_high_speed(self, size=None, timeout_ms=None):
-        """read data from the device in high speed mode
-
-        Returns
-        -------
-        str
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    def read_high_speed_alt(self, size=None, timeout_ms=None):
-        """read data from the device in alternate high speed mode
+    def read(self, size=None, timeout_ms=None, **kwargs):
+        """read data from the
 
         Returns
         -------
@@ -89,13 +65,20 @@ class TransportInterface(object):
 
 
 class TransportLayerUSB(TransportInterface):
+    """implementation of the usb transport interface for spectrometers"""
 
-    _required_init_kwargs = {'endpoint_map'}
+    _required_init_kwargs = ('endpoint_map',)
     _default_read_size = {
         'low_speed': 64,
         'high_speed': 512,
         'high_speed_alt': 512
     }
+    _read_endpoints = {
+        'low_speed': 'lowspeed_in',
+        'high_speed': 'highspeed_in',
+        'high_speed_alt': 'highspeed_in2'
+    }
+    _default_read_endpoint = 'low_speed'
 
     def __init__(self, endpoint_map=None):
         assert endpoint_map is not None
@@ -137,23 +120,23 @@ class TransportLayerUSB(TransportInterface):
         self._device = None
         self._opened = False
 
-    def write(self, data):
-        self._device.write(self._endpoint_map.ep_out, data)
+    def write(self, data, timeout_ms=None, **kwargs):
+        if self._device is None:
+            raise RuntimeError("device not opened")
+        if kwargs:
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+        self._device.write(self._endpoint_map.ep_out, data, timeout=timeout_ms)
 
-    def read(self, size=None, timeout_ms=None):
+    def read(self, size=None, timeout_ms=None, mode=None, **kwargs):
+        if self._device is None:
+            raise RuntimeError("device not opened")
+        mode = mode if mode is not None else self._default_read_endpoint
+        endpoint = getattr(self._endpoint_map, mode)
         if size is None:
-            size = self._default_read_size['low_speed']
-        return self._device.read(self._endpoint_map.lowspeed_in, size, timeout=timeout_ms)
-
-    def read_high_speed(self, size=None, timeout_ms=None):
-        if size is None:
-            size = self._default_read_size['high_speed']
-        return self._device.read(self._endpoint_map.highspeed_in, size, timeout=timeout_ms)
-
-    def read_high_speed_alt(self, size=None, timeout_ms=None):
-        if size is None:
-            size = self._default_read_size['high_speed_alt']
-        return self._device.read(self._endpoint_map.highspeed_in2, size, timeout=timeout_ms)
+            size = self._default_read_size[mode]
+        if kwargs:
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+        return self._device.read(endpoint, size, timeout=timeout_ms)
 
     @property
     def default_timeout_ms(self):

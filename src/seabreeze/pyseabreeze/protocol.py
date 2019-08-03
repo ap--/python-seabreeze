@@ -1,4 +1,7 @@
-"""The oceanoptics spectrometers use two different communication protocols.
+"""Implementation of the USB communication layer
+
+
+ceanoptics spectrometers use two different communication protocols.
 
 One is called 'OBP protocol'  # OceanBinaryProtocol
 the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe

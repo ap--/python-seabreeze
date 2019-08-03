@@ -1,100 +1,138 @@
-"""Implementation of the USB communication layer
+"""Implementation of the Protocol layer
 
-
-ceanoptics spectrometers use two different communication protocols.
-
-One is called 'OBP protocol'  # OceanBinaryProtocol
-the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
+ocean optics spectrometers use two different communication protocols:
+- one is called 'OBP protocol'  # OceanBinaryProtocol
+- the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
 
 """
+import functools
 import hashlib
 import struct
 import warnings
 
-import usb.core
-import usb.util
-
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
 
-class USBCommBase(object):
-    endpoint_map = None
-    _device = None
-    usbtimeout_ms = 0.0
-    _mode = 'lowspeed'
-    usb_read = None
-    _opened = None
+class ProtocolInterface(object):
 
-    def open_device(self, device):
-        # device.reset()
-        self.usbtimeout_ms = device.default_timeout
-        self._device = device
-        self.usb_read = self.usb_read_lowspeed
-        try:  # unavailable on some systems/backends
-            if device.is_kernel_driver_active(0):
-                device.detach_kernel_driver(0)
-        except NotImplementedError:
-            pass
-        try:
-            device.set_configuration()
-        except usb.USBError as usberr:
-            if usberr.errno == 16:
-                self._opened = True
-            raise
+    def __init__(self, transport):
+        self.transport = transport
+
+    def send(self, msg_type, payload, timeout_ms=None, **kwargs):
+        raise NotImplementedError("implement in derived classes")
+
+    def receive(self, size=None, timeout_ms=None, **kwargs):
+        raise NotImplementedError("implement in derived classes")
+
+    def query(self, msg_type, payload, timeout_ms=None, **kwargs):
+        raise NotImplementedError("implement in derived classes")
+
+
+class OOIProtocol(ProtocolInterface):
+
+    @staticmethod
+    def _compile_msgs(msg_dict):
+        return {code: functools.partial(struct.Struct(msg).pack, code) for code, msg in msg_dict.items()}
+
+    msgs = _compile_msgs({
+        0x01: '<B',    # OP_INITIALIZE
+        0x02: '<BI',   # OP_ITIME
+        0x05: '<BB',   # OP_GETINFO
+        0x09: '<B',    # OP_REQUESTSPEC
+        0x0A: '<BH',   # OP_SETTRIGMODE
+        0x71: '<BBB',  # OP_TECENABLE_QE
+        0x72: '<B',    # OP_READTEC_QE
+        0x73: '<Bh',   # OP_TECSETTEMP_QE
+        0xFE: '<B',    # OP_USBMODE
+    })  # add more here if you implement new features
+
+    def send(self, msg_type, payload, timeout_ms=None, **kwargs):
+        """send a message to the spectrometer
+
+        Parameters
+        ----------
+        msg_type : int
+            a message type as defined in `OOIProtocol.msgs`
+        payload :
+            the payload to be sent. Can be a singe value or a tuple, dependent
+            `msg_type`.
+        timeout_ms : int, optional
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        **kwargs :
+            ignored and only present to provide compatible caller interfaces
+
+        Returns
+        -------
+        bytes_written : int
+            the number of bytes sent
+        """
+        if kwargs:
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+        message = self.msgs[msg_type]
+        if not isinstance(payload, (tuple, list)):
+            data = message(payload)
         else:
-            self._opened = True
+            data = message(*payload)
+        return self.transport.write(data, timeout_ms=timeout_ms)
 
-    def _is_open(self):
-        if self._opened is None:
-            return False
-        else:
-            return self._opened
+    def receive(self, size=None, timeout_ms=None, mode=None, **kwargs):
+        """receive data from the spectrometer
 
-    def close_device(self):
-        usb.util.dispose_resources(self._device)
-        self._device.reset()
-        self._device = None
-        self.usbtimeout_ms = 0.0
-        self._opened = False
+        Parameters
+        ----------
+        size : int, optional
+            number of bytes to receive. if `None` (default) uses the
+            default size as specified in the transport layer.
+        timeout_ms : int, optional
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        mode : str, optional
+            transport layers can support different modes
+            (i.e. {'lowspeed', 'highspeed', 'highspeed_alt'} in the usb case)
+        kwargs :
+            ignored and only present to provide compatible caller interfaces
 
-    def usb_send(self, data):
-        self._device.write(self.endpoint_map.ep_out, data)
+        Returns
+        -------
+        data : str
+            data returned from the spectrometer
+        """
+        if kwargs:
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+        return self.transport.read(size=size, timeout=timeout_ms, mode=mode, **kwargs)
 
-    def usb_read_lowspeed(self, size=64, timeout=None):
-        return self._device.read(self.endpoint_map.lowspeed_in, size, timeout=timeout)
+    def query(self, msg_type, payload, size=None, timeout_ms=None, mode=None, **kwargs):
+        """convenience method combining send and receive
 
-    def usb_read_highspeed(self, size=512, timeout=None):
-        return self._device.read(self.endpoint_map.highspeed_in, size, timeout=timeout)
+        Parameters
+        ----------
+        msg_type : int
+            a message type as defined in `OOIProtocol.msgs`
+        payload :
+            the payload to be sent. Can be a singe value or a tuple, dependent
+            `msg_type`.
+        size : int, optional
+            number of bytes to receive. if `None` (default) uses the
+            default size as specified in the transport layer.
+        timeout_ms : int, optional
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        mode : str, optional
+            transport layers can support different modes
+            (i.e. {'lowspeed', 'highspeed', 'highspeed_alt'} in the usb case)
+        kwargs :
+            ignored and only present to provide compatible caller interfaces
 
-    def usb_read_highspeed_alt(self, size=512, timeout=None):
-        return self._device.read(self.endpoint_map.highspeed_in2, size, timeout=timeout)
+        Returns
+        -------
+        data : str
+            data returned from the spectrometer
+        """
+        self.send(msg_type, payload, timeout_ms=timeout_ms)
+        return self.receive(size=size, timeout_ms=timeout_ms, **kwargs)
 
-    def set_default_read(self, mode):
-        if mode == "highspeed":
-            self.usb_read = self.usb_read_highspeed
-        else:  # mode == "lowspeed"
-            self.usb_read = self.usb_read_lowspeed
 
-
-class USBCommOOI(USBCommBase):
-
-    def send_command(self, msgtype, payload):
-        data = msgtype % payload
-        return self.usb_send(data)
-
-    def innitiate_query(self, msgtype, payload):
-        data = msgtype % payload
-        return self.usb_send(data)
-
-    def receive_query(self, alternate_endpoint=False):
-        if not alternate_endpoint:
-            return self.usb_read()
-        else:
-            return self.usb_read_highspeed_alt()
-
-    def query(self, msgtype, payload):
-        self.innitiate_query(msgtype, payload)
-        return self.usb_read()
 
 
 class USBCommOBP(USBCommBase):

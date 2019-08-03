@@ -5,6 +5,7 @@ ocean optics spectrometers use two different communication protocols:
 - the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
 
 """
+import collections
 import functools
 import hashlib
 import struct
@@ -16,6 +17,11 @@ from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 class ProtocolInterface(object):
 
     def __init__(self, transport):
+        if not (hasattr(transport, 'write')
+                and isinstance(transport.write, collections.Callable)
+                and hasattr(transport, 'read')
+                and isinstance(transport.read, collections.Callable)):
+            raise TypeError("transport does not implement read and write methods")
         self.transport = transport
 
     def send(self, msg_type, payload, timeout_ms=None, **kwargs):
@@ -46,16 +52,15 @@ class OOIProtocol(ProtocolInterface):
         0xFE: '<B',    # OP_USBMODE
     })  # add more here if you implement new features
 
-    def send(self, msg_type, payload, timeout_ms=None, **kwargs):
-        """send a message to the spectrometer
+    def send(self, msg_type, payload=(), timeout_ms=None, **kwargs):
+        """send a ooi message to the spectrometer
 
         Parameters
         ----------
         msg_type : int
             a message type as defined in `OOIProtocol.msgs`
-        payload :
-            the payload to be sent. Can be a singe value or a tuple, dependent
-            `msg_type`.
+        payload : optional
+            dependent on `msg_type`. a singe value or a tuple of multiple values
         timeout_ms : int, optional
             the timeout after which the transport layer should error.
             `None` means no timeout (default)
@@ -69,11 +74,8 @@ class OOIProtocol(ProtocolInterface):
         """
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        message = self.msgs[msg_type]
-        if not isinstance(payload, (tuple, list)):
-            data = message(payload)
-        else:
-            data = message(*payload)
+        payload = payload if isinstance(tuple, list) else (payload,)
+        data = self.msgs[msg_type](*payload)
         return self.transport.write(data, timeout_ms=timeout_ms)
 
     def receive(self, size=None, timeout_ms=None, mode=None, **kwargs):
@@ -89,7 +91,7 @@ class OOIProtocol(ProtocolInterface):
             `None` means no timeout (default)
         mode : str, optional
             transport layers can support different modes
-            (i.e. {'lowspeed', 'highspeed', 'highspeed_alt'} in the usb case)
+            (i.e. {'low_speed', 'high_speed', 'high_speed_alt'} in the usb case)
         kwargs :
             ignored and only present to provide compatible caller interfaces
 
@@ -120,7 +122,7 @@ class OOIProtocol(ProtocolInterface):
             `None` means no timeout (default)
         mode : str, optional
             transport layers can support different modes
-            (i.e. {'lowspeed', 'highspeed', 'highspeed_alt'} in the usb case)
+            (i.e. {'low_speed', 'high_speed', 'high_speed_alt'} in the usb case)
         kwargs :
             ignored and only present to provide compatible caller interfaces
 
@@ -133,9 +135,26 @@ class OOIProtocol(ProtocolInterface):
         return self.receive(size=size, timeout_ms=timeout_ms, **kwargs)
 
 
+class OBPProtocol(ProtocolInterface):
 
+    @staticmethod
+    def _compile_msgs(msg_dict):
+        return {code: struct.Struct(msg).pack for code, msg in msg_dict.items()}
 
-class USBCommOBP(USBCommBase):
+    msgs = _compile_msgs({
+        0x00100928: "",    # GET_BUF_SPEC32_META
+        0x00101100: "",    # GET_RAW_SPECTRUM_NOW
+        0x00110010: "<L",  # SET_ITIME_USEC
+        0x00110110: "<B",  # SET_TRIG_MODE
+        0x00180100: "",    # GET_WL_COEFF_COUNT
+        0x00180101: "<B",  # GET_WL_COEFF
+        0x00181100: "",    # GET_NL_COEFF_COUNT
+        0x00181101: "<B",  # GET_NL_COEFF
+        0x00420004: "",    # GET_TE_TEMPERATURE
+        0x00420010: "<B",  # SET_TE_ENABLE
+        0x00420011: "<f",  # SET_TE_SETPOINT
+    })  # add more here if you implement new features
+
     class OBP(object):
         """All relevant constants are stored here"""
 
@@ -179,77 +198,155 @@ class USBCommOBP(USBCommBase):
         NO_CHECKSUM = ""
         FOOTER = 0xC2C3C4C5  # the datasheet specifies it in this order...
 
-        HEADER_FMT = ("<H"  # start_bytes
-                      "H"  # protocol_version
-                      "H"  # flags
-                      "H"  # error number
-                      "L"  # message type
-                      "L"  # regarding
-                      "6s"  # reserved
-                      "B"  # checksum type
-                      "B"  # immediate length
-                      "16s"  # immediate data
-                      "L"  # bytes remaining
-                      )
+        HEADER_FMT = (
+            "<H"   # start_bytes
+            "H"    # protocol_version
+            "H"    # flags
+            "H"    # error number
+            "L"    # message type
+            "L"    # regarding
+            "6s"   # reserved
+            "B"    # checksum type
+            "B"    # immediate length
+            "16s"  # immediate data
+            "L"    # bytes remaining
+        )
 
-        FOOTER_FMT = ("16s"  # checksum
-                      "L"  # footer
-                      )
+        FOOTER_FMT = (
+            "16s"  # checksum
+            "L"    # footer
+        )
 
-    def send_command(self, msgtype, payload, timeout=None):
-        """OBP command function"""
+    # noinspection DuplicatedCode
+    def send(self, msg_type, payload=(), timeout_ms=None, request_ack=True, **kwargs):
+        """send a obp message to the spectrometer
+
+        Parameters
+        ----------
+        msg_type : int
+            a message type as defined in `OBPProtocol.msgs`
+        payload : optional
+            dependent on `msg_type`. Can be a single value or a tuple of multiple values
+        timeout_ms : int, optional
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        request_ack : bool, default `True`
+            request an ack for the sent command from the spectrometer.
+        **kwargs :
+            ignored and only present to provide compatible caller interfaces
+
+        Returns
+        -------
+        bytes_written : int
+            the number of bytes sent
+        """
+        if kwargs:
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+        payload = payload if isinstance(tuple, list) else (payload,)
+        data = self.msgs[msg_type](*payload)
+
         # Constructing message and querying usb.
-        msg = self._construct_outgoing_message(msgtype, payload, requestACK=True)
-        self.usb_send(msg)
-        ret = self.usb_read(timeout=timeout)
+        message = self._construct_outgoing_message(msg_type, data, request_ack=request_ack)  # TODO
+        bytes_written = self.transport.write(message)  # ? assert bytes_written == len(message)
 
-        _, checksumtype = self._check_incoming_message_header(ret[:44])
+        if not request_ack:
+            return bytes_written
 
-        checksum = self._check_incoming_message_footer(ret[-20:])
-        if ((checksumtype == self.OBP.CHECKSUM_TYPE_MD5) and
-                (checksum != hashlib.md5(ret[:-20]).digest())):
-            # TODO: raise Error
+        response = self.transport.read(timeout_ms=timeout_ms)
+        remaining_bytes, checksum_type = self._check_incoming_message_header(response[:44])
+        # ? assert remaining_bytes == 20
+        checksum = self._check_incoming_message_footer(response[-20:])
+
+        if checksum_type == self.OBP.CHECKSUM_TYPE_MD5 and checksum != hashlib.md5(response[:-20]).digest():
             warnings.warn("WARNING OBP: The checksums differ, but we ignore this for now.")
-        return
+        return bytes_written
 
-    def innitiate_query(self, msgtype, payload):
-        msg = self._construct_outgoing_message(msgtype, payload, requestACK=False)
-        self.usb_send(msg)
+    def receive(self, size=None, timeout_ms=None, **kwargs):
+        """receive data from the spectrometer
 
-    def receive_query(self, timeout=None):
-        """receive_query needs to be called after innitiate_query"""
-        ret = self.usb_read(size=64, timeout=timeout)
+        Parameters
+        ----------
+        size : int, optional
+            number of bytes to receive. if `None` (default) uses the
+            default size as specified in the transport layer.
+        timeout_ms : int, optional
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        kwargs :
+            ignored and only present to provide compatible caller interfaces
 
-        remaining_bytes, checksumtype = self._check_incoming_message_header(ret[:44])
+        Returns
+        -------
+        data : str
+            data returned from the spectrometer
+        """
+        response = self.transport.read(size=64, timeout_ms=timeout_ms)
+        remaining_bytes, checksum_type = self._check_incoming_message_header(response[:44])
         length_payload_footer = remaining_bytes
 
         # we already received some data
-        remaining_bytes -= len(ret[44:])
+        remaining_bytes -= len(response[44:])
         if remaining_bytes > 0:
-            ret += self.usb_read(size=remaining_bytes, timeout=timeout)
+            response += self.transport.read(size=remaining_bytes, timeout_ms=timeout_ms)
 
-        if length_payload_footer != len(ret[44:]):
-            raise SeaBreezeError("remaining packet length mismatch: %d != %d" %
-                                 (remaining_bytes, len(ret[44:])))
+        if length_payload_footer != len(response[44:]):
+            raise SeaBreezeError("remaining packet length mismatch: {:d} != {:d}".format(
+                remaining_bytes, len(response[44:])
+            ))
 
-        checksum = self._check_incoming_message_footer(ret[-20:])
-        if ((checksumtype == self.OBP.CHECKSUM_TYPE_MD5) and
-                (checksum != hashlib.md5(ret[:-20]).digest())):
-            # TODO: raise Error
+        checksum = self._check_incoming_message_footer(response[-20:])
+        if checksum_type == self.OBP.CHECKSUM_TYPE_MD5 and checksum != hashlib.md5(response[:-20]).digest():
             warnings.warn("WARNING OBP: The checksums differ, but we ignore this for now.")
-        data = self._extract_message_data(ret)
-        return data
 
-    def query(self, msgtype, payload, timeout=None):
-        """OBP query function"""
-        self.innitiate_query(msgtype, payload)
-        return self.receive_query(timeout)
+        return self._extract_message_data(response)
 
-    def _construct_outgoing_message(self, msgtype, payload, requestACK=False, regarding=None):
-        """message layout, see STS datasheet
+    def query(self, msg_type, payload, size=None, timeout_ms=None, **kwargs):
+        """convenience method combining send and receive
 
+        Parameters
+        ----------
+        msg_type : int
+            a message type as defined in `OBPProtocol.msgs`
+        payload :
+            the payload to be sent. Can be a single value or a tuple, dependent
+            `msg_type`.
+        size : int, optional
+            number of bytes to receive. if `None` (default) uses the
+            default size as specified in the transport layer.
+        timeout_ms : int, optional
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        kwargs :
+            ignored and only present to provide compatible caller interfaces
+
+        Returns
+        -------
+        data : str
+            data returned from the spectrometer
         """
-        if requestACK == True:
+        self.send(msg_type, payload, request_ack=False)
+        return self.receive(timeout_ms=timeout_ms)
+
+    def _construct_outgoing_message(self, msg_type, payload_string, request_ack=False, regarding=None):
+        """construct an outgoing OBP message
+
+        Parameters
+        ----------
+        msg_type : `int`
+            the obp message type, a 4 byte integer
+        payload_string : `str`
+            a compiled payload_string
+        request_ack : `bool`
+            request an ack for the sent command from the spectrometer.
+        regarding : `int`
+            see ocean optics obp protocol documentation
+
+        Returns
+        -------
+        message : `str`
+            compiled message
+        """
+        if request_ack is True:
             flags = self.OBP.FLAG_REQUEST_ACK
         else:
             flags = 0
@@ -257,40 +354,50 @@ class USBCommOBP(USBCommBase):
         if regarding is None:
             regarding = 0
 
-        if len(payload) <= 16:
-            payload_fmt = "0s"
-            immediate_length = len(payload)
-            immediate_data = payload
-            payload = ""
+        if len(payload_string) <= 16:
+            payload_string_fmt = "0s"
+            immediate_length = len(payload_string)
+            immediate_data = payload_string
+            payload_string = ""
             bytes_remaining = 20  # Checksum + footer
         else:
-            payload_fmt = "%ds" % len(payload)
+            payload_string_fmt = "%ds" % len(payload_string)
             immediate_length = 0
             immediate_data = ""
-            bytes_remaining = 20 + len(payload)
+            bytes_remaining = 20 + len(payload_string)
 
-        FMT = self.OBP.HEADER_FMT + payload_fmt + self.OBP.FOOTER_FMT
+        FMT = self.OBP.HEADER_FMT + payload_string_fmt + self.OBP.FOOTER_FMT
 
         msg = struct.pack(FMT,
                           self.OBP.HEADER_START_BYTES,
                           self.OBP.HEADER_PROTOCOL_VERSION,
                           flags,
                           self.OBP.NO_ERROR,
-                          msgtype,
+                          msg_type,
                           regarding,
                           self.OBP.RESERVED,
                           self.OBP.CHECKSUM_TYPE_NONE,
                           immediate_length,
                           immediate_data,
                           bytes_remaining,
-                          payload,
+                          payload_string,
                           self.OBP.NO_CHECKSUM,
                           self.OBP.FOOTER)
         return msg
 
     def _check_incoming_message_header(self, header):
-        """message layout, see STS datasheet
+        """check the incoming message header
 
+        Parameters
+        ----------
+        header : `str`
+            a obp header of length 44
+
+        Returns
+        -------
+        bytes_and_checksum_type : tuple[`int`, `int`]
+            bytes_remaining after the header (returns 20 for a 64 byte message)
+            checksum_type only supports self.OBP.CHECKSUM_TYPE_MD5 for now
         """
         if len(header) != 44:
             raise SeaBreezeError("header has wrong length! len(header): %d" % len(header))
@@ -316,26 +423,35 @@ class USBCommOBP(USBCommBase):
             if error != 0:  # != SUCCESS
                 raise SeaBreezeError(self.OBP.ERROR_CODES[error])
             else:
-                pass  # TODO: should we do simething here?
+                pass  # TODO: should we do something here?
         if flags & self.OBP.FLAG_PROTOCOL_DEPRECATED:
             raise SeaBreezeError("Protocol deprecated?!?")
 
-        # msgtype = data[4]
+        # msg_type = data[4]
         # regarding = data[5]
 
-        checksumtype = data[7]  # TODO: implement checksums.
-        if checksumtype not in [self.OBP.CHECKSUM_TYPE_NONE, self.OBP.CHECKSUM_TYPE_MD5]:
-            raise SeaBreezeError('the checksum type is unkown: "%d"' % checksumtype)
+        checksum_type = data[7]  # TODO: implement checksums.
+        if checksum_type not in [self.OBP.CHECKSUM_TYPE_NONE, self.OBP.CHECKSUM_TYPE_MD5]:
+            raise SeaBreezeError('the checksum type is unknown: "%d"' % checksum_type)
 
         # immediate_length = data[8]
         # immediate_data = data[9]
         bytes_remaining = data[10]
 
-        return bytes_remaining, checksumtype
+        return bytes_remaining, checksum_type
 
     def _check_incoming_message_footer(self, footer):
-        """message layout, see STS datasheet
+        """check the incoming message header
 
+        Parameters
+        ----------
+        footer : `str`
+            a obp footer of length 20
+
+        Returns
+        -------
+        checksum: `str`
+            the 16 byte checksum of the message
         """
         assert len(footer) == 20, "footer has wrong length! len(footer): %d" % len(footer)
 
@@ -347,8 +463,17 @@ class USBCommOBP(USBCommBase):
         return checksum
 
     def _extract_message_data(self, msg):
-        """message layout, see STS datasheet
+        """extract the payload data from a obp message
 
+        Parameters
+        ----------
+        msg : `str`
+            a obp message
+
+        Returns
+        -------
+        data : `str`
+            the payload contained in the message
         """
         payload_length = len(msg) - 44 - 20  # - HeaderLength - FooterLength
         if not (payload_length >= 0):
@@ -358,14 +483,14 @@ class USBCommOBP(USBCommBase):
 
         data = struct.unpack(FMT, msg)
 
-        msgtype = data[4]
+        msg_type = data[4]
 
         immediate_length = data[8]
         immediate_data = data[9]
         payload = data[11]
 
         if (immediate_length > 0) and len(payload) > 0:
-            raise SeaBreezeError("Got immediate AND payload data? cmd: '%d'" % msgtype)
+            raise SeaBreezeError("Got immediate AND payload data? cmd: '%d'" % msg_type)
         elif immediate_length > 0:
             return immediate_data[:immediate_length]
         elif payload_length > 0:

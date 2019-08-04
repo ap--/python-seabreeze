@@ -91,8 +91,8 @@ class SeaBreezeAPI(object):
                 was_open_before = False
                 try:
                     dev.open()
-                except usb.USBError as usberr:
-                    if usberr.errno == 16:
+                except usb.core.USBError as usb_error:
+                    if usb_error.errno == 16:
                         # device used by another thread?
                         continue
                     else:

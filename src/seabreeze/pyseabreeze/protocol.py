@@ -9,6 +9,7 @@ import collections
 import functools
 import hashlib
 import struct
+import time
 import warnings
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
@@ -51,6 +52,12 @@ class OOIProtocol(ProtocolInterface):
         0x73: '<Bh',   # OP_TECSETTEMP_QE
         0xFE: '<B',    # OP_USBMODE
     })  # add more here if you implement new features
+
+    def __init__(self, transport):
+        super(OOIProtocol, self).__init__(transport)
+        # initialize the spectrometer
+        self.send(0x01)
+        time.sleep(0.1)  # wait shortly after init command
 
     def send(self, msg_type, payload=(), timeout_ms=None, **kwargs):
         """send a ooi message to the spectrometer

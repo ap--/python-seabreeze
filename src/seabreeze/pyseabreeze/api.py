@@ -6,69 +6,70 @@ most of this code is based on implementations from
     http://github.com/ap--/python-oceanoptics
 
 """
+import logging
+
 import usb.core
 import usb.util
-from seabreeze.pyseabreeze.devices import is_ocean_optics_usb_device, SeaBreezeDevice
-from seabreeze.pyseabreeze.exceptions import SeaBreezeError
+
+from seabreeze.pyseabreeze.devices import SeaBreezeDevice
+from seabreeze.pyseabreeze.transport import USBTransport
 
 
 class SeaBreezeAPI(object):
     """SeaBreeze API interface"""
 
+    _log = logging.getLogger(__name__)
+
     def __init__(self, initialize=True):
         if initialize:
             self.initialize()
 
-    def initialize(self):
+    @staticmethod
+    def initialize():
         """initialize the api backend
 
         normally this function does not have to be called directly by the user.
         it resets all usb devices on load
         """
         # create the handles and associate protocols
-        for device in self._list_pyusb_devices():
+        for device in USBTransport.list_devices():
             try:
                 device.reset()
                 usb.util.dispose_resources(device)
-            except:
-                pass
+            except Exception as err:
+                SeaBreezeAPI._log.debug("initialize failed: {}('{}')".format(
+                    err.__class__.__name__, err.message
+                ))
 
-    def shutdown(self):
+    @staticmethod
+    def shutdown():
         """shutdown the api backend
 
         normally this function does not have to be called directly by the user
         """
         # dispose usb resources
-        for device in self._list_pyusb_devices():
+        for device in USBTransport.list_devices():
             try:
                 usb.util.dispose_resources(device)
-            except:
-                pass
+            except Exception as err:
+                SeaBreezeAPI._log.debug("shutdown failed: {}('{}')".format(
+                    err.__class__.__name__, err.message
+                ))
 
-    def add_rs232_device_location(self, device_type, bus_path, baudrate):
+    @staticmethod
+    def add_rs232_device_location(device_type, bus_path, baudrate):
         """add RS232 device location"""
+        # RS232Transport.register_device(device_type, bus_path, baudrate)
         raise NotImplementedError("rs232 communication not implemented for pyseabreeze")
 
-    def add_ipv4_device_location(self, device_type, ip_address, port):
+    @staticmethod
+    def add_ipv4_device_location(device_type, ip_address, port):
         """add ipv4 device location"""
+        # IPV4Transport.register_device(device_type, ip_address, port)
         raise NotImplementedError("ipv4 communication not implemented for pyseabreeze")
 
-    def _list_pyusb_devices(self):
-        """list pyusb devices for all available spectrometers
-
-        Note: this includes spectrometers that are currently opened in other
-        processes on the machine.
-
-        Returns
-        -------
-        devices : list of usb.core.Device
-            unique pyusb devices for each available spectrometer
-        """
-        # get all matching devices
-        return usb.core.find(find_all=True,
-                             custom_match=is_ocean_optics_usb_device)
-
-    def list_devices(self):
+    @staticmethod
+    def list_devices():
         """returns available SeaBreezeDevices
 
         list all connected Ocean Optics devices supported
@@ -80,9 +81,8 @@ class SeaBreezeAPI(object):
             connected Spectrometer instances
         """
         # get all matching devices
-        # create the handles and associate protocols
         devices = []
-        for pyusb_dev in self._list_pyusb_devices():
+        for pyusb_dev in USBTransport.list_devices():
             # get the correct communication interface
             dev = SeaBreezeDevice(pyusb_dev)
             if dev.is_open:
@@ -97,8 +97,6 @@ class SeaBreezeAPI(object):
                         continue
                     else:
                         raise
-            model = dev.model
-            serial = dev.serial_number
             if not was_open_before:
                 dev.close()
             devices.append(dev)

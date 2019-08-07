@@ -2,74 +2,166 @@
 
 
 """
+from collections import defaultdict
+
 import enum
 import itertools
-import struct
-import time
 
 from future.utils import with_metaclass
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
-from seabreeze.pyseabreeze.communication import USBCommBase, USBCommOOI, USBCommOBP
+from seabreeze.pyseabreeze.features import SeaBreezeFeature
+from seabreeze.pyseabreeze.protocol import OOIProtocol, OBPProtocol
 from seabreeze.pyseabreeze import features as sbf
 
 # spectrometer models for pyseabreeze
 #
-VENDOR_ID = 0x2457
-# NOTE: PRODUCT_IDS and _model_registry will be filled
-#       via the _SeaBreezeDeviceMeta metaclass magic below
-PRODUCT_IDS = set()
+from seabreeze.pyseabreeze.transport import USBTransport, TransportInterface
+
+
 _model_class_registry = {}
-
-
-def is_ocean_optics_usb_device(dev):
-    """return if the provided device is a supported ocean optics device
-
-    Parameters
-    ----------
-    dev : usb.core.Device
-
-    Returns
-    -------
-    bool
-    """
-    # noinspection PyUnresolvedReferences
-    return dev.idVendor == VENDOR_ID and dev.idProduct in PRODUCT_IDS
 
 
 class _SeaBreezeDeviceMeta(type):
     """metaclass for pyseabreeze devices"""
 
     def __new__(mcs, name, bases, attr_dict):
+        # This part of the metaclass magic is very opaque. It could be avoided by moving all
+        # of this logic to custom __init__ methods of the Spectrometer classes, or to factory
+        # functions. But I am using python-seabreeze as a playground to experiment with
+        # different ways of implementing extendable interfaces, so please forgive these design
+        # decisions ^^"
+        #
+        # I also like the concise way you can define the spectrometer functionality this way.
+        # It allows you to get a quick overview of the functionality implemented in pyseabreeze,
+        # without having to read through a lot of code. And I think that it's easy to understand
+        # what a spectrometer can do, by just looking at the spectrometer class definition, even
+        # if you don't understand the details of the implementation.
+        #
+        # Because it's quite opaque the code below tries hard to enforce strict typing in all
+        # defined spectrometer classes to minimize the amount of errors you can make when adding
+        # a new spectrometers to pyseabreeze.
+        #
         if name != 'SeaBreezeDevice':
-            # > the command interface
-            _interface_cls = attr_dict['interface_cls']
-            assert issubclass(_interface_cls, USBCommBase), "instance class does not derive from USBCommBase"
+            # This runs for all subclasses of SeaBreezeDevice, so for all defined spectrometers
+            # What might be unintuitive to the user is, that all defined attributes in the
+            # spectrometer classes are only used to configure the subclass and are NOT directly
+            # available in the instances later. (look at how attr_dict is modified below).
+            #
+            if 'model_name' not in attr_dict:
+                raise AttributeError("'model_name' not provided for class '{}'".format(name))
+            model_name = attr_dict.pop('model_name')
+            if not isinstance(model_name, str):
+                raise TypeError("{}.model_name not a str".format(name))
 
-            # make the seabreeze device derive from the interface_cls
-            bases = tuple(b for b in itertools.chain(bases, [_interface_cls]))
+            # gather the transport classes defined on the class
+            transport_classes = mcs._extract_transform_classes(model_name, class_name=name, attr_dict=attr_dict)
+            # gather the feature classes defined on the class
+            feature_classes = mcs._extract_feature_classes(model_name, class_name=name, attr_dict=attr_dict)
+
+            if attr_dict:
+                raise ValueError("")
+
+            attr_dict = {
+                '_model_name': model_name,
+                '_transport_classes': transport_classes,
+                '_feature_classes': feature_classes
+            }
 
         return super(_SeaBreezeDeviceMeta, mcs).__new__(mcs, name, bases, attr_dict)
 
     def __init__(cls, name, bases, attr_dict):
         if name != 'SeaBreezeDevice':
-            # check if required class attributes are present and correctly typed
-            # > product_id
-            _product_id = attr_dict['product_id']
-            assert isinstance(_product_id, int), "product_od not an int"
-            assert 0 <= _product_id <= 0xFFFF, "product_id not a 16bit int"
-            assert _product_id not in PRODUCT_IDS, "product_id already registered"
-            # > usb endpoint map
-            _endpoint_map = attr_dict['endpoint_map']
-            assert isinstance(_endpoint_map, EndPointMap), "no endpoint map provided"
             # > model name
-            _model_name = attr_dict['model_name']
-            assert isinstance(_model_name, str), "model name not a str"
-
-            # add to the class registry
-            PRODUCT_IDS.add(_product_id)
-            _model_class_registry[_product_id] = cls
+            model_name = attr_dict['model_name']
+            assert isinstance(model_name, str), "model name not a str"
+            _model_class_registry[model_name] = cls
 
         super(_SeaBreezeDeviceMeta, cls).__init__(name, bases, attr_dict)
+
+    @staticmethod
+    def _extract_transform_classes(model_name, class_name, attr_dict):
+
+        visited_attrs = set()
+        transport_classes = []
+        try:
+            supported_transport_classes = attr_dict.pop('transport')
+        except KeyError:
+            raise AttributeError("{}.transport not provided")
+        if not isinstance(supported_transport_classes, tuple) or not supported_transport_classes:
+            raise TypeError("{}.transport not a tuple of len > 0")
+
+        for idx, transport_cls in enumerate(supported_transport_classes):
+            # for each supported transport of the spectrometer, gather the configuration from
+            # the spectrometer class and specialize the transport_cls with the provided settings.
+            #
+            if not issubclass(transport_cls, TransportInterface):
+                raise TypeError("{}.transport[{:d}] '{}' does not derive from TransportInterface".format(
+                    class_name, idx, transport_cls.__name__
+                ))
+            # noinspection PyProtectedMember
+            kwargs = transport_cls._required_init_kwargs
+            transport_init_kwargs = {}
+            for kw in kwargs:
+                if kw not in attr_dict:
+                    raise AttributeError("{}.{} not provided for class but '{}' requires it.".format(
+                        class_name, kw, transport_cls.__name__
+                    ))
+                transport_init_kwargs[kw] = attr_dict[kw]
+            visited_attrs.update(kwargs)
+            # specialize the transport class with the spectrometer's custom config
+            specialized_transport_cls = transport_cls.specialize(model_name, **transport_init_kwargs)
+            transport_classes.append(specialized_transport_cls)
+
+        for attr in visited_attrs:
+            del attr_dict[attr]
+
+        return tuple(transport_classes)
+
+    @staticmethod
+    def _extract_feature_classes(model_name, class_name, attr_dict):
+
+        visited_attrs = set()
+        feature_classes = defaultdict(list)
+        try:
+            supported_feature_classes = attr_dict.pop('feature_classes')
+        except KeyError:
+            raise AttributeError("{}.feature_classes not provided")
+        if not isinstance(supported_feature_classes, tuple) or not supported_feature_classes:
+            raise TypeError("{}.feature_classes not a tuple of len > 0")
+        for idx, feature_cls in enumerate(supported_feature_classes):
+            # for each supported feature of the spectrometer, gather the configuration
+            # from the spectrometer class and subclass the feature_cls with the provided
+            # settings. Also check if requirements are fulfilled, i.e. if the feature depends
+            # on other features or on specific protocols
+            #
+            if not issubclass(feature_cls, SeaBreezeFeature):
+                raise TypeError("{}.feature_classes[{:d}] '{}' does not derive from SeaBreezeFeature".format(
+                    model_name, idx, feature_cls.__name__
+                ))
+            # noinspection PyProtectedMember
+            required = set(feature_cls._required_features)
+            if not required.issubset(feature_classes):
+                raise KeyError("{}.feature_classes[{:d}] '{}' requires '{}'. To fix, re-order or add.".format(
+                    model_name, idx, feature_cls.__name__, ", ".join(required - set(feature_classes))
+                ))
+            # noinspection PyProtectedMember
+            kwargs = feature_cls._required_kwargs
+            feature_attrs = {}
+            for kw in kwargs:
+                if kw not in attr_dict:
+                    raise AttributeError("{}.{} not provided for class but '{}' requires it.".format(
+                        class_name, kw, feature_cls.__name__
+                    ))
+                feature_attrs[kw] = attr_dict[kw]
+            visited_attrs.update(kwargs)
+            # specialize the feature class with the spectrometer's custom config
+            specialized_feature_cls = feature_cls.specialize(**feature_attrs)
+            feature_classes[feature_cls.identifier].append(specialized_feature_cls)
+
+        for attr in visited_attrs:
+            del attr_dict[attr]
+
+        return feature_classes
 
 
 class EndPointMap(object):
@@ -133,26 +225,33 @@ class TriggerMode(enum.IntEnum):
 
 class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 
-    # attributes have to be defined in derived classes
-    product_id = None
-    model_name = None
-    endpoint_map = None
-    interface_cls = None
-
     # internal attribute
+    _model_name = None
     _serial_number = '?'
     _cached_features = None
 
-    def __new__(cls, handle=None):
-        if handle is None:
+    def __new__(cls, raw_device=None):
+        if raw_device is None:
             raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
-        specialized_cls = _model_class_registry[handle.idProduct]
-        return super(SeaBreezeDevice, cls).__new__(specialized_cls, handle)
+        for transport in {USBTransport}:
+            supported_model = transport.supported_model(raw_device)
+            if supported_model is not None:
+                break
+        else:
+            raise TypeError("No transport supports device.")
+        specialized_cls = _model_class_registry[supported_model]
+        return super(SeaBreezeDevice, cls).__new__(specialized_cls, raw_device)
 
-    def __init__(self, handle=None):
-        if handle is None:
+    def __init__(self, raw_device=None):
+        if raw_device is None:
             raise SeaBreezeError("Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`.")
-        self.handle = handle
+        self._raw_device = raw_device
+        for transport in self._transport_classes:
+            if transport.supported_model(self._raw_device) is not None:
+                self._transport = transport()
+                break
+        else:
+            raise TypeError("No transport supports device.")
         try:
             self._serial_number = self.get_serial_number()
         except SeaBreezeError:
@@ -160,7 +259,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 
     @property
     def model(self):
-        return self.model_name
+        return self._model_name
 
     @property
     def serial_number(self):
@@ -176,11 +275,10 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         None
         """
-        self.open_device(self.handle)
-        if issubclass(self.interface_cls, USBCommOOI):
-            # initialize the spectrometer
-            self.usb_send(struct.pack('<B', 0x01))
-            time.sleep(0.1)  # wait shortly after init command
+        self._transport.open_device(self.handle)
+        # if issubclass(self.interface_cls, USBCommOOI):
+        #    # initialize the spectrometer
+        #    self.usb_send(struct.pack('<B', 0x01))
         # cache features
         self._cached_features = {}
         _ = self.features
@@ -194,7 +292,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         None
         """
-        self.close_device()
+        self._transport.close_device()
 
     @property
     def is_open(self):
@@ -204,7 +302,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         bool
         """
-        return self._is_open()
+        return self._transport.is_open
 
     def get_serial_number(self):
         """return the serial number string of the spectrometer
@@ -214,27 +312,18 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         serial_number: str
         """
         try:
-            if issubclass(self.interface_cls, USBCommOOI):
+            if issubclass(self._protocol, OOIProtocol):
                 # The serial is stored in slot 0
                 # noinspection PyUnresolvedReferences
                 return str(self.f.eeprom.eeprom_read_slot(0))
 
-            elif issubclass(self.interface_cls, USBCommOBP):
+            elif issubclass(self._protocol, OBPProtocol):
                 return self.query(0x00000100, "")
 
             else:
                 raise NotImplementedError("No serial number for interface class %s" % str(self.interface_cls))
         except AttributeError:
             raise SeaBreezeError("device not open")
-
-    def get_model(self):
-        """return the model string of the spectrometer
-
-        Returns
-        -------
-        model: str
-        """
-        return self.model_name
 
     @property
     def features(self):
@@ -246,12 +335,12 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         features : `dict` [`str`, `seabreeze.cseabreeze.SeaBreezeFeature`]
         """
-        # TODO: make this a cached property
         if not self._cached_features:
             self._cached_features = {k: [] for k in sbf.SeaBreezeFeature.get_feature_class_registry()}
             for feature_cls in self.feature_classes:
                 f_list = self._cached_features.setdefault(feature_cls.identifier, [])
-                f_list.append(feature_cls(self, len(f_list)))
+                # noinspection PyProtectedMember
+                f_list.append(feature_cls(self._transport._protocol, len(f_list)))
         return self._cached_features
 
     @property
@@ -278,11 +367,13 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 #
 class USB2000PLUS(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x101E
     model_name = 'USB2000PLUS'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x101E
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((6, 21))  # as in seabreeze-3.0.9
@@ -304,11 +395,13 @@ class USB2000PLUS(SeaBreezeDevice):
 
 class USB2000(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1002
     model_name = 'USB2000'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1002
+    usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
@@ -330,11 +423,13 @@ class USB2000(SeaBreezeDevice):
 
 class HR2000(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x100a
     model_name = 'HR2000'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x100a
+    usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
@@ -356,11 +451,13 @@ class HR2000(SeaBreezeDevice):
 
 class HR4000(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1012
     model_name = 'HR4000'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1012
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((2, 13))
@@ -382,11 +479,13 @@ class HR4000(SeaBreezeDevice):
 
 class HR2000PLUS(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1016
     model_name = 'HR2000PLUS'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1016
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
@@ -408,11 +507,13 @@ class HR2000PLUS(SeaBreezeDevice):
 
 class USB650(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1014
     model_name = 'USB650'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1014
+    usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()
@@ -434,11 +535,13 @@ class USB650(SeaBreezeDevice):
 
 class QE65000(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1018
     model_name = 'QE65000'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1018
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (1040, 1044))  # as in seabreeze-3.0.5
@@ -460,11 +563,13 @@ class QE65000(SeaBreezeDevice):
 
 class USB4000(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1022
     model_name = 'USB4000'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1022
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((5, 16)),  # as in seabreeze-3.0.9
@@ -486,11 +591,13 @@ class USB4000(SeaBreezeDevice):
 
 class NIRQUEST512(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1026
     model_name = 'NIRQUEST512'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1026
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges(),  # as in seabreeze-3.0.9
@@ -512,11 +619,13 @@ class NIRQUEST512(SeaBreezeDevice):
 
 class NIRQUEST256(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1028
     model_name = 'NIRQUEST256'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1028
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges(),  # as in seabreeze-3.0.9
@@ -538,11 +647,13 @@ class NIRQUEST256(SeaBreezeDevice):
 
 class MAYA2000PRO(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x102a
     model_name = 'MAYA2000PRO'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x102a
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (2064, 2068))
@@ -564,11 +675,13 @@ class MAYA2000PRO(SeaBreezeDevice):
 
 class MAYA2000(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x102c
     model_name = 'MAYA2000'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x102c
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((0, 8), (2072, 2080))
@@ -590,11 +703,13 @@ class MAYA2000(SeaBreezeDevice):
 
 class TORUS(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1040
     model_name = 'TORUS'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1040
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()
@@ -616,11 +731,13 @@ class TORUS(SeaBreezeDevice):
 
 class APEX(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1044
     model_name = 'APEX'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1044
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (2064, 2068))
@@ -642,11 +759,13 @@ class APEX(SeaBreezeDevice):
 
 class MAYALSL(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x1046
     model_name = 'MAYALSL'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x1046
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (2064, 2068))
@@ -668,11 +787,13 @@ class MAYALSL(SeaBreezeDevice):
 
 class JAZ(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x2000
     model_name = 'JAZ'
-    interface_cls = USBCommOOI
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x2000
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82)
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
@@ -694,11 +815,13 @@ class JAZ(SeaBreezeDevice):
 
 class STS(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x4000
     model_name = 'STS'
-    interface_cls = USBCommOBP
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x4000
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+    usb_protocol = OBPProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()
@@ -719,11 +842,13 @@ class STS(SeaBreezeDevice):
 
 class QEPRO(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x4004
     model_name = 'QEPRO'
-    interface_cls = USBCommOBP
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x4004
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+    usb_protocol = OBPProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (1040, 1044))
@@ -744,11 +869,13 @@ class QEPRO(SeaBreezeDevice):
 
 class VENTANA(SeaBreezeDevice):
 
-    # communication config
-    product_id = 0x5000
     model_name = 'VENTANA'
-    interface_cls = USBCommOBP
-    endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x82)
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x5000
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x82)
+    usb_protocol = OBPProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()

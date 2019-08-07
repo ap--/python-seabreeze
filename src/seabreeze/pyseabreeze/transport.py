@@ -3,6 +3,7 @@
 Some spectrometers can support different transports (usb, network, rs232, etc.)
 
 """
+import functools
 import warnings
 
 import usb.core
@@ -12,16 +13,6 @@ import usb.util
 class TransportInterface(object):
 
     _required_init_kwargs = ()
-
-    @classmethod
-    def supports(cls, device):
-        """return if the device supports the transport or vice versa
-
-        Returns
-        -------
-        bool
-        """
-        raise NotImplementedError("implement in derived transport class")
 
     def open_device(self, device):
         """open a seabreeze device
@@ -63,32 +54,56 @@ class TransportInterface(object):
     def default_timeout_ms(self):
         raise NotImplementedError("implement in derived transport class")
 
-
-class TransportLayerUSB(TransportInterface):
-    """implementation of the usb transport interface for spectrometers"""
-
-    _required_init_kwargs = ('endpoint_map',)
-    _default_read_size = {
-        'low_speed': 64,
-        'high_speed': 512,
-        'high_speed_alt': 512
-    }
-    _read_endpoints = {
-        'low_speed': 'lowspeed_in',
-        'high_speed': 'highspeed_in',
-        'high_speed_alt': 'highspeed_in2'
-    }
-    _default_read_endpoint = 'low_speed'
-
-    def __init__(self, endpoint_map=None):
-        assert endpoint_map is not None
-        self._endpoint_map = endpoint_map
-        self._device = None
-        self._opened = None
+    @classmethod
+    def list_devices(cls):
+        raise NotImplementedError("implement in derived transport class")
 
     @classmethod
-    def supports(cls, device):
-        return isinstance(device, usb.core.Device)
+    def register_model(cls, model_name, **kwargs):
+        raise NotImplementedError("implement in derived transport class")
+
+    @classmethod
+    def supported_model(cls, device):
+        """return if the device supports the transport or vice versa
+
+        Returns
+        -------
+        model_name : ``
+        """
+        return None
+
+    @classmethod
+    def specialize(cls, model_name, **kwargs):
+        raise NotImplementedError("implement in derived transport class")
+
+
+class USBTransport(TransportInterface):
+    """implementation of the usb transport interface for spectrometers"""
+
+    _required_init_kwargs = ('usb_product_id', 'usb_endpoint_map', 'usb_protocol')
+    vendor_id = 0x2457
+    product_ids = {}
+
+    def __init__(self, usb_product_id, usb_endpoint_map, usb_protocol):
+        super(USBTransport, self).__init__()
+        self._product_id = usb_product_id
+        self._endpoint_map = usb_endpoint_map
+        self._protocol = usb_protocol
+        # internal settings
+        self._default_read_size = {
+            'low_speed': 64,
+            'high_speed': 512,
+            'high_speed_alt': 512
+        }
+        self._read_endpoints = {
+            'low_speed': 'lowspeed_in',
+            'high_speed': 'highspeed_in',
+            'high_speed_alt': 'highspeed_in2'
+        }
+        self._default_read_endpoint = 'low_speed'
+        # internal state
+        self._device = None
+        self._opened = None
 
     def open_device(self, device):
         if not isinstance(device, usb.core.Device):
@@ -109,6 +124,9 @@ class TransportLayerUSB(TransportInterface):
             raise
         else:
             self._opened = True
+        # This will initialize the communication protocol
+        if self._opened:
+            self._protocol(self)
 
     @property
     def is_open(self):
@@ -125,13 +143,13 @@ class TransportLayerUSB(TransportInterface):
             raise RuntimeError("device not opened")
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        self._device.write(self._endpoint_map.ep_out, data, timeout=timeout_ms)
+        return self._device.write(self._endpoint_map.ep_out, data, timeout=timeout_ms)
 
     def read(self, size=None, timeout_ms=None, mode=None, **kwargs):
         if self._device is None:
             raise RuntimeError("device not opened")
         mode = mode if mode is not None else self._default_read_endpoint
-        endpoint = getattr(self._endpoint_map, mode)
+        endpoint = getattr(self._endpoint_map, self._read_endpoints[mode])
         if size is None:
             size = self._default_read_size[mode]
         if kwargs:
@@ -141,3 +159,41 @@ class TransportLayerUSB(TransportInterface):
     @property
     def default_timeout_ms(self):
         return self._device.default_timeout if self._device else None
+
+    @classmethod
+    def list_devices(cls):
+        """list pyusb devices for all available spectrometers
+
+        Note: this includes spectrometers that are currently opened in other
+        processes on the machine.
+
+        Returns
+        -------
+        devices : list of usb.core.Device
+            unique pyusb devices for each available spectrometer
+        """
+        # get all matching devices
+        return usb.core.find(find_all=True,
+                             custom_match=lambda dev: (dev.idVendor == cls.vendor_id and
+                                                       dev.idProduct in cls.product_ids))
+
+    @classmethod
+    def register_model(cls, model_name, **kwargs):
+        product_id = kwargs.get('usb_product_id')
+        if product_id in cls.product_ids:
+            raise ValueError("product_id 0x{:04x} already in registry".format(product_id))
+        cls.product_ids[product_id] = model_name
+
+    @classmethod
+    def supported_model(cls, device):
+        if not isinstance(device, usb.core.Device):
+            return None
+        # noinspection PyUnresolvedReferences
+        return cls.product_ids[device.idProduct]
+
+    @classmethod
+    def specialize(cls, model_name, **kwargs):
+        assert set(kwargs) == set(cls._required_init_kwargs)
+        # usb transport register automatically on registration
+        cls.register_model(model_name, **kwargs)
+        return functools.partial(cls, **kwargs)

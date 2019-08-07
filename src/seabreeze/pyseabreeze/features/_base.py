@@ -1,10 +1,10 @@
+import functools
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.protocol import ProtocolInterface
 
 
 class SeaBreezeFeature(object):
-
     identifier = "base_feature"
 
     _required_kwargs = ()
@@ -39,3 +39,8 @@ class SeaBreezeFeature(object):
     @classmethod
     def supports_protocol(cls, protocol):
         return isinstance(protocol, cls._required_protocol_cls)
+
+    @classmethod
+    def specialize(cls, **kwargs):
+        assert set(kwargs) == set(cls._required_kwargs)
+        return functools.partial(cls, **kwargs)

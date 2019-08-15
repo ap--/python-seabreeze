@@ -2,9 +2,10 @@ import struct
 
 import numpy
 
-from seabreeze.pyseabreeze.communication import USBCommOOI, USBCommOBP
+from seabreeze.pyseabreeze.protocol import OOIProtocol, OBPProtocol
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
 
 
 # Definition
@@ -48,52 +49,85 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 # =========================================
 #
 class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
-    required_interface_cls = USBCommOOI
-    required_features = ('eeprom',)
+    _required_protocol_cls = OOIProtocol
+    _required_features = ('eeprom',)
+    _required_kwargs = (
+        'dark_pixel_indices',
+        'integration_time_min',
+        'integration_time_max',
+        'integration_time_base',
+        'spectrum_num_pixel',
+        'spectrum_raw_length',
+        'spectrum_max_value',
+        'trigger_modes',
+    )
 
     _normalization_value = 1.0
 
-    def __init__(self, device, feature_id):
+    # config
+    _dark_pixel_indices = None
+    _integration_time_min = None
+    _integration_time_max = None
+    _integration_time_base = None
+    _spectrum_num_pixel = None
+    _spectrum_raw_length = None
+    _spectrum_max_value = None
+    _trigger_modes = None
+
+    def __init__(self, device, feature_id,
+                 dark_pixel_indices,
+                 integration_time_min,
+                 integration_time_max,
+                 integration_time_base,
+                 spectrum_num_pixel,
+                 spectrum_raw_length,
+                 spectrum_max_value,
+                 trigger_modes):
         super(SeaBreezeSpectrometerFeatureOOI, self).__init__(device, feature_id)
+        self._dark_pixel_indices = dark_pixel_indices
+        self._integration_time_min = integration_time_min
+        self._integration_time_max = integration_time_max
+        self._integration_time_base = integration_time_base
+        self._spectrum_num_pixel = spectrum_num_pixel
+        self._spectrum_raw_length = spectrum_raw_length
+        self._spectrum_max_value = spectrum_max_value
+        self._trigger_modes = trigger_modes
 
     def set_trigger_mode(self, mode):
-        if mode in self.device.trigger_modes:
-            self.device.usb_send(struct.pack("<BH", 0x0A, mode))
+        if mode in self._trigger_modes:
+            self.protocol.send(0x0A, mode)
         else:
-            raise SeaBreezeError("Only supports: %s" % str(self.device.trigger_modes))
+            raise SeaBreezeError("Only supports: %s" % str(self._trigger_modes))
 
     def set_integration_time_micros(self, integration_time_micros):
-        t_min = self.device.integration_time_min
-        t_max = self.device.integration_time_max
+        t_min = self._integration_time_min
+        t_max = self._integration_time_max
         if t_min <= integration_time_micros < t_max:
-            i_time = int(integration_time_micros / self.device.integration_time_base)
-            self.device.usb_send(struct.pack('<BI', 0x02, i_time))
+            i_time = int(integration_time_micros / self._integration_time_base)
+            self.protocol.send(0x02, i_time)
         else:
             raise SeaBreezeError("Integration not in [{:d}, {:d}]".format(t_min, t_max))
 
     def get_integration_time_micros_limits(self):
-        return self.device.integration_time_min, self.device.integration_time_max
+        return self._integration_time_min, self._integration_time_max
 
     def get_maximum_intensity(self):
-        return self.device.spectrum_max_value
+        return self._spectrum_max_value
 
     def get_electric_dark_pixel_indices(self):
-        return numpy.array(self.device.dark_pixel_indices)
+        return numpy.array(self._dark_pixel_indices)
 
     @property
     def _spectrum_length(self):
-        return self.device.spectrum_num_pixel
-
-    @property
-    def _spectrum_raw_length(self):
-        return self.device.spectrum_raw_length
+        return self._spectrum_num_pixel
 
     def get_wavelengths(self):
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
         # OOI spectrometers store the wavelength calibration in slots 1,2,3,4
         coeffs = []
         for i in range(1, 5):
-            coeffs.append(float(self.device.f.eeprom.eeprom_read_slot(i)))
+            # noinspection PyProtectedMember
+            coeffs.append(float(SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)))
         return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))
 
     def get_intensities(self):
@@ -103,11 +137,10 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
 
     def _get_spectrum_raw(self):
         tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
-        self.device.usb_send(struct.pack('<B', 0x09))
+        self.protocol.send(0x09)
 
-        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
-        tmp[:] = self.device.usb_read_highspeed(size=self._spectrum_raw_length,
-                                                timeout=timeout)
+        timeout = int(self._integration_time_max * 1e-3 + self.protocol.transport.default_timeout_ms)
+        tmp[:] = self.protocol.receive(size=self._spectrum_raw_length, timeout=timeout, mode='high_speed')
         return tmp
 
     def _get_fast_buffer_spectrum(self):
@@ -131,28 +164,44 @@ class SeaBreezeSpectrometerFeatureOOI2K(SeaBreezeSpectrometerFeatureOOI):
 
 class SeaBreezeSpectrometerFeatureOOIFPGA(SeaBreezeSpectrometerFeatureOOI):
 
-    def __init__(self, device, feature_id):
-        super(SeaBreezeSpectrometerFeatureOOIFPGA, self).__init__(device, feature_id)
-        self.device.usb_send(struct.pack("<B", 0xFE))
-        ret = self.device.usb_read(size=16)
+    def __init__(self, device, feature_id,
+                 dark_pixel_indices,
+                 integration_time_min,
+                 integration_time_max,
+                 integration_time_base,
+                 spectrum_num_pixel,
+                 spectrum_raw_length,
+                 spectrum_max_value,
+                 trigger_modes):
+        super(SeaBreezeSpectrometerFeatureOOIFPGA, self).__init__(device, feature_id,
+                                                                  dark_pixel_indices,
+                                                                  integration_time_min,
+                                                                  integration_time_max,
+                                                                  integration_time_base,
+                                                                  spectrum_num_pixel,
+                                                                  spectrum_raw_length,
+                                                                  spectrum_max_value,
+                                                                  trigger_modes)
+        self.protocol.send(0xFE)
+        ret = self.protocol.receive(size=16)
         data = struct.unpack("<HLBBBBBBBBBB", ret[:])
-        self.device.usbspeed = data[10]
+        # FIXME: check data[10] return values
+        self.protocol.transport._default_read_endpoint = 'low_speed' if data[10] else 'high_speed'
 
 
 class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA):
 
     def _get_spectrum_raw(self):
         tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
-        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
-        self.device.usb_send(struct.pack('<B', 0x09))
-        if self.device.usbspeed == 0x00:  # lowspeed
-            tmp[:] = self.device.usb_read_highspeed(size=self._spectrum_raw_length,
-                                                    timeout=timeout)
-        else:  # self.usbspeed == 0x80  highspeed
-            tmp[:2048] = self.device.usb_read_highspeed_alt(size=2048,
-                                                            timeout=timeout)
-            tmp[2048:] = self.device.usb_read_highspeed(size=self._spectrum_raw_length - 2048,
-                                                        timeout=timeout)
+        timeout = int(self._integration_time_max * 1e-3 + self.protocol.transport.default_timeout_ms)
+        self.protocol.send(0x09)
+        # noinspection PyProtectedMember
+        if self.protocol.transport._default_read_endpoint == 'low_speed':
+            tmp[:] = self.protocol.receive(size=self._spectrum_raw_length, timeout=timeout)
+        else:  # high_speed
+            tmp[:2048] = self.protocol.receive(size=2048, timeout=timeout, mode='high_speed_alt')
+            tmp[2048:] = self.protocol.receive(size=self._spectrum_raw_length - 2048,
+                                               timeout=timeout, mode='high_speed')
         return tmp
 
 
@@ -223,61 +272,94 @@ class SeaBreezeSpectrometerFeatureOOIFPGAGainAlt(SeaBreezeSpectrometerFeatureOOI
         return struct.unpack("<H", ret[2:4])[0]
 
     def _saturation_not_initialized(self, x):
-        return x <= 32768 or x > self.device.spectrum_max_value
+        return x <= 32768 or x > self._spectrum_max_value
 
 
 # Spectrometer Features based on USBCommOBP
 # =========================================
 #
 class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
-    required_interface_cls = USBCommOBP
+    _required_protocol_cls = OBPProtocol
+    # required_interface_cls = USBCommOBP
     required_features = ()
+    _required_kwargs = (
+        'dark_pixel_indices',
+        'integration_time_min',
+        'integration_time_max',
+        'integration_time_base',
+        'spectrum_num_pixel',
+        'spectrum_raw_length',
+        'spectrum_max_value',
+        'trigger_modes',
+    )
 
     _normalization_value = 1.0
 
-    def __init__(self, device, feature_id):
+    # config
+    _dark_pixel_indices = None
+    _integration_time_min = None
+    _integration_time_max = None
+    _integration_time_base = None
+    _spectrum_num_pixel = None
+    _spectrum_raw_length = None
+    _spectrum_max_value = None
+    _trigger_modes = None
+
+    def __init__(self, device, feature_id,
+                 dark_pixel_indices,
+                 integration_time_min,
+                 integration_time_max,
+                 integration_time_base,
+                 spectrum_num_pixel,
+                 spectrum_raw_length,
+                 spectrum_max_value,
+                 trigger_modes):
         super(SeaBreezeSpectrometerFeatureOBP, self).__init__(device, feature_id)
+        self._dark_pixel_indices = dark_pixel_indices
+        self._integration_time_min = integration_time_min
+        self._integration_time_max = integration_time_max
+        self._integration_time_base = integration_time_base
+        self._spectrum_num_pixel = spectrum_num_pixel
+        self._spectrum_raw_length = spectrum_raw_length
+        self._spectrum_max_value = spectrum_max_value
+        self._trigger_modes = trigger_modes
 
     def set_trigger_mode(self, mode):
-        if mode in self.device.trigger_modes:
-            self.device.send_command(0x00110110, struct.pack("<B", mode))
+        if mode in self._trigger_modes:
+            self.protocol.send(0x00110110, mode)
         else:
-            raise SeaBreezeError("Only supports: %s" % str(self.device.trigger_modes))
+            raise SeaBreezeError("Only supports: %s" % str(self._trigger_modes))
 
     def set_integration_time_micros(self, integration_time_micros):
-        t_min = self.device.integration_time_min
-        t_max = self.device.integration_time_max
+        t_min = self._integration_time_min
+        t_max = self._integration_time_max
         if t_min <= integration_time_micros < t_max:
-            i_time = int(integration_time_micros / self.device.integration_time_base)
-            self.device.send_command(0x00110010, struct.pack("<L", i_time))
+            i_time = int(integration_time_micros / self._integration_time_base)
+            self.protocol.send(0x00110010, i_time)
         else:
             raise SeaBreezeError("Integration not in [{:d}, {:d}]".format(t_min, t_max))
 
     def get_integration_time_micros_limits(self):
-        return self.device.integration_time_min, self.device.integration_time_max
+        return self._integration_time_min, self._integration_time_max
 
     def get_maximum_intensity(self):
-        return self.device.spectrum_max_value
+        return self._spectrum_max_value
 
     def get_electric_dark_pixel_indices(self):
-        return numpy.array(self.device.dark_pixel_indices)
+        return numpy.array(self._dark_pixel_indices)
 
     @property
     def _spectrum_length(self):
-        return self.device.spectrum_num_pixel
-
-    @property
-    def _spectrum_raw_length(self):
-        return self.device.spectrum_raw_length
+        return self._spectrum_num_pixel
 
     def get_wavelengths(self):
         # get number of wavelength coefficients
-        data = self.device.query(0x00180100, "")
+        data = self.protocol.query(0x00180100)
         N = struct.unpack("<B", data)[0]
         # now query the coefficients
         coeffs = []
         for i in range(N):
-            data = self.device.query(0x00180101, struct.pack("<B", i))
+            data = self.protocol.query(0x00180101, i)
             coeffs.append(struct.unpack("<f", data)[0])
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
@@ -289,8 +371,8 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
         return numpy.array(struct.unpack("<" + "H" * self._spectrum_length, tmp), dtype=numpy.double)
 
     def _get_spectrum_raw(self):
-        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
-        datastring = self.device.query(0x00101100, "", timeout=timeout)
+        timeout = int(self._integration_time_max * 1e-3 + self.protocol.transport.default_timeout_ms)
+        datastring = self.protocol.query(0x00101100, timeout=timeout)
         return numpy.fromstring(datastring, dtype=numpy.uint8)
 
     def _get_fast_buffer_spectrum(self):
@@ -338,7 +420,8 @@ class SeaBreezeSpectrometerFeatureQE65000(SeaBreezeSpectrometerFeatureOOIFPGA):
         # OOI spectrometers store the wavelength calibration in slots 1,2,3,4
         coeffs = []
         for i in range(1, 5):
-            coeffs.append(float(self.device.f.eeprom.eeprom_read_slot(i)))
+            # noinspection PyProtectedMember
+            coeffs.append(float(SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)))
         return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))
 
     def get_intensities(self):
@@ -411,8 +494,8 @@ class SeaBreezeSpectrometerFeatureSTS(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
 
     def _get_spectrum_raw(self):
-        timeout = int(self.device.integration_time_max * 1e-3 + self.device.usbtimeout_ms)
-        datastring = self.device.query(0x00100928, "", timeout=timeout)
+        timeout = int(self._integration_time_max * 1e-3 + self.protocol.transport.default_timeout_ms)
+        datastring = self.protocol.query(0x00100928, timeout=timeout)
         return numpy.fromstring(datastring, dtype=numpy.uint8)
 
     def get_intensities(self):

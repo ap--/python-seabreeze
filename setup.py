@@ -91,7 +91,8 @@ setup(
     ],
     install_requires=[
         "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
-        "numpy ; python_version>='3.6'", 'numpy'
+        "numpy ; python_version>='3.6'",
+        "future"
     ],
     extras_require={
         'cseabreeze': [],

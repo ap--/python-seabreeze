@@ -58,8 +58,10 @@ class _SeaBreezeDeviceMeta(type):
             # gather the feature classes defined on the class
             feature_classes = mcs._extract_feature_classes(model_name, class_name=name, attr_dict=attr_dict)
 
-            if attr_dict:
-                raise ValueError("")
+            if any(not attr.startswith('_') for attr in attr_dict):
+                raise ValueError("can't define extra attrs on spectrometer classes: {}".format(
+                    ", ".join(attr for attr in attr_dict if not attr.startswith('_'))
+                ))
 
             attr_dict = {
                 '_model_name': model_name,
@@ -72,7 +74,7 @@ class _SeaBreezeDeviceMeta(type):
     def __init__(cls, name, bases, attr_dict):
         if name != 'SeaBreezeDevice':
             # > model name
-            model_name = attr_dict['model_name']
+            model_name = getattr(cls, '_model_name')
             assert isinstance(model_name, str), "model name not a str"
             _model_class_registry[model_name] = cls
 

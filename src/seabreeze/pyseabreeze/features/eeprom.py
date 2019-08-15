@@ -1,8 +1,6 @@
-import struct
-
-from seabreeze.pyseabreeze.communication import USBCommOOI
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.protocol import OOIProtocol
 
 
 # Definition
@@ -19,11 +17,15 @@ class SeaBreezeEEPROMFeature(SeaBreezeFeature):
 # ===============================
 #
 class SeaBreezeEEPromFeatureOOI(SeaBreezeEEPROMFeature):
-    requires_interface_cls = USBCommOOI
+    _required_protocol_cls = OOIProtocol
 
-    def eeprom_read_slot(self, slot_number, strip_zero_bytes=False, raw=False):
-        self.device.usb_send(struct.pack('<BB', 0x05, int(slot_number)))
-        ret = self.device.usb_read_lowspeed(size=17)
+    def eeprom_read_slot(self, slot_number, strip_zero_bytes=False):
+        return self._func_eeprom_read_slot(self.protocol, slot_number, strip_zero_bytes=strip_zero_bytes)
+
+    @staticmethod
+    def _func_eeprom_read_slot(protocol, slot_number, strip_zero_bytes=False, raw=False):
+        protocol.send(0x05, slot_number)
+        ret = protocol.receive(size=17, mode='low_speed')
         if ret[0] != 0x05 or ret[1] != int(slot_number) % 0xFF:
             raise SeaBreezeError('read_eeprom_slot_raw: wrong answer: "%s"' % ret)
         if raw:

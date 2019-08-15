@@ -39,7 +39,7 @@ class _SeaBreezeDeviceMeta(type):
         #
         # Because it's quite opaque the code below tries hard to enforce strict typing in all
         # defined spectrometer classes to minimize the amount of errors you can make when adding
-        # a new spectrometers to pyseabreeze.
+        # a new spectrometer to pyseabreeze.
         #
         if name != 'SeaBreezeDevice':
             # This runs for all subclasses of SeaBreezeDevice, so for all defined spectrometers

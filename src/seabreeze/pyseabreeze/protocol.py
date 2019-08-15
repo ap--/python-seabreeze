@@ -37,11 +37,7 @@ class ProtocolInterface(object):
 
 class OOIProtocol(ProtocolInterface):
 
-    @staticmethod
-    def _compile_msgs(msg_dict):
-        return {code: functools.partial(struct.Struct(msg).pack, code) for code, msg in msg_dict.items()}
-
-    msgs = _compile_msgs({
+    msgs = {code: functools.partial(struct.Struct(msg).pack, code) for code, msg in {
         0x01: '<B',    # OP_INITIALIZE
         0x02: '<BI',   # OP_ITIME
         0x05: '<BB',   # OP_GETINFO
@@ -51,7 +47,7 @@ class OOIProtocol(ProtocolInterface):
         0x72: '<B',    # OP_READTEC_QE
         0x73: '<Bh',   # OP_TECSETTEMP_QE
         0xFE: '<B',    # OP_USBMODE
-    })  # add more here if you implement new features
+    }.items()}  # add more here if you implement new features
 
     def __init__(self, transport):
         super(OOIProtocol, self).__init__(transport)
@@ -144,11 +140,7 @@ class OOIProtocol(ProtocolInterface):
 
 class OBPProtocol(ProtocolInterface):
 
-    @staticmethod
-    def _compile_msgs(msg_dict):
-        return {code: struct.Struct(msg).pack for code, msg in msg_dict.items()}
-
-    msgs = _compile_msgs({
+    msgs = {code: struct.Struct(msg).pack for code, msg in {
         0x00100928: "",    # GET_BUF_SPEC32_META
         0x00101100: "",    # GET_RAW_SPECTRUM_NOW
         0x00110010: "<L",  # SET_ITIME_USEC
@@ -160,7 +152,7 @@ class OBPProtocol(ProtocolInterface):
         0x00420004: "",    # GET_TE_TEMPERATURE
         0x00420010: "<B",  # SET_TE_ENABLE
         0x00420011: "<f",  # SET_TE_SETPOINT
-    })  # add more here if you implement new features
+    }.items()}  # add more here if you implement new features
 
     class OBP(object):
         """All relevant constants are stored here"""

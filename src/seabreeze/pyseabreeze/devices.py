@@ -275,10 +275,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         None
         """
-        self._transport.open_device(self.handle)
-        # if issubclass(self.interface_cls, USBCommOOI):
-        #    # initialize the spectrometer
-        #    self.usb_send(struct.pack('<B', 0x01))
+        self._transport.open_device(self._raw_device)
         # cache features
         self._cached_features = {}
         _ = self.features
@@ -336,11 +333,17 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         features : `dict` [`str`, `seabreeze.cseabreeze.SeaBreezeFeature`]
         """
         if not self._cached_features:
-            self._cached_features = {k: [] for k in sbf.SeaBreezeFeature.get_feature_class_registry()}
-            for feature_cls in self.feature_classes:
-                f_list = self._cached_features.setdefault(feature_cls.identifier, [])
-                # noinspection PyProtectedMember
-                f_list.append(feature_cls(self._transport._protocol, len(f_list)))
+            # noinspection PyProtectedMember
+            protocol = self._transport._protocol
+            self._cached_features = {}
+            for identifier in sbf.SeaBreezeFeature.get_feature_class_registry():
+                for feature_cls in self.feature_classes[identifier]:
+                    assert issubclass(feature_cls, sbf.SeaBreezeFeature) and identifier == feature_cls.identifier
+                    if not feature_cls.supports_protocol(protocol):
+                        continue
+                    f_list = self._cached_features.setdefault(identifier, [])
+                    # noinspection PyProtectedMember
+                    f_list.append(feature_cls(self._transport._protocol, len(f_list)))
         return self._cached_features
 
     @property

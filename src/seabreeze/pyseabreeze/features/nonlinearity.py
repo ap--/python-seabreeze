@@ -1,7 +1,8 @@
 import struct
 
-from seabreeze.pyseabreeze.communication import USBCommOOI, USBCommOBP
+from seabreeze.pyseabreeze.protocol import OOIProtocol, OBPProtocol
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
 
 
 # Definition
@@ -18,15 +19,17 @@ class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
 # ==================
 #
 class NonlinearityCoefficientsEEPromFeatureOOI(SeaBreezeNonlinearityCoefficientsFeature):
-    required_interface_cls = USBCommOOI
-    required_features = ('eeprom',)
+    _required_protocol_cls = OOIProtocol
+    _required_features = ('eeprom', )
 
     def get_nonlinearity_coefficients(self):
         # The spectrometers store the wavelength calibration in slots 6..13
         coeffs = []
-        order = int(float(self.device.f.eeprom.read_eeprom_slot(14)))
+        # noinspection PyProtectedMember
+        order = int(float(SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, 14)))
         for i in range(6, 6 + order + 1):
-            coeffs.append(float(self.device.f.eeprom.read_eeprom_slot(i)))
+            # noinspection PyProtectedMember
+            coeffs.append(float(SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)))
         return coeffs
 
 
@@ -34,15 +37,15 @@ class NonlinearityCoefficientsEEPromFeatureOOI(SeaBreezeNonlinearityCoefficients
 # ==================
 #
 class NonlinearityCoefficientsFeatureOBP(SeaBreezeNonlinearityCoefficientsFeature):
-    required_interface_cls = USBCommOBP
+    _required_protocol_cls = OBPProtocol
 
     def get_nonlinearity_coefficients(self):
         # get number of nonlinearity coefficients
-        data = self.device.query(0x00181100, "")
+        data = self.protocol.query(0x00181100)
         N = struct.unpack("<B", data)[0]
         # now query the coefficients
         coeffs = []
         for i in range(N):
-            data = self.device.query(0x00181101, struct.pack("<B", i))
+            data = self.protocol.query(0x00181101, i)
             coeffs.append(struct.unpack("<f", data)[0])
         return coeffs

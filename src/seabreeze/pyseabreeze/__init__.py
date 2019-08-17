@@ -5,8 +5,7 @@ from seabreeze.pyseabreeze.api import SeaBreezeAPI
 from seabreeze.pyseabreeze.exceptions import (SeaBreezeError,
                                               SeaBreezeNumFeaturesError)
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice
-
-"""
+# noinspection PyUnresolvedReferences
 from seabreeze.pyseabreeze.features import (SeaBreezeFeature,
                                             SeaBreezeRawUSBBusAccessFeature,
                                             SeaBreezeSpectrometerFeature,
@@ -36,4 +35,3 @@ from seabreeze.pyseabreeze.features import (SeaBreezeFeature,
                                             SeaBreezeFastBufferFeature,
                                             SeaBreezeAcquisitionDelayFeature,
                                             SeaBreezeI2CMasterFeature)
-"""

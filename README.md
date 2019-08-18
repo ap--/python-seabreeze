@@ -15,8 +15,6 @@ library provided by Ocean Optics to communicate with the spectrometer. If
 SeaBreeze is not available it can fallback to a pyUSB based reimplementation.
 **This software is not associated with Ocean Optics. Use it at your own risk.**
 
-
-
 ## tl;dr -- give me the spectrum now!
 
 ```
@@ -44,7 +42,7 @@ _Consider supporting open source software and_ [_buying me a beer_](https://payp
 
 ## Overview
 
-![overview](docs/overview.png)
+![overview](docs/_static/overview.png)
 
 Starting with version _0.6.0_, python-seabreeze is available as a pre-built
 package for Python versions _2.7.x_, _3.5.x_, _3.6.x_ on _win-32_, _win-64_,

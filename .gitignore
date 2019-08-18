@@ -8,3 +8,5 @@ dist/*
 .idea
 venv/*
 docs/build/*
+src/seabreeze/cseabreeze/c_seabreeze_wrapper.cpp
+src/seabreeze.egg-info

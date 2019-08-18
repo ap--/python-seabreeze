@@ -3,7 +3,7 @@ from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 
-class SeaBreezeRawUSBAccessFeature(SeaBreezeFeature):
+class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
     identifier = 'raw_usb_bus_access'
     _required_protocol_cls = ProtocolInterface
 

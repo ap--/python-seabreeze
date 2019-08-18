@@ -6,8 +6,9 @@ from seabreeze.pyseabreeze.exceptions import (SeaBreezeError,
                                               SeaBreezeNumFeaturesError)
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice
 # noinspection PyUnresolvedReferences
-from seabreeze.pyseabreeze.features import (SeaBreezeFeature,
-                                            SeaBreezeRawUSBBusAccessFeature,
+from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+# noinspection PyUnresolvedReferences
+from seabreeze.pyseabreeze.features import (SeaBreezeRawUSBBusAccessFeature,
                                             SeaBreezeSpectrometerFeature,
                                             SeaBreezePixelBinningFeature,
                                             SeaBreezeThermoElectricFeature,

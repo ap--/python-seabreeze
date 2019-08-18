@@ -394,7 +394,7 @@ class USB2000PLUS(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB2000PLUS,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -422,7 +422,7 @@ class USB2000(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB2000,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -450,7 +450,7 @@ class HR2000(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureHR2000,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -478,7 +478,7 @@ class HR4000(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureHR4000,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -506,7 +506,7 @@ class HR2000PLUS(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureHR2000PLUS,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -534,7 +534,7 @@ class USB650(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB650,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -562,7 +562,7 @@ class QE65000(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureQE65000,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -590,7 +590,7 @@ class USB4000(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB4000,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -618,7 +618,7 @@ class NIRQUEST512(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureNIRQUEST512,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -646,7 +646,7 @@ class NIRQUEST256(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureNIRQUEST256,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -674,7 +674,7 @@ class MAYA2000PRO(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureMAYA2000PRO,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -702,7 +702,7 @@ class MAYA2000(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureMAYA2000,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -730,7 +730,7 @@ class TORUS(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureTORUS,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -758,7 +758,7 @@ class APEX(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureAPEX,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -786,7 +786,7 @@ class MAYALSL(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureMAYALSL,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -814,7 +814,7 @@ class JAZ(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureJAZ,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -841,7 +841,7 @@ class STS(SeaBreezeDevice):
     # features
     feature_classes = (
         sbf.spectrometer.SeaBreezeSpectrometerFeatureSTS,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -868,7 +868,7 @@ class QEPRO(SeaBreezeDevice):
     # features
     feature_classes = (
         sbf.spectrometer.SeaBreezeSpectrometerFeatureQEPRO,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
 
@@ -895,5 +895,5 @@ class VENTANA(SeaBreezeDevice):
     # features
     feature_classes = (
         sbf.spectrometer.SeaBreezeSpectrometerFeatureVENTANA,
-        sbf.rawusb.SeaBreezeRawUSBAccessFeature,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )

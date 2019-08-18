@@ -15,6 +15,9 @@ from seabreeze.pyseabreeze.devices import SeaBreezeDevice
 from seabreeze.pyseabreeze.transport import USBTransport
 
 
+__all__ = ['SeaBreezeAPI']
+
+
 class SeaBreezeAPI(object):
     """SeaBreeze API interface"""
 

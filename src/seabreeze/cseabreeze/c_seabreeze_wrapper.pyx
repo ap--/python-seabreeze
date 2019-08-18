@@ -87,6 +87,11 @@ class SeaBreezeNumFeaturesError(SeaBreezeError):
         super(SeaBreezeNumFeaturesError, self).__init__(message)
 
 
+class SeaBreezeNotSupported(SeaBreezeError):
+    # ... i know you shouldn't always subclass Exceptions ...
+    pass
+
+
 cdef class SeaBreezeAPI(object):
     """SeaBreeze API interface"""
 
@@ -766,13 +771,13 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         #                                        unsigned char *buffer, int bufferLength)
         raise NotImplementedError("unformatted spectrum")
 
-    def _get_fast_buffer_spectrum(self):
+    def get_fast_buffer_spectrum(self):
         # TODO: requires wrapping of OBP command GetRawSpectrumWithMetadata
         #       which returns N raw spectra each with a 64 byte metadata prefix
         # int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
         #                                       unsigned char *dataBuffer, int dataMaxLength,
         #                                       unsigned int numberOfSampleToRetrieve) # currently 15 max
-        raise NotImplementedError("fast buffer spectrum")
+        raise NotImplementedError("Not yet supported via cseabreeze. Requires changes to libseabreeze.")
 
 
 cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):

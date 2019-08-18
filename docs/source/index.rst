@@ -30,15 +30,15 @@ out the :ref:`Contributing Guide <contrib>` if you want to learn how to contribu
 python-seabreeze in the wild
 ============================
 
-python-seabreeze is used in many labs around the world. One of the cool experiments I know of was
+python-seabreeze is used in many labs around the world. One of the cool examples was
 a `student project measuring fluorescence spectra (#17)
 <https://www.spacestationexplorers.org/new-student-experiments-reach-iss-on-spacex-crs-14>`_ with a
 ``Spark`` spectrometer controlled by a raspberry pi zero, which was sent to the International
-Space Station on the SpaceX CRS-14 resupply mission. *(space proof)*
+Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :sup:`TM`\ *)*
 
 .. tip::
 
-    If you want me to add your project here, let me know. Happy to add it.
+    If you use python-seabreeze in your project let me know about it and I'll add it here :)
 
 .. rubric:: projects
 
@@ -55,14 +55,23 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof)*
 .. sidebar:: A note from the author
     :subtitle: (ノ\*-_-\*)ノ┴—┴
 
-    Over the years, maintaining this project made me realize that supporting the authors of
+    Over the years, maintaining this project made me aware that supporting the authors of
     open source projects is a crucial (but mostly ignored) part of the open source community.
-    If python-seabreeze_ saved you some development time, consider contributing to the
-    project, or send me an email and tell me about your project, or consider buying me coffee,
-    or support me via paypal. Something small like that puts a smile on my face for weeks, and
-    it's extremely motivating.
+    If python-seabreeze_ saved you some development time, consider `contributing to the
+    project <https://github.com/ap--/python-seabreeze>`_, or
+    `send me an email <mailto:mail+seabreeze@poehlmann.io>`_ and tell me about your project,
+    or consider `buying me coffee <https://www.buymeacoffee.com/poehlmann>`_,
+    or `support me via paypal <https://paypal.me/apoehlmann>`_. Something small like that
+    puts a smile on my face for weeks, and it's extremely motivating.
 
-    .. rubric:: Anyways, enough ranting (^_^") let's science!
+    .. rubric:: Anyways, enough ranting (^_^") think about it and let's science!
+
+
+    .. image:: https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png
+        :target: https://www.buymeacoffee.com/poehlmann
+        :alt: Buy Me A Coffee
+        :align: center
+
 
 .. _python-seabreeze: https://github.com/ap--/python-seabreeze
 

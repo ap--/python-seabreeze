@@ -36,7 +36,7 @@ The C++ libseabreeze API is fully wrapped and exposed to python. If you intend t
 directly use it you start with a :class:`SeaBreezeAPI` instance
 and retrieve :class:`SeaBreezeDevice` instances via
 :func:`SeaBreezeAPI.list_devices`. These instances offer all feature functionality via their
-``features`` property or their ``f`` attribute for easy access.
+``features`` property or their shorthand ``f`` property for easy access.
 
 
 SeaBreezeAPI
@@ -73,8 +73,59 @@ SeaBreezeFeatures
     :attr:`SeaBreezeDevice.features` or :attr:`SeaBreezeDevice.f`. Their individual
     class interfaces are documented here:
 
+.. rubric:: Summary of all features
+
+.. autosummary::
+
+    SeaBreezeFeature
+    SeaBreezeRawUSBBusAccessFeature
+    SeaBreezeSpectrometerFeature
+    SeaBreezePixelBinningFeature
+    SeaBreezeThermoElectricFeature
+    SeaBreezeIrradCalFeature
+    SeaBreezeEthernetConfigurationFeature
+    SeaBreezeMulticastFeature
+    SeaBreezeIPv4Feature
+    SeaBreezeDHCPServerFeature
+    SeaBreezeNetworkConfigurationFeature
+    SeaBreezeWifiConfigurationFeature
+    SeaBreezeGPIOFeature
+    SeaBreezeEEPROMFeature
+    SeaBreezeLightSourceFeature
+    SeaBreezeStrobeLampFeature
+    SeaBreezeContinuousStrobeFeature
+    SeaBreezeShutterFeature
+    SeaBreezeNonlinearityCoefficientsFeature
+    SeaBreezeTemperatureFeature
+    SeaBreezeIntrospectionFeature
+    SeaBreezeSpectrumProcessingFeature
+    SeaBreezeRevisionFeature
+    SeaBreezeOpticalBenchFeature
+    SeaBreezeStrayLightCoefficientsFeature
+    SeaBreezeDataBufferFeature
+    SeaBreezeFastBufferFeature
+    SeaBreezeAcquisitionDelayFeature
+    SeaBreezeI2CMasterFeature
+
+.. rubric:: Feature class interfaces
+
 .. autoclass:: SeaBreezeFeature
-    :members:
+
+    .. method:: get_feature_class_registry()
+
+        return a class registry dictionary *internal use only*
+
+        creates a dictionary of all derived classes of `SeaBreezeFeature` and
+        returns a {SeaBreezeFeature.identifier: DerivedSeabreezeFeature} mapping.
+
+
+    .. method:: get_feature_ids_from_device(SeaBreezeDevice device)
+
+        return feature_id from a :class:`SeaBreezeDevice` *internal use only*
+
+        all :class:`SeaBreezeFeature` derived classes have this classmethod and return their
+        individual feature ids if the provided :class:`SeaBreezeDevice` supports the feature.
+
 
 .. autoclass:: SeaBreezeRawUSBBusAccessFeature
     :members:

@@ -3,7 +3,7 @@ import struct
 import numpy
 
 from seabreeze.pyseabreeze.protocol import OOIProtocol, OBPProtocol
-from seabreeze.pyseabreeze.exceptions import SeaBreezeError
+from seabreeze.pyseabreeze.exceptions import SeaBreezeError, SeaBreezeNotSupported
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
 
@@ -41,8 +41,8 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     def _get_spectrum_raw(self):
         raise NotImplementedError("implement in derived class")
 
-    def _get_fast_buffer_spectrum(self):
-        raise NotImplementedError("implement in derived class")
+    def get_fast_buffer_spectrum(self):
+        raise SeaBreezeNotSupported("needs to be provided in the specific implementation if supported")
 
 
 # Spectrometer Features based on USBCommOOI
@@ -143,8 +143,8 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         tmp[:] = self.protocol.receive(size=self._spectrum_raw_length, timeout=timeout, mode='high_speed')
         return tmp
 
-    def _get_fast_buffer_spectrum(self):
-        raise NotImplementedError("implement in derived class")
+    def get_fast_buffer_spectrum(self):
+        raise SeaBreezeNotSupported("needs to be provided in the specific implementation if supported")
 
 
 class SeaBreezeSpectrometerFeatureOOI2K(SeaBreezeSpectrometerFeatureOOI):
@@ -375,8 +375,8 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
         datastring = self.protocol.query(0x00101100, timeout=timeout)
         return numpy.fromstring(datastring, dtype=numpy.uint8)
 
-    def _get_fast_buffer_spectrum(self):
-        raise NotImplementedError("implement in derived class")
+    def get_fast_buffer_spectrum(self):
+        raise SeaBreezeNotSupported("needs to be provided in the specific implementation if supported")
 
 
 # Model specific changes

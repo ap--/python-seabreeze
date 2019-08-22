@@ -105,6 +105,11 @@ setup(
     package_dir={
         '': 'src'
     },
+    entry_points={
+        'console_scripts': [
+            'seabreeze_os_setup=seabreeze.os_setup:main'
+        ],
+    },
     description=('Python interface module for Ocean Optics spectrometers. '
                  'This software is not associated with Ocean Optics. '
                  'Use it at your own risk.'),

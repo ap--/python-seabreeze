@@ -320,6 +320,8 @@ cdef class SeaBreezeDevice(object):
         try:
             # this is a hack to figure out if the spectrometer is connected
             self.get_serial_number()
+        except SeaBreezeNumFeaturesError:
+            return False
         except SeaBreezeError as err:
             if err.error_code == _ErrorCode.TRANSFER_ERROR:
                 return False

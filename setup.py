@@ -24,7 +24,7 @@ except ImportError:
 else:
     WARN_NO_CYTHON = False
 
-SEABREEZE_VERSION = "0.6.1"
+SEABREEZE_VERSION = "0.9.0"
 
 # Platform specific libraries and source files
 if platform.system() == "Windows":
@@ -86,8 +86,6 @@ setup(
     setup_requires=[
         'setuptools>=18.0',
         'cython>=0.18',
-        "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
-        "numpy ; python_version>='3.6'",
     ],
     install_requires=[
         "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17

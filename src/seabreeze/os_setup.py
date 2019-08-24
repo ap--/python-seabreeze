@@ -2,16 +2,19 @@
 
 author: Andreas Poehlmann
 """
-import pkg_resources
-import logging
-import platform
-import os
 import argparse
+import ctypes
+import logging
+import os
+import platform
+import shutil
 import subprocess
 import sys
 import tempfile
 import zipfile
+from textwrap import dedent
 
+from builtins import input, str
 from future.standard_library import hooks
 
 with hooks():
@@ -19,14 +22,16 @@ with hooks():
     from urllib.error import HTTPError
 
 try:
+    # noinspection PyProtectedMember
     from textwrap import indent as _indent
 except ImportError:
+    # noinspection PyUnusedLocal
     def _indent(text, prefix, predicate=None):
         return "".join(prefix + line for line in text.splitlines(True))
 
-
 _GITHUB_REPO_URL = 'https://raw.githubusercontent.com/ap--/python-seabreeze/master/os_support'
 _UDEV_RULES_PATH = '/etc/udev/rules.d/10-oceanoptics.rules'
+_DRIVERS_ZIP_FN = 'windows-driver-files.zip'
 _log = logging.getLogger(__name__)
 
 
@@ -36,6 +41,18 @@ def _diff_files(file1, file2):
         return subprocess.check_output(['diff', file1, file2])
     except subprocess.CalledProcessError as err:
         return err.output
+
+
+def _request_confirmation(question):
+    """require user input to continue"""
+    while True:
+        user_input = input('{} [y/n] '.format(question)).lower()
+        if user_input not in {'y', 'n'}:
+            _log.info("Please enter 'y' or 'n'.")
+        elif user_input[0] == 'n':
+            return False
+        else:
+            return True
 
 
 def linux_install_udev_rules():
@@ -80,6 +97,9 @@ def linux_install_udev_rules():
                 _log.info("udev rules differ. To overwrite run with '--overwrite-existing'")
                 sys.exit(1)
 
+        if not _request_confirmation("Install udev rules?"):
+            sys.exit(0)
+
         # cp rules and execute
         _log.info('Copying udev rules to {}'.format(_UDEV_RULES_PATH))
         subprocess.call(['sudo', 'cp', udev_fn, _UDEV_RULES_PATH])
@@ -93,18 +113,99 @@ def linux_install_udev_rules():
             udev_tmp_file.close()  # removes tempfile
 
 
+def _windows_is_admin():
+    """windows only: check if running as admin"""
+    # noinspection PyBroadException
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except Exception:
+        return False
+
+
+def _is_contained_in_dir(files, cdir=None):
+    cdir = os.path.abspath(cdir or os.path.curdir)
+    for f in files:
+        f_abs = os.path.abspath(f)
+        if not os.path.commonprefix((f_abs, cdir)).startswith(cdir):
+            return False
+    return True
+
+
 def windows_install_drivers():
-    """install driver inf files via pnputil"""
+    """install driver inf files via pnputil in an elevated shell"""
+    if not _request_confirmation("Install windows drivers?"):
+        sys.exit(0)
+
+    if not _windows_is_admin():
+        # Re-run the program with admin rights
+        ret = ctypes.windll.shell32.ShellExecuteW(None,
+                                                  "runas",
+                                                  sys.executable,
+                                                  subprocess.list2cmdline(sys.argv),
+                                                  None,
+                                                  1)
+        if ret > 32:
+            _log.info('Launched admin shell')
+        else:
+            _log.info('Failed to launch admin shell')
+        sys.exit(int(ret > 32))
+
+    # running as admin
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ignore-platform', help="", action='store_true')
+    parser.add_argument('drivers_zip', help="drivers zip file (default: download from github)", default='', nargs='?')
     args = parser.parse_args()
 
-    # download zip
-    # create tempdir and extract zip
-    # install via pnputil
-    # TODO: runas admin?
-    cmd = ['pnputil', '-a', '-i']
-    # remove tempdir
+    if args.drivers_zip:
+        if not os.path.exists(args.drivers_zip):
+            raise IOError("drivers_zip file '{}' doesn't exist".format(args.drivers_zip))
+        drivers_zip = args.drivers_zip
+    else:
+        drivers_zip = None
+
+    tmp_dir = tempfile.mkdtemp(prefix='seabreeze-os-')
+    # noinspection PyBroadException
+    try:
+        # download driver files
+        if drivers_zip is None:
+            url = '{}/{}'.format(_GITHUB_REPO_URL, os.path.basename(_DRIVERS_ZIP_FN))
+            drivers_zip = os.path.join(tmp_dir, _DRIVERS_ZIP_FN)
+            with open(drivers_zip, 'w') as dzip:
+                try:
+                    _log.info("Downloading windows drivers from github")
+                    drivers_zip_data = urlopen(url).read()
+                except HTTPError:
+                    _log.error("Can't download '{}'".format(url))
+                    sys.exit(1)
+                dzip.write(drivers_zip_data)
+
+        # extract driver files
+        with zipfile.ZipFile(drivers_zip, 'r') as dzip:
+            if not _is_contained_in_dir(dzip.namelist()):
+                raise Exception("Zipfile contains non subdir paths")
+            dzip.extractall(tmp_dir)
+        _log.info("Extracted to temporary directory {}".format(tmp_dir))
+
+        # use correct pnputil with 32bit pythons
+        if '32bit' in platform.architecture():
+            pnputil = r'%systemroot%\Sysnative\pnputil.exe'
+        else:
+            pnputil = 'pnputil.exe'
+
+        # install with pnp util
+        cmd = [pnputil, '-i', '-a', os.path.join(tmp_dir, '*.inf')]
+        subprocess.check_call(cmd, shell=True)
+        _log.info("Success")
+        _log.warn(dedent("""\
+            Note: Some of the drivers currently don't have valid signatures.
+            Look at the output above. If the spectrometer you want to use only
+            provides an unsigned driver, you might have to install it manually.
+            If you encouter this issue, please report it on github."""))
+    except Exception:
+        _log.error("Error when installing drivers", exc_info=True)
+
+    finally:
+        shutil.rmtree(tmp_dir)
+        input('Press [enter] to close.')
 
 
 def main():

@@ -1,12 +1,13 @@
 *.so
 *.tar.bz2
 *.pyc
-build/*
-dist/*
 .DS_Store
 .eggs
 .idea
+build/*
+dist/*
 venv/*
 docs/build/*
+pip-wheel-metadata/*
 src/seabreeze/cseabreeze/c_seabreeze_wrapper.cpp
 src/seabreeze.egg-info

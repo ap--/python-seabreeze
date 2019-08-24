@@ -58,13 +58,7 @@ class Spectrometer(object):
         if correct_nonlinearity and not self._nc:
             raise SeaBreezeError("This device does not support nonlinearity correction.")
         # Get the intensities
-        out = numpy.empty((self._pixels,), dtype=numpy.double)
-        transferred_N = 0
-        while True:
-            transferred_N += lib.spectrometer_get_formatted_spectrum(self._dev, self._fidsp,
-                                                                     out[transferred_N:])
-            if transferred_N >= self._pixels:
-                break
+        out = self._dev.f.spectrometer.get_intensities()
         # Do corrections if requested
         if correct_nonlinearity or correct_dark_counts:
             dark_offset = numpy.mean(out[self._dp]) if self._dp else 0.

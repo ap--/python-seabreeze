@@ -23,13 +23,14 @@ class Spectrometer(object):
         self._dev = device
         self._dev.open()
 
-        nc = self._dev.f.nonlinearity_coefficients
-        if nc is not None:
+        try:
             self._nc = self._dev.f.nonlinearity_coefficients.get_nonlinearity_coefficients()
-        else:
+        except (AttributeError, SeaBreezeError):
             self._nc = None
 
         self._dp = self._dev.f.spectrometer.get_electric_dark_pixel_indices()
+
+        self._wavelengths = self._dev.f.spectrometer.get_wavelengths()
 
     @classmethod
     def from_serial_number(cls, serial=None):
@@ -50,7 +51,7 @@ class Spectrometer(object):
                 raise SeaBreezeError("No device attached with serial number '%s'." % serial)
 
     def wavelengths(self):
-        return self._dev.f.spectrometer.wavelengths()
+        return self._wavelengths
 
     def intensities(self, correct_dark_counts=False, correct_nonlinearity=False):
         if correct_dark_counts and not self._dp:
@@ -79,7 +80,7 @@ class Spectrometer(object):
         # If integration time is out of bounds, libseabreeze returns Undefined Error
         # (Probably only for devices with a non micro second time base...)
         try:
-            self._dev.f.spectrometer.integration_time_micros(integration_time_micros)
+            self._dev.f.spectrometer.set_integration_time_micros(integration_time_micros)
         except SeaBreezeError as e:
             if getattr(e, 'error_code', None) == 1:
                 # Only replace if 'Undefined Error'
@@ -88,7 +89,7 @@ class Spectrometer(object):
                 raise e
 
     def trigger_mode(self, mode):
-        self._dev.f.spectrometer.trigger_mode(mode)
+        self._dev.f.spectrometer.set_trigger_mode(mode)
 
     @property
     def serial_number(self):
@@ -100,7 +101,7 @@ class Spectrometer(object):
 
     @property
     def pixels(self):
-        return self._dev.f.spectrometer.pixels
+        return self._dev.f.spectrometer._spectrum_length
 
     def close(self):
         self._dev.close()

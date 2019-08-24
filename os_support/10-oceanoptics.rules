@@ -60,6 +60,8 @@ ATTR{idVendor}=="2457", ATTR{idProduct}=="1040", SYMLINK+="torus-%n", MODE="0666
 ATTR{idVendor}=="2457", ATTR{idProduct}=="2000", SYMLINK+="jaz-%n", MODE="0666"
 # Ocean Optics Inc. STS spectrometer
 ATTR{idVendor}=="2457", ATTR{idProduct}=="4000", SYMLINK+="sts-%n", MODE="0666"
+# Ocean Optics Inc. Spark spectrometer
+ATTR{idVendor}=="2457", ATTR{idProduct}=="4200", SYMLINK+="spark-%n", MODE="0666"
 # Ocean Optics Inc. Centice Clear Shot II spectrometer
 ATTR{idVendor}=="184c", ATTR{idProduct}=="0000", SYMLINK+="clearshot2-%n", MODE="0666"
 # unprogrammed EzUSB

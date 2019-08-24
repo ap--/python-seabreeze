@@ -763,6 +763,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
                                                                         &out[0], out_length)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
+        assert bytes_written == self._spectrum_length
         return intensities
 
     def _get_spectrum_raw(self):

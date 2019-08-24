@@ -9,9 +9,11 @@
 # changes:
 # - set MODE instead of group (fedora doesn't use plugdev)
 # - match parent subsystems for compatibility with older udev versions
+# - match both actions 'add' and 'bind' (fixes ubuntu 18.04 issues)
 #
 
 SUBSYSTEMS=="usb", ACTION=="add", GOTO="oceanoptics_rules_begin"
+SUBSYSTEMS=="usb", ACTION=="bind", GOTO="oceanoptics_rules_begin"
 
 GOTO="oceanoptics_rules_end"
 LABEL="oceanoptics_rules_begin"

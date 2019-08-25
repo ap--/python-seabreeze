@@ -42,12 +42,15 @@ else:
     if platform.system() == "Windows":
         libs = ['winusb']
         ignore_subdirs = {'linux', 'osx', 'posix'}
+        macros = [('_WINDOWS', None)]
     elif platform.system() == "Darwin":
         libs = []
         ignore_subdirs = {'linux', 'winusb', 'windows'}
+        macros = []
     else:
         libs = ['usb']
         ignore_subdirs = {'osx', 'winusb', 'windows'}
+        macros = []
 
     # Collect all source files for cseabreeze backend
     sources = ['src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx']
@@ -58,6 +61,7 @@ else:
     # define extension
     libseabreeze = Extension('seabreeze.cseabreeze._wrapper',
                              language='c++',
+                             define_macros=macros,
                              sources=sources,
                              include_dirs=['src/libseabreeze/include'],
                              libraries=libs)

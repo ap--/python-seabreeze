@@ -86,7 +86,7 @@ exclude_patterns = []
 pygments_style = None
 
 napoleon_use_rtype = False
-
+napoleon_use_admonition_for_notes = True
 
 # -- Options for HTML output -------------------------------------------------
 

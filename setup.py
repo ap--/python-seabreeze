@@ -26,37 +26,49 @@ else:
 
 SEABREEZE_VERSION = "0.9.0"
 
-# Platform specific libraries and source files
-if platform.system() == "Windows":
-    libs = ['winusb']
-    ignore_subdirs = {'linux', 'osx', 'posix'}
-elif platform.system() == "Darwin":
-    libs = []
-    ignore_subdirs = {'linux', 'winusb', 'windows'}
+if "--without-cseabreeze" in sys.argv:
+    sys.argv.remove("--without-cseabreeze")  # this is a hack...
+    # The correct way to do this, would be to:
+    # - make cseabreeze it's own python module and make python-seabreeze depend on
+    #   it as an extra dependency
+    # - by default ship pyseabreeze but keep pyseabreeze as an extra so that installing
+    #   pyusb is optional
+    # - require users to decide which backend they want to install...
+    # user requests to not install cython wrapper
+    extensions = []
 else:
-    libs = ['usb']
-    ignore_subdirs = {'osx', 'winusb', 'windows'}
 
-# Collect all source files for cseabreeze backend
-sources = ['src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx']
-for root, subdirs, fns in os.walk('src/libseabreeze/src'):
-    subdirs[:] = (d for d in subdirs if d not in ignore_subdirs)
-    sources.extend((os.path.join(root, fn) for fn in fns))
+    # Platform specific libraries and source files
+    if platform.system() == "Windows":
+        libs = ['winusb']
+        ignore_subdirs = {'linux', 'osx', 'posix'}
+    elif platform.system() == "Darwin":
+        libs = []
+        ignore_subdirs = {'linux', 'winusb', 'windows'}
+    else:
+        libs = ['usb']
+        ignore_subdirs = {'osx', 'winusb', 'windows'}
 
-# define extension
-libseabreeze = Extension('seabreeze.cseabreeze._wrapper',
-                         language='c++',
-                         sources=sources,
-                         include_dirs=['src/libseabreeze/include'],
-                         libraries=libs)
+    # Collect all source files for cseabreeze backend
+    sources = ['src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx']
+    for root, subdirs, fns in os.walk('src/libseabreeze/src'):
+        subdirs[:] = (d for d in subdirs if d not in ignore_subdirs)
+        sources.extend((os.path.join(root, fn) for fn in fns))
 
-# TODO: detect if running on rtd?
-building_sphinx_documentation = True
-libseabreeze.cython_directives = {
-    'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
-    'embedsignature': not building_sphinx_documentation,  # add function signature to docstring for ipython
-}
-extensions = [libseabreeze]
+    # define extension
+    libseabreeze = Extension('seabreeze.cseabreeze._wrapper',
+                             language='c++',
+                             sources=sources,
+                             include_dirs=['src/libseabreeze/include'],
+                             libraries=libs)
+
+    # TODO: detect if running on rtd?
+    building_sphinx_documentation = True
+    libseabreeze.cython_directives = {
+        'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
+        'embedsignature': not building_sphinx_documentation,  # add function signature to docstring for ipython
+    }
+    extensions = [libseabreeze]
 
 
 # prevent cpp compiler warning
@@ -73,7 +85,7 @@ class sb_build_ext(build_ext):
         build_ext.build_extensions(self)
 
 
-if WARN_NO_CYTHON:
+if WARN_NO_CYTHON and extensions:
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
     log = logging.getLogger('setup')
     log.info("if error `unknown file type '.pyx'` occurs try `pip install cython` and rerun")

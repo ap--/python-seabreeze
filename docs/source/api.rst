@@ -17,7 +17,7 @@ spectrometers
 list_devices
 ------------
 
-Provides a list of available `SeaBreezeDevice`s
+Provides a list of available instances of `SeaBreezeDevice`
 
 .. autofunction:: list_devices
 

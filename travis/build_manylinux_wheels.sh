@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e -x
 
+yum install -y libusb-devel
+
 # Compile wheels
 for PYBIN in /opt/python/*/bin; do
     if [[ ! $PYBIN =~ "34" ]]; then  # exclude 3.4

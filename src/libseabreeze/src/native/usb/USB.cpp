@@ -311,30 +311,7 @@ void USB::usbHexDump(void *x, int length, int endpoint) {
 }
 
 void USB::hexDump(void *x, int length) {
-    /* This is a nice hexdump method that formats the given buffer into
-     * blocks of 16 with the starting address in the far left column.  This
-     * is being included to assist with USB device communication debugging.
-     * Yes, it uses fprintf() and stderr because it was originally written
-     * in C.  This can be ported to C++-style cerr::<< or ostream::<< if that
-     * really seems important.
-     */
-    int i, j;
-    int written;
-    char buf[256];
-
-    for(i = 0; i < (length / 16) + 1; i++) {
-        written = 0;
-        written += sprintf(buf + written, "[%04X]: ", (i * 16 & 0x00FFFF));
-        for(j = 0; j < 16 && (j + (i * 16) < length); j++) {
-            written += sprintf(buf + written,
-                    "%02X ", ((char *)x)[j + (i * 16)] & 0x00FF);
-        }
-        written += sprintf(buf + written, "\n");
-        fprintf(stderr, "%s", buf);
-        if(j < 16 && (j + i * 16 >= length)) {
-            break;
-        }
-    }
+    /* removed because python 2.7 compilation errors on windows and i can't be bothered */
     fflush(stderr);
 }
 

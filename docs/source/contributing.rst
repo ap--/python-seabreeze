@@ -3,4 +3,5 @@ Contributing Guide
 
 .. _contrib:
 
-HAHA
+.. Attention::
+    show how to add a spectrometer and a new feature

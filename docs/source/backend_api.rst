@@ -218,7 +218,7 @@ pyseabreeze
 
 .. currentmodule:: seabreeze.pyseabreeze
 
-The C++ libseabreeze API is fully wrapped and exposed to python. If you intend to
+`pyseabreeze` is a compatible pure python implementation of `cseabreeze`. If you intend to
 directly use it you start with a :class:`SeaBreezeAPI` instance
 and retrieve :class:`SeaBreezeDevice` instances via
 :func:`SeaBreezeAPI.list_devices`. These instances offer all feature functionality via their

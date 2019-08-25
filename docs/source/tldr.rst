@@ -10,13 +10,23 @@ all you need to know to read a spectrum:
 
     $ pip install python-seabreeze
 
-.. admonition:: if windows
 
-    force your spectrometer to use a driver from :module:`system/windows-driver-files.zip`
+Do the os specific setup:
 
-.. admonition:: if linux
+.. admonition:: Note
 
-    install udev rules from :module:`system/10-oceanoptics.rules`
+    The `seabreeze_os_setup` script is installed with python-seabreeze.
+    It installs `udev rules <https://github.com/ap--/python-seabreeze/blob/master/os_support/10-oceanoptics.rules>`_
+    on linux and
+    `spectrometer drivers <https://github.com/ap--/python-seabreeze/blob/master/os_support/windows-driver-files.zip>`_
+    on windows
+
+.. code:: bash
+
+    $ seabreeze_os_setup
+
+
+Access the spectrometer:
 
 .. code-block:: python
 

@@ -60,7 +60,7 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
     If python-seabreeze_ saved you some development time, consider `contributing to the
     project <https://github.com/ap--/python-seabreeze>`_, or
     `send me an email <mailto:mail+seabreeze@poehlmann.io>`_ and tell me about your project,
-    or consider `buying me coffee <https://www.buymeacoffee.com/poehlmann>`_,
+    or consider `buying me a coffee <https://www.buymeacoffee.com/poehlmann>`_,
     or `support me via paypal <https://paypal.me/apoehlmann>`_. Something small like that
     puts a smile on my face for weeks, and it's extremely motivating.
 

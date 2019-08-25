@@ -35,7 +35,7 @@
 #include "common/buses/BusFamilies.h"
 #include <stdio.h>
 
-#ifdef WINDOWS
+#ifdef _WINDOWS
 #define snprintf _snprintf
 #endif
 

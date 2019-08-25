@@ -35,7 +35,7 @@
 #include "common/buses/rs232/RS232DeviceLocator.h"
 #include "common/buses/BusFamilies.h"
 
-#ifdef WINDOWS
+#ifdef _WINDOWS
 #define snprintf _snprintf
 #endif
 

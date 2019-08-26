@@ -40,7 +40,7 @@ else:
 
     # Platform specific libraries and source files
     if platform.system() == "Windows":
-        libs = ['winusb']
+        libs = ['winusb', 'ws2_32', 'setupapi']
         ignore_subdirs = {'linux', 'osx', 'posix'}
         macros = [('_WINDOWS', None)]
     elif platform.system() == "Darwin":
@@ -62,8 +62,8 @@ else:
     libseabreeze = Extension('seabreeze.cseabreeze._wrapper',
                              language='c++',
                              define_macros=macros,
-                             sources=sources,
-                             include_dirs=['src/libseabreeze/include'],
+                             sources=[os.path.relpath(s) for s in sources],
+                             include_dirs=[os.path.relpath('src/libseabreeze/include')],
                              libraries=libs)
 
     # TODO: detect if running on rtd?
@@ -75,18 +75,39 @@ else:
     extensions = [libseabreeze]
 
 
-# prevent cpp compiler warning
-# - see: https://stackoverflow.com/a/36293331
-# - see: https://github.com/python/cpython/pull/7476/files
 # noinspection PyPep8Naming
 class sb_build_ext(build_ext):
     def build_extensions(self):
+        # Deal with windows command line limit
+        if os.name == 'nt':
+            self.compiler.spawn = win_spawn.__get__(self.compiler)
+        # prevent cpp compiler warning
+        # - see: https://stackoverflow.com/a/36293331
+        # - see: https://github.com/python/cpython/pull/7476/files
         customize_compiler(self.compiler)
         try:
             self.compiler.compiler_so.remove("-Wstrict-prototypes")
         except (AttributeError, ValueError):
             pass
+        # call superclass
         build_ext.build_extensions(self)
+
+
+# the windows shell can't handle all the object files provided to link.exe
+def win_spawn(self, cmd):
+    from distutils.spawn import spawn
+    from subprocess import list2cmdline
+    old_path = os.getenv('path')
+    try:
+        os.environ['path'] = self._paths
+        if cmd[0].endswith('link.exe'):
+            with open('ihatewindowssomuch.rsp', 'w') as f:
+                f.write(list2cmdline(cmd[1:]) + "\n\r")
+            return spawn(cmd[:1] + ["@{}".format(os.path.abspath(f.name))])
+        else:
+            return spawn(cmd)
+    finally:
+        os.environ['path'] = old_path
 
 
 if WARN_NO_CYTHON and extensions:

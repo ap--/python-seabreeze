@@ -64,6 +64,7 @@ matrix:
         - choco install python2 vcredist2008
         - choco install --ignore-dependencies vcpython27
         - choco install visualcpp-build-tools
+        - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
       env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
@@ -76,6 +77,7 @@ matrix:
       before_install:
         - choco install python3 --version 3.5.4
         - choco install visualcpp-build-tools
+        - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
       env: PATH=/c/Python35:/c/Python35/Scripts:$PATH
@@ -88,6 +90,7 @@ matrix:
       before_install:
         - choco install python3 --version 3.6.8
         - choco install visualcpp-build-tools
+        - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
       env: PATH=/c/Python36:/c/Python36/Scripts:$PATH
@@ -100,6 +103,7 @@ matrix:
       before_install:
         - choco install python3 --version 3.7.4
         - choco install visualcpp-build-tools
+        - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH

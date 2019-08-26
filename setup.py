@@ -125,6 +125,7 @@ setup(
     setup_requires=[
         'setuptools>=18.0',
         'cython>=0.18',
+        'wheel'
     ],
     install_requires=[
         "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17

@@ -67,6 +67,7 @@ matrix:
         - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
+        - python -m pip install --upgrade wheel
       env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
       install:
         - source travis/build_windows_wheels.sh
@@ -80,6 +81,7 @@ matrix:
         - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
+        - python -m pip install --upgrade wheel
       env: PATH=/c/Python35:/c/Python35/Scripts:$PATH
       install:
         - source travis/build_windows_wheels.sh
@@ -93,6 +95,7 @@ matrix:
         - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
+        - python -m pip install --upgrade wheel
       env: PATH=/c/Python36:/c/Python36/Scripts:$PATH
       install:
         - source travis/build_windows_wheels.sh
@@ -106,6 +109,7 @@ matrix:
         - choco install windows-sdk-10.1
         - choco install windowsdriverkit10
         - python -m pip install --upgrade pip
+        - python -m pip install --upgrade wheel
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
       install:
         - source travis/build_windows_wheels.sh

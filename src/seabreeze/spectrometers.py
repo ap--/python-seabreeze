@@ -44,7 +44,7 @@ class Spectrometer(object):
         device : `seabreeze.spectrometers.SeaBreezeDevice`
             a SeaBreezeDevice as returned from `list_devices`
         """
-        if not isinstance(dev, SeaBreezeDevice):
+        if not isinstance(device, SeaBreezeDevice):
             raise TypeError("device has to be a `SeaBreezeDevice`")
         self._dev = device
         self.open()  # always open the device here to allow caching values
@@ -57,7 +57,7 @@ class Spectrometer(object):
                 # NOTE: the spark spectrometer raises a transport error when trying
                 # to receive the nc coefficients. In this case continue with disabled
                 # nonlinearity correction support
-                self._nc = nc.get_nonlinearity_coefficients()
+                self._nc = nc_feature.get_nonlinearity_coefficients()
             except SeaBreezeError:
                 pass
         # check for dark pixel correction support
@@ -103,7 +103,7 @@ class Spectrometer(object):
             return cls.from_first_available()
 
         for dev in list_devices():
-            if dev.serial == str(serial):
+            if dev.serial_number == str(serial):
                 if dev.is_open:
                     raise SeaBreezeError("Device already opened.")
                 else:

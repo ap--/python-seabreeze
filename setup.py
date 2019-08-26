@@ -99,7 +99,8 @@ def win_spawn(self, cmd):
     from subprocess import list2cmdline
     old_path = os.getenv('path')
     try:
-        os.environ['path'] = self._paths
+        if hasattr(self, '_paths'):  # msv9 compat
+            os.environ['path'] = self._paths
         if cmd[0].endswith('link.exe'):
             with open('ihatewindowssomuch.rsp', 'w') as f:
                 f.write(list2cmdline(cmd[1:]) + "\n\r")
@@ -107,7 +108,8 @@ def win_spawn(self, cmd):
         else:
             return spawn(cmd)
     finally:
-        os.environ['path'] = old_path
+        if hasattr(self, '_paths'):
+            os.environ['path'] = old_path
 
 
 if WARN_NO_CYTHON and extensions:

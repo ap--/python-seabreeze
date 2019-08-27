@@ -43,6 +43,8 @@ else:
         libs = ['winusb', 'ws2_32', 'setupapi']
         ignore_subdirs = {'linux', 'osx', 'posix'}
         macros = [('_WINDOWS', None)]
+        if sys.version_info.major == 2:  # this should actually check if msv9
+            macros.extend([('WINDOWS', None), ('_WIN32', None)])
     elif platform.system() == "Darwin":
         libs = []
         ignore_subdirs = {'linux', 'winusb', 'windows'}

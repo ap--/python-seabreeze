@@ -32,11 +32,10 @@ install:
   - '%PYTHON%\python.exe -m pip install --upgrade wheel'
   - '%PYTHON%\python.exe -m pip install --upgrade setuptools'
 
-build:
-  - ci\build_windows_wheels.cmd
+build: off
 
 test_script:
-  - "echo 'done'"
+  - ci\build_windows_wheels.cmd
 
 after_test:
   - "echo 'done'"

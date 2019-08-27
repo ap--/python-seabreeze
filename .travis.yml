@@ -70,6 +70,8 @@ matrix:
         - python -m pip install --upgrade wheel
       env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
            SBBUILDSDK=8.1
+           DISTUTILS_USE_SDK=1
+           MSSdk=1
       install:
         - source travis/build_windows_wheels.sh
 
@@ -119,7 +121,7 @@ matrix:
         - source travis/build_windows_wheels.sh
 
 script:
-  - ls wheelhouse/*.whl
+  - ls wheelhouse/seabreeze*.whl
   - echo "done."
 
 deploy:
@@ -127,7 +129,7 @@ deploy:
   skip_cleanup: true
   file_glob: true
   file:
-    - wheelhouse/*.whl
+    - wheelhouse/seabreeze*.whl
   api_key:
     secure: hDbhZMLLmvid2U9VuFBRkdduRMnsLnUvZzSnzJE96NSrGd/rcHM0GXUiVEOpVqHJmygBSVekTVjk7wOvljWvyxTfa4qd1/hdkKNbUbhWCBC1pXsPLLsnb2xLu8s6YHJc4bu0ZE3imm+6gAaABHB6SZe9P0c21L40TDh6Ew2VY1g=
   on:

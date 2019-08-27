@@ -1,7 +1,7 @@
 @echo off
 :: Minimal build script
 
-SET INCLUDE=%WDDK_INC_PATH%;%INCLUDE%
-SET LIB=%WDDK_LIB_PATH%;%LIB%
+SET INCLUDE=%INCLUDE%;%WDDK_INC_PATH%
+SET LIB=%LIB%;%WDDK_LIB_PATH%
 
-%PYTHON%\python.exe -m pip wheel .
+%PYTHON%\python.exe -m pip wheel . -w wheelhouse

@@ -1,30 +1,23 @@
 environment:
 
-  global:
-    WDDK_INC_PATH: C:\WinDDK\7600.16385.1\inc\api;C:\WinDDK\7600.16385.1\inc\ddk
-
   matrix:
 
     # For Python versions available on Appveyor, see
     # http://www.appveyor.com/docs/installed-software#python
 
     - PYTHON: C:\Python27
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wxp\i386
+      WDDK_INC_PATH: C:\WinDDK\7600.16385.1\inc\api;C:\WinDDK\7600.16385.1\inc\ddk;
+      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wxp\i386;
     - PYTHON: C:\Python35
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wxp\i386
     - PYTHON: C:\Python36
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wxp\i386
     - PYTHON: C:\Python37
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wxp\i386
 
     - PYTHON: C:\Python27-x64
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wlh\amd64
+      WDDK_INC_PATH: C:\WinDDK\7600.16385.1\inc\api;C:\WinDDK\7600.16385.1\inc\ddk;
+      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wlh\amd64;
     - PYTHON: C:\Python35-x64
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wlh\amd64
     - PYTHON: C:\Python36-x64
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wlh\amd64
     - PYTHON: C:\Python37-x64
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wlh\amd64
 
 install:
   # Setup the build environment
@@ -41,7 +34,7 @@ after_test:
   - "echo 'done'"
 
 artifacts:
-  - path: dist\*
+  - path: wheelhouse\seabreeze-*
     name: wheel
 
 deploy:

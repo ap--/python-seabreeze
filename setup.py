@@ -13,6 +13,7 @@ import os
 import platform
 import sys
 from distutils.sysconfig import customize_compiler
+from distutils.util import strtobool
 
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
@@ -68,12 +69,11 @@ else:
                              include_dirs=[os.path.relpath('src/libseabreeze/include')],
                              libraries=libs)
 
-    # TODO: detect if running on rtd?
-    building_sphinx_documentation = True
-    libseabreeze.cython_directives = {
-        'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
-        'embedsignature': not building_sphinx_documentation,  # add function signature to docstring for ipython
-    }
+    if strtobool(os.environ.get('READTHEDOCS', 'false')):
+        libseabreeze.cython_directives = {
+            'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
+            'embedsignature': not building_sphinx_documentation,  # add function signature to docstring for ipython
+        }
     extensions = [libseabreeze]
 
 

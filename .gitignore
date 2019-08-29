@@ -11,3 +11,4 @@ docs/build/*
 pip-wheel-metadata/*
 src/seabreeze/cseabreeze/c_seabreeze_wrapper.cpp
 src/seabreeze.egg-info
+src/seabreeze/_version.py

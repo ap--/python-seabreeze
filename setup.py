@@ -25,8 +25,6 @@ except ImportError:
 else:
     WARN_NO_CYTHON = False
 
-SEABREEZE_VERSION = "0.9.0"
-
 if "--without-cseabreeze" in sys.argv:
     sys.argv.remove("--without-cseabreeze")  # this is a hack...
     # The correct way to do this, would be to:
@@ -121,13 +119,19 @@ if WARN_NO_CYTHON and extensions:
 
 setup(
     name='seabreeze',
-    version=SEABREEZE_VERSION,
     author='Andreas Poehlmann',
     author_email='andreas@poehlmann.io',
+    url='https://github.com/ap--/python-seabreeze',
+    use_scm_version={
+        'write_to': 'src/seabreeze/_version.py',
+        'write_to_template': '__version__ = "{version}"',
+        'tag_regex': r'^(?P<pkg>python-seabreeze-)?(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$',
+    },
     setup_requires=[
         'setuptools>=18.0',
         'cython>=0.18',
-        'wheel'
+        'wheel',
+        'setuptools_scm'
     ],
     install_requires=[
         "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
@@ -141,6 +145,7 @@ setup(
     cmdclass={
         'build_ext': sb_build_ext
     },
+    ext_modules=extensions,
     packages=find_packages(where='src'),
     package_dir={
         '': 'src'
@@ -154,5 +159,12 @@ setup(
                  'This software is not associated with Ocean Optics. '
                  'Use it at your own risk.'),
     long_description=open('README.md').read(),
-    ext_modules=extensions,
+    classifiers=[
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+    ]
 )

@@ -50,7 +50,7 @@ Windows
 """
 # noinspection PyUnresolvedReferences
 from seabreeze.backends import use
+from seabreeze._version import __version__
 
-__version__ = "0.6.0"
 __author__ = "Andreas Poehlmann"
 __email__ = "andreas@poehlmann.io"

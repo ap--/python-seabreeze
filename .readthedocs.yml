@@ -1,0 +1,10 @@
+version: 2
+# use conda to install, because we need libusb
+conda:
+  environment: docs/environment.yml
+sphinx:
+  configuration: docs/source/conf.py
+python:
+   install:
+      - method: pip
+        path: .

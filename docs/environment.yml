@@ -1,0 +1,12 @@
+name: seabreeze
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - cython
+  - numpy
+  - libusb-compat
+  - pip
+  - setuptools
+  - wheel
+

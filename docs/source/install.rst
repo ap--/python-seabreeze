@@ -7,8 +7,7 @@ Install via pip
 ---------------
 
 .. Attention::
-    Not working yet. Need to get permissions for claimed `seabreeze` name on pypi first
-    so that I can publish the prebuilt wheels via travis.
+    Not working yet. Need publish new wheels for `seabreeze` on pypi first.
 
 .. code:: bash
 

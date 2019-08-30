@@ -8,7 +8,7 @@ all you need to know to read a spectrum:
 
 .. code:: bash
 
-    $ pip install python-seabreeze
+    $ pip install seabreeze
 
 
 Do the os specific setup:

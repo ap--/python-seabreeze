@@ -39,33 +39,41 @@ else:
 
     # Platform specific libraries and source files
     if platform.system() == "Windows":
-        libs = ['winusb', 'ws2_32', 'setupapi']
         ignore_subdirs = {'linux', 'osx', 'posix'}
-        macros = [('_WINDOWS', None)]
+        compile_opts = dict(
+            define_macros=[('_WINDOWS', None)],
+            include_dirs=[],
+            libraries=['winusb', 'ws2_32', 'setupapi'],
+            library_dirs=[]
+        )
         if sys.version_info.major == 2:  # this should actually check if msv9
-            macros.extend([('WINDOWS', None), ('_WIN32', None)])
+            compile_opts['define_macros'].extend([('WINDOWS', None), ('_WIN32', None)])
+
     elif platform.system() == "Darwin":
-        libs = []
         ignore_subdirs = {'linux', 'winusb', 'windows'}
-        macros = []
+        compile_opts = dict(define_macros=[], include_dirs=[], libraries=[], library_dirs=[])
+
     else:
-        libs = ['usb']
         ignore_subdirs = {'osx', 'winusb', 'windows'}
-        macros = []
+        try:
+            import pkgconfig
+            compile_opts = pkgconfig.parse('libusb')
+        except ImportError:
+            compile_opts = dict(define_macros=[], include_dirs=[], libraries=['usb'], library_dirs=[])
 
     # Collect all source files for cseabreeze backend
     sources = ['src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx']
     for root, subdirs, fns in os.walk('src/libseabreeze/src'):
         subdirs[:] = (d for d in subdirs if d not in ignore_subdirs)
         sources.extend((os.path.join(root, fn) for fn in fns))
+    # Add seabreeze include dirs
+    compile_opts['include_dirs'].append(os.path.relpath('src/libseabreeze/include'))
 
     # define extension
     libseabreeze = Extension('seabreeze.cseabreeze._wrapper',
                              language='c++',
-                             define_macros=macros,
                              sources=[os.path.relpath(s) for s in sources],
-                             include_dirs=[os.path.relpath('src/libseabreeze/include')],
-                             libraries=libs)
+                             **compile_opts)
 
     building_sphinx_documentation = bool(strtobool(os.environ.get('READTHEDOCS', 'false')))
     libseabreeze.cython_directives = {
@@ -131,8 +139,9 @@ setup(
     setup_requires=[
         'setuptools>=18.0',
         'cython>=0.18',
-        'wheel',
-        'setuptools_scm'
+        'wheel>=0.31.0',
+        'setuptools_scm',
+        'pkgconfig'
     ],
     install_requires=[
         "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17

@@ -67,11 +67,11 @@ else:
                              include_dirs=[os.path.relpath('src/libseabreeze/include')],
                              libraries=libs)
 
-    if strtobool(os.environ.get('READTHEDOCS', 'false')):
-        libseabreeze.cython_directives = {
-            'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
-            'embedsignature': not building_sphinx_documentation,  # add function signature to docstring for ipython
-        }
+    building_sphinx_documentation = bool(strtobool(os.environ.get('READTHEDOCS', 'false')))
+    libseabreeze.cython_directives = {
+        'binding': building_sphinx_documentation,  # fix class method parameters for sphinx
+        'embedsignature': not building_sphinx_documentation,  # add function signature to docstring for ipython
+    }
     extensions = [libseabreeze]
 
 
@@ -80,6 +80,7 @@ class sb_build_ext(build_ext):
     def build_extensions(self):
         # Deal with windows command line limit
         if os.name == 'nt':
+            # noinspection PyArgumentList
             self.compiler.spawn = win_spawn.__get__(self.compiler)
         # prevent cpp compiler warning
         # - see: https://stackoverflow.com/a/36293331

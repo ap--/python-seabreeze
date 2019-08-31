@@ -182,6 +182,18 @@ class Spectrometer(object):
             out += dark_offset
         return out
 
+    @property
+    def max_intensity(self):
+        """return the maximum intensity of the spectrometer
+
+        Returns
+        -------
+        max_intensity : `float`
+            the maximum intensity that can be returned by the spectrometer in (a.u.)
+            It's possible that the spectrometer saturates already at lower values.
+        """
+        return self._dev.f.spectrometer.get_maximum_intensity()
+
     def spectrum(self, correct_dark_counts=False, correct_nonlinearity=False):
         """returns wavelengths and intensities as single array
 

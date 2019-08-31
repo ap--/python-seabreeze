@@ -28,14 +28,9 @@ def test_read_model():
         pytest.skip("no supported device connected")
 
     for device in devices:
-        spec = None
-        try:
-            spec = Spectrometer(device)
-            model = spec.model
-            assert len(model) > 0
-        finally:
-            if spec is not None:
-                spec.close()
+        spec = Spectrometer(device)
+        model = spec.model
+        assert len(model) > 0
 
 
 @pytest.mark.usefixtures("backendify_classes")
@@ -45,14 +40,9 @@ def test_read_serial_number():
         pytest.skip("no supported device connected")
 
     for device in devices:
-        spec = None
-        try:
-            spec = Spectrometer(device)
-            serial = spec.serial_number
-            assert len(serial) > 0
-        finally:
-            if spec is not None:
-                spec.close()
+        spec = Spectrometer(device)
+        serial = spec.serial_number
+        assert len(serial) > 0
 
 
 @pytest.mark.usefixtures("backendify_classes")
@@ -62,13 +52,8 @@ def test_read_spectrum():
         pytest.skip("no supported device connected")
 
     for device in devices:
-        spec = None
-        try:
-            spec = Spectrometer(device)
-            arr = spec.intensities()
-            assert arr.size == spec.pixels
-        finally:
-            if spec is not None:
-                spec.close()
+        spec = Spectrometer(device)
+        arr = spec.intensities()
+        assert arr.size == spec.pixels
 
 

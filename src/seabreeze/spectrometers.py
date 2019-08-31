@@ -13,7 +13,6 @@ from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrome
 
 # get the backend and add some functions/classes to this module
 _lib = seabreeze.backends.get_backend()
-_api = _lib.SeaBreezeAPI()
 
 SeaBreezeError = _lib.SeaBreezeError
 SeaBreezeDevice = _lib.SeaBreezeDevice
@@ -30,11 +29,16 @@ def list_devices():
     devices: `list[SeaBreezeDevice]`
         connected Spectrometer instances
     """
-    return _api.list_devices()
+    if not hasattr(list_devices, '_api'):
+        list_devices._api = _lib.SeaBreezeAPI()
+    # noinspection PyProtectedMember
+    return list_devices._api.list_devices()
 
 
 class Spectrometer(_DeprecatedSpectrometerMixin):
     """Spectrometer class for all supported spectrometers"""
+
+    _backend = _lib  # store reference to backend to allow backend switching in tests
 
     def __init__(self, device):
         """create a Spectrometer instance for the provided device
@@ -47,7 +51,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         device : `seabreeze.spectrometers.SeaBreezeDevice`
             a SeaBreezeDevice as returned from `list_devices`
         """
-        if not isinstance(device, SeaBreezeDevice):
+        if not isinstance(device, self._backend.SeaBreezeDevice):
             raise TypeError("device has to be a `SeaBreezeDevice`")
         self._dev = device
         self.open()  # always open the device here to allow caching values
@@ -61,7 +65,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 # to receive the nc coefficients. In this case continue with disabled
                 # nonlinearity correction support
                 self._nc = nc_feature.get_nonlinearity_coefficients()
-            except SeaBreezeError:
+            except self._backend.SeaBreezeError:
                 pass
         # check for dark pixel correction support
         self._dp = self._dev.f.spectrometer.get_electric_dark_pixel_indices()
@@ -77,11 +81,11 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         spectrometer : `Spectrometer`
             the first available supported spectrometer
         """
-        for dev in list_devices():
+        for dev in cls._backend.list_devices():
             if not dev.is_open:
                 return cls(dev)
         else:
-            raise SeaBreezeError("No unopened device found.")
+            raise cls._backend.SeaBreezeError("No unopened device found.")
 
     @classmethod
     def from_serial_number(cls, serial=None):
@@ -105,14 +109,14 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         if serial is None:  # pick first spectrometer
             return cls.from_first_available()
 
-        for dev in list_devices():
+        for dev in cls._backend.list_devices():
             if dev.serial_number == str(serial):
                 if dev.is_open:
-                    raise SeaBreezeError("Device already opened.")
+                    raise cls._backend.SeaBreezeError("Device already opened.")
                 else:
                     return cls(dev)
         else:
-            raise SeaBreezeError("No device attached with serial number '%s'." % serial)
+            raise cls._backend.SeaBreezeError("No device attached with serial number '%s'." % serial)
 
     def wavelengths(self):
         """wavelength array of the spectrometer
@@ -169,9 +173,9 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
             measured intensities in (a.u.)
         """
         if correct_dark_counts and not self._dp:
-            raise SeaBreezeError("This device does not support dark count correction.")
+            raise self._backend.SeaBreezeError("This device does not support dark count correction.")
         if correct_nonlinearity and not self._nc:
-            raise SeaBreezeError("This device does not support nonlinearity correction.")
+            raise self._backend.SeaBreezeError("This device does not support nonlinearity correction.")
         # Get the intensities
         out = self._dev.f.spectrometer.get_intensities()
         # Do corrections if requested
@@ -233,10 +237,10 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         # (Probably only for devices with a non micro second time base...)
         try:
             self._dev.f.spectrometer.set_integration_time_micros(integration_time_micros)
-        except SeaBreezeError as e:
+        except self._backend.SeaBreezeError as e:
             if getattr(e, 'error_code', None) == 1:
                 # Only replace if 'Undefined Error'
-                raise SeaBreezeError("FIX: Specified integration time is out of range.")
+                raise self._backend.SeaBreezeError("FIX: Specified integration time is out of range.")
             else:
                 raise e
 

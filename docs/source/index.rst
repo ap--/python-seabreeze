@@ -20,7 +20,7 @@ out the :ref:`Contributing Guide <contrib>` if you want to learn how to contribu
 
 
 .. figure:: _static/overview.png
-    :figwidth: image
+    :figwidth: 75%
     :align: center
 
     python-seabreeze module structure

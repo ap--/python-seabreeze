@@ -114,8 +114,9 @@ cdef class SeaBreezeAPI(object):
 
         normally this function does not have to be called directly by the user
         """
-        csb.SeaBreezeAPI.shutdown()
-        self.sbapi = NULL
+        # csb.SeaBreezeAPI.shutdown()
+        # self.sbapi = NULL
+        pass  # disable python level SeaBreezeAPI shutdown
 
     def add_rs232_device_location(self, device_type, bus_path, baudrate):
         """add RS232 device location
@@ -242,7 +243,7 @@ cdef class SeaBreezeDevice(object):
 
     """
     cdef readonly long handle
-    cdef readonly str model, serial_number
+    cdef readonly str _model, _serial_number
     cdef csb.SeaBreezeAPI *sbapi
 
     def __cinit__(self, handle):
@@ -255,11 +256,11 @@ cdef class SeaBreezeDevice(object):
         try:
             self._get_info()
         except SeaBreezeError:
-            if not self.model:
+            if not self._model:
                 # TODO: warn, getting the model string should always succeed...
-                self.model = "?"
-            if not self.serial_number:
-                self.serial_number = "?"
+                self._model = "?"
+            if not self._serial_number:
+                self._serial_number = "?"
 
     def __dealloc__(self):
         cdef int error_code
@@ -270,14 +271,14 @@ cdef class SeaBreezeDevice(object):
         """populate model and serial_number attributes (internal)"""
         model = self.get_model()
         try:
-            self.model = model
+            self._model = model
         except TypeError:
-            self.model = model.encode("utf-8")
+            self._model = model.encode("utf-8")
         serial_number = self.get_serial_number()
         try:
-            self.serial_number = serial_number
+            self._serial_number = serial_number
         except TypeError:
-            self.serial_number = serial_number.encode("utf-8")
+            self._serial_number = serial_number.encode("utf-8")
 
     def __repr__(self):
         return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial_number)
@@ -308,6 +309,14 @@ cdef class SeaBreezeDevice(object):
         self.sbapi.closeDevice(self.handle, &error_code)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
+
+    @property
+    def model(self):
+        return "{}.".format(self._model)[:-1]
+
+    @property
+    def serial_number(self):
+        return "{}.".format(self._serial_number)[:-1]
 
     @property
     def is_open(self):

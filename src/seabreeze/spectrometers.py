@@ -237,10 +237,12 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         # (Probably only for devices with a non micro second time base...)
         try:
             self._dev.f.spectrometer.set_integration_time_micros(integration_time_micros)
+        except OverflowError:
+            raise self._backend.SeaBreezeError("[OverFlow] Specified integration time is out of range.")
         except self._backend.SeaBreezeError as e:
             if getattr(e, 'error_code', None) == 1:
                 # Only replace if 'Undefined Error'
-                raise self._backend.SeaBreezeError("FIX: Specified integration time is out of range.")
+                raise self._backend.SeaBreezeError("[Fix] Specified integration time is out of range.")
             else:
                 raise e
 

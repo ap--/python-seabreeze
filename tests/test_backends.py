@@ -38,3 +38,15 @@ def test_backend_features_interface(cseabreeze, pyseabreeze):
         c_attrs = c_feature_interface[feature] - CSEABREEZE_CUSTOM
         py_attrs = py_feature_interface[feature] - PYSEABREEZE_CUSTOM
         assert c_attrs == py_attrs, 'feature {} differs in attrs'.format(feature)
+
+
+def test_cseabreeze_seabreezeapi(cseabreeze):
+    """check if list_devices doesn't crash"""
+    api = cseabreeze.SeaBreezeAPI()
+    api.list_devices()
+
+
+def test_pyseabreeze_seabreezeapi(pyseabreeze):
+    """check if list_devices doesn't crash"""
+    api = pyseabreeze.SeaBreezeAPI()
+    api.list_devices()

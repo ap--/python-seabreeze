@@ -118,14 +118,9 @@ SeaBreezeFeatures
         creates a dictionary of all derived classes of `SeaBreezeFeature` and
         returns a {SeaBreezeFeature.identifier: DerivedSeabreezeFeature} mapping.
 
+    .. attribute:: feature_id
 
-    .. method:: get_feature_ids_from_device(SeaBreezeDevice device)
-
-        return feature_id from a :class:`SeaBreezeDevice` *internal use only*
-
-        all :class:`SeaBreezeFeature` derived classes have this classmethod and return their
-        individual feature ids if the provided :class:`SeaBreezeDevice` supports the feature.
-
+        assigned feature id for cseabreeze feature *internal use only*
 
 .. autoclass:: SeaBreezeRawUSBBusAccessFeature
     :members:
@@ -304,14 +299,13 @@ SeaBreezeFeatures
         creates a dictionary of all derived classes of `SeaBreezeFeature` and
         returns a {SeaBreezeFeature.identifier: DerivedSeabreezeFeature} mapping.
 
+    .. method:: supports_protocol(protocol)
 
-    .. method:: get_feature_ids_from_device(SeaBreezeDevice device)
+        *internal use only*
 
-        return feature_id from a :class:`SeaBreezeDevice` *internal use only*
+    .. method:: specialize(**kwargs)
 
-        all :class:`SeaBreezeFeature` derived classes have this classmethod and return their
-        individual feature ids if the provided :class:`SeaBreezeDevice` supports the feature.
-
+        *internal use only*
 
 .. autoclass:: SeaBreezeRawUSBBusAccessFeature
     :members:

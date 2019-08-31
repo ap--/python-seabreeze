@@ -141,7 +141,8 @@ setup(
         'cython>=0.18',
         'wheel>=0.31.0',
         'setuptools_scm',
-        'pkgconfig'
+        'pkgconfig',
+        'pytest-runner'
     ],
     install_requires=[
         "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
@@ -152,6 +153,9 @@ setup(
         'cseabreeze': [],
         'pyseabreeze': ['pyusb >=1.0']
     },
+    tests_require=[
+        'pytest<5'
+    ],
     cmdclass={
         'build_ext': sb_build_ext
     },

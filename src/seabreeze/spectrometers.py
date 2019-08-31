@@ -7,7 +7,9 @@ Email: andreas@poehlmann.io
 
 """
 import numpy
+
 import seabreeze.backends
+from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin
 
 # get the backend and add some functions/classes to this module
 _lib = seabreeze.backends.get_backend()
@@ -30,7 +32,7 @@ def list_devices():
     return _api.list_devices()
 
 
-class Spectrometer(object):
+class Spectrometer(_DeprecatedSpectrometerMixin):
     """Spectrometer class for all supported spectrometers"""
 
     def __init__(self, device):

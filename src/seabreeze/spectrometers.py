@@ -199,7 +199,8 @@ class Spectrometer(object):
 
         Convenience method to allow:
 
-        >>> wavelengths, intensities = spectrometer.spectrum()
+        >>> spec = Spectrometer.from_first_available()
+        >>> wavelengths, intensities = spec.spectrum()
 
         Parameters
         ----------
@@ -235,6 +236,17 @@ class Spectrometer(object):
                 raise SeaBreezeError("FIX: Specified integration time is out of range.")
             else:
                 raise e
+
+    @property
+    def integration_time_micros_limits(self):
+        """return the hardcoded minimum and maximum integration time
+
+        Returns
+        -------
+        integration_time_micros_min_max : `tuple[int, int]`
+            min and max integration time in micro seconds
+        """
+        return self._dev.f.spectrometer.get_integration_time_micros_limits()
 
     def trigger_mode(self, mode):
         """set the trigger mode of the device

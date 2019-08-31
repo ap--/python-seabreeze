@@ -17,6 +17,7 @@ _api = _lib.SeaBreezeAPI()
 
 SeaBreezeError = _lib.SeaBreezeError
 SeaBreezeDevice = _lib.SeaBreezeDevice
+SeaBreezeFeature = _lib.SeaBreezeFeature
 
 
 def list_devices():
@@ -276,6 +277,34 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """the spectrometer's number of pixels"""
         # noinspection PyProtectedMember
         return self._dev.f.spectrometer._spectrum_length
+
+    @property
+    def features(self):
+        """return a dictionary of all supported features
+
+        this returns a dictionary with all supported Features of the spectrometer
+        and gives direct access to the features provided by the backend interface.
+
+        Returns
+        -------
+        features : `dict` [`str`, `seabreeze.SeaBreezeFeature`]
+        """
+        return self._dev.features
+
+    @property
+    def f(self):
+        """convenience assess to features via attributes
+
+        this allows you to access a feature like this::
+
+        >>> spec = Spectrometer.from_first_available()
+        >>> # via .features
+        >>> spec.features['eeprom'][0].eeprom_read_slot(4)
+        >>> # via .f
+        >>> spec.f.eeprom.eeprom_read_slot(4)
+
+        """
+        return self._dev.f
 
     def open(self):
         """open the connection to the SeaBreezeDevice

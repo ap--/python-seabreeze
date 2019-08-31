@@ -1,0 +1,30 @@
+name: run tests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 2
+      matrix:
+        python-version: [2.7, 3.5, 3.6, 3.7]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setup libusb-dev
+      run: |
+        sudo apt-get install -y libusb-dev
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install 'setuptools>=18.0' 'cython>=0.18' 'wheel>=0.31.0' 'pytest<5'
+        pip install -e .[pyseabreeze]
+    - name: Test with pytest
+      run: |
+        python setup.py pytest

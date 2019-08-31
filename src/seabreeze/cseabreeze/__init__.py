@@ -35,3 +35,4 @@ from seabreeze.cseabreeze._wrapper import (SeaBreezeAPI,
                                            SeaBreezeFastBufferFeature,
                                            SeaBreezeAcquisitionDelayFeature,
                                            SeaBreezeI2CMasterFeature)
+_backend_ = 'cseabreeze'

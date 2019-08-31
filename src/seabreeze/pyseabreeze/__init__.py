@@ -36,3 +36,4 @@ from seabreeze.pyseabreeze.features import (SeaBreezeRawUSBBusAccessFeature,
                                             SeaBreezeFastBufferFeature,
                                             SeaBreezeAcquisitionDelayFeature,
                                             SeaBreezeI2CMasterFeature)
+_backend_ = 'pyseabreeze'

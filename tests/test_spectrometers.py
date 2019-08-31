@@ -6,12 +6,15 @@ import seabreeze.cseabreeze as csb
 
 
 def _retr():
+    """retrieves a list of all connected spectrometers for all backends"""
     params, ids = [], []
     csb_serials, psb_serials = set(), set()
     for serials, backend in [(csb_serials, csb), (psb_serials, psb)]:
         api = backend.SeaBreezeAPI()
         try:
             serials.update((d.serial_number, d.model) for d in api.list_devices())
+        except:
+            pass
         finally:
             api.shutdown()
     for ser_mod in csb_serials.union(psb_serials):
@@ -32,7 +35,23 @@ def _retr():
     return dict(params=params, ids=ids)
 
 
-@pytest.fixture(scope='function', **_retr())
+@pytest.fixture(scope='function', params=[csb, psb], ids=["cseabreeze", "pyseabreeze"])
+def backendlify(request):
+    backend = request.param
+    # list_devices
+    _api = getattr(list_devices, '_api', None)
+    if not isinstance(_api, backend.SeaBreezeAPI):
+        _api = backend.SeaBreezeAPI()
+        setattr(list_devices, '_api', _api)
+    # Spectrometer
+    Spectrometer._backend = backend
+    try:
+        yield
+    finally:
+        _api.shutdown()
+
+
+@pytest.fixture(scope='function', **_retr())  # request all spectrometers on module load
 def backendlified_serial(request):
     backend, serial = request.param
     # list_devices
@@ -68,7 +87,7 @@ def test_read_serial_number(backendlified_serial):
     assert len(serial) > 0
 
 
-def test_read_spectrum(backendlified_serial):
+def test_read_intensities(backendlified_serial):
     devices = list(list_devices())
     if len(devices) == 0:
         pytest.skip("no supported device connected")
@@ -77,4 +96,41 @@ def test_read_spectrum(backendlified_serial):
     arr = spec.intensities()
     assert arr.size == spec.pixels
 
+
+def test_read_wavelengths(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    spec = Spectrometer.from_serial_number(backendlified_serial)
+    arr = spec.wavelengths()
+    assert arr.size == spec.pixels
+
+
+def test_read_spectrum(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    spec = Spectrometer.from_serial_number(backendlified_serial)
+    arr = spec.spectrum()
+    assert arr.shape == (2, spec.pixels)
+
+
+def test_max_intensity(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    spec = Spectrometer.from_serial_number(backendlified_serial)
+    value = spec.max_intensity
+    assert isinstance(value, float)
+    assert 0 < value < 1e8
+
+
+@pytest.mark.usefixtures('backendlify')
+def test_cant_find_serial():
+    exc = Spectrometer._backend.SeaBreezeError
+    with pytest.raises(exc):
+        Spectrometer.from_serial_number("i-do-not-exist")
 

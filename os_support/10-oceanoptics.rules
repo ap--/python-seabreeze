@@ -1,15 +1,22 @@
 # udev rules file for Ocean Optics, Inc. spectrometers
-# only USB spectrometers are supported.
+# ====================================================
 #
 # version: 2.0
-# updated: 2019-07-06
+# updated: 2019-08-31
+# maintainer: Andreas Poehlmann <andreas@poehlmann.io>
 #
-# previous versions are missing this header
+# [info] Previous versions are missing this header.
 #
-# changes:
-# - set MODE instead of group (fedora doesn't use plugdev)
-# - match parent subsystems for compatibility with older udev versions
-# - match both actions 'add' and 'bind' (fixes ubuntu 18.04 issues)
+# Ships with [python-seabreeze](https://github.com/ap--/python-seabreeze/)
+# Only USB spectrometers are supported. When using the newest version (1.0+)
+# of python-seabreeze you can install the rules via running:
+#
+#   $ seabreeze_os_setup
+#
+# Changes:
+# - set MODE instead of group (Fedora doesn't use `plugdev`)
+# - match parent SUBSYSTEMS for compatibility with older udev versions
+# - match both actions 'add' and 'bind' (fixes https://github.com/systemd/systemd/issues/8221)
 #
 
 SUBSYSTEMS=="usb", ACTION=="add", GOTO="oceanoptics_rules_begin"

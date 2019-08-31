@@ -199,7 +199,7 @@ def windows_install_drivers():
             Note: Some of the drivers currently don't have valid signatures.
             Look at the output above. If the spectrometer you want to use only
             provides an unsigned driver, you might have to install it manually.
-            If you encouter this issue, please report it on github."""))
+            If you encounter this issue, please report it on github."""))
     except Exception:
         _log.error("Error when installing drivers", exc_info=True)
 

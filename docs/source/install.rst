@@ -35,3 +35,6 @@ running the script provided by python-seabreeze. After installing via pip, run:
 .. code:: bash
 
     $ seabreeze_os_setup
+
+For some additional information see
+`os_support/readme.md <https://github.com/ap--/python-seabreeze/blob/master/os_support/readme.md>`_.

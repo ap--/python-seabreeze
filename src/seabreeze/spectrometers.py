@@ -81,7 +81,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         spectrometer : `Spectrometer`
             the first available supported spectrometer
         """
-        for dev in cls._backend.list_devices():
+        for dev in list_devices():
             if not dev.is_open:
                 return cls(dev)
         else:
@@ -109,7 +109,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         if serial is None:  # pick first spectrometer
             return cls.from_first_available()
 
-        for dev in cls._backend.list_devices():
+        for dev in list_devices():
             if dev.serial_number == str(serial):
                 if dev.is_open:
                     raise cls._backend.SeaBreezeError("Device already opened.")

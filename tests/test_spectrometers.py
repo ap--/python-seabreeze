@@ -15,7 +15,10 @@ def backendify_classes(request):
         setattr(list_devices, '_api', _api)
     # Spectrometer
     Spectrometer._backend = backend
-    yield
+    try:
+        yield
+    finally:
+        _api.shutdown()
 
 
 @pytest.mark.usefixtures("backendify_classes")
@@ -25,9 +28,14 @@ def test_read_model():
         pytest.skip("no supported device connected")
 
     for device in devices:
-        spec = Spectrometer(device)
-        model = spec.model
-        assert len(model) > 0
+        spec = None
+        try:
+            spec = Spectrometer(device)
+            model = spec.model
+            assert len(model) > 0
+        finally:
+            if spec is not None:
+                spec.close()
 
 
 @pytest.mark.usefixtures("backendify_classes")
@@ -37,9 +45,14 @@ def test_read_serial_number():
         pytest.skip("no supported device connected")
 
     for device in devices:
-        spec = Spectrometer(device)
-        serial = spec.serial_number
-        assert len(serial) > 0
+        spec = None
+        try:
+            spec = Spectrometer(device)
+            serial = spec.serial_number
+            assert len(serial) > 0
+        finally:
+            if spec is not None:
+                spec.close()
 
 
 @pytest.mark.usefixtures("backendify_classes")
@@ -49,8 +62,13 @@ def test_read_spectrum():
         pytest.skip("no supported device connected")
 
     for device in devices:
-        spec = Spectrometer(device)
-        arr = spec.intensities()
-        assert arr.size == spec.pixels
+        spec = None
+        try:
+            spec = Spectrometer(device)
+            arr = spec.intensities()
+            assert arr.size == spec.pixels
+        finally:
+            if spec is not None:
+                spec.close()
 
 

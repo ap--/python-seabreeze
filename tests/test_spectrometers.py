@@ -128,6 +128,55 @@ def test_max_intensity(backendlified_serial):
     assert 0 < value < 1e8
 
 
+def test_integration_time_limits(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    spec = Spectrometer.from_serial_number(backendlified_serial)
+    low, high = spec.integration_time_micros_limits
+    assert isinstance(low, int)
+    assert isinstance(high, int)
+    assert 0 < low < high < 2**64
+
+
+def test_integration_time(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    exc = Spectrometer._backend.SeaBreezeError
+    spec = Spectrometer.from_serial_number(backendlified_serial)
+
+    with pytest.raises(exc):
+        # fail because too low
+        spec.integration_time_micros(0)
+
+    with pytest.raises(exc):
+        # fail because too large
+        spec.integration_time_micros(2**62)
+
+    with pytest.raises(exc):
+        # fail because too large long overflow
+        spec.integration_time_micros(2**64)
+
+    spec.integration_time_micros(10000)
+
+
+def test_trigger_mode(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    exc = Spectrometer._backend.SeaBreezeError
+    spec = Spectrometer.from_serial_number(backendlified_serial)
+
+    with pytest.raises(exc):
+        spec.trigger_mode(0xF0)  # <- should be unsupported for all specs
+
+    spec.trigger_mode(0x00)  # <- normal mode
+
+
 @pytest.mark.usefixtures('backendlify')
 def test_cant_find_serial():
     exc = Spectrometer._backend.SeaBreezeError

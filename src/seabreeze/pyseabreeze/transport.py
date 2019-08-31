@@ -3,11 +3,23 @@
 Some spectrometers can support different transports (usb, network, rs232, etc.)
 
 """
-import functools
 import warnings
+from functools import partial
 
 import usb.core
 import usb.util
+
+try:
+    from functools import partialmethod
+except ImportError:
+    # https://gist.github.com/carymrobbins/8940382
+    # noinspection PyPep8Naming
+    class partialmethod(partial):
+        def __get__(self, instance, owner):
+            if instance is None:
+                return self
+            args, kwargs = self.args or (), self.keywords or {}
+            return partial(self.func, instance, *args, **kwargs)
 
 
 class TransportInterface(object):
@@ -88,7 +100,7 @@ class USBTransport(TransportInterface):
         super(USBTransport, self).__init__()
         self._product_id = usb_product_id
         self._endpoint_map = usb_endpoint_map
-        self._protocol = usb_protocol
+        self._protocol_cls = usb_protocol
         # internal settings
         self._default_read_size = {
             'low_speed': 64,
@@ -104,6 +116,7 @@ class USBTransport(TransportInterface):
         # internal state
         self._device = None
         self._opened = None
+        self._protocol = None
 
     def open_device(self, device):
         if not isinstance(device, usb.core.Device):
@@ -126,7 +139,7 @@ class USBTransport(TransportInterface):
             self._opened = True
         # This will initialize the communication protocol
         if self._opened:
-            self._protocol(self)
+            self._protocol = self._protocol_cls(self)
 
     @property
     def is_open(self):
@@ -137,6 +150,7 @@ class USBTransport(TransportInterface):
         self._device.reset()
         self._device = None
         self._opened = False
+        self._protocol = None
 
     def write(self, data, timeout_ms=None, **kwargs):
         if self._device is None:
@@ -196,4 +210,7 @@ class USBTransport(TransportInterface):
         assert set(kwargs) == set(cls._required_init_kwargs)
         # usb transport register automatically on registration
         cls.register_model(model_name, **kwargs)
-        return functools.partial(cls, **kwargs)
+        specialized_class = type("USBTransport{}".format(model_name), (cls, ), {
+                                    '__init__': partialmethod(cls.__init__, **kwargs)
+                                 })
+        return specialized_class

@@ -74,24 +74,16 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
     _spectrum_max_value = None
     _trigger_modes = None
 
-    def __init__(self, device, feature_id,
-                 dark_pixel_indices,
-                 integration_time_min,
-                 integration_time_max,
-                 integration_time_base,
-                 spectrum_num_pixel,
-                 spectrum_raw_length,
-                 spectrum_max_value,
-                 trigger_modes):
-        super(SeaBreezeSpectrometerFeatureOOI, self).__init__(device, feature_id)
-        self._dark_pixel_indices = dark_pixel_indices
-        self._integration_time_min = integration_time_min
-        self._integration_time_max = integration_time_max
-        self._integration_time_base = integration_time_base
-        self._spectrum_num_pixel = spectrum_num_pixel
-        self._spectrum_raw_length = spectrum_raw_length
-        self._spectrum_max_value = spectrum_max_value
-        self._trigger_modes = trigger_modes
+    def __init__(self, device, feature_id, **kwargs):
+        super(SeaBreezeSpectrometerFeatureOOI, self).__init__(device, feature_id, **kwargs)
+        self._dark_pixel_indices = kwargs['dark_pixel_indices']
+        self._integration_time_min = kwargs['integration_time_min']
+        self._integration_time_max = kwargs['integration_time_max']
+        self._integration_time_base = kwargs['integration_time_base']
+        self._spectrum_num_pixel = kwargs['spectrum_num_pixel']
+        self._spectrum_raw_length = kwargs['spectrum_raw_length']
+        self._spectrum_max_value = kwargs['spectrum_max_value']
+        self._trigger_modes = kwargs['trigger_modes']
 
     def set_trigger_mode(self, mode):
         if mode in self._trigger_modes:
@@ -140,7 +132,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         self.protocol.send(0x09)
 
         timeout = int(self._integration_time_max * 1e-3 + self.protocol.transport.default_timeout_ms)
-        tmp[:] = self.protocol.receive(size=self._spectrum_raw_length, timeout=timeout, mode='high_speed')
+        tmp[:] = self.protocol.receive(size=self._spectrum_raw_length, timeout_ms=timeout, mode='high_speed')
         return tmp
 
     def get_fast_buffer_spectrum(self):
@@ -164,24 +156,8 @@ class SeaBreezeSpectrometerFeatureOOI2K(SeaBreezeSpectrometerFeatureOOI):
 
 class SeaBreezeSpectrometerFeatureOOIFPGA(SeaBreezeSpectrometerFeatureOOI):
 
-    def __init__(self, device, feature_id,
-                 dark_pixel_indices,
-                 integration_time_min,
-                 integration_time_max,
-                 integration_time_base,
-                 spectrum_num_pixel,
-                 spectrum_raw_length,
-                 spectrum_max_value,
-                 trigger_modes):
-        super(SeaBreezeSpectrometerFeatureOOIFPGA, self).__init__(device, feature_id,
-                                                                  dark_pixel_indices,
-                                                                  integration_time_min,
-                                                                  integration_time_max,
-                                                                  integration_time_base,
-                                                                  spectrum_num_pixel,
-                                                                  spectrum_raw_length,
-                                                                  spectrum_max_value,
-                                                                  trigger_modes)
+    def __init__(self, device, feature_id, **kwargs):
+        super(SeaBreezeSpectrometerFeatureOOIFPGA, self).__init__(device, feature_id, **kwargs)
         self.protocol.send(0xFE)
         ret = self.protocol.receive(size=16)
         data = struct.unpack("<HLBBBBBBBBBB", ret[:])
@@ -197,11 +173,11 @@ class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA)
         self.protocol.send(0x09)
         # noinspection PyProtectedMember
         if self.protocol.transport._default_read_endpoint == 'low_speed':
-            tmp[:] = self.protocol.receive(size=self._spectrum_raw_length, timeout=timeout)
+            tmp[:] = self.protocol.receive(size=self._spectrum_raw_length, timeout_ms=timeout)
         else:  # high_speed
-            tmp[:2048] = self.protocol.receive(size=2048, timeout=timeout, mode='high_speed_alt')
+            tmp[:2048] = self.protocol.receive(size=2048, timeout_ms=timeout, mode='high_speed_alt')
             tmp[2048:] = self.protocol.receive(size=self._spectrum_raw_length - 2048,
-                                               timeout=timeout, mode='high_speed')
+                                               timeout_ms=timeout, mode='high_speed')
         return tmp
 
 
@@ -216,22 +192,23 @@ class _SeaBreezeSpectrometerSaturationMixin(object):
     # noinspection PyUnresolvedReferences
     def _saturation_get_normalization_value(self):
         """internal only"""
-        ret = self.device.f.eeprom.eeprom_read_slot(17, raw=True)
+        # noinspection PyProtectedMember
+        ret = SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, 17, raw=True)
         # ret contains the first two response bytes, then the eeprom data
         saturation = self._saturation_unpack(ret)
         if self._saturation_not_initialized(saturation):
             # pass  # not initialized?
             return self._normalization_value
         else:
-            return float(self.device.spectrum_max_value) / saturation
+            return float(self._spectrum_max_value) / saturation
 
 
 class SeaBreezeSpectrometerFeatureOOIGain(SeaBreezeSpectrometerFeatureOOI,
                                           _SeaBreezeSpectrometerSaturationMixin):
 
-    def __init__(self, device, feature_id):
+    def __init__(self, device, feature_id, **kwargs):
         # set the usbspeed
-        super(SeaBreezeSpectrometerFeatureOOIGain, self).__init__(device, feature_id)
+        super(SeaBreezeSpectrometerFeatureOOIGain, self).__init__(device, feature_id, **kwargs)
         # load the saturation value
         self._normalization_value = self._saturation_get_normalization_value()
 
@@ -239,9 +216,9 @@ class SeaBreezeSpectrometerFeatureOOIGain(SeaBreezeSpectrometerFeatureOOI,
 class SeaBreezeSpectrometerFeatureOOIFPGAGain(SeaBreezeSpectrometerFeatureOOIFPGA,
                                               _SeaBreezeSpectrometerSaturationMixin):
 
-    def __init__(self, device, feature_id):
+    def __init__(self, device, feature_id, **kwargs):
         # set the usbspeed
-        super(SeaBreezeSpectrometerFeatureOOIFPGAGain, self).__init__(device, feature_id)
+        super(SeaBreezeSpectrometerFeatureOOIFPGAGain, self).__init__(device, feature_id, **kwargs)
         # load the saturation value
         self._normalization_value = self._saturation_get_normalization_value()
 
@@ -249,9 +226,9 @@ class SeaBreezeSpectrometerFeatureOOIFPGAGain(SeaBreezeSpectrometerFeatureOOIFPG
 class SeaBreezeSpectrometerFeatureOOIFPGA4KGain(SeaBreezeSpectrometerFeatureOOIFPGA4K,
                                                 _SeaBreezeSpectrometerSaturationMixin):
 
-    def __init__(self, device, feature_id):
+    def __init__(self, device, feature_id, **kwargs):
         # set the usbspeed
-        super(SeaBreezeSpectrometerFeatureOOIFPGA4KGain, self).__init__(device, feature_id)
+        super(SeaBreezeSpectrometerFeatureOOIFPGA4KGain, self).__init__(device, feature_id, **kwargs)
         # get the saturation value
         self._normalization_value = self._saturation_get_normalization_value()
 
@@ -305,24 +282,16 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
     _spectrum_max_value = None
     _trigger_modes = None
 
-    def __init__(self, device, feature_id,
-                 dark_pixel_indices,
-                 integration_time_min,
-                 integration_time_max,
-                 integration_time_base,
-                 spectrum_num_pixel,
-                 spectrum_raw_length,
-                 spectrum_max_value,
-                 trigger_modes):
-        super(SeaBreezeSpectrometerFeatureOBP, self).__init__(device, feature_id)
-        self._dark_pixel_indices = dark_pixel_indices
-        self._integration_time_min = integration_time_min
-        self._integration_time_max = integration_time_max
-        self._integration_time_base = integration_time_base
-        self._spectrum_num_pixel = spectrum_num_pixel
-        self._spectrum_raw_length = spectrum_raw_length
-        self._spectrum_max_value = spectrum_max_value
-        self._trigger_modes = trigger_modes
+    def __init__(self, device, feature_id, **kwargs):
+        super(SeaBreezeSpectrometerFeatureOBP, self).__init__(device, feature_id, **kwargs)
+        self._dark_pixel_indices = kwargs['dark_pixel_indices']
+        self._integration_time_min = kwargs['integration_time_min']
+        self._integration_time_max = kwargs['integration_time_max']
+        self._integration_time_base = kwargs['integration_time_base']
+        self._spectrum_num_pixel = kwargs['spectrum_num_pixel']
+        self._spectrum_raw_length = kwargs['spectrum_raw_length']
+        self._spectrum_max_value = kwargs['spectrum_max_value']
+        self._trigger_modes = kwargs['trigger_modes']
 
     def set_trigger_mode(self, mode):
         if mode in self._trigger_modes:
@@ -372,7 +341,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
 
     def _get_spectrum_raw(self):
         timeout = int(self._integration_time_max * 1e-3 + self.protocol.transport.default_timeout_ms)
-        datastring = self.protocol.query(0x00101100, timeout=timeout)
+        datastring = self.protocol.query(0x00101100, timeout_ms=timeout)
         return numpy.fromstring(datastring, dtype=numpy.uint8)
 
     def get_fast_buffer_spectrum(self):
@@ -495,7 +464,7 @@ class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
 
     def _get_spectrum_raw(self):
         timeout = int(self._integration_time_max * 1e-3 + self.protocol.transport.default_timeout_ms)
-        datastring = self.protocol.query(0x00100928, timeout=timeout)
+        datastring = self.protocol.query(0x00100928, timeout_ms=timeout)
         return numpy.fromstring(datastring, dtype=numpy.uint8)
 
     def get_intensities(self):

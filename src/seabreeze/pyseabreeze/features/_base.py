@@ -1,7 +1,19 @@
-import functools
+from functools import partial
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.protocol import ProtocolInterface
+
+try:
+    from functools import partialmethod
+except ImportError:
+    # https://gist.github.com/carymrobbins/8940382
+    # noinspection PyPep8Naming
+    class partialmethod(partial):
+        def __get__(self, instance, owner):
+            if instance is None:
+                return self
+            args, kwargs = self.args or (), self.keywords or {}
+            return partial(self.func, instance, *args, **kwargs)
 
 
 class SeaBreezeFeature(object):
@@ -16,12 +28,14 @@ class SeaBreezeFeature(object):
 
         Parameters
         ----------
-        protocol : seabreeze.pyseabreeze.protocol.ProtocolInterface
+        protocol : Type[seabreeze.pyseabreeze.protocol.ProtocolInterface}
         feature_id : int
         """
         if self.identifier == "base_feature":
             raise SeaBreezeError("Don't instantiate SeaBreezeFeature directly. Use derived feature classes.")
-        assert set(self._required_kwargs) == set(kwargs)
+        assert set(self._required_kwargs) == set(kwargs), "{} vs {}".format(
+            str(set(self._required_kwargs)), str(set(kwargs))
+        )
         # check protocol support
         if not isinstance(protocol, self._required_protocol_cls):
             raise SeaBreezeError("FeatureError: Protocol not supported by feature")
@@ -41,6 +55,9 @@ class SeaBreezeFeature(object):
         return isinstance(protocol, cls._required_protocol_cls)
 
     @classmethod
-    def specialize(cls, **kwargs):
+    def specialize(cls, model_name, **kwargs):
         assert set(kwargs) == set(cls._required_kwargs)
-        return functools.partial(cls, **kwargs)
+        specialized_class = type("{}{}".format(cls.__name__, model_name), (cls, ), {
+            '__init__': partialmethod(cls.__init__, **kwargs)
+        })
+        return specialized_class

@@ -77,7 +77,7 @@ class OOIProtocol(ProtocolInterface):
         """
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        payload = payload if isinstance(tuple, list) else (payload,)
+        payload = payload if isinstance(payload, (tuple, list)) else (payload,)
         data = self.msgs[msg_type](*payload)
         return self.transport.write(data, timeout_ms=timeout_ms)
 
@@ -105,7 +105,7 @@ class OOIProtocol(ProtocolInterface):
         """
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        return self.transport.read(size=size, timeout=timeout_ms, mode=mode, **kwargs)
+        return self.transport.read(size=size, timeout_ms=timeout_ms, mode=mode, **kwargs)
 
     def query(self, msg_type, payload, size=None, timeout_ms=None, mode=None, **kwargs):
         """convenience method combining send and receive
@@ -241,7 +241,7 @@ class OBPProtocol(ProtocolInterface):
         """
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        payload = payload if isinstance(tuple, list) else (payload,)
+        payload = payload if isinstance(payload, (tuple, list)) else (payload,)
         data = self.msgs[msg_type](*payload)
 
         # Constructing message and querying usb.

@@ -157,7 +157,7 @@ class _SeaBreezeDeviceMeta(type):
                 feature_attrs[kw] = attr_dict[kw]
             visited_attrs.update(kwargs)
             # specialize the feature class with the spectrometer's custom config
-            specialized_feature_cls = feature_cls.specialize(**feature_attrs)
+            specialized_feature_cls = feature_cls.specialize(model_name, **feature_attrs)
             feature_classes[feature_cls.identifier].append(specialized_feature_cls)
 
         for attr in visited_attrs:
@@ -311,16 +311,21 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         serial_number: str
         """
         try:
-            if issubclass(self._protocol, OOIProtocol):
+            # noinspection PyProtectedMember
+            protocol = self._transport._protocol
+            if protocol is None:
+                raise AttributeError('transport not opened')
+
+            elif isinstance(protocol, OOIProtocol):
                 # The serial is stored in slot 0
                 # noinspection PyUnresolvedReferences
                 return str(self.f.eeprom.eeprom_read_slot(0))
 
-            elif issubclass(self._protocol, OBPProtocol):
+            elif isinstance(protocol, OBPProtocol):
                 return self.query(0x00000100, "")
 
             else:
-                raise NotImplementedError("No serial number for interface class %s" % str(self.interface_cls))
+                raise NotImplementedError("No serial number for protocol class {}".format(protocol.__class__.__name__))
         except AttributeError:
             raise SeaBreezeError("device not open")
 
@@ -339,11 +344,11 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
             protocol = self._transport._protocol
             self._cached_features = {}
             for identifier in sbf.SeaBreezeFeature.get_feature_class_registry():
-                for feature_cls in self.feature_classes[identifier]:
+                f_list = self._cached_features.setdefault(identifier, [])
+                for feature_cls in self._feature_classes[identifier]:
                     assert issubclass(feature_cls, sbf.SeaBreezeFeature) and identifier == feature_cls.identifier
                     if not feature_cls.supports_protocol(protocol):
                         continue
-                    f_list = self._cached_features.setdefault(identifier, [])
                     # noinspection PyProtectedMember
                     f_list.append(feature_cls(self._transport._protocol, len(f_list)))
         return self._cached_features

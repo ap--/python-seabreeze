@@ -104,7 +104,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         return self._integration_time_min, self._integration_time_max
 
     def get_maximum_intensity(self):
-        return self._spectrum_max_value
+        return float(self._spectrum_max_value)
 
     def get_electric_dark_pixel_indices(self):
         return numpy.array(self._dark_pixel_indices)
@@ -312,7 +312,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
         return self._integration_time_min, self._integration_time_max
 
     def get_maximum_intensity(self):
-        return self._spectrum_max_value
+        return float(self._spectrum_max_value)
 
     def get_electric_dark_pixel_indices(self):
         return numpy.array(self._dark_pixel_indices)

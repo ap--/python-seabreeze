@@ -242,7 +242,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         else:
             raise TypeError("No transport supports device.")
         specialized_cls = _model_class_registry[supported_model]
-        return super(SeaBreezeDevice, cls).__new__(specialized_cls, raw_device)
+        return super(SeaBreezeDevice, cls).__new__(specialized_cls)
 
     def __init__(self, raw_device=None):
         if raw_device is None:

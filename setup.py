@@ -26,6 +26,7 @@ else:
     WARN_NO_CYTHON = False
 
 if "--without-cseabreeze" in sys.argv:
+    # user requests to not install cython wrapper
     sys.argv.remove("--without-cseabreeze")  # this is a hack...
     # The correct way to do this, would be to:
     # - make cseabreeze it's own python module and make python-seabreeze depend on
@@ -33,7 +34,6 @@ if "--without-cseabreeze" in sys.argv:
     # - by default ship pyseabreeze but keep pyseabreeze as an extra so that installing
     #   pyusb is optional
     # - require users to decide which backend they want to install...
-    # user requests to not install cython wrapper
     extensions = []
 else:
 

@@ -2035,12 +2035,12 @@ cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
     identifier = "gpio"
 
     modes = dict(
-        GPIO_OUTPUT_PUSH_PULL = 0x00,
-        GPIO_OPEN_DRAIN_OUTPUT = 0x01,
-        DAC_OUTPUT = 0x02,
-        GPIO_INPUT_HIGH_Z = 0x80,
-        GPIO_INPUT_PULL_DOWN = 0x81,
-        ADC_INPUT = 0x82,
+        GPIO_OUTPUT_PUSH_PULL=0x00,
+        GPIO_OPEN_DRAIN_OUTPUT=0x01,
+        DAC_OUTPUT=0x02,
+        GPIO_INPUT_HIGH_Z=0x80,
+        GPIO_INPUT_PULL_DOWN=0x81,
+        ADC_INPUT=0x82,
     )
 
     @classmethod

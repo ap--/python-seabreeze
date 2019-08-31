@@ -9,6 +9,15 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeGPIOFeature(SeaBreezeFeature):
     identifier = 'gpio'
 
+    modes = dict(
+        GPIO_OUTPUT_PUSH_PULL=0x00,
+        GPIO_OPEN_DRAIN_OUTPUT=0x01,
+        DAC_OUTPUT=0x02,
+        GPIO_INPUT_HIGH_Z=0x80,
+        GPIO_INPUT_PULL_DOWN=0x81,
+        ADC_INPUT=0x82,
+    )
+
     def get_number_of_gpio_pins(self):
         raise NotImplementedError("implement in derived class")
 

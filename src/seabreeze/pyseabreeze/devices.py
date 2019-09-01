@@ -905,3 +905,30 @@ class VENTANA(SeaBreezeDevice):
         sbf.spectrometer.SeaBreezeSpectrometerFeatureVENTANA,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
+
+
+class SPARK(SeaBreezeDevice):
+
+    model_name = 'SPARK'
+
+    # communication config
+    transport = (USBTransport, )
+    usb_product_id = 0x4200
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)  # XXX: we'll ignore the alternative EPs
+    usb_protocol = OBPProtocol
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
+    integration_time_min = 10
+    integration_time_max = 85000000
+    integration_time_base = 1
+    spectrum_num_pixel = 1024
+    spectrum_raw_length = (1024 * 2) + 64  # XXX: Metadata
+    spectrum_max_value = 16383
+    trigger_modes = TriggerMode.supported('OBP_NORMAL', 'OBP_EXTERNAL', 'OBP_INTERNAL')
+
+    # features
+    feature_classes = (
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureSPARK,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
+    )

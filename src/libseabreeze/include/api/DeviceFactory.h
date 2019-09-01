@@ -37,6 +37,8 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <string>
 #include "common/devices/Device.h"
 
 namespace seabreeze {
@@ -51,6 +53,8 @@ namespace seabreeze {
         Device *create(const std::string& name);
         Device *create(int index);
         int getNumberOfDeviceTypes();
+
+        std::vector<std::string> getSupportedModels();
 
     private:
         typedef Device *(*creatorFunction)(void);

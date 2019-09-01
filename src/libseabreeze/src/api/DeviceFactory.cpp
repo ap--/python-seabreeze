@@ -33,6 +33,7 @@
 #include "common/globals.h"
 #include <string.h>
 #include <string>
+#include <vector>
 
 #include "api/DeviceFactory.h"
 
@@ -140,4 +141,13 @@ Device *DeviceFactory::create(int index) {
 
 int DeviceFactory::getNumberOfDeviceTypes() {
     return (int) nameToCreator.size();
+}
+
+std::vector<std::string> DeviceFactory::getSupportedModels() {
+    std::vector<std::string> supportedModels;
+    for (map<string, creatorFunction>::iterator i = nameToCreator.begin(); i != nameToCreator.end(); i++)
+    {
+        supportedModels.push_back(std::string(i->first));
+    }
+    return supportedModels;
 }

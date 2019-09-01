@@ -104,6 +104,10 @@ public:
      */
     virtual int getDeviceIDs(long *ids, unsigned long maxLength) = 0;
 
+    // quick and dirty support for returning supported models...
+    virtual int getNumberOfSupportedModels() = 0;
+    virtual int getSupportedModelName(int index, int *errorCode, char* buffer, int bufferLength) = 0;
+
     /**
      * This will attempt to open the bus connection to the device with the given ID.
      * Returns 0 on success, other value on error.

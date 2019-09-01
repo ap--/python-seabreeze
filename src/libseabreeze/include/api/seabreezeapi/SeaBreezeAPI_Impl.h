@@ -56,7 +56,11 @@ public:
     virtual void closeDevice(long id, int *errorCode);
 
     virtual int getDeviceType(long id, int *errorCode, char *buffer, unsigned int length);
-    
+
+    // quick and dirty support for returning supported models...
+    virtual int getNumberOfSupportedModels();
+    virtual int getSupportedModelName(int index, int *errorCode, char *buffer, int bufferLength);
+
     virtual unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType);
 
     /* Get raw usb access capabilities */

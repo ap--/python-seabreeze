@@ -297,6 +297,34 @@ DeviceAdapter *SeaBreezeAPI_Impl::getDeviceByID(unsigned long id) {
     return NULL;
 }
 
+
+int SeaBreezeAPI_Impl::getNumberOfSupportedModels() {
+    std::vector<std::string> supportedModels = DeviceFactory::getInstance()->getSupportedModels();
+    return (int) (supportedModels.size());
+}
+
+
+int SeaBreezeAPI_Impl::getSupportedModelName(int index, int *errorCode, char *buffer, int bufferLength) {
+    std::vector<std::string> supportedModels = DeviceFactory::getInstance()->getSupportedModels();
+
+    if (index < 0) {
+        SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+        return -1;
+    }
+    if (index >= supportedModels.size()) {
+        SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
+        return -1;
+    }
+
+    std::string & model = supportedModels.at(index);
+    size_t n = model.copy( buffer, bufferLength - 1 );
+    buffer[n] = '\0';
+
+    SET_ERROR_CODE(ERROR_SUCCESS);
+    return (int) n;
+}
+
+
 /**************************************************************************************/
 //  Device Control  for the SeaBreeze API class
 /**************************************************************************************/

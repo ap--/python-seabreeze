@@ -233,6 +233,32 @@ cdef class SeaBreezeAPI(object):
             devices.append(dev)
         return devices
 
+    def supported_models(self):
+        """returns SeaBreezeDevices supported by the backend
+
+        models supported by the backend
+
+        Returns
+        -------
+        devices: list of str
+            list of model names that are supported by this backend
+        """
+        cdef int num_models
+        cdef int error_code
+        cdef char c_buffer[_MAXBUFLEN]
+        cdef int bytes_written
+        num_devices = self.sbapi.getNumberOfSupportedModels()
+
+        output = []
+        for i in range(num_devices):
+            bytes_written = self.sbapi.getSupportedModelName(i, &error_code, c_buffer, _MAXBUFLEN)
+            if error_code != 0:
+                raise SeaBreezeError(error_code=error_code)
+
+            serial = c_buffer[:bytes_written]
+            output.append(serial.decode("utf-8").rstrip('\x00'))
+        return output
+
 
 cdef class SeaBreezeDevice(object):
     """SeaBreezeDevice class for handling all spectrometers

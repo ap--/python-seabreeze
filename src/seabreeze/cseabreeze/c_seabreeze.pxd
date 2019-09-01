@@ -35,6 +35,9 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         int getDeviceIDs(long *ids, unsigned long maxLength)
         int getDeviceType(long id, int *errorCode, char *buffer, unsigned int length)
 
+        int getNumberOfSupportedModels()
+        int getSupportedModelName(int index, int *errorCode, char *buffer, int bufferLength)
+
         int openDevice(long id, int *errorCode)
         void closeDevice(long id, int *errorCode)
 

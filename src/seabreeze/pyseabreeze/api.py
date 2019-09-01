@@ -11,7 +11,7 @@ import logging
 import usb.core
 import usb.util
 
-from seabreeze.pyseabreeze.devices import SeaBreezeDevice
+from seabreeze.pyseabreeze.devices import SeaBreezeDevice, _model_class_registry
 from seabreeze.pyseabreeze.transport import USBTransport
 
 
@@ -104,3 +104,16 @@ class SeaBreezeAPI(object):
                 dev.close()
             devices.append(dev)
         return devices
+
+    @staticmethod
+    def supported_models():
+        """returns SeaBreezeDevices supported by the backend
+
+        models supported by the backend
+
+        Returns
+        -------
+        devices: list of str
+            list of model names that are supported by this backend
+        """
+        return [x for x in sorted(_model_class_registry.keys())]

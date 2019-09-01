@@ -6,17 +6,18 @@ Installing python-seabreeze
 Install via pip
 ---------------
 
-.. Attention::
-    Not working yet. Need publish new wheels for `seabreeze` on pypi first.
+.. Info::
+    Until version v1.0.0 is fully released pip install requires the --pre argument to install
+    the pypi prerelease.
 
 .. code:: bash
 
     # install only cseabreeze backend
-    pip install seabreeze
+    pip install seabreeze --pre
     # install both cseabreeze and pyseabreeze backend
-    pip install seabreeze[pyseabreeze]
+    pip install seabreeze[pyseabreeze] --pre
     # install only pyseabreeze backend
-    pip install seabreeze[pyseabreeze] --no-build-isolation --install-option="--without-cseabreeze"
+    pip install seabreeze[pyseabreeze] --no-build-isolation --install-option="--without-cseabreeze" --pre
 
 
 Install via conda

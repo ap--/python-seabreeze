@@ -61,7 +61,8 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
     project <https://github.com/ap--/python-seabreeze>`_, or
     `send me an email <mailto:mail+seabreeze@poehlmann.io>`_ and tell me about your project,
     or consider `buying me a coffee <https://www.buymeacoffee.com/poehlmann>`_,
-    or `support me via paypal <https://paypal.me/apoehlmann>`_. Something small like that
+    or support me via `patreon <https://patreon.com/apoehlmann>`_ or
+    `paypal <https://paypal.me/apoehlmann>`_. Something small like that
     puts a smile on my face for weeks, and it's extremely motivating.
 
     .. rubric:: Anyways, enough ranting (^_^") think about it and let's science!
@@ -71,6 +72,7 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
         :target: https://www.buymeacoffee.com/poehlmann
         :alt: Buy Me A Coffee
         :align: center
+
 
 
 .. _python-seabreeze: https://github.com/ap--/python-seabreeze
@@ -87,6 +89,7 @@ Contents
    tldr.rst
    install.rst
    quickstart.rst
+   troubleshoot.rst
 
 .. toctree::
    :caption: Development:

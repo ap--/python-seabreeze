@@ -11,10 +11,10 @@ this branch is work in progress for release v1.0 of python-seabreeze
 - [x] build docs on rtd
 - [x] provide compat module for old seabreeze
 - [x] refactor public api
-- [ ] document backend apis
+- [x] document backend apis
 - [x] update index page diagram
 - [x] add tests
-- [ ] show how to add new spectrometer in contributing guide
+- [x] show how to add new spectrometer in contributing guide
 - [ ] add CHANGELOG.md
 - [ ] revert ./README.md
 - [ ] publish to pypi

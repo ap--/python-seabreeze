@@ -20,7 +20,11 @@ SeaBreeze is not available it can fallback to a pyUSB based reimplementation.
 You'll find the documentation here [https://python-seabreeze.readthedocs.io/en/latest/](https://python-seabreeze.readthedocs.io/en/latest/)
 
 
-## tl;dr -- give me the spectrum now!
+## Usage
+
+The following example shows how simple it is to acquire a spectrum with
+python-seabreeze through the model independent _Spectrometer_ class. For a more
+detailed description read the [documentation](https://python-seabreeze.readthedocs.io/en/latest/):
 
 ```python
 >>> from seabreeze.spectrometers import Spectrometer
@@ -34,32 +38,7 @@ array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
          6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
 ```
 
-
-## Usage
-
-The following example shows how simple it is to acquire a spectrum with
-python-seabreeze through the model independent _Spectrometer_ class. For a more
-detailed description read the (currently incomplete) [documentation](docs/DOCUMENTATION.md).:
-
-```python
->>> import seabreeze.spectrometers as sb
->>> devices = sb.list_devices()
->>> print devices
-[<SeaBreezeDevice USB2000PLUS:USB2+H02749>, <SeaBreezeDevice USB2000PLUS:USB2+H02751>]
->>> spec = sb.Spectrometer(devices[0])
->>> spec.integration_time_micros(12000)
->>> spec.wavelengths()
-array([  340.32581   ,   340.70321186,   341.08058305, ...,  1024.84940994,
-        1025.1300678 ,  1025.4106617 ])
->>> spec.intensities()
-array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
-         6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
-```
-
-To use the pyseabreeze backend simply run this before importing
-seabreeze.spectrometers. The pyseabreeze backend requires [pyUSB](https://walac.github.io/pyusb/) to be
-installed. (Look at the [backends documentation](docs/BACKENDS.md) for more
-info.)
+To use the pyseabreeze backend simply run this before importing `seabreeze.spectrometers`.
 
 ```python
 >>> import seabreeze

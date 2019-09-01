@@ -151,7 +151,10 @@ setup(
     ],
     extras_require={
         'cseabreeze': [],
-        'pyseabreeze': ['pyusb >=1.0']
+        'pyseabreeze': [
+            'pyusb >=1.0',
+            "enum34 ; python_version<'3.4'"
+        ]
     },
     tests_require=[
         'pytest<5'

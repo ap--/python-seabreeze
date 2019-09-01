@@ -177,6 +177,7 @@ setup(
                  'This software is not associated with Ocean Optics. '
                  'Use it at your own risk.'),
     long_description=open('README.md').read(),
+    long_description_content_type="text/markdown",
     classifiers=[
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',

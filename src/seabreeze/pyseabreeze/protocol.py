@@ -141,6 +141,7 @@ class OOIProtocol(ProtocolInterface):
 class OBPProtocol(ProtocolInterface):
 
     msgs = {code: struct.Struct(msg).pack for code, msg in {
+        0x00000100: "",    # GET_SERIAL
         0x00100928: "",    # GET_BUF_SPEC32_META
         0x00101100: "",    # GET_RAW_SPECTRUM_NOW
         0x00110010: "<L",  # SET_ITIME_USEC
@@ -299,7 +300,7 @@ class OBPProtocol(ProtocolInterface):
 
         return self._extract_message_data(response)
 
-    def query(self, msg_type, payload, size=None, timeout_ms=None, **kwargs):
+    def query(self, msg_type, payload=(), size=None, timeout_ms=None, **kwargs):
         """convenience method combining send and receive
 
         Parameters

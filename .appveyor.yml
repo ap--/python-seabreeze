@@ -40,7 +40,7 @@ deploy:
   release: $(appveyor_repo_tag_name)
   provider: GitHub
   auth_token:
-    secure: OiiLi86ESCEHBxNyRQKpWMw2b7tp5whZ8OcgFIjizPBFhOpyonU61GV9LDIYyjh8
+    secure: M1DDbZLXnHTIW1xA7A6dkXCD6S4VCSP5QW2OiQUB4D2iZfGWNkOJSsGkZBHEfPL/
   artifact: wheel
   draft: false
   prerelease: false

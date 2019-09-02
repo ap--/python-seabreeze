@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import zipfile
 from textwrap import dedent
 
@@ -53,6 +54,7 @@ def _request_confirmation(question):
             return False
         else:
             return True
+        time.sleep(0.1)
 
 
 def linux_install_udev_rules():
@@ -131,6 +133,13 @@ def _is_contained_in_dir(files, cdir=None):
     return True
 
 
+def _unicode(x):
+    try:
+        return unicode(x)
+    except NameError:
+        return x
+
+
 def windows_install_drivers():
     """install driver inf files via pnputil in an elevated shell"""
     if not _request_confirmation("Install windows drivers?"):
@@ -138,17 +147,18 @@ def windows_install_drivers():
 
     if not _windows_is_admin():
         # Re-run the program with admin rights
+        argv = [__file__] + sys.argv[1:]
         ret = ctypes.windll.shell32.ShellExecuteW(None,
-                                                  "runas",
-                                                  sys.executable,
-                                                  subprocess.list2cmdline(sys.argv),
+                                                  _unicode("runas"),
+                                                  _unicode(sys.executable),
+                                                  _unicode(subprocess.list2cmdline(argv)),
                                                   None,
                                                   1)
         if ret > 32:
             _log.info('Launched admin shell')
         else:
-            _log.info('Failed to launch admin shell')
-        sys.exit(int(ret > 32))
+            _log.info('Failed to launch admin shell. Error code {}'.format(ret))
+        sys.exit(0 if ret > 32 else 1)
 
     # running as admin
     parser = argparse.ArgumentParser()
@@ -169,7 +179,7 @@ def windows_install_drivers():
         if drivers_zip is None:
             url = '{}/{}'.format(_GITHUB_REPO_URL, os.path.basename(_DRIVERS_ZIP_FN))
             drivers_zip = os.path.join(tmp_dir, _DRIVERS_ZIP_FN)
-            with open(drivers_zip, 'w') as dzip:
+            with open(drivers_zip, 'wb') as dzip:
                 try:
                     _log.info("Downloading windows drivers from github")
                     drivers_zip_data = urlopen(url).read()
@@ -193,15 +203,23 @@ def windows_install_drivers():
 
         # install with pnp util
         cmd = [pnputil, '-i', '-a', os.path.join(tmp_dir, '*.inf')]
-        subprocess.check_call(cmd, shell=True)
-        _log.info("Success")
+        return_code = subprocess.call(cmd, shell=True)
+
         _log.warn(dedent("""\
             Note: Some of the drivers currently don't have valid signatures.
             Look at the output above. If the spectrometer you want to use only
             provides an unsigned driver, you might have to install it manually.
             If you encounter this issue, please report it on github."""))
+
+        if return_code == 0:
+            _log.info("Success")
+        elif return_code == 3010:
+            _log.info("Success! REBOOT REQUIRED!")
+        else:
+            _log.error("pnputil returned with {}".format(return_code))
+
     except Exception:
-        _log.error("Error when installing drivers", exc_info=True)
+        _log.error("Error when installing drivers")
 
     finally:
         shutil.rmtree(tmp_dir)
@@ -218,3 +236,8 @@ def main():
     else:
         _log.info("Nothing to do for system '{}'".format(system))
     sys.exit(0)
+
+
+if __name__ == "__main__":
+    # fix for windows entry_point shims, which are actually .exe files...
+    main()

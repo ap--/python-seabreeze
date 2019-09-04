@@ -52,6 +52,11 @@ else:
     elif platform.system() == "Darwin":
         ignore_subdirs = {'linux', 'winusb', 'windows'}
         compile_opts = dict(define_macros=[], include_dirs=[], libraries=[], library_dirs=[])
+        compile_opts['extra_link_args'] = [
+            '-framework', 'Carbon',
+            '-framework', 'CoreFoundation',
+            '-framework', 'IOKit'
+        ]
 
     else:
         ignore_subdirs = {'osx', 'winusb', 'windows'}

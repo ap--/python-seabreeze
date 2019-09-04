@@ -8,7 +8,7 @@ Install via pip
 
 .. danger::
 
-    Until version v1.0.0 is fully released pip install requires the --pre argument to install
+    Until version v1.0.0 is fully released pip install requires the `--pre` argument to install
     the pypi prerelease.
 
 .. code:: bash

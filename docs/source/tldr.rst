@@ -6,9 +6,14 @@ You know how to install python modules with binary extensions and you know how t
 access usb devices from user space with your operating system of choice. Here's
 all you need to know to read a spectrum:
 
+.. danger::
+
+    Until version v1.0.0 is fully released pip install requires the `--pre` argument to install
+    the pypi prerelease.
+
 .. code:: bash
 
-    $ pip install seabreeze
+    $ pip install seabreeze --pre
 
 
 Do the os specific setup:

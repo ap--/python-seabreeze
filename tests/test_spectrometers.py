@@ -198,9 +198,10 @@ def test_trigger_mode(backendlified_serial):
     exc = Spectrometer._backend.SeaBreezeError
     spec = Spectrometer.from_serial_number(backendlified_serial)
 
-    with pytest.raises(exc):
-        spec.trigger_mode(0xF0)  # <- should be unsupported for all specs
-
     spec.trigger_mode(0x00)  # <- normal mode
 
+    with pytest.raises(exc):
+        spec.trigger_mode(0xF0)  # <- should be unsupported for all specs
+    # test again to see if the bus is locked
+    spec.trigger_mode(0x00)  # <- normal mode
 

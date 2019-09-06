@@ -163,7 +163,8 @@ setup(
         ]
     },
     tests_require=[
-        'pytest<5'
+        'pytest<5',
+        'mock'
     ],
     cmdclass={
         'build_ext': sb_build_ext

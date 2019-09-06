@@ -3,14 +3,12 @@ import pytest
 
 @pytest.fixture(scope='module')
 def cseabreeze():
-    import seabreeze.cseabreeze as csb
-    yield csb
+    yield pytest.importorskip('seabreeze.cseabreeze')
 
 
 @pytest.fixture(scope='module')
 def pyseabreeze():
-    import seabreeze.pyseabreeze as psb
-    yield psb
+    yield pytest.importorskip('seabreeze.pyseabreeze')
 
 
 def _get_class_public_interface_dict(backend):

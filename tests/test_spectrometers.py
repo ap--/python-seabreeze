@@ -1,8 +1,23 @@
 import pytest
 
-from seabreeze.spectrometers import list_devices, Spectrometer
-import seabreeze.pyseabreeze as psb
-import seabreeze.cseabreeze as csb
+try:
+    import seabreeze.pyseabreeze as psb
+except ImportError:
+    psb = None
+
+try:
+    import seabreeze.cseabreeze as csb
+except ImportError:
+    csb = None
+
+
+# skip all tests in this module if no backends can be imported
+if csb is not None or psb is not None:
+    import seabreeze
+    seabreeze.use('cseabreeze', force=False)
+    from seabreeze.spectrometers import list_devices, Spectrometer
+else:
+    pytestmark = pytest.mark.skip("No backend available!")
 
 
 def _retr():
@@ -10,6 +25,8 @@ def _retr():
     params, ids = [], []
     csb_serials, psb_serials = set(), set()
     for serials, backend in [(csb_serials, csb), (psb_serials, psb)]:
+        if backend is None:
+            continue
         api = backend.SeaBreezeAPI()
         try:
             serials.update((d.serial_number, d.model) for d in api.list_devices())
@@ -35,7 +52,10 @@ def _retr():
     return dict(params=params, ids=ids)
 
 
-@pytest.fixture(scope='function', params=[csb, psb], ids=["cseabreeze", "pyseabreeze"])
+@pytest.fixture(scope='function',
+                params=[csb or pytest.param(csb, marks=pytest.mark.skip),
+                        psb or pytest.param(psb, marks=pytest.mark.skip)],
+                ids=["cseabreeze", "pyseabreeze"])
 def backendlify(request):
     backend = request.param
     # list_devices
@@ -65,6 +85,13 @@ def backendlified_serial(request):
         yield serial
     finally:
         _api.shutdown()
+
+
+@pytest.mark.usefixtures('backendlify')
+def test_cant_find_serial():
+    exc = Spectrometer._backend.SeaBreezeError
+    with pytest.raises(exc):
+        Spectrometer.from_serial_number("i-do-not-exist")
 
 
 def test_read_model(backendlified_serial):
@@ -176,10 +203,4 @@ def test_trigger_mode(backendlified_serial):
 
     spec.trigger_mode(0x00)  # <- normal mode
 
-
-@pytest.mark.usefixtures('backendlify')
-def test_cant_find_serial():
-    exc = Spectrometer._backend.SeaBreezeError
-    with pytest.raises(exc):
-        Spectrometer.from_serial_number("i-do-not-exist")
 

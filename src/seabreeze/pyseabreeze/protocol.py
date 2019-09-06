@@ -192,10 +192,10 @@ class OBPProtocol(ProtocolInterface):
         }
 
         NO_ERROR = 0x0000
-        RESERVED = ""
+        RESERVED = b""
         CHECKSUM_TYPE_NONE = 0x00
         CHECKSUM_TYPE_MD5 = 0x01
-        NO_CHECKSUM = ""
+        NO_CHECKSUM = b""
         FOOTER = 0xC2C3C4C5  # the datasheet specifies it in this order...
 
         HEADER_FMT = (
@@ -334,7 +334,7 @@ class OBPProtocol(ProtocolInterface):
         ----------
         msg_type : `int`
             the obp message type, a 4 byte integer
-        payload_string : `str`
+        payload_string : `bytes`
             a compiled payload_string
         request_ack : `bool`
             request an ack for the sent command from the spectrometer.
@@ -358,12 +358,12 @@ class OBPProtocol(ProtocolInterface):
             payload_string_fmt = "0s"
             immediate_length = len(payload_string)
             immediate_data = payload_string
-            payload_string = ""
+            payload_string = b""
             bytes_remaining = 20  # Checksum + footer
         else:
             payload_string_fmt = "%ds" % len(payload_string)
             immediate_length = 0
-            immediate_data = ""
+            immediate_data = b""
             bytes_remaining = 20 + len(payload_string)
 
         FMT = self.OBP.HEADER_FMT + payload_string_fmt + self.OBP.FOOTER_FMT
@@ -496,4 +496,4 @@ class OBPProtocol(ProtocolInterface):
         elif payload_length > 0:
             return payload
         else:
-            return ""
+            return b""

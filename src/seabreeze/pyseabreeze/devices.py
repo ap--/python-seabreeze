@@ -322,10 +322,10 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
             elif isinstance(protocol, OOIProtocol):
                 # The serial is stored in slot 0
                 # noinspection PyUnresolvedReferences
-                return str(self.f.eeprom.eeprom_read_slot(0))
+                return self.f.eeprom.eeprom_read_slot(0)
 
             elif isinstance(protocol, OBPProtocol):
-                return protocol.query(0x00000100)
+                return protocol.query(0x00000100).decode('utf8')
 
             else:
                 raise NotImplementedError("No serial number for protocol class {}".format(protocol.__class__.__name__))

@@ -19,6 +19,9 @@ SeaBreeze is not available it can fallback to a pyUSB based reimplementation.
 
 You'll find the documentation here [https://python-seabreeze.readthedocs.io/en/latest/](https://python-seabreeze.readthedocs.io/en/latest/)
 
+## Changes
+
+The changelog can be found here [CHANGELOG.md](https://github.com/ap--/python-seabreeze/blob/master/CHANGELOG.md)
 
 ## Usage
 

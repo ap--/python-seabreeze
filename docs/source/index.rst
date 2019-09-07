@@ -17,6 +17,7 @@ based reimplementation.
 It's recommended to read the :ref:`Installing python-seabreeze section <install-seabreeze>`,
 the :ref:`Quickstart Guide <quickstart>` and the :ref:`API documentation <api>`. Also check
 out the :ref:`Contributing Guide <contrib>` if you want to learn how to contribute to the project.
+A changelog is available `here <https://github.com/ap--/python-seabreeze/blob/master/CHANGELOG.md>`_.
 
 
 .. figure:: _static/overview.png

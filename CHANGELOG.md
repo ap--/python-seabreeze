@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Fixed
+- `seabreeze_os_setup` fix py3 error when udev rules differed on linux
 
 ## [1.0.0rc4] - 2017-09-07
 ### Added

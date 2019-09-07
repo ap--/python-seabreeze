@@ -28,7 +28,7 @@ try:
 except ImportError:
     # noinspection PyUnusedLocal
     def _indent(text, prefix, predicate=None):
-        return "".join(prefix + line for line in text.splitlines(True))
+        return u"".join(prefix + line for line in text.splitlines(True))
 
 _GITHUB_REPO_URL = 'https://raw.githubusercontent.com/ap--/python-seabreeze/master/os_support'
 _UDEV_RULES_PATH = '/etc/udev/rules.d/10-oceanoptics.rules'
@@ -39,9 +39,9 @@ _log = logging.getLogger(__name__)
 def _diff_files(file1, file2):
     """diff two files using linux `diff`"""
     try:
-        return subprocess.check_output(['diff', file1, file2])
+        return subprocess.check_output(['diff', file1, file2]).decode('utf8')
     except subprocess.CalledProcessError as err:
-        return err.output
+        return err.output.decode('utf8')
 
 
 def _request_confirmation(question):
@@ -95,7 +95,7 @@ def linux_install_udev_rules():
                 _log.info("udev rules already newest version")
                 sys.exit(0)
             else:
-                _log.info(_indent(rules_differ, '  ').rstrip())
+                _log.info(_indent(rules_differ, u'  ').rstrip())
                 _log.info("udev rules differ. To overwrite run with '--overwrite-existing'")
                 sys.exit(1)
 

@@ -1,4 +1,4 @@
-# Python-seabreeze changelog
+# seabreeze changelog
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -13,8 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+## [1.0.0]
+### Added
+- *docs* install via [piwheels](https://www.piwheels.hostedpi.com/project/seabreeze/)
+
+### Changed
+- *docs* install via conda
+- *docs* minor layout fixes and python-seabreeze vs seabreeze renaming
+
 ### Fixed
 - `seabreeze_os_setup` fix py3 error when udev rules differed on linux
+- fix links in changelog
 
 ## [1.0.0rc4] - 2017-09-07
 ### Added
@@ -67,9 +77,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0rc4...HEAD
-[1.0.0rc4]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0rc3...v1.0.0rc4
-[1.0.0rc3]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0rc2...v1.0.0rc3
-[1.0.0rc2]: https://github.com/olivierlacan/keep-a-changelog/compare/python-seabreeze-v0.6.0...v1.0.0rc2
-[0.6.0]: https://github.com/olivierlacan/keep-a-changelog/compare/python-seabreeze-v0.5.3...python-seabreeze-v0.6.0
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/ap--/python-seabreeze/compare/v1.0.0rc4...v1.0.0
+[1.0.0rc4]: https://github.com/ap--/python-seabreeze/compare/v1.0.0rc3...v1.0.0rc4
+[1.0.0rc3]: https://github.com/ap--/python-seabreeze/compare/v1.0.0rc2...v1.0.0rc3
+[1.0.0rc2]: https://github.com/ap--/python-seabreeze/compare/python-seabreeze-v0.6.0...v1.0.0rc2
+[0.6.0]: https://github.com/ap--/python-seabreeze/compare/python-seabreeze-v0.5.3...python-seabreeze-v0.6.0
 [0.5.3]: https://github.com/ap--/python-seabreeze/tree/python-seabreeze-v0.5.3

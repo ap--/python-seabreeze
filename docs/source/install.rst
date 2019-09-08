@@ -1,35 +1,39 @@
-Installing python-seabreeze
-===========================
+Installing seabreeze
+====================
 
 .. _install-seabreeze:
 
-Install via pip
----------------
-
-.. danger::
-
-    Until version v1.0.0 is fully released pip install requires the `--pre` argument to install
-    the pypi prerelease.
+Installing via pip
+------------------
 
 .. code:: bash
 
     # install only cseabreeze backend
-    pip install seabreeze --pre
+    pip install seabreeze
     # install both cseabreeze and pyseabreeze backend
-    pip install seabreeze[pyseabreeze] --pre
+    pip install seabreeze[pyseabreeze]
     # install only pyseabreeze backend
-    pip install seabreeze[pyseabreeze] --no-build-isolation --install-option="--without-cseabreeze" --pre
+    pip install seabreeze[pyseabreeze] --no-build-isolation --install-option="--without-cseabreeze"
 
 
-Install via conda
------------------
+Installing via conda
+--------------------
 
-.. Attention::
-    Not working yet. Need to add `conda-forge` or continue to build own packages (maybe via travis too?)
+.. code:: bash
 
+    # install via conda
+    conda install -c poehlmann seabreeze
 
-Building python-seabreeze manually
-----------------------------------
+.. note::
+    For now the packages are provided via the `poehlmann` conda channel. It's on the roadmap to
+    move to `conda-forge`.
+
+.. attention::
+    Before version 1 conda packages for seabreeze were named *python-seabreeze*. This has now
+    changed to be consistent with the pypi package naming.
+
+Building seabreeze manually
+---------------------------
 
 If you want to build python-seabreeze manually you have to install some build dependencies.
 
@@ -41,11 +45,14 @@ Linux requires a compiler and libusb development headers:
 .. code:: bash
 
     # run the appropriate command for your distribution flavor
-    # - if your distro is a deb flavor (ubuntu, etc...)
+
+    # if your distro is a deb flavor (ubuntu, etc...)
     sudo apt-get install git-all build-essential libusb-dev
-    # - if your distro is a rpm flavor
+
+    # if your distro is a rpm flavor
     sudo yum install git-all gcc gcc-c++ make libusb-devel
-    # - if your distro is a arch flavor
+
+    # if your distro is a arch flavor
     sudo pacman -S base-devel libusb libusb-compat libusb-devel make gcc
 
 Step (1) - OSX
@@ -90,7 +97,7 @@ Finally we can clone and install python-seabreeze:
     cd python-seabreeze
     python -m pip install .
 
-This should install python-seabreeze in your python environment.
+This should install seabreeze in your python environment.
 
 
 Operating System dependent setup
@@ -101,9 +108,21 @@ running the script provided by python-seabreeze. After installing via pip, run:
 
 .. code:: bash
 
-    $ seabreeze_os_setup
+    seabreeze_os_setup
 
 For some additional information see
 `os_support/readme.md <https://github.com/ap--/python-seabreeze/blob/master/os_support/readme.md>`_.
 
+
+Installing on a Raspberry Pi
+----------------------------
+
+Rasperry Pi wheels are automagically provided by the wonderful
+`piwheels package repository <https://www.piwheels.org/project/seabreeze/>`_. Follow the
+instructions `here <https://www.piwheels.org/>`_ on how to add piwheels as an extra index
+to pip and then you should be able to install via:
+
+.. code:: bash
+
+    pip3 install seabreeze
 

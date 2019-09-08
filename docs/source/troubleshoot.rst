@@ -3,7 +3,7 @@ Troubleshooting
 
 .. _troubleshoot:
 
-Some common issues you might have with python-seabreeze
+Some common issues you might have with seabreeze
 
 No spectrometer is detected
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

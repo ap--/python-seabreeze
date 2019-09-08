@@ -3,7 +3,8 @@ Contributing Guide
 
 .. _contrib:
 
-If you want to contribute to python-seabreeze, please create a pull request on github.
+If you want to contribute to seabreeze, please create a pull request on github.
+Documentation improvements are very welcome!
 Extending pyseabreeze is quite easy. Look at the examples below.
 
 .. tip::
@@ -14,8 +15,9 @@ Extending pyseabreeze is quite easy. Look at the examples below.
 Adding a new spectrometer
 -------------------------
 
-To add a new spectrometer with basic spectrometer functionality to `pyseabreeze` you need to
-do two things:
+To add a new spectrometer with basic spectrometer functionality to `pyseabreeze` you
+first need to find a datasheet pdf of your spectrometer to get the necessary information
+and then you need to do two things:
 
 Add a new device class to `seabreeze/pyseabreeze/devices.py`:
 
@@ -88,7 +90,7 @@ results in a github issue. To do this git clone the repository and:
     skipping 'src/seabreeze/cseabreeze/c_seabreeze_wrapper.cpp' Cython extension (up-to-date)
     copying build/lib.linux-x86_64-2.7/seabreeze/cseabreeze/_wrapper.so -> src/seabreeze/cseabreeze
     ========================================== test session starts ==========================================
-    platform linux2 -- Python 2.7.15+, pytest-4.6.5, py-1.8.0, pluggy-0.12.0 -- /home/poehlmann/Development/python-seabreeze/venv/bin/python
+    platform linux2 -- Python 2.7.15+, pytest-4.6.5, py-1.8.0, pluggy-0.12.0 -- /python
     cachedir: .pytest_cache
     rootdir: /home/poehlmann/Development/python-seabreeze, inifile: pytest.ini
     collected 23 items
@@ -197,4 +199,5 @@ results in a github issue. To do this git clone the repository and:
 
     -- Docs: https://docs.pytest.org/en/latest/warnings.html
     =========================== 1 failed, 22 passed, 2 warnings in 34.78 seconds ============================
-    Exception AttributeError: "'NoneType' object has no attribute '_ctx'" in <bound method SPARK.__del__ of <SeaBreezeDevice SPARK:00061>> ignored
+    Exception AttributeError: "'NoneType' object has no attribute '_ctx'" in
+        <bound method SPARK.__del__ of <SeaBreezeDevice SPARK:00061>> ignored

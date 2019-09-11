@@ -1,27 +1,45 @@
 # Python module for [Ocean Optics](http://www.oceanoptics.com/) spectrometers
 
-[![Anaconda](https://anaconda.org/poehlmann/python-seabreeze/badges/version.svg)](https://anaconda.org/poehlmann/python-seabreeze)
-[![CondaDownload](https://anaconda.org/poehlmann/python-seabreeze/badges/downloads.svg)](https://anaconda.org/poehlmann/python-seabreeze/files)
-[![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=win-whl&style=flat-square)](https://ci.appveyor.com/project/ap--/python-seabreeze)
-[![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=osx-whl&style=flat-square)](https://travis-ci.org/ap--/python-seabreeze)
-[![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg?style=flat-square)](https://github.com/ap--/python-seabreeze/releases)
-[![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/ap--/python-seabreeze.svg?style=flat-square)](https://github.com/ap--/python-seabreeze/issues)
-[![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square)](https://paypal.me/apoehlmann)
+[![Conda (channel only)](https://img.shields.io/conda/vn/poehlmann/seabreeze?label=conda)](https://anaconda.org/poehlmann/seabreeze)
+[![PyPI](https://img.shields.io/pypi/v/seabreeze)](https://pypi.org/project/seabreeze/)
+[![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=win)](https://ci.appveyor.com/project/ap--/python-seabreeze)
+[![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=linux%7Cosx)](https://travis-ci.org/ap--/python-seabreeze)
+[![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg?label=github)](https://github.com/ap--/python-seabreeze/releases)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/seabreeze?label=pypi)](https://pypi.org/project/seabreeze/)
+[![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](http://opensource.org/licenses/MIT)
+[![GitHub issues](https://img.shields.io/github/issues/ap--/python-seabreeze.svg)](https://github.com/ap--/python-seabreeze/issues)
+[![Paypal donate](http://img.shields.io/badge/paypal-donate-blue.svg)](https://paypal.me/apoehlmann)
 
 Python-seabreeze is the easy way to access your Ocean Optics spectrometers from
 python. It wraps the [SeaBreeze](http://oceanoptics.com/product/seabreeze/)
-library provided by Ocean Optics to communicate with the spectrometer. If
-SeaBreeze is not available it can fallback to a pyUSB based reimplementation.
+library provided by Ocean Optics to communicate with the spectrometer. It also
+provides a pyUSB based reimplementation of SeaBreeze for easy extension.
 **This software is not associated with Ocean Optics. Use it at your own risk.**
 
 ## DOCUMENTATION ON RTD
 
-You'll find the documentation here [https://python-seabreeze.readthedocs.io/en/latest/](https://python-seabreeze.readthedocs.io/en/latest/)
+You'll find the documentation and more detailed information here
+[https://python-seabreeze.readthedocs.io/en/latest/](https://python-seabreeze.readthedocs.io/en/latest/)
 
 ## Changes
 
 The changelog can be found here [CHANGELOG.md](https://github.com/ap--/python-seabreeze/blob/master/CHANGELOG.md)
+
+## Install
+
+```bash
+# via pypi
+pip install seabreeze
+seabreeze_os_setup
+```
+
+or
+
+```bash
+# via conda
+conda install -c poehlmann seabreeze
+seabreeze_os_setup
+```
 
 ## Usage
 
@@ -41,7 +59,7 @@ array([  1.58187931e+01,   2.66704852e+04,   6.80208103e+02, ...,
          6.53090172e+02,   6.35011552e+02,   6.71168793e+02])
 ```
 
-To use the pyseabreeze backend simply run this before importing `seabreeze.spectrometers`.
+To use the pyseabreeze backend (requires `pyusb`) simply run this before importing `seabreeze.spectrometers`.
 
 ```python
 >>> import seabreeze

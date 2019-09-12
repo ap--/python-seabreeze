@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | label  | description                         |
 |-------:|:------------------------------------|
-| *doc*  | module documentation related        |
+| *docs* | module documentation related        |
 | *csb*  | refers to `seabreeze.cseabreeze`    |
 | *psb*  | refers to `seabreeze.pyseabreeze`   |
 | *spec* | refers to `seabreeze.spectrometers` |
@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0]
+## [1.0.0] - 2019-09-08
 ### Added
 - *docs* install via [piwheels](https://www.piwheels.hostedpi.com/project/seabreeze/)
 
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `seabreeze_os_setup` fix py3 error when udev rules differed on linux
 - fix links in changelog
 
-## [1.0.0rc4] - 2017-09-07
+## [1.0.0rc4] - 2019-09-07
 ### Added
 - added this changelog
 
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `seabreeze.backend` fix regression with error logging
 - fixed test suites if backend not installed or not available on ci
 
-## [1.0.0rc3] - 2017-09-04
+## [1.0.0rc3] - 2019-09-04
 ### Added
 - *docs* added note regarding pip install for prereleases
 
@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `seabreeze_os_setup` fix elevating to admin shell
 - `seabreeze_os_setup` fix download of drivers on py27
 
-## [1.0.0rc2] - 2017-09-01
+## [1.0.0rc2] - 2019-09-01
 ### Added
 - *docs* extensive documentation via sphinx on [readthedocs](https://python-seabreeze.readthedocs.io)
 - `seabreeze_os_setup` entry point for doing udev rule (linux) and driver setup (windows)

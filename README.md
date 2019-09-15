@@ -1,6 +1,6 @@
 # Python module for [Ocean Optics](http://www.oceanoptics.com/) spectrometers
 
-[![Conda (channel only)](https://img.shields.io/conda/vn/poehlmann/seabreeze?label=conda)](https://anaconda.org/poehlmann/seabreeze)
+[![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/seabreeze?label=conda)](https://anaconda.org/conda-forge/seabreeze)
 [![PyPI](https://img.shields.io/pypi/v/seabreeze)](https://pypi.org/project/seabreeze/)
 [![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=win)](https://ci.appveyor.com/project/ap--/python-seabreeze)
 [![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=linux%7Cosx)](https://travis-ci.org/ap--/python-seabreeze)

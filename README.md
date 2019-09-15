@@ -37,7 +37,7 @@ or
 
 ```bash
 # via conda
-conda install -c poehlmann seabreeze
+conda install -c conda-forge seabreeze
 seabreeze_os_setup
 ```
 

@@ -22,11 +22,11 @@ Installing via conda
 .. code:: bash
 
     # install via conda
-    conda install -c poehlmann seabreeze
+    conda install -c conda-forge seabreeze
 
 .. note::
-    For now the packages are provided via the `poehlmann` conda channel. It's on the roadmap to
-    move to `conda-forge`.
+    seabreeze is now on `conda-forge`. The `poehlmann` channel will still be available for a
+    while, but slowly phased out.
 
 .. attention::
     Before version 1 conda packages for seabreeze were named *python-seabreeze*. This has now
@@ -104,7 +104,7 @@ Operating System dependent setup
 --------------------------------
 
 Additional installation steps required by the specific operating system should be done by
-running the script provided by python-seabreeze. After installing via pip, run:
+running the script provided by python-seabreeze. After installing via pip or conda or manually, run:
 
 .. code:: bash
 

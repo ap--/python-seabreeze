@@ -29,8 +29,10 @@ Installing via conda
     while, but slowly phased out.
 
 .. attention::
-    Before version 1 conda packages for seabreeze were named *python-seabreeze*. This has now
-    changed to be consistent with the pypi package naming.
+    - Before version 1 conda packages for seabreeze were named *python-seabreeze*. This has now
+      changed to be consistent with the pypi package naming.
+    - It's recommended to install the conda-forge package when in a conda environment, instead
+      of installing via pip.
 
 Building seabreeze manually
 ---------------------------

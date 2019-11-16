@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Fixed
+- *spec* fix nonlinearity coefficients regression
+
 ### Changed
 - *docs* update conda install instructions
 

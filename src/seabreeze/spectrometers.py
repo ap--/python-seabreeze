@@ -64,7 +64,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 # NOTE: the spark spectrometer raises a transport error when trying
                 # to receive the nc coefficients. In this case continue with disabled
                 # nonlinearity correction support
-                self._nc = nc_feature.get_nonlinearity_coefficients()
+                self._nc = numpy.poly1d(nc_feature.get_nonlinearity_coefficients()[::-1])
             except self._backend.SeaBreezeError:
                 pass
         # check for dark pixel correction support

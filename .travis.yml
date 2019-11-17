@@ -47,6 +47,13 @@ matrix:
     env: PYTHON_VERSION=3.7
     install:
     - source ci/build_osx_wheels.sh
+  - name: Python 3.8 on macOS
+    os: osx
+    osx_image: xcode9.4
+    language: shell
+    env: PYTHON_VERSION=3.8
+    install:
+      - source ci/build_osx_wheels.sh
 script:
 - ls wheelhouse/seabreeze*.whl
 - echo "done."

@@ -3,7 +3,12 @@ curl https://raw.githubusercontent.com/matthew-brett/multibuild/ed1cfaf365ed51bd
 curl https://raw.githubusercontent.com/matthew-brett/multibuild/ed1cfaf365ed51bd309a80e60736915d3ec70d31/common_utils.sh -s -o common_utils.sh
 source osx_utils.sh
 
-get_macpython_environment ${PYTHON_VERSION} venv "10.6"
+MACPYTHON_OSX_VERSION="10.6"
+if [[ ${PYTHON_VERSION} == "3.8" ]]; then
+    MACPYTHON_OSX_VERSION="10.9"
+fi
+
+get_macpython_environment ${PYTHON_VERSION} venv ${MACPYTHON_OSX_VERSION}
 
 echo "Building wheel"
 python --version

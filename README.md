@@ -121,6 +121,8 @@ Files in this repository are released under the [MIT license](LICENSE.md).
 
 If you want me to add your project here, let me know. Happy to add it.
 
+- [python-seatease by @jonathanvanschenck](https://github.com/jonathanvanschenck/python-seatease) - a software emulator of python-seabreeze. Emulates seabreeze's behavior so for testing my code without access to a spectrometer.
+- [python-seabreeze-server by @jonathanvanschenck](https://github.com/jonathanvanschenck/python-seabreeze-server) - a TCP-based server to host the seabreeze.cseabreeze backend, allowing multiple clients (potentially offsite) to interact with a single spectrometer.
 - [SeaBreeze](https://sourceforge.net/projects/seabreeze/) - Ocean Optics' SeaBreeze C library.
 - [libseabreeze](https://github.com/ap--/libseabreeze) - github clone of the C library. _internal use only_ (has pre-built libraries if you know what you're doing)
 - [python-seabreeze-feedstock](https://github.com/ap--/python-seabreeze) - anaconda feedstock for automated package deployment. _internal use only_

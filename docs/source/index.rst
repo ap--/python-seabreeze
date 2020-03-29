@@ -43,10 +43,14 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
 
 .. rubric:: projects
 
+- `python-seatease by @jonathanvanschenck`_ - a software emulator of python-seabreeze. Emulates seabreeze's behavior so for testing my code without access to a spectrometer.
+- `python-seabreeze-server by @jonathanvanschenck`_ - a TCP-based server to host the seabreeze.cseabreeze backend, allowing multiple clients (potentially offsite) to interact with a single spectrometer.
 - SeaBreeze_ - Ocean Optics' SeaBreeze C library.
 - libseabreeze_ - github clone of the C library. *internal use only* (has pre-built libraries if you know what you're doing)
 - python-seabreeze-feedstock_ - anaconda feedstock for automated package deployment. *internal use only*
 
+.. _`python-seatease by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seatease
+.. _`python-seabreeze-server by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seabreeze-server
 .. _libseabreeze: https://github.com/ap--/libseabreeze
 .. _python-seabreeze-feedstock: https://github.com/ap--/python-seabreeze
 

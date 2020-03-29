@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix udev rules by finalizing MODE setting
+
 ## [1.0.1] - 2019-11-16
 ### Fixed
 - *spec* fix nonlinearity coefficients regression

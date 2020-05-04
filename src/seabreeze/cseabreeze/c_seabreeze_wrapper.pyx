@@ -2872,7 +2872,7 @@ cdef class SeaBreezeTemperatureFeature(SeaBreezeFeature):
                 temperatures.append(float(c_buffer[i]))
         finally:
             PyMem_Free(c_buffer)
-        return tuple(output)
+        return tuple(temperatures)
 
 
 cdef class SeaBreezeIntrospectionFeature(SeaBreezeFeature):

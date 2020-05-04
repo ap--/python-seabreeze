@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- *csb* SeaBreezeTemperatureFeature return temperature as float
 - *csb* SeaBreezeTemperatureFeature fix temperature_get_all
 - fix udev rules by finalizing MODE setting
 

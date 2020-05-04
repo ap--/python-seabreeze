@@ -2845,7 +2845,7 @@ cdef class SeaBreezeTemperatureFeature(SeaBreezeFeature):
         output = self.sbapi.temperatureGet(self.device_id, self.feature_id, &error_code, c_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-        return int(output)
+        return float(output)
 
     # int temperatureGetAll(long deviceID, long featureID, int *errorCode, double *buffer, int maxLength)
     def temperature_get_all(self):

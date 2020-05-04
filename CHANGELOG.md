@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.0.2] - 2020-05-04
+### Fixed
 - *csb* SeaBreezeTemperatureFeature return temperature as float
 - *csb* SeaBreezeTemperatureFeature fix temperature_get_all
 - fix udev rules by finalizing MODE setting
@@ -88,7 +92,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/ap--/python-seabreeze/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ap--/python-seabreeze/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ap--/python-seabreeze/compare/v1.0.0rc4...v1.0.0
 [1.0.0rc4]: https://github.com/ap--/python-seabreeze/compare/v1.0.0rc3...v1.0.0rc4

@@ -40,6 +40,7 @@ class OOIProtocol(ProtocolInterface):
     msgs = {code: functools.partial(struct.Struct(msg).pack, code) for code, msg in {
         0x01: '<B',    # OP_INITIALIZE
         0x02: '<BI',   # OP_ITIME
+        0x03: '<BH',   # set Strobe/Lamp enable Line
         0x05: '<BB',   # OP_GETINFO
         0x09: '<B',    # OP_REQUESTSPEC
         0x0A: '<BH',   # OP_SETTRIGMODE

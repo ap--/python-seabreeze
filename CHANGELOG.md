@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- *psb* Continuous Strobe support for USB2000+
 - *psb* Continuous Strobe implement set_period_micros
 - *psb* Continuous Strobe support for USB650 **thanks @moritzj29**
 

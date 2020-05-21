@@ -1,5 +1,4 @@
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.protocol import OOIProtocol
 
 
 # Definition
@@ -30,14 +29,3 @@ class SeaBreezeLightSourceFeature(SeaBreezeFeature):
 
     def set_intensity(self, light_source_index, intensity):
         raise NotImplementedError("implement in derived class")
-
-class SeaBreezeLightSourceFeatureOOI(SeaBreezeLightSourceFeature):
-    _required_protocol_cls = OOIProtocol
-    _light_enabled = False # default after initialization of device
-
-    def set_enable(self, enable=True):
-        self.protocol.send(0x03, int(enable))
-        self._light_enabled = bool(enable)
-
-    def is_enabled(self):
-        return self._light_enabled

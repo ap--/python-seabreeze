@@ -543,7 +543,7 @@ class USB650(SeaBreezeDevice):
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB650,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
-        sbf.lightsource.SeaBreezeLightSourceFeatureOOI,
+        sbf.continuousstrobe.SeaBreezeContinuousStrobeFeatureOOI,
     )
 
 

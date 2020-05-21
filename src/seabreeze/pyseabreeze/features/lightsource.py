@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeLightSourceFeature(SeaBreezeFeature):
-    identifier = 'light_source'
+    identifier = "light_source"
 
     def get_count(self):
         raise NotImplementedError("implement in derived class")

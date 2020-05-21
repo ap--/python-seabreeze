@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
-    identifier = 'acquisition_delay'
+    identifier = "acquisition_delay"
 
     def set_delay_microseconds(self, delay_usec):
         raise NotImplementedError("implement in derived class")

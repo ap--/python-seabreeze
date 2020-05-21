@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeFastBufferFeature(SeaBreezeFeature):
-    identifier = 'fast_buffer'
+    identifier = "fast_buffer"
 
     def get_buffering_enable(self):
         raise NotImplementedError("implement in derived class")

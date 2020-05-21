@@ -32,7 +32,9 @@ class SeaBreezeFeature(object):
         feature_id : int
         """
         if self.identifier == "base_feature":
-            raise SeaBreezeError("Don't instantiate SeaBreezeFeature directly. Use derived feature classes.")
+            raise SeaBreezeError(
+                "Don't instantiate SeaBreezeFeature directly. Use derived feature classes."
+            )
         assert set(self._required_kwargs) == set(kwargs), "{} vs {}".format(
             str(set(self._required_kwargs)), str(set(kwargs))
         )
@@ -48,7 +50,10 @@ class SeaBreezeFeature(object):
     @classmethod
     def get_feature_class_registry(cls):
         # noinspection PyUnresolvedReferences
-        return {feature_class.identifier: feature_class for feature_class in SeaBreezeFeature.__subclasses__()}
+        return {
+            feature_class.identifier: feature_class
+            for feature_class in SeaBreezeFeature.__subclasses__()
+        }
 
     @classmethod
     def supports_protocol(cls, protocol):
@@ -57,7 +62,9 @@ class SeaBreezeFeature(object):
     @classmethod
     def specialize(cls, model_name, **kwargs):
         assert set(kwargs) == set(cls._required_kwargs)
-        specialized_class = type("{}{}".format(cls.__name__, model_name), (cls, ), {
-            '__init__': partialmethod(cls.__init__, **kwargs)
-        })
+        specialized_class = type(
+            "{}{}".format(cls.__name__, model_name),
+            (cls,),
+            {"__init__": partialmethod(cls.__init__, **kwargs)},
+        )
         return specialized_class

@@ -16,12 +16,13 @@ from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
 
 class ProtocolInterface(object):
-
     def __init__(self, transport):
-        if not (hasattr(transport, 'write')
-                and isinstance(transport.write, collections.Callable)
-                and hasattr(transport, 'read')
-                and isinstance(transport.read, collections.Callable)):
+        if not (
+            hasattr(transport, "write")
+            and isinstance(transport.write, collections.Callable)
+            and hasattr(transport, "read")
+            and isinstance(transport.read, collections.Callable)
+        ):
             raise TypeError("transport does not implement read and write methods")
         self.transport = transport
 
@@ -37,20 +38,23 @@ class ProtocolInterface(object):
 
 class OOIProtocol(ProtocolInterface):
 
-    msgs = {code: functools.partial(struct.Struct(msg).pack, code) for code, msg in {
-        0x01: '<B',    # OP_INITIALIZE
-        0x02: '<BI',   # OP_ITIME
-        0x03: '<BH',   # set Strobe/Lamp enable Line
-        0x05: '<BB',   # OP_GETINFO
-        0x09: '<B',    # OP_REQUESTSPEC
-        0x0A: '<BH',   # OP_SETTRIGMODE
-        0x6A: '<BBH',  # OP_WRITE_REGISTER
-        0x6B: '<BB',   # OP_READ_REGISTER
-        0x71: '<BBB',  # OP_TECENABLE_QE
-        0x72: '<B',    # OP_READTEC_QE
-        0x73: '<Bh',   # OP_TECSETTEMP_QE
-        0xFE: '<B',    # OP_USBMODE
-    }.items()}  # add more here if you implement new features
+    msgs = {
+        code: functools.partial(struct.Struct(msg).pack, code)
+        for code, msg in {
+            0x01: "<B",  # OP_INITIALIZE
+            0x02: "<BI",  # OP_ITIME
+            0x03: "<BH",  # set Strobe/Lamp enable Line
+            0x05: "<BB",  # OP_GETINFO
+            0x09: "<B",  # OP_REQUESTSPEC
+            0x0A: "<BH",  # OP_SETTRIGMODE
+            0x6A: "<BBH",  # OP_WRITE_REGISTER
+            0x6B: "<BB",  # OP_READ_REGISTER
+            0x71: "<BBB",  # OP_TECENABLE_QE
+            0x72: "<B",  # OP_READTEC_QE
+            0x73: "<Bh",  # OP_TECSETTEMP_QE
+            0xFE: "<B",  # OP_USBMODE
+        }.items()
+    }  # add more here if you implement new features
 
     def __init__(self, transport):
         super(OOIProtocol, self).__init__(transport)
@@ -108,7 +112,9 @@ class OOIProtocol(ProtocolInterface):
         """
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        return self.transport.read(size=size, timeout_ms=timeout_ms, mode=mode, **kwargs)
+        return self.transport.read(
+            size=size, timeout_ms=timeout_ms, mode=mode, **kwargs
+        )
 
     def query(self, msg_type, payload, size=None, timeout_ms=None, mode=None, **kwargs):
         """convenience method combining send and receive
@@ -143,20 +149,23 @@ class OOIProtocol(ProtocolInterface):
 
 class OBPProtocol(ProtocolInterface):
 
-    msgs = {code: struct.Struct(msg).pack for code, msg in {
-        0x00000100: "",    # GET_SERIAL
-        0x00100928: "",    # GET_BUF_SPEC32_META
-        0x00101100: "",    # GET_RAW_SPECTRUM_NOW
-        0x00110010: "<L",  # SET_ITIME_USEC
-        0x00110110: "<B",  # SET_TRIG_MODE
-        0x00180100: "",    # GET_WL_COEFF_COUNT
-        0x00180101: "<B",  # GET_WL_COEFF
-        0x00181100: "",    # GET_NL_COEFF_COUNT
-        0x00181101: "<B",  # GET_NL_COEFF
-        0x00420004: "",    # GET_TE_TEMPERATURE
-        0x00420010: "<B",  # SET_TE_ENABLE
-        0x00420011: "<f",  # SET_TE_SETPOINT
-    }.items()}  # add more here if you implement new features
+    msgs = {
+        code: struct.Struct(msg).pack
+        for code, msg in {
+            0x00000100: "",  # GET_SERIAL
+            0x00100928: "",  # GET_BUF_SPEC32_META
+            0x00101100: "",  # GET_RAW_SPECTRUM_NOW
+            0x00110010: "<L",  # SET_ITIME_USEC
+            0x00110110: "<B",  # SET_TRIG_MODE
+            0x00180100: "",  # GET_WL_COEFF_COUNT
+            0x00180101: "<B",  # GET_WL_COEFF
+            0x00181100: "",  # GET_NL_COEFF_COUNT
+            0x00181101: "<B",  # GET_NL_COEFF
+            0x00420004: "",  # GET_TE_TEMPERATURE
+            0x00420010: "<B",  # SET_TE_ENABLE
+            0x00420011: "<f",  # SET_TE_SETPOINT
+        }.items()
+    }  # add more here if you implement new features
 
     class OBP(object):
         """All relevant constants are stored here"""
@@ -172,26 +181,26 @@ class OBPProtocol(ProtocolInterface):
         FLAG_PROTOCOL_DEPRECATED = 0x0020
 
         ERROR_CODES = {
-            0: 'Success (no detectable errors)',
-            1: 'Invalid/unsupported protocol',
-            2: 'Unknown message type',
-            3: 'Bad checksum',
-            4: 'Message too large',
-            5: 'Payload length does not match message type',
-            6: 'Payload data invalid',
-            7: 'Device not ready for given message type',
-            8: 'Unknown checksum type',
-            9: 'Device reset unexpectedly',
-            10: 'Too many buses (Commands have come from too many bus interfaces)',
-            11: 'Out of memory. Failed to allocate enough space to complete request.',
-            12: 'Command is valid, but desired information does not exist.',
-            13: 'Int Device Error. May be unrecoverable.',
-            100: 'Could not decrypt properly',
-            101: 'Firmware layout invalid',
-            102: 'Data packet was wrong size',
-            103: 'hardware revision not compatible with firmware',
-            104: 'Existing flash map not compatible with firmware',
-            255: 'Operation/Response Deferred. Will take some time. Do not ACK or NACK yet.',
+            0: "Success (no detectable errors)",
+            1: "Invalid/unsupported protocol",
+            2: "Unknown message type",
+            3: "Bad checksum",
+            4: "Message too large",
+            5: "Payload length does not match message type",
+            6: "Payload data invalid",
+            7: "Device not ready for given message type",
+            8: "Unknown checksum type",
+            9: "Device reset unexpectedly",
+            10: "Too many buses (Commands have come from too many bus interfaces)",
+            11: "Out of memory. Failed to allocate enough space to complete request.",
+            12: "Command is valid, but desired information does not exist.",
+            13: "Int Device Error. May be unrecoverable.",
+            100: "Could not decrypt properly",
+            101: "Firmware layout invalid",
+            102: "Data packet was wrong size",
+            103: "hardware revision not compatible with firmware",
+            104: "Existing flash map not compatible with firmware",
+            255: "Operation/Response Deferred. Will take some time. Do not ACK or NACK yet.",
         }
 
         NO_ERROR = 0x0000
@@ -202,23 +211,20 @@ class OBPProtocol(ProtocolInterface):
         FOOTER = 0xC2C3C4C5  # the datasheet specifies it in this order...
 
         HEADER_FMT = (
-            "<H"   # start_bytes
-            "H"    # protocol_version
-            "H"    # flags
-            "H"    # error number
-            "L"    # message type
-            "L"    # regarding
-            "6s"   # reserved
-            "B"    # checksum type
-            "B"    # immediate length
+            "<H"  # start_bytes
+            "H"  # protocol_version
+            "H"  # flags
+            "H"  # error number
+            "L"  # message type
+            "L"  # regarding
+            "6s"  # reserved
+            "B"  # checksum type
+            "B"  # immediate length
             "16s"  # immediate data
-            "L"    # bytes remaining
+            "L"  # bytes remaining
         )
 
-        FOOTER_FMT = (
-            "16s"  # checksum
-            "L"    # footer
-        )
+        FOOTER_FMT = "16s" "L"  # checksum  # footer
 
     # noinspection DuplicatedCode
     def send(self, msg_type, payload=(), timeout_ms=None, request_ack=True, **kwargs):
@@ -249,19 +255,30 @@ class OBPProtocol(ProtocolInterface):
         data = self.msgs[msg_type](*payload)
 
         # Constructing message and querying usb.
-        message = self._construct_outgoing_message(msg_type, data, request_ack=request_ack)  # TODO
-        bytes_written = self.transport.write(message)  # ? assert bytes_written == len(message)
+        message = self._construct_outgoing_message(
+            msg_type, data, request_ack=request_ack
+        )  # TODO
+        bytes_written = self.transport.write(
+            message
+        )  # ? assert bytes_written == len(message)
 
         if not request_ack:
             return bytes_written
 
         response = self.transport.read(timeout_ms=timeout_ms)
-        remaining_bytes, checksum_type = self._check_incoming_message_header(response[:44])
+        remaining_bytes, checksum_type = self._check_incoming_message_header(
+            response[:44]
+        )
         # ? assert remaining_bytes == 20
         checksum = self._check_incoming_message_footer(response[-20:])
 
-        if checksum_type == self.OBP.CHECKSUM_TYPE_MD5 and checksum != hashlib.md5(response[:-20]).digest():
-            warnings.warn("WARNING OBP: The checksums differ, but we ignore this for now.")
+        if (
+            checksum_type == self.OBP.CHECKSUM_TYPE_MD5
+            and checksum != hashlib.md5(response[:-20]).digest()
+        ):
+            warnings.warn(
+                "WARNING OBP: The checksums differ, but we ignore this for now."
+            )
         return bytes_written
 
     def receive(self, size=None, timeout_ms=None, **kwargs):
@@ -284,7 +301,9 @@ class OBPProtocol(ProtocolInterface):
             data returned from the spectrometer
         """
         response = self.transport.read(size=64, timeout_ms=timeout_ms)
-        remaining_bytes, checksum_type = self._check_incoming_message_header(response[:44])
+        remaining_bytes, checksum_type = self._check_incoming_message_header(
+            response[:44]
+        )
         length_payload_footer = remaining_bytes
 
         # we already received some data
@@ -293,13 +312,20 @@ class OBPProtocol(ProtocolInterface):
             response += self.transport.read(size=remaining_bytes, timeout_ms=timeout_ms)
 
         if length_payload_footer != len(response[44:]):
-            raise SeaBreezeError("remaining packet length mismatch: {:d} != {:d}".format(
-                remaining_bytes, len(response[44:])
-            ))
+            raise SeaBreezeError(
+                "remaining packet length mismatch: {:d} != {:d}".format(
+                    remaining_bytes, len(response[44:])
+                )
+            )
 
         checksum = self._check_incoming_message_footer(response[-20:])
-        if checksum_type == self.OBP.CHECKSUM_TYPE_MD5 and checksum != hashlib.md5(response[:-20]).digest():
-            warnings.warn("WARNING OBP: The checksums differ, but we ignore this for now.")
+        if (
+            checksum_type == self.OBP.CHECKSUM_TYPE_MD5
+            and checksum != hashlib.md5(response[:-20]).digest()
+        ):
+            warnings.warn(
+                "WARNING OBP: The checksums differ, but we ignore this for now."
+            )
 
         return self._extract_message_data(response)
 
@@ -330,7 +356,9 @@ class OBPProtocol(ProtocolInterface):
         self.send(msg_type, payload, request_ack=False)
         return self.receive(timeout_ms=timeout_ms)
 
-    def _construct_outgoing_message(self, msg_type, payload_string, request_ack=False, regarding=None):
+    def _construct_outgoing_message(
+        self, msg_type, payload_string, request_ack=False, regarding=None
+    ):
         """construct an outgoing OBP message
 
         Parameters
@@ -371,21 +399,23 @@ class OBPProtocol(ProtocolInterface):
 
         FMT = self.OBP.HEADER_FMT + payload_string_fmt + self.OBP.FOOTER_FMT
 
-        msg = struct.pack(FMT,
-                          self.OBP.HEADER_START_BYTES,
-                          self.OBP.HEADER_PROTOCOL_VERSION,
-                          flags,
-                          self.OBP.NO_ERROR,
-                          msg_type,
-                          regarding,
-                          self.OBP.RESERVED,
-                          self.OBP.CHECKSUM_TYPE_NONE,
-                          immediate_length,
-                          immediate_data,
-                          bytes_remaining,
-                          payload_string,
-                          self.OBP.NO_CHECKSUM,
-                          self.OBP.FOOTER)
+        msg = struct.pack(
+            FMT,
+            self.OBP.HEADER_START_BYTES,
+            self.OBP.HEADER_PROTOCOL_VERSION,
+            flags,
+            self.OBP.NO_ERROR,
+            msg_type,
+            regarding,
+            self.OBP.RESERVED,
+            self.OBP.CHECKSUM_TYPE_NONE,
+            immediate_length,
+            immediate_data,
+            bytes_remaining,
+            payload_string,
+            self.OBP.NO_CHECKSUM,
+            self.OBP.FOOTER,
+        )
         return msg
 
     def _check_incoming_message_header(self, header):
@@ -403,14 +433,16 @@ class OBPProtocol(ProtocolInterface):
             checksum_type only supports self.OBP.CHECKSUM_TYPE_MD5 for now
         """
         if len(header) != 44:
-            raise SeaBreezeError("header has wrong length! len(header): %d" % len(header))
+            raise SeaBreezeError(
+                "header has wrong length! len(header): %d" % len(header)
+            )
 
         data = struct.unpack(self.OBP.HEADER_FMT, header)
 
         if data[0] != self.OBP.HEADER_START_BYTES:
             raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
         if data[1] != self.OBP.HEADER_PROTOCOL_VERSION:
-            raise SeaBreezeError('Header protocol version wrong: %d' % data[1])
+            raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
 
         flags = data[2]
         if flags == 0:
@@ -434,7 +466,10 @@ class OBPProtocol(ProtocolInterface):
         # regarding = data[5]
 
         checksum_type = data[7]  # TODO: implement checksums.
-        if checksum_type not in [self.OBP.CHECKSUM_TYPE_NONE, self.OBP.CHECKSUM_TYPE_MD5]:
+        if checksum_type not in [
+            self.OBP.CHECKSUM_TYPE_NONE,
+            self.OBP.CHECKSUM_TYPE_MD5,
+        ]:
             raise SeaBreezeError('the checksum type is unknown: "%d"' % checksum_type)
 
         # immediate_length = data[8]
@@ -456,12 +491,16 @@ class OBPProtocol(ProtocolInterface):
         checksum: `str`
             the 16 byte checksum of the message
         """
-        assert len(footer) == 20, "footer has wrong length! len(footer): %d" % len(footer)
+        assert len(footer) == 20, "footer has wrong length! len(footer): %d" % len(
+            footer
+        )
 
         data = struct.unpack("<" + self.OBP.FOOTER_FMT, footer)
 
         checksum = data[0]
-        assert data[1] == self.OBP.FOOTER, "the device returned a wrong footer: %d" % data[1]
+        assert data[1] == self.OBP.FOOTER, (
+            "the device returned a wrong footer: %d" % data[1]
+        )
 
         return checksum
 

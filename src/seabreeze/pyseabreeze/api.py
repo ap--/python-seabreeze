@@ -10,12 +10,10 @@ import logging
 
 import usb.core
 import usb.util
-
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice, _model_class_registry
 from seabreeze.pyseabreeze.transport import USBTransport
 
-
-__all__ = ['SeaBreezeAPI']
+__all__ = ["SeaBreezeAPI"]
 
 
 class SeaBreezeAPI(object):
@@ -40,9 +38,11 @@ class SeaBreezeAPI(object):
                 device.reset()
                 usb.util.dispose_resources(device)
             except Exception as err:
-                SeaBreezeAPI._log.debug("initialize failed: {}('{}')".format(
-                    err.__class__.__name__, err.message
-                ))
+                SeaBreezeAPI._log.debug(
+                    "initialize failed: {}('{}')".format(
+                        err.__class__.__name__, err.message
+                    )
+                )
 
     @staticmethod
     def shutdown():
@@ -55,9 +55,11 @@ class SeaBreezeAPI(object):
             try:
                 usb.util.dispose_resources(device)
             except Exception as err:
-                SeaBreezeAPI._log.debug("shutdown failed: {}('{}')".format(
-                    err.__class__.__name__, err.message
-                ))
+                SeaBreezeAPI._log.debug(
+                    "shutdown failed: {}('{}')".format(
+                        err.__class__.__name__, err.message
+                    )
+                )
 
     @staticmethod
     def add_rs232_device_location(device_type, bus_path, baudrate):

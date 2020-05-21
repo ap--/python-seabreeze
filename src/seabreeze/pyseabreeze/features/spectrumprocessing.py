@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
-    identifier = 'spectrum_processing'
+    identifier = "spectrum_processing"
 
     def get_boxcar_width(self):
         raise NotImplementedError("implement in derived class")

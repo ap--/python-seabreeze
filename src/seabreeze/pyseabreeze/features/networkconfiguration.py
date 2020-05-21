@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
-    identifier = 'network_configuration'
+    identifier = "network_configuration"
 
     def get_number_of_network_interfaces(self):
         raise NotImplementedError("implement in derived class")

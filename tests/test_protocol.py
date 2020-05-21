@@ -10,6 +10,7 @@ except ImportError:
     OBP_VALID_MSG = None
 else:
     from seabreeze.pyseabreeze.protocol import OBPProtocol
+
     _o = OBPProtocol.OBP
     OBP_VALID_MSG = struct.pack(
         _o.HEADER_FMT + "0s" + _o.FOOTER_FMT,
@@ -26,7 +27,7 @@ else:
         20,
         b"",
         _o.NO_CHECKSUM,
-        _o.FOOTER
+        _o.FOOTER,
     )
 
 
@@ -40,4 +41,3 @@ def mock_transport():
 def test_obp_protocol_messages(mock_transport):
     obp = OBPProtocol(mock_transport)
     obp.send(0x00000100)
-

@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezePixelBinningFeature(SeaBreezeFeature):
-    identifier = 'pixel_binning'
+    identifier = "pixel_binning"
 
     def set_binning_factor(self, factor):
         raise NotImplementedError("implement in derived class")
@@ -27,4 +27,6 @@ class SeaBreezePixelBinningFeature(SeaBreezeFeature):
     def get_default_binning_factor(self):
         raise NotImplementedError("implement in derived class")
 
-    default_binning_factor = property(get_default_binning_factor, set_default_binning_factor)
+    default_binning_factor = property(
+        get_default_binning_factor, set_default_binning_factor
+    )

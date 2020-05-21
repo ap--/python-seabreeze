@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeStrobeLampFeature(SeaBreezeFeature):
-    identifier = 'strobe_lamp'
+    identifier = "strobe_lamp"
 
     def enable_lamp(self, state):
         raise NotImplementedError("implement in derived class")

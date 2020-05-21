@@ -5,6 +5,7 @@
 
 class SeaBreezeError(Exception):
     """SeaBreezeError base class"""
+
     pass
 
 

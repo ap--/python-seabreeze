@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
-    identifier = 'wifi_configuration'
+    identifier = "wifi_configuration"
 
     def get_wifi_mode(self, interface_index):
         raise NotImplementedError("implement in derived class")

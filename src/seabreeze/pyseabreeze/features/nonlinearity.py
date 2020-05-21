@@ -1,15 +1,15 @@
 import struct
 
-from seabreeze.pyseabreeze.protocol import OOIProtocol, OBPProtocol
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
+from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
 
 
 # Definition
 # ==========
 #
 class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
-    identifier = 'nonlinearity_coefficients'
+    identifier = "nonlinearity_coefficients"
 
     def get_nonlinearity_coefficients(self):
         raise NotImplementedError("implement in derived class")
@@ -18,18 +18,26 @@ class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
 # OOI implementation
 # ==================
 #
-class NonlinearityCoefficientsEEPromFeatureOOI(SeaBreezeNonlinearityCoefficientsFeature):
+class NonlinearityCoefficientsEEPromFeatureOOI(
+    SeaBreezeNonlinearityCoefficientsFeature
+):
     _required_protocol_cls = OOIProtocol
-    _required_features = ('eeprom', )
+    _required_features = ("eeprom",)
 
     def get_nonlinearity_coefficients(self):
         # The spectrometers store the wavelength calibration in slots 6..13
         coeffs = []
         # noinspection PyProtectedMember
-        order = int(float(SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, 14)))
+        order = int(
+            float(SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, 14))
+        )
         for i in range(6, 6 + order + 1):
             # noinspection PyProtectedMember
-            coeffs.append(float(SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)))
+            coeffs.append(
+                float(
+                    SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)
+                )
+            )
         return coeffs
 
 

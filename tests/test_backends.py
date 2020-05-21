@@ -1,14 +1,14 @@
 import pytest
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def cseabreeze():
-    yield pytest.importorskip('seabreeze.cseabreeze')
+    yield pytest.importorskip("seabreeze.cseabreeze")
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def pyseabreeze():
-    yield pytest.importorskip('seabreeze.pyseabreeze')
+    yield pytest.importorskip("seabreeze.pyseabreeze")
 
 
 def _get_class_public_interface_dict(backend):
@@ -17,7 +17,7 @@ def _get_class_public_interface_dict(backend):
     interface_dict = {}
     for fcls in feature_classes:
         name = fcls.__name__
-        attrs = set(attr for attr in dir(fcls) if not attr.startswith('_'))
+        attrs = set(attr for attr in dir(fcls) if not attr.startswith("_"))
         interface_dict[name] = attrs
     return interface_dict
 
@@ -29,13 +29,13 @@ def test_backend_features_interface(cseabreeze, pyseabreeze):
 
     assert set(c_feature_interface) == set(py_feature_interface)
 
-    CSEABREEZE_CUSTOM = {'feature_id'}
-    PYSEABREEZE_CUSTOM = {'supports_protocol', 'specialize'}
+    CSEABREEZE_CUSTOM = {"feature_id"}
+    PYSEABREEZE_CUSTOM = {"supports_protocol", "specialize"}
 
     for feature in c_feature_interface:
         c_attrs = c_feature_interface[feature] - CSEABREEZE_CUSTOM
         py_attrs = py_feature_interface[feature] - PYSEABREEZE_CUSTOM
-        assert c_attrs == py_attrs, 'feature {} differs in attrs'.format(feature)
+        assert c_attrs == py_attrs, "feature {} differs in attrs".format(feature)
 
 
 def test_cseabreeze_seabreezeapi(cseabreeze):

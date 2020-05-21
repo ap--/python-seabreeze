@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
-    identifier = 'dhcp_server'
+    identifier = "dhcp_server"
 
     def get_address(self, interface_index):
         raise NotImplementedError("implement in derived class")

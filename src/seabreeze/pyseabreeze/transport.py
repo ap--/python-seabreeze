@@ -92,7 +92,7 @@ class TransportInterface(object):
 class USBTransport(TransportInterface):
     """implementation of the usb transport interface for spectrometers"""
 
-    _required_init_kwargs = ('usb_product_id', 'usb_endpoint_map', 'usb_protocol')
+    _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")
     vendor_id = 0x2457
     product_ids = {}
 
@@ -103,16 +103,16 @@ class USBTransport(TransportInterface):
         self._protocol_cls = usb_protocol
         # internal settings
         self._default_read_size = {
-            'low_speed': 64,
-            'high_speed': 512,
-            'high_speed_alt': 512
+            "low_speed": 64,
+            "high_speed": 512,
+            "high_speed_alt": 512,
         }
         self._read_endpoints = {
-            'low_speed': 'lowspeed_in',
-            'high_speed': 'highspeed_in',
-            'high_speed_alt': 'highspeed_in2'
+            "low_speed": "lowspeed_in",
+            "high_speed": "highspeed_in",
+            "high_speed_alt": "highspeed_in2",
         }
-        self._default_read_endpoint = 'low_speed'
+        self._default_read_endpoint = "low_speed"
         # internal state
         self._device = None
         self._opened = None
@@ -187,15 +187,20 @@ class USBTransport(TransportInterface):
             unique pyusb devices for each available spectrometer
         """
         # get all matching devices
-        return usb.core.find(find_all=True,
-                             custom_match=lambda dev: (dev.idVendor == cls.vendor_id and
-                                                       dev.idProduct in cls.product_ids))
+        return usb.core.find(
+            find_all=True,
+            custom_match=lambda dev: (
+                dev.idVendor == cls.vendor_id and dev.idProduct in cls.product_ids
+            ),
+        )
 
     @classmethod
     def register_model(cls, model_name, **kwargs):
-        product_id = kwargs.get('usb_product_id')
+        product_id = kwargs.get("usb_product_id")
         if product_id in cls.product_ids:
-            raise ValueError("product_id 0x{:04x} already in registry".format(product_id))
+            raise ValueError(
+                "product_id 0x{:04x} already in registry".format(product_id)
+            )
         cls.product_ids[product_id] = model_name
 
     @classmethod
@@ -210,7 +215,9 @@ class USBTransport(TransportInterface):
         assert set(kwargs) == set(cls._required_init_kwargs)
         # usb transport register automatically on registration
         cls.register_model(model_name, **kwargs)
-        specialized_class = type("USBTransport{}".format(model_name), (cls, ), {
-                                    '__init__': partialmethod(cls.__init__, **kwargs)
-                                 })
+        specialized_class = type(
+            "USBTransport{}".format(model_name),
+            (cls,),
+            {"__init__": partialmethod(cls.__init__, **kwargs)},
+        )
         return specialized_class

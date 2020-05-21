@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
-    identifier = 'ethernet_configuration'
+    identifier = "ethernet_configuration"
 
     def get_mac_address(self, interface_index):
         raise NotImplementedError("implement in derived class")

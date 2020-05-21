@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeTemperatureFeature(SeaBreezeFeature):
-    identifier = 'temperature'
+    identifier = "temperature"
 
     def count_temperatures(self):
         raise NotImplementedError("implement in derived class")

@@ -48,9 +48,10 @@ Windows
     requires installing the drivers
 
 """
+from seabreeze._version import __version__
+
 # noinspection PyUnresolvedReferences
 from seabreeze.backends import use
-from seabreeze._version import __version__
 
 __author__ = "Andreas Poehlmann"
 __email__ = "andreas@poehlmann.io"

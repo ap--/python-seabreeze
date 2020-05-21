@@ -29,7 +29,7 @@ def list_devices():
     devices: `list[SeaBreezeDevice]`
         connected Spectrometer instances
     """
-    if not hasattr(list_devices, '_api'):
+    if not hasattr(list_devices, "_api"):
         list_devices._api = _lib.SeaBreezeAPI()
     # noinspection PyProtectedMember
     return list_devices._api.list_devices()
@@ -64,7 +64,9 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 # NOTE: the spark spectrometer raises a transport error when trying
                 # to receive the nc coefficients. In this case continue with disabled
                 # nonlinearity correction support
-                self._nc = numpy.poly1d(nc_feature.get_nonlinearity_coefficients()[::-1])
+                self._nc = numpy.poly1d(
+                    nc_feature.get_nonlinearity_coefficients()[::-1]
+                )
             except self._backend.SeaBreezeError:
                 pass
         # check for dark pixel correction support
@@ -116,7 +118,9 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 else:
                     return cls(dev)
         else:
-            raise cls._backend.SeaBreezeError("No device attached with serial number '%s'." % serial)
+            raise cls._backend.SeaBreezeError(
+                "No device attached with serial number '%s'." % serial
+            )
 
     def wavelengths(self):
         """wavelength array of the spectrometer
@@ -173,14 +177,18 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
             measured intensities in (a.u.)
         """
         if correct_dark_counts and not self._dp:
-            raise self._backend.SeaBreezeError("This device does not support dark count correction.")
+            raise self._backend.SeaBreezeError(
+                "This device does not support dark count correction."
+            )
         if correct_nonlinearity and not self._nc:
-            raise self._backend.SeaBreezeError("This device does not support nonlinearity correction.")
+            raise self._backend.SeaBreezeError(
+                "This device does not support nonlinearity correction."
+            )
         # Get the intensities
         out = self._dev.f.spectrometer.get_intensities()
         # Do corrections if requested
         if correct_nonlinearity or correct_dark_counts:
-            dark_offset = numpy.mean(out[self._dp]) if self._dp else 0.
+            dark_offset = numpy.mean(out[self._dp]) if self._dp else 0.0
             out -= dark_offset
         if correct_nonlinearity:
             out = out / numpy.polyval(self._nc, out)
@@ -221,8 +229,12 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         spectrum : `numpy.ndarray`
             combined array of wavelengths and measured intensities
         """
-        return numpy.vstack((self._wavelengths,
-                             self.intensities(correct_dark_counts, correct_nonlinearity)))
+        return numpy.vstack(
+            (
+                self._wavelengths,
+                self.intensities(correct_dark_counts, correct_nonlinearity),
+            )
+        )
 
     def integration_time_micros(self, integration_time_micros):
         """set the integration time in microseconds
@@ -236,13 +248,19 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         # If integration time is out of bounds, libseabreeze returns Undefined Error
         # (Probably only for devices with a non micro second time base...)
         try:
-            self._dev.f.spectrometer.set_integration_time_micros(integration_time_micros)
+            self._dev.f.spectrometer.set_integration_time_micros(
+                integration_time_micros
+            )
         except OverflowError:
-            raise self._backend.SeaBreezeError("[OverFlow] Specified integration time is out of range.")
+            raise self._backend.SeaBreezeError(
+                "[OverFlow] Specified integration time is out of range."
+            )
         except self._backend.SeaBreezeError as e:
-            if getattr(e, 'error_code', None) == 1:
+            if getattr(e, "error_code", None) == 1:
                 # Only replace if 'Undefined Error'
-                raise self._backend.SeaBreezeError("[Fix] Specified integration time is out of range.")
+                raise self._backend.SeaBreezeError(
+                    "[Fix] Specified integration time is out of range."
+                )
             else:
                 raise e
 

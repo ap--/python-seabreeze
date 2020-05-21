@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
-    identifier = 'i2c_master'
+    identifier = "i2c_master"
 
     def get_number_of_buses(self):
         raise NotImplementedError("implement in derived class")

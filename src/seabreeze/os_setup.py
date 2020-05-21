@@ -13,9 +13,9 @@ import sys
 import tempfile
 import time
 import zipfile
+from builtins import input, str
 from textwrap import dedent
 
-from builtins import input, str
 from future.standard_library import hooks
 
 with hooks():
@@ -30,27 +30,30 @@ except ImportError:
     def _indent(text, prefix, predicate=None):
         return u"".join(prefix + line for line in text.splitlines(True))
 
-_GITHUB_REPO_URL = 'https://raw.githubusercontent.com/ap--/python-seabreeze/master/os_support'
-_UDEV_RULES_PATH = '/etc/udev/rules.d/10-oceanoptics.rules'
-_DRIVERS_ZIP_FN = 'windows-driver-files.zip'
+
+_GITHUB_REPO_URL = (
+    "https://raw.githubusercontent.com/ap--/python-seabreeze/master/os_support"
+)
+_UDEV_RULES_PATH = "/etc/udev/rules.d/10-oceanoptics.rules"
+_DRIVERS_ZIP_FN = "windows-driver-files.zip"
 _log = logging.getLogger(__name__)
 
 
 def _diff_files(file1, file2):
     """diff two files using linux `diff`"""
     try:
-        return subprocess.check_output(['diff', file1, file2]).decode('utf8')
+        return subprocess.check_output(["diff", file1, file2]).decode("utf8")
     except subprocess.CalledProcessError as err:
-        return err.output.decode('utf8')
+        return err.output.decode("utf8")
 
 
 def _request_confirmation(question):
     """require user input to continue"""
     while True:
-        user_input = input('{} [y/n] '.format(question)).lower()
-        if user_input not in {'y', 'n'}:
+        user_input = input("{} [y/n] ".format(question)).lower()
+        if user_input not in {"y", "n"}:
             _log.info("Please enter 'y' or 'n'.")
-        elif user_input[0] == 'n':
+        elif user_input[0] == "n":
             return False
         else:
             return True
@@ -60,8 +63,17 @@ def _request_confirmation(question):
 def linux_install_udev_rules():
     """verify and install the udev rules"""
     parser = argparse.ArgumentParser()
-    parser.add_argument('--overwrite-existing', help="overwrite rules if already present", action='store_true')
-    parser.add_argument('rules', help="rules file (default: download from github)", default='', nargs='?')
+    parser.add_argument(
+        "--overwrite-existing",
+        help="overwrite rules if already present",
+        action="store_true",
+    )
+    parser.add_argument(
+        "rules",
+        help="rules file (default: download from github)",
+        default="",
+        nargs="?",
+    )
     args = parser.parse_args()
 
     if args.rules:
@@ -77,7 +89,7 @@ def linux_install_udev_rules():
     try:
         # download rules from github if no file is provided
         if udev_tmp_file is not None:
-            url = '{}/{}'.format(_GITHUB_REPO_URL, os.path.basename(_UDEV_RULES_PATH))
+            url = "{}/{}".format(_GITHUB_REPO_URL, os.path.basename(_UDEV_RULES_PATH))
             try:
                 _log.info("downloading rules from github")
                 udev_data = urlopen(url).read()
@@ -95,19 +107,21 @@ def linux_install_udev_rules():
                 _log.info("udev rules already newest version")
                 sys.exit(0)
             else:
-                _log.info(_indent(rules_differ, u'  ').rstrip())
-                _log.info("udev rules differ. To overwrite run with '--overwrite-existing'")
+                _log.info(_indent(rules_differ, u"  ").rstrip())
+                _log.info(
+                    "udev rules differ. To overwrite run with '--overwrite-existing'"
+                )
                 sys.exit(1)
 
         if not _request_confirmation("Install udev rules?"):
             sys.exit(0)
 
         # cp rules and execute
-        _log.info('Copying udev rules to {}'.format(_UDEV_RULES_PATH))
-        subprocess.call(['sudo', 'cp', udev_fn, _UDEV_RULES_PATH])
-        _log.info('Calling udevadm control --reload-rules')
-        subprocess.call(['sudo', 'udevadm', 'control', '--reload-rules'])
-        _log.info('Success')
+        _log.info("Copying udev rules to {}".format(_UDEV_RULES_PATH))
+        subprocess.call(["sudo", "cp", udev_fn, _UDEV_RULES_PATH])
+        _log.info("Calling udevadm control --reload-rules")
+        subprocess.call(["sudo", "udevadm", "control", "--reload-rules"])
+        _log.info("Success")
         sys.exit(0)
 
     finally:
@@ -148,38 +162,47 @@ def windows_install_drivers():
     if not _windows_is_admin():
         # Re-run the program with admin rights
         argv = [__file__] + sys.argv[1:]
-        ret = ctypes.windll.shell32.ShellExecuteW(None,
-                                                  _unicode("runas"),
-                                                  _unicode(sys.executable),
-                                                  _unicode(subprocess.list2cmdline(argv)),
-                                                  None,
-                                                  1)
+        ret = ctypes.windll.shell32.ShellExecuteW(
+            None,
+            _unicode("runas"),
+            _unicode(sys.executable),
+            _unicode(subprocess.list2cmdline(argv)),
+            None,
+            1,
+        )
         if ret > 32:
-            _log.info('Launched admin shell')
+            _log.info("Launched admin shell")
         else:
-            _log.info('Failed to launch admin shell. Error code {}'.format(ret))
+            _log.info("Failed to launch admin shell. Error code {}".format(ret))
         sys.exit(0 if ret > 32 else 1)
 
     # running as admin
     parser = argparse.ArgumentParser()
-    parser.add_argument('drivers_zip', help="drivers zip file (default: download from github)", default='', nargs='?')
+    parser.add_argument(
+        "drivers_zip",
+        help="drivers zip file (default: download from github)",
+        default="",
+        nargs="?",
+    )
     args = parser.parse_args()
 
     if args.drivers_zip:
         if not os.path.exists(args.drivers_zip):
-            raise IOError("drivers_zip file '{}' doesn't exist".format(args.drivers_zip))
+            raise IOError(
+                "drivers_zip file '{}' doesn't exist".format(args.drivers_zip)
+            )
         drivers_zip = args.drivers_zip
     else:
         drivers_zip = None
 
-    tmp_dir = tempfile.mkdtemp(prefix='seabreeze-os-')
+    tmp_dir = tempfile.mkdtemp(prefix="seabreeze-os-")
     # noinspection PyBroadException
     try:
         # download driver files
         if drivers_zip is None:
-            url = '{}/{}'.format(_GITHUB_REPO_URL, os.path.basename(_DRIVERS_ZIP_FN))
+            url = "{}/{}".format(_GITHUB_REPO_URL, os.path.basename(_DRIVERS_ZIP_FN))
             drivers_zip = os.path.join(tmp_dir, _DRIVERS_ZIP_FN)
-            with open(drivers_zip, 'wb') as dzip:
+            with open(drivers_zip, "wb") as dzip:
                 try:
                     _log.info("Downloading windows drivers from github")
                     drivers_zip_data = urlopen(url).read()
@@ -189,27 +212,31 @@ def windows_install_drivers():
                 dzip.write(drivers_zip_data)
 
         # extract driver files
-        with zipfile.ZipFile(drivers_zip, 'r') as dzip:
+        with zipfile.ZipFile(drivers_zip, "r") as dzip:
             if not _is_contained_in_dir(dzip.namelist()):
                 raise Exception("Zipfile contains non subdir paths")
             dzip.extractall(tmp_dir)
         _log.info("Extracted to temporary directory {}".format(tmp_dir))
 
         # use correct pnputil with 32bit pythons
-        if '32bit' in platform.architecture():
-            pnputil = r'%systemroot%\Sysnative\pnputil.exe'
+        if "32bit" in platform.architecture():
+            pnputil = r"%systemroot%\Sysnative\pnputil.exe"
         else:
-            pnputil = 'pnputil.exe'
+            pnputil = "pnputil.exe"
 
         # install with pnp util
-        cmd = [pnputil, '-i', '-a', os.path.join(tmp_dir, '*.inf')]
+        cmd = [pnputil, "-i", "-a", os.path.join(tmp_dir, "*.inf")]
         return_code = subprocess.call(cmd, shell=True)
 
-        _log.warn(dedent("""\
+        _log.warn(
+            dedent(
+                """\
             Note: Some of the drivers currently don't have valid signatures.
             Look at the output above. If the spectrometer you want to use only
             provides an unsigned driver, you might have to install it manually.
-            If you encounter this issue, please report it on github."""))
+            If you encounter this issue, please report it on github."""
+            )
+        )
 
         if return_code == 0:
             _log.info("Success")
@@ -223,11 +250,11 @@ def windows_install_drivers():
 
     finally:
         shutil.rmtree(tmp_dir)
-        input('Press [enter] to close.')
+        input("Press [enter] to close.")
 
 
 def main():
-    logging.basicConfig(level=logging.INFO, format='%(message)s')
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     system = platform.system()
     if system == "Windows":
         windows_install_drivers()

@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeGPIOFeature(SeaBreezeFeature):
-    identifier = 'gpio'
+    identifier = "gpio"
 
     modes = dict(
         GPIO_OUTPUT_PUSH_PULL=0x00,

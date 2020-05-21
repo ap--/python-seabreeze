@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeDataBufferFeature(SeaBreezeFeature):
-    identifier = 'data_buffer'
+    identifier = "data_buffer"
 
     def clear(self):
         raise NotImplementedError("implement in derived class")

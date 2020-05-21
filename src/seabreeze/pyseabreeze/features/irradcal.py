@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeIrradCalFeature(SeaBreezeFeature):
-    identifier = 'irrad_cal'
+    identifier = "irrad_cal"
 
     def has_collection_area(self):
         raise NotImplementedError("implement in derived class")

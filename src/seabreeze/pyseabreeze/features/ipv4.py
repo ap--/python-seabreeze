@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeIPv4Feature(SeaBreezeFeature):
-    identifier = 'ipv4'
+    identifier = "ipv4"
 
     def get_dhcp_enable_state(self, interface_index):
         raise NotImplementedError("implement in derived class")

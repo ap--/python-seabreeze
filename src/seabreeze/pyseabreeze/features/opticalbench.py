@@ -3,11 +3,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 # Definition
 # ==========
-# 
+#
 # TODO: This feature needs to be implemented for pyseabreeze
 #
 class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
-    identifier = 'optical_bench'
+    identifier = "optical_bench"
 
     def get_fiber_diameter_microns(self):
         raise NotImplementedError("implement in derived class")

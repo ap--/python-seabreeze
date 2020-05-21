@@ -7,7 +7,6 @@ import itertools
 from collections import defaultdict
 
 from future.utils import with_metaclass
-
 from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature

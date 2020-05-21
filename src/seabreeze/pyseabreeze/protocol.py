@@ -5,7 +5,6 @@ ocean optics spectrometers use two different communication protocols:
 - the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
 
 """
-import collections
 import functools
 import hashlib
 import struct
@@ -14,14 +13,19 @@ import warnings
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
+try:
+    from collections.abc import Callable
+except ImportError:  # Python27
+    from collections import Callable
+
 
 class ProtocolInterface(object):
     def __init__(self, transport):
         if not (
             hasattr(transport, "write")
-            and isinstance(transport.write, collections.Callable)
+            and isinstance(transport.write, Callable)
             and hasattr(transport, "read")
-            and isinstance(transport.read, collections.Callable)
+            and isinstance(transport.read, Callable)
         ):
             raise TypeError("transport does not implement read and write methods")
         self.transport = transport

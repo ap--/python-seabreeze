@@ -7,7 +7,6 @@ Email: andreas@poehlmann.io
 
 """
 import numpy
-
 import seabreeze.backends
 from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin
 

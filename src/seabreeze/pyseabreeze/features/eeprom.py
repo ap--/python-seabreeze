@@ -34,7 +34,10 @@ class SeaBreezeEEPromFeatureOOI(SeaBreezeEEPROMFeature):
             raise SeaBreezeError('read_eeprom_slot_raw: wrong answer: "%s"' % ret)
         if raw:
             return ret
-        data = ret[2 : ret[2:].index(0) + 2].tostring().decode("utf-8")
+        try:
+            data = ret[2 : ret[2:].index(0) + 2].tobytes().decode("utf-8")
+        except AttributeError:  # Python27
+            data = ret[2 : ret[2:].index(0) + 2].tostring().decode("utf-8")
         if not strip_zero_bytes:
             return data
         return data.rstrip("\x00")

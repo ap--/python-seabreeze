@@ -44,6 +44,8 @@ class OOIProtocol(ProtocolInterface):
         0x05: '<BB',   # OP_GETINFO
         0x09: '<B',    # OP_REQUESTSPEC
         0x0A: '<BH',   # OP_SETTRIGMODE
+        0x6A: '<BBH',  # OP_WRITE_REGISTER
+        0x6B: '<BB',   # OP_READ_REGISTER
         0x71: '<BBB',  # OP_TECENABLE_QE
         0x72: '<B',    # OP_READTEC_QE
         0x73: '<Bh',   # OP_TECSETTEMP_QE

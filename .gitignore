@@ -4,9 +4,11 @@
 .DS_Store
 .eggs
 .idea
+.cache/*
 build/*
 dist/*
 venv/*
+venv*/*
 docs/build/*
 pip-wheel-metadata/*
 src/seabreeze/cseabreeze/c_seabreeze_wrapper.cpp

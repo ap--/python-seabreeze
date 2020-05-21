@@ -13,7 +13,7 @@ Installing via pip
     # install both cseabreeze and pyseabreeze backend
     pip install seabreeze[pyseabreeze]
     # install only pyseabreeze backend
-    pip install seabreeze[pyseabreeze] --no-build-isolation --install-option="--without-cseabreeze"
+    pip install seabreeze[pyseabreeze] --no-use-pep517 --no-build-isolation --install-option="--without-cseabreeze"
 
 
 Installing via conda

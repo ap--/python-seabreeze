@@ -1,5 +1,19 @@
 import pytest
 
+
+def _running_on_ci():
+    """returns if we're currently running on a CI"""
+    import os
+
+    CI = os.environ.get("CI", "").lower()
+    CONDA_BUILD = os.environ.get("CONDA_BUILD", "").lower()
+    if CONDA_BUILD in {"1", "true"}:
+        return True
+    if CI in {"1", "true", "azure", "travis", "appveyor", "circleci"}:
+        return True
+    return False
+
+
 try:
     import seabreeze.pyseabreeze as psb
 except ImportError:
@@ -24,34 +38,35 @@ else:
 def _retr():
     """retrieves a list of all connected spectrometers for all backends"""
     params, ids = [], []
-    csb_serials, psb_serials = set(), set()
-    for serials, backend in [(csb_serials, csb), (psb_serials, psb)]:
-        if backend is None:
-            continue
-        api = backend.SeaBreezeAPI()
-        try:
-            serials.update((d.serial_number, d.model) for d in api.list_devices())
-        except:
-            pass
-        finally:
-            api.shutdown()
-    for ser_mod in csb_serials.union(psb_serials):
-        params.extend(
-            [
-                (csb, ser_mod[0])
-                if ser_mod in csb_serials
-                else pytest.param((csb, None), marks=pytest.mark.skip),
-                (psb, ser_mod[0])
-                if ser_mod in psb_serials
-                else pytest.param((psb, None), marks=pytest.mark.skip),
-            ]
-        )
-        ids.extend(
-            [
-                ("cseabreeze:{}:{}".format(ser_mod[1], ser_mod[0])),
-                ("pyseabreeze:{}:{}".format(ser_mod[1], ser_mod[0])),
-            ]
-        )
+    if not _running_on_ci():
+        csb_serials, psb_serials = set(), set()
+        for serials, backend in [(csb_serials, csb), (psb_serials, psb)]:
+            if backend is None:
+                continue
+            api = backend.SeaBreezeAPI()
+            try:
+                serials.update((d.serial_number, d.model) for d in api.list_devices())
+            except:
+                pass
+            finally:
+                api.shutdown()
+        for ser_mod in csb_serials.union(psb_serials):
+            params.extend(
+                [
+                    (csb, ser_mod[0])
+                    if ser_mod in csb_serials
+                    else pytest.param((csb, None), marks=pytest.mark.skip),
+                    (psb, ser_mod[0])
+                    if ser_mod in psb_serials
+                    else pytest.param((psb, None), marks=pytest.mark.skip),
+                ]
+            )
+            ids.extend(
+                [
+                    ("cseabreeze:{}:{}".format(ser_mod[1], ser_mod[0])),
+                    ("pyseabreeze:{}:{}".format(ser_mod[1], ser_mod[0])),
+                ]
+            )
     if not params:
         params = [
             pytest.param((csb, None), marks=pytest.mark.skip),

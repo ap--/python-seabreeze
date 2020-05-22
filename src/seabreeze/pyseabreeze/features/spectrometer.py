@@ -1,6 +1,7 @@
 import struct
 
 import numpy
+
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError, SeaBreezeNotSupported
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI

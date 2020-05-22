@@ -14,9 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- *psb* Continuous Strobe support for USB2000+
-- *psb* Continuous Strobe implement set_period_micros
+## [1.1.0] - 2020-05-22
+### Added
 - *psb* Continuous Strobe support for USB650 **thanks @moritzj29**
+- *psb* Continuous Strobe implement set_period_micros
+- *psb* Continuous Strobe support for USB2000+
+- add python-3.8 support
+
+### Fixed
+- *docs* fix instructions to install pyseabreeze only
 
 ## [1.0.2] - 2020-05-04
 ### Fixed
@@ -94,7 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/ap--/python-seabreeze/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/ap--/python-seabreeze/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ap--/python-seabreeze/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ap--/python-seabreeze/compare/v1.0.0rc4...v1.0.0

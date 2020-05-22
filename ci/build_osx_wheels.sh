@@ -1,6 +1,6 @@
 #!/bin/bash
-curl https://raw.githubusercontent.com/matthew-brett/multibuild/ed1cfaf365ed51bd309a80e60736915d3ec70d31/osx_utils.sh -s -o osx_utils.sh
-curl https://raw.githubusercontent.com/matthew-brett/multibuild/ed1cfaf365ed51bd309a80e60736915d3ec70d31/common_utils.sh -s -o common_utils.sh
+curl https://raw.githubusercontent.com/matthew-brett/multibuild/88a0b6f0eb770cf9f95792d66410e7696ce3d384/osx_utils.sh -s -o osx_utils.sh
+curl https://raw.githubusercontent.com/matthew-brett/multibuild/88a0b6f0eb770cf9f95792d66410e7696ce3d384/common_utils.sh -s -o common_utils.sh
 source osx_utils.sh
 
 MACPYTHON_OSX_VERSION="10.6"

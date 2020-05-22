@@ -174,7 +174,14 @@ setup(
         "cseabreeze": [],
         "pyseabreeze": ["pyusb >=1.0", "enum34 ; python_version<'3.4'"],
     },
-    tests_require=["pytest<5", "mock"],
+    tests_require=[
+        "pytest<5",
+        # mock and zipp break python setup.py pytest on python 2.7
+        "mock<4 ; python_version<'3.6'",
+        "mock ; python_version>='3.6'",
+        "zipp<2 ; python_version<'3.6'",
+        "zipp ; python_version>='3.6'",
+    ],
     cmdclass={"build_ext": sb_build_ext},
     ext_modules=extensions,
     packages=find_packages(where="src"),

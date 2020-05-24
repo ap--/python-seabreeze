@@ -280,7 +280,7 @@ int RS232Close(void *handle) {
 int RS232Write(void *handle, char *data, int numberOfBytes) {
     struct __rs232_handle *desc;
     ssize_t written = 0;
-    unsigned int offset;
+    int offset;
     unsigned int bytesToWrite;
 
     desc = (struct __rs232_handle *)handle;
@@ -330,7 +330,7 @@ int RS232Write(void *handle, char *data, int numberOfBytes) {
 int RS232Read(void *handle, char *buffer, int numberOfBytes) {
     struct __rs232_handle *desc;
     int bytesRead;
-    unsigned int offset;
+    int offset;
     unsigned int bytesToRead;
 
     desc = (struct __rs232_handle *)handle;

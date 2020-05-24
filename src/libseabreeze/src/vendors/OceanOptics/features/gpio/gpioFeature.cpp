@@ -67,7 +67,7 @@ unsigned char GPIOFeature::getGPIO_NumberOfPins(const Protocol &protocol, const 
 		proto = lookupProtocolImpl(protocol);
 		GPIO_PI = static_cast<GPIOProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException &e) {
+	catch (const FeatureProtocolNotFoundException &e) {
 		string error(
 			"Could not find matching protocol implementation to get data.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */
@@ -77,7 +77,7 @@ unsigned char GPIOFeature::getGPIO_NumberOfPins(const Protocol &protocol, const 
 	try {
 		numberOfPins = GPIO_PI->getGPIO_NumberOfPins(bus);
 	}
-	catch (ProtocolException &pe) {
+	catch (const ProtocolException &pe) {
 		string error("Caught protocol exception: ");
 		error += pe.what();
 		/* FIXME: previous exception should probably be bundled up into the new exception */
@@ -98,7 +98,7 @@ unsigned int GPIOFeature::getGPIO_OutputEnableVector(const Protocol &protocol, c
 		proto = lookupProtocolImpl(protocol);
 		GPIO_PI = static_cast<GPIOProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException &e) {
+	catch (const FeatureProtocolNotFoundException &e) {
 		string error(
 			"Could not find matching protocol implementation to get data.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */
@@ -108,7 +108,7 @@ unsigned int GPIOFeature::getGPIO_OutputEnableVector(const Protocol &protocol, c
 	try {
 		outputEnableVector = GPIO_PI->getGPIO_OutputEnableVector(bus);
 	}
-	catch (ProtocolException &pe) {
+	catch (const ProtocolException &pe) {
 		string error("Caught protocol exception: ");
 		error += pe.what();
 		/* FIXME: previous exception should probably be bundled up into the new exception */

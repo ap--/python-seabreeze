@@ -76,7 +76,7 @@ vector<double> *OOISpectrometerFeature::getFormattedSpectrum(const Protocol &pro
     try {
         proto = lookupProtocolImpl(protocol);
         spec = static_cast<SpectrometerProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error("Could not find matching protocol implementation to get a formatted spectrum.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
@@ -90,7 +90,7 @@ vector<double> *OOISpectrometerFeature::getFormattedSpectrum(const Protocol &pro
     try {
         logger.debug("reading spectrum");
         retval = spec->readFormattedSpectrum(bus);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -126,7 +126,7 @@ void OOISpectrometerFeature::writeRequestFormattedSpectrum(const Protocol &proto
     try {
         proto = lookupProtocolImpl(protocol);
         spec = static_cast<SpectrometerProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error("Could not find matching protocol implementation to get raw spectrum.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
         logger.error(error.c_str());
@@ -135,7 +135,7 @@ void OOISpectrometerFeature::writeRequestFormattedSpectrum(const Protocol &proto
 
     try {
         spec->requestFormattedSpectrum(bus);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -157,7 +157,7 @@ void OOISpectrometerFeature::writeRequestUnformattedSpectrum(const Protocol &pro
 		proto = lookupProtocolImpl(protocol);
 		spec = static_cast<SpectrometerProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException &e) {
+	catch (const FeatureProtocolNotFoundException &e) {
 		string error("Could not find matching protocol implementation to get an unformatted spectrum.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */
 		logger.error(error.c_str());
@@ -167,7 +167,7 @@ void OOISpectrometerFeature::writeRequestUnformattedSpectrum(const Protocol &pro
 	try {
 		spec->requestUnformattedSpectrum(bus);
 	}
-	catch (ProtocolException &pe) {
+	catch (const ProtocolException &pe) {
 		string error("Caught protocol exception: ");
 		error += pe.what();
 		/* FIXME: previous exception should probably be bundled up into the new exception */
@@ -189,7 +189,7 @@ void OOISpectrometerFeature::writeRequestFastBufferSpectrum(const Protocol &prot
 		proto = lookupProtocolImpl(protocol);
 		spec = static_cast<SpectrometerProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException &e) {
+	catch (const FeatureProtocolNotFoundException &e) {
 		string error("Could not find matching protocol implementation to get an unformatted spectrum.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */
 		logger.error(error.c_str());

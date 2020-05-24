@@ -70,10 +70,10 @@ int EEPROMFeatureAdapter::readEEPROMSlot(int *errorCode, int slotNumber,
         memcpy(buffer, &((*info)[0]), bytesCopied * sizeof (unsigned char));
         delete info;
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
-    } catch (IllegalArgumentException &iae) {
+    } catch (const IllegalArgumentException &iae) {
         SET_ERROR_CODE(ERROR_INVALID_ERROR);
         return 0;
     }

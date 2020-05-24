@@ -69,11 +69,11 @@ bool JazTCPIPv4::open() {
         this->socket->connect(loc->getIPv4Address(), loc->getPort());
         this->socket->setSOLinger(false, 1);
         this->socket->setReadTimeoutMillis(0);  /* Wait indefinitely */
-    } catch (UnknownHostException &uhe) {
+    } catch (const UnknownHostException &uhe) {
         return false;
-    } catch (BusConnectException &bce) {
+    } catch (const BusConnectException &bce) {
         return false;
-    } catch (SocketException &se) {
+    } catch (const SocketException &se) {
         return false;
     }
     

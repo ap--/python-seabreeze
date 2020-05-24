@@ -55,7 +55,7 @@ vector<byte> RawUSBBusAccessFeature::readUSB(const USBInterface *bus, int endpoi
     try {
         USBTransferHelper helper(descriptor, 0x00, endpoint);
         helper.receive(retval, length);
-    } catch (BusTransferException &e) {
+    } catch (const BusTransferException &e) {
         string error("Caught BusTransferException in readUSB: ");
         error += e.what();
         throw FeatureControlException(error);
@@ -74,7 +74,7 @@ int RawUSBBusAccessFeature::writeUSB(const USBInterface *bus, int endpoint,
         USBTransferHelper helper(descriptor, endpoint, 0x00);
         helper.send(data, (unsigned int) data.size());
         bytesWritten = (int) data.size();
-    } catch (BusTransferException &e) {
+    } catch (const BusTransferException &e) {
         string error("Caught BusTransferException in writeUSB: ");
         error += e.what();
         throw FeatureControlException(error);

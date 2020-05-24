@@ -131,9 +131,9 @@ bool ThermoElectricQEFeature::initialize(const Protocol &protocol, const Bus &bu
         double temp = getDefaultSetPointCelsius(protocol, bus);
         setThermoElectricEnable(protocol, bus, enable);
         setTemperatureSetPointCelsius(protocol, bus, temp);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         return false;
-    } catch (IllegalArgumentException &iae) {
+    } catch (const IllegalArgumentException &iae) {
         return false;
     }
 

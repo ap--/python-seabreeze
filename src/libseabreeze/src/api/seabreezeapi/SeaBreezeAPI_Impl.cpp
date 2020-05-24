@@ -150,7 +150,7 @@ int SeaBreezeAPI_Impl::probeDevices() {
                             DeviceAdapter *da = new DeviceAdapter(newdev, ++__deviceID);
                             this->probedDevices.push_back(da);
                             validDevices.push_back(da);
-                        } catch (IllegalArgumentException &iae) {
+                        } catch (const IllegalArgumentException &iae) {
                             continue;
                         }
                     }
@@ -216,7 +216,7 @@ int SeaBreezeAPI_Impl::addTCPIPv4DeviceLocation(char *deviceTypeName, char *ipAd
     try {
         /* Note that this pre-increments the device ID to mitigate any race conditions */
         this->specifiedDevices.push_back(new DeviceAdapter(dev, ++__deviceID));
-    } catch (IllegalArgumentException &iae) {
+    } catch (const IllegalArgumentException &iae) {
         /* Unable to create the adapter */
         return 2;
     }
@@ -240,7 +240,7 @@ int SeaBreezeAPI_Impl::addRS232DeviceLocation(char *deviceTypeName,
     try {
         /* Note that this pre-increments the device ID to mitigate any race conditions */
         this->specifiedDevices.push_back(new DeviceAdapter(dev, ++__deviceID));
-    } catch (IllegalArgumentException &iae) {
+    } catch (const IllegalArgumentException &iae) {
         /* Unable to create the adapter */
         return 2;
     }
@@ -311,7 +311,7 @@ int SeaBreezeAPI_Impl::getSupportedModelName(int index, int *errorCode, char *bu
         SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
         return -1;
     }
-    if (index >= supportedModels.size()) {
+    if (index >= (int) supportedModels.size()) {
         SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
         return -1;
     }

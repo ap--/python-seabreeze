@@ -127,7 +127,7 @@ int OBPIrradCalProtocol::writeIrradCal(const Bus &bus, const vector<float> &cal)
 int OBPIrradCalProtocol::hasCollectionArea(const Bus &bus) {
     try {
         readCollectionArea(bus);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         return 0;
     }
     return 1;

@@ -51,7 +51,7 @@ bool ProgrammableSaturationFeatureBase::initialize(const Protocol &protocol,
     try {
         this->saturation = getSaturation(protocol, bus);
         this->valid = true;
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         this->valid = false;
     }
     

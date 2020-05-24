@@ -71,7 +71,7 @@ void AcquisitionDelayFeature::setAcquisitionDelayMicroseconds(
     try {
         proto = lookupProtocolImpl(protocol);
         delay = static_cast<AcquisitionDelayProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &fpnfe) {
+    } catch (const FeatureProtocolNotFoundException &fpnfe) {
         string error(
                 "Could not find matching protocol implementation to set acquisition delay.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -82,7 +82,7 @@ void AcquisitionDelayFeature::setAcquisitionDelayMicroseconds(
         delay->setAcquisitionDelayMicroseconds(bus, delayMicros);
         this->lastAcquisitionDelayMicroseconds = delayMicros;
         this->lastAcquisitionDelayValid = true;
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */

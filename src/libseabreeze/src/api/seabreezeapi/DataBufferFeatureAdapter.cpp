@@ -59,7 +59,7 @@ void DataBufferFeatureAdapter::clearBuffer(int *errorCode)
     {
         this->feature->clearBuffer(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) 
+    } catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
@@ -71,7 +71,7 @@ void DataBufferFeatureAdapter::removeOldestSpectraFromBuffer(int *errorCode, uns
     {
         this->feature->removeOldestSpectraFromBuffer(*this->protocol, *this->bus, 0, numberOfSpectra);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) 
+    } catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
@@ -86,7 +86,7 @@ unsigned long DataBufferFeatureAdapter::getNumberOfElements(int *errorCode)
         retval = this->feature->getNumberOfElements(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) 
+    } catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
@@ -102,7 +102,7 @@ unsigned long DataBufferFeatureAdapter::getBufferCapacity(int *errorCode)
         retval = this->feature->getBufferCapacity(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) 
+    } catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
@@ -118,7 +118,7 @@ unsigned long DataBufferFeatureAdapter::getBufferCapacityMaximum(int *errorCode)
         retval = this->feature->getBufferCapacityMaximum(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) 
+    } catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
@@ -134,7 +134,7 @@ unsigned long DataBufferFeatureAdapter::getBufferCapacityMinimum(int *errorCode)
         retval = this->feature->getBufferCapacityMinimum(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) 
+    } catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
@@ -147,7 +147,7 @@ void DataBufferFeatureAdapter::setBufferCapacity(int *errorCode, unsigned long c
     {
         this->feature->setBufferCapacity(*this->protocol, *this->bus, 0, capacity);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) 
+    } catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }

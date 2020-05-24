@@ -65,7 +65,7 @@ vector<double> *NonlinearityCoeffsFeature::readNonlinearityCoefficients(
     try {
         proto = lookupProtocolImpl(protocol);
         nonlinearity = static_cast<NonlinearityCoeffsProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error(
                 "Could not find matching protocol implementation to get nonlinearity calibration.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -75,7 +75,7 @@ vector<double> *NonlinearityCoeffsFeature::readNonlinearityCoefficients(
     try {
         coeffs = nonlinearity->readNonlinearityCoeffs(bus);
         return coeffs;
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */

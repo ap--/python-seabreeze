@@ -75,7 +75,7 @@ int RawUSBBusAccessFeatureAdapter::readUSB(int *errorCode, unsigned char *buffer
 
         SET_ERROR_CODE(ERROR_SUCCESS);
     } 
-    catch (FeatureException &fe) 
+    catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
@@ -100,7 +100,7 @@ int RawUSBBusAccessFeatureAdapter::writeUSB(int *errorCode, unsigned char *buffe
         delete charVector;
         SET_ERROR_CODE(ERROR_SUCCESS);
     } 
-    catch (FeatureException &fe) 
+    catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         delete charVector;

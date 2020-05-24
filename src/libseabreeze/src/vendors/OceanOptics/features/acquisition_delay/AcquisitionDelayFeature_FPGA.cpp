@@ -77,7 +77,7 @@ void AcquisitionDelayFeature_FPGA::setAcquisitionDelayMicroseconds(
     try {
         proto = lookupProtocolImpl(protocol);
         fpga = static_cast<FPGARegisterProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &fpnfe) {
+    } catch (const FeatureProtocolNotFoundException &fpnfe) {
         string error("Could not find matching protocol implementation to write FPGA register");
         throw FeatureProtocolNotFoundException(error);
     }
@@ -97,7 +97,7 @@ void AcquisitionDelayFeature_FPGA::setAcquisitionDelayMicroseconds(
          */
         this->lastAcquisitionDelayMicroseconds = delayMicros;
         this->lastAcquisitionDelayValid = true;
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         throw FeatureControlException(error);

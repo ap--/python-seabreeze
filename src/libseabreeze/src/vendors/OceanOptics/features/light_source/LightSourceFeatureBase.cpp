@@ -73,7 +73,7 @@ bool LightSourceFeatureBase::hasLightSourceEnable(const Protocol &protocol,
     try {
         proto = lookupProtocolImpl(protocol);
         lightSource = static_cast<LightSourceProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error(
                 "Could not find matching protocol implementation to control light source.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -82,7 +82,7 @@ bool LightSourceFeatureBase::hasLightSourceEnable(const Protocol &protocol,
 
     try {
         return lightSource->hasLightSourceEnable(bus, this->moduleIndex, lightSourceIndex);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -103,7 +103,7 @@ bool LightSourceFeatureBase::isLightSourceEnabled(const Protocol &protocol,
     try {
         proto = lookupProtocolImpl(protocol);
         lightSource = static_cast<LightSourceProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error(
                 "Could not find matching protocol implementation to control light source.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -112,7 +112,7 @@ bool LightSourceFeatureBase::isLightSourceEnabled(const Protocol &protocol,
 
     try {
         return lightSource->isLightSourceEnabled(bus, this->moduleIndex, lightSourceIndex);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -133,7 +133,7 @@ void LightSourceFeatureBase::setLightSourceEnable(const Protocol &protocol,
     try {
         proto = lookupProtocolImpl(protocol);
         lightSource = static_cast<LightSourceProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error(
                 "Could not find matching protocol implementation to control light source.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -142,7 +142,7 @@ void LightSourceFeatureBase::setLightSourceEnable(const Protocol &protocol,
 
     try {
         lightSource->setLightSourceEnable(bus, this->moduleIndex, lightSourceIndex, enable);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -163,7 +163,7 @@ bool LightSourceFeatureBase::hasVariableIntensity(const Protocol &protocol,
     try {
         proto = lookupProtocolImpl(protocol);
         lightSource = static_cast<LightSourceProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error(
                 "Could not find matching protocol implementation to control light source.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -172,7 +172,7 @@ bool LightSourceFeatureBase::hasVariableIntensity(const Protocol &protocol,
 
     try {
         return lightSource->hasVariableIntensity(bus, this->moduleIndex, lightSourceIndex);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -195,7 +195,7 @@ double LightSourceFeatureBase::getLightSourceIntensity(const Protocol &protocol,
     try {
         proto = lookupProtocolImpl(protocol);
         lightSourceProtocolInterface = static_cast<LightSourceProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &ex) {
+    } catch (const FeatureProtocolNotFoundException &ex) {
         throw FeatureProtocolNotFoundException("Could not find "
                 "matching protocol implementation to control light source");
     }
@@ -223,7 +223,7 @@ double LightSourceFeatureBase::getLightSourceIntensity(const Protocol &protocol,
             double current = normalized->getIntensity(bus, this->moduleIndex, lightSourceIndex);
 
             return __mapIntensityFromProtocol(current, minimum, maximum);
-        } catch (ProtocolException &ex) {
+        } catch (const ProtocolException &ex) {
             string error("Caught protocol exception: ");
             error += ex.what();
             throw FeatureException(error);
@@ -235,7 +235,7 @@ double LightSourceFeatureBase::getLightSourceIntensity(const Protocol &protocol,
             double current = counts->getIntensityCounts(bus, this->moduleIndex, lightSourceIndex);
 
             return __mapIntensityFromProtocol(current, minimum, maximum);
-        } catch (ProtocolException &ex) {
+        } catch (const ProtocolException &ex) {
             string error("Caught protocol exception: ");
             error += ex.what();
             throw FeatureException(error);
@@ -260,7 +260,7 @@ void LightSourceFeatureBase::setLightSourceIntensity(const Protocol &protocol,
     try {
         proto = lookupProtocolImpl(protocol);
         lightSourceProtocolInterface = static_cast<LightSourceProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException ex) {
+    } catch (const FeatureProtocolNotFoundException &ex) {
         throw FeatureProtocolNotFoundException("Could not find "
                 "matching protocol implementation to control lamp");
     }
@@ -289,7 +289,7 @@ void LightSourceFeatureBase::setLightSourceIntensity(const Protocol &protocol,
             double current = __mapIntensityToProtocol(intensity, minimum, maximum);
 
             normalized->setIntensity(bus, this->moduleIndex, lightSourceIndex, current);
-        } catch (ProtocolException &ex) {
+        } catch (const ProtocolException &ex) {
             string error("Caught protocol exception: ");
             error += ex.what();
             throw FeatureException(error);
@@ -304,7 +304,7 @@ void LightSourceFeatureBase::setLightSourceIntensity(const Protocol &protocol,
             double current = __mapIntensityToProtocol(intensity, minimum, maximum);
 
             counts->setIntensityCounts(bus, this->moduleIndex, lightSourceIndex, (int)current);
-        } catch (ProtocolException &ex) {
+        } catch (const ProtocolException &ex) {
             string error("Caught protocol exception: ");
             error += ex.what();
             throw FeatureException(error);

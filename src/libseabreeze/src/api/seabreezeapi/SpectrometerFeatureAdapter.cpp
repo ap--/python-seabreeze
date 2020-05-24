@@ -76,7 +76,7 @@ int SpectrometerFeatureAdapter::getUnformattedSpectrum(int *errorCode,
         memcpy(buffer, &((*spectrum)[0]), bytesCopied * sizeof (unsigned char));
         delete spectrum;
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
@@ -106,7 +106,7 @@ int SpectrometerFeatureAdapter::getFastBufferSpectrum(int *errorCode,
 		delete spectrum;
 		SET_ERROR_CODE(ERROR_SUCCESS);
 	}
-	catch (FeatureException &fe) {
+	catch (const FeatureException &fe) {
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		return 0;
 	}
@@ -132,7 +132,7 @@ int SpectrometerFeatureAdapter::getFormattedSpectrum(int *errorCode,
         memcpy(buffer, &((*spectrum)[0]), doublesCopied * sizeof (double));
         delete spectrum;
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
 		
 		// the get spectrum calls should have an argument for the error string so that fe.what can be used
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
@@ -164,7 +164,7 @@ int SpectrometerFeatureAdapter::getUnformattedSpectrumLength(int *errorCode) {
         delete spectrum;
         SET_ERROR_CODE(ERROR_SUCCESS);
         return length;
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
@@ -178,7 +178,7 @@ int SpectrometerFeatureAdapter::getFormattedSpectrumLength(int *errorCode) {
     try {
         numberOfPixels = this->feature->getNumberOfPixels();
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
@@ -191,7 +191,7 @@ void SpectrometerFeatureAdapter::setTriggerMode(int *errorCode, int mode) {
     try {
         this->feature->setTriggerMode(*this->protocol, *this->bus, triggerMode);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_INVALID_TRIGGER_MODE);
         return;
     }
@@ -220,7 +220,7 @@ int SpectrometerFeatureAdapter::getWavelengths(int *errorCode,
         delete wlVector;
 
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
@@ -237,7 +237,7 @@ unsigned short SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode)
 		numberOfPixels = this->feature->getNumberOfPixels();
 		SET_ERROR_CODE(ERROR_SUCCESS);
 	}
-	catch (FeatureException &fe) {
+	catch (const FeatureException &fe) {
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		return 0;
 	}
@@ -348,10 +348,10 @@ void SpectrometerFeatureAdapter::setIntegrationTimeMicros(int *errorCode,
         this->feature->setIntegrationTimeMicros(*this->protocol, *this->bus,
                     integrationTimeMicros);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return;
-    } catch (IllegalArgumentException &iae) {
+    } catch (const IllegalArgumentException &iae) {
         SET_ERROR_CODE(ERROR_INPUT_OUT_OF_BOUNDS);
         return;
     }
@@ -363,7 +363,7 @@ long SpectrometerFeatureAdapter::getMinimumIntegrationTimeMicros(int *errorCode)
     try {
         retval = this->feature->getIntegrationTimeMinimum();
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return -1;
     }

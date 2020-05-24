@@ -69,7 +69,7 @@ unsigned short IntrospectionFeatureAdapter::getNumberOfPixels(int *errorCode) {
 		returnValue = this->feature->getNumberOfPixels(*this->protocol, *this->bus);
 		SET_ERROR_CODE(ERROR_SUCCESS);
 	}
-	catch (FeatureException &fe) {
+	catch (const FeatureException &fe) {
 		returnValue = 0;
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 	}
@@ -93,7 +93,7 @@ int IntrospectionFeatureAdapter::getActivePixelRanges(int *errorCode, unsigned i
 		delete cal;
 		SET_ERROR_CODE(ERROR_SUCCESS);
 	}
-	catch (FeatureException &fe) {
+	catch (const FeatureException &fe) {
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		return 0;
 	}
@@ -115,7 +115,7 @@ int IntrospectionFeatureAdapter::getElectricDarkPixelRanges(int *errorCode, unsi
 		delete cal;
 		SET_ERROR_CODE(ERROR_SUCCESS);
 	}
-	catch (FeatureException &fe) {
+	catch (const FeatureException &fe) {
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		return 0;
 	}
@@ -137,7 +137,7 @@ int IntrospectionFeatureAdapter::getOpticalDarkPixelRanges(int *errorCode, unsig
 		delete cal;
 		SET_ERROR_CODE(ERROR_SUCCESS);
 	}
-	catch (FeatureException &fe) {
+	catch (const FeatureException &fe) {
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		return 0;
 	}

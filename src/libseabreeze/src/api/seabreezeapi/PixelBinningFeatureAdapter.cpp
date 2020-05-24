@@ -55,7 +55,7 @@ unsigned char PixelBinningFeatureAdapter::getPixelBinningFactor(int *errorCode) 
     try {
         retval = feature->getPixelBinningFactor(*protocol, *bus);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException) {
+    } catch (const FeatureException &) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 
@@ -67,9 +67,9 @@ void PixelBinningFeatureAdapter::setPixelBinningFactor(int *errorCode, const uns
     try {
         feature->setPixelBinningFactor(*protocol, *bus, pixelBinning);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException) {
+    } catch (const FeatureException &) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-    } catch (IllegalArgumentException) {
+    } catch (const IllegalArgumentException &) {
         SET_ERROR_CODE(ERROR_INVALID_ERROR);
     }
 }
@@ -81,7 +81,7 @@ unsigned char PixelBinningFeatureAdapter::getDefaultPixelBinningFactor(int *erro
     try {
         retval = feature->getDefaultPixelBinningFactor(*protocol, *bus);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException) {
+    } catch (const FeatureException &) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 
@@ -93,9 +93,9 @@ void PixelBinningFeatureAdapter::setDefaultPixelBinningFactor(int *errorCode, co
     try {
         feature->setDefaultPixelBinningFactor(*protocol, *bus, pixelBinning);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException) {
+    } catch (const FeatureException &) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-    } catch (IllegalArgumentException) {
+    } catch (const IllegalArgumentException &) {
         SET_ERROR_CODE(ERROR_INVALID_ERROR);
     }
 }
@@ -105,9 +105,9 @@ void PixelBinningFeatureAdapter::setDefaultPixelBinningFactor(int *errorCode) {
     try {
         feature->setDefaultPixelBinningFactor(*protocol, *bus);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException) {
+    } catch (const FeatureException &) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
-    } catch (IllegalArgumentException) {
+    } catch (const IllegalArgumentException &) {
         SET_ERROR_CODE(ERROR_INVALID_ERROR);
     }
 }
@@ -119,7 +119,7 @@ unsigned char PixelBinningFeatureAdapter::getMaxPixelBinningFactor(int *errorCod
     try {
         retval = feature->getMaxPixelBinningFactor(*protocol, *bus);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException) {
+    } catch (const FeatureException &) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 

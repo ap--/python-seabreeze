@@ -69,7 +69,7 @@ int IrradCalFeatureAdapter::readIrradCalibration(int *errorCode, float *buffer,
 
         delete cal;
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
@@ -89,7 +89,7 @@ int IrradCalFeatureAdapter::writeIrradCalibration(int *errorCode, float *buffer,
             *this->protocol, *this->bus, *floatVector);
         delete floatVector;
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         delete floatVector;
         return 0;
@@ -113,7 +113,7 @@ float IrradCalFeatureAdapter::readIrradCollectionArea(int *errorCode) {
     try {
         area = (float) this->feature->readCollectionArea(*this->protocol, *this->bus);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
     return area;
@@ -123,7 +123,7 @@ void IrradCalFeatureAdapter::writeIrradCollectionArea(int *errorCode, float area
     try {
         this->feature->writeCollectionArea(*this->protocol, *this->bus, area);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 }

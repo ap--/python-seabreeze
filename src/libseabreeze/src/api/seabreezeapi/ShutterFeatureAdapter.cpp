@@ -59,7 +59,7 @@ void ShutterFeatureAdapter::setShutterOpen(int *errorCode, bool open) {
 
     try {
         this->feature->setShutterOpen(*this->protocol, *this->bus, open);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return;
     }

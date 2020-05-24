@@ -126,7 +126,7 @@ bool Ventana::initialize(const Bus &bus) {
              * initialized with the other Feature instances once this is done.
              */
             this->features.push_back(thermoFeature);
-        } catch (FeatureException &fe) {
+        } catch (const FeatureException &fe) {
             /* The attempt to get the temperature failed, so this feature is
              * probably not present on the hardware.  Clean up.
              */
@@ -163,7 +163,7 @@ bool Ventana::initialize(const Bus &bus) {
                 /* The instance is not needed so clean it up. */
                 delete laser;
             }
-        } catch (FeatureException &fe) {
+        } catch (const FeatureException &fe) {
             /* Attempting to initialize the laser failed, so the hardware may
              * not be present.  Clean up.
              */

@@ -64,7 +64,7 @@ int SerialNumberFeatureAdapter::getSerialNumber(int *errorCode,
     try {
         serialNumber = this->feature->readSerialNumber(
             *this->protocol, *this->bus);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
@@ -94,7 +94,7 @@ unsigned char SerialNumberFeatureAdapter::getSerialNumberMaximumLength(int *erro
     try {
         length = this->feature->readSerialNumberMaximumLength(
             *this->protocol, *this->bus);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }

@@ -65,7 +65,7 @@ void StrobeLampFeature::setStrobeLampEnable(const Protocol &protocol,
     try {
         proto = lookupProtocolImpl(protocol);
         lamp = static_cast<StrobeLampProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException &e) {
+    } catch (const FeatureProtocolNotFoundException &e) {
         string error(
                 "Could not find matching protocol implementation to control lamp.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -74,7 +74,7 @@ void StrobeLampFeature::setStrobeLampEnable(const Protocol &protocol,
 
     try {
         lamp->setStrobeLampEnable(bus, enable);
-    } catch (ProtocolException &pe) {
+    } catch (const ProtocolException &pe) {
         string error("Caught protocol exception: ");
         error += pe.what();
         /* FIXME: previous exception should probably be bundled up into the new exception */

@@ -66,7 +66,7 @@ FastBufferIndex_t FastBufferFeatureBase::getBufferingEnable(
 		proto = lookupProtocolImpl(protocol);
 		buffer = static_cast<FastBufferProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException fpnfe) {
+	catch (const FeatureProtocolNotFoundException &fpnfe) {
 		string error(
 			"Could not find matching protocol implementation to get data buffer capacity.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */
@@ -98,7 +98,7 @@ void FastBufferFeatureBase::setBufferingEnable(const Protocol &protocol,
 		proto = lookupProtocolImpl(protocol);
 		buffer = static_cast<FastBufferProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException fpnfe) {
+	catch (const FeatureProtocolNotFoundException &fpnfe) {
 		string error(
 			"Could not find matching protocol implementation to set data buffer capacity.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */
@@ -127,7 +127,7 @@ FastBufferSampleCount_t FastBufferFeatureBase::getConsecutiveSampleCount(
 		proto = lookupProtocolImpl(protocol);
 		buffer = static_cast<FastBufferProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException fpnfe) {
+	catch (const FeatureProtocolNotFoundException &fpnfe) {
 		string error(
 			"Could not find matching protocol implementation to get data buffer capacity.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */
@@ -159,7 +159,7 @@ void FastBufferFeatureBase::setConsecutiveSampleCount(const Protocol &protocol,
 		proto = lookupProtocolImpl(protocol);
 		buffer = static_cast<FastBufferProtocolInterface *>(proto);
 	}
-	catch (FeatureProtocolNotFoundException fpnfe) {
+	catch (const FeatureProtocolNotFoundException &fpnfe) {
 		string error(
 			"Could not find matching protocol implementation to set data buffer capacity.");
 		/* FIXME: previous exception should probably be bundled up into the new exception */

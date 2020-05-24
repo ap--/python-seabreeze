@@ -96,7 +96,7 @@ vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
             /* FIXME: retry, throw exception, something here */
         }
     } 
-	catch (BusException &be) 
+	catch (const BusException &be)
 	{
         if(NULL != bytes) 
 		{
@@ -129,7 +129,7 @@ vector<byte> *OBPTransaction::queryDevice(TransferHelper *helper,
 		{
             response = OBPMessage::parseHeaderFromByteStream(bytes);
         } 
-		catch (IllegalArgumentException &iae) 
+		catch (const IllegalArgumentException &iae)
 		{
             response = NULL;
         }

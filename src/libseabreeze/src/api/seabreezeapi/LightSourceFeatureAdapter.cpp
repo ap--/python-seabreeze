@@ -63,7 +63,7 @@ int LightSourceFeatureAdapter::getLightSourceCount(int *errorCode) {
     SET_ERROR_CODE(ERROR_SUCCESS);
     try {
         return this->feature->getLightSourceCount(*this->protocol, *this->bus);
-    } catch (FeatureException &ex) {
+    } catch (const FeatureException &ex) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
@@ -75,7 +75,7 @@ bool LightSourceFeatureAdapter::hasLightSourceEnable(int *errorCode,
     try {
         return this->feature->hasLightSourceEnable(*this->protocol, *this->bus,
                         lightSourceIndex);
-    } catch (FeatureException &ex) {
+    } catch (const FeatureException &ex) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return false;
     }
@@ -88,7 +88,7 @@ bool LightSourceFeatureAdapter::isLightSourceEnabled(int *errorCode,
     try {
         return this->feature->isLightSourceEnabled(*this->protocol, *this->bus,
                         lightSourceIndex);
-    } catch (FeatureException &ex) {
+    } catch (const FeatureException &ex) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return false;
     }
@@ -101,7 +101,7 @@ void LightSourceFeatureAdapter::setLightSourceEnable(int *errorCode,
     try {
         this->feature->setLightSourceEnable(*this->protocol, *this->bus,
                 lightSourceIndex, enable);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return;
     }
@@ -116,7 +116,7 @@ bool LightSourceFeatureAdapter::hasVariableIntensity(int *errorCode,
     try {
         return this->feature->hasVariableIntensity(*this->protocol, *this->bus,
                         lightSourceIndex);
-    } catch (FeatureException &ex) {
+    } catch (const FeatureException &ex) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return false;
     }
@@ -129,7 +129,7 @@ double LightSourceFeatureAdapter::getLightSourceIntensity(int *errorCode,
     try {
         return this->feature->getLightSourceIntensity(*this->protocol,
                         *this->bus, lightSourceIndex);
-    } catch (FeatureException &ex) {
+    } catch (const FeatureException &ex) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0.0;
     }
@@ -142,7 +142,7 @@ void LightSourceFeatureAdapter::setLightSourceIntensity(int *errorCode,
     try {
         this->feature->setLightSourceIntensity(*this->protocol, *this->bus,
                 lightSourceIndex, intensity);
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return;
     }

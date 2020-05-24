@@ -56,7 +56,7 @@ unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
             return this->maxIntensity;
         }
         return result;
-    } catch (FeatureException &fe) {
+    } catch (const FeatureException &fe) {
         /* No valid saturation setting, so default to the max intensity */
         return this->maxIntensity;
     }

@@ -93,7 +93,7 @@ void SpectrumProcessingFeature::writeSpectrumProcessingScansToAverage(const Prot
     try {
         proto = lookupProtocolImpl(protocol);
         processingPI = static_cast<SpectrumProcessingProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException fpnfe) {
+    } catch (const FeatureProtocolNotFoundException &fpnfe) {
         string error(
                 "Could not find matching protocol implementation to set spectrum processing state.");
         /* FIXME: previous exception should probably be bundled up into the new exception */
@@ -147,7 +147,7 @@ void SpectrumProcessingFeature::writeSpectrumProcessingBoxcarWidth(const Protoco
     try {
         proto = lookupProtocolImpl(protocol);
         processingPI = static_cast<SpectrumProcessingProtocolInterface *>(proto);
-    } catch (FeatureProtocolNotFoundException fpnfe) {
+    } catch (const FeatureProtocolNotFoundException &fpnfe) {
         string error(
                 "Could not find matching protocol implementation to set spectrum processing state.");
         /* FIXME: previous exception should probably be bundled up into the new exception */

@@ -78,7 +78,7 @@ int FlameXUSBTransferHelper::send(const std::vector<byte> &buffer,
         /* Pad up to a multiple of the word size */
         int paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));
         vector<byte> *outBuffer = new vector<byte>(paddedLength);
-        memcpy(&outBuffer[0], &buffer[0], length);
+        memcpy((byte*) &outBuffer[0], (byte*) &buffer[0], length);
         int result = USBTransferHelper::send(*outBuffer, paddedLength);
         delete outBuffer;
         return result;

@@ -10,6 +10,7 @@ import logging
 
 import usb.core
 import usb.util
+
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice, _model_class_registry
 from seabreeze.pyseabreeze.transport import USBTransport
 

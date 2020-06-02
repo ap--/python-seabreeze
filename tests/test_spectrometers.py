@@ -232,3 +232,24 @@ def test_trigger_mode(backendlified_serial):
         spec.trigger_mode(0xF0)  # <- should be unsupported for all specs
     # test again to see if the bus is locked
     spec.trigger_mode(0x00)  # <- normal mode
+
+
+@pytest.mark.usefixtures("backendlify")
+def test_list_devices_dont_close_opened_devices():
+    """test list_devices() interaction with already opened devices"""
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    num_devices = len(devices)
+
+    dev = devices[0]
+    dev.open()
+    assert dev.is_open is True
+    devices_2 = list_devices()
+    assert len(devices_2) == num_devices
+    # dev.is_open is still True here...
+    assert dev.is_open is True
+    # but if we delete the new reference created by the second call to list_devices:
+    del devices_2
+    assert dev.is_open is True

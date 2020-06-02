@@ -16,7 +16,7 @@ def _running_on_ci():
 
 
 @pytest.fixture(scope="session", autouse=_running_on_ci())
-def mock_pyusb_backend_libusb0():
+def mock_pyusb_core_find():
     """mock usb.core.find
 
     when running on a ci, the libusb0 backend of pyusb can crash if access
@@ -26,3 +26,15 @@ def mock_pyusb_backend_libusb0():
     """
     with mock.patch("usb.core.find", return_value=[]):
         yield
+
+
+@pytest.fixture(scope="module")
+def cseabreeze():
+    """try importing the cseabreeze backend"""
+    yield pytest.importorskip("seabreeze.cseabreeze")
+
+
+@pytest.fixture(scope="module")
+def pyseabreeze():
+    """try importing the pyseabreeze backend"""
+    yield pytest.importorskip("seabreeze.pyseabreeze")

@@ -1,17 +1,8 @@
-import pytest
-
-
-@pytest.fixture(scope="module")
-def cseabreeze():
-    yield pytest.importorskip("seabreeze.cseabreeze")
-
-
-@pytest.fixture(scope="module")
-def pyseabreeze():
-    yield pytest.importorskip("seabreeze.pyseabreeze")
+# test both backends
 
 
 def _get_class_public_interface_dict(backend):
+    """return a dictionary with a set of all public functions for each feature"""
     base_class = backend.SeaBreezeFeature
     feature_classes = base_class.__subclasses__()
     interface_dict = {}
@@ -27,6 +18,7 @@ def test_backend_features_interface(cseabreeze, pyseabreeze):
     c_feature_interface = _get_class_public_interface_dict(cseabreeze)
     py_feature_interface = _get_class_public_interface_dict(pyseabreeze)
 
+    # test if there's a difference between cseabreeze and pyseabreeze features
     assert set(c_feature_interface) == set(py_feature_interface)
 
     CSEABREEZE_CUSTOM = {"feature_id"}
@@ -35,6 +27,7 @@ def test_backend_features_interface(cseabreeze, pyseabreeze):
     for feature in c_feature_interface:
         c_attrs = c_feature_interface[feature] - CSEABREEZE_CUSTOM
         py_attrs = py_feature_interface[feature] - PYSEABREEZE_CUSTOM
+        # for each feature test if there's a difference between cseabreeze and pyseabreeze
         assert c_attrs == py_attrs, "feature {} differs in attrs".format(feature)
 
 

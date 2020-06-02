@@ -3,16 +3,14 @@ import struct
 import mock
 import pytest
 
-try:
-    import seabreeze.pyseabreeze
-except ImportError:
-    pytestmark = pytest.mark.skip("Can't import pyseabreeze")
-    OBP_VALID_MSG = None
-else:
+
+@pytest.fixture
+def obp_message(pyseabreeze):
+    """create a valid OBP message"""
     from seabreeze.pyseabreeze.protocol import OBPProtocol
 
     _o = OBPProtocol.OBP
-    OBP_VALID_MSG = struct.pack(
+    yield struct.pack(
         _o.HEADER_FMT + "0s" + _o.FOOTER_FMT,
         _o.HEADER_START_BYTES,
         _o.HEADER_PROTOCOL_VERSION,
@@ -32,12 +30,15 @@ else:
 
 
 @pytest.fixture
-def mock_transport():
+def mock_transport(obp_message):
     mock_transport = mock.Mock()
-    mock_transport.read.return_value = OBP_VALID_MSG
+    mock_transport.read.return_value = obp_message
     yield mock_transport
 
 
 def test_obp_protocol_messages(mock_transport):
+    """test the parsing code for the OBP protocol implementation of pyseabreeze"""
+    from seabreeze.pyseabreeze.protocol import OBPProtocol
+
     obp = OBPProtocol(mock_transport)
     obp.send(0x00000100)

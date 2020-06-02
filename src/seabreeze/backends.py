@@ -16,7 +16,7 @@ def _use_backend(name):
         else:
             raise ValueError("unknown backend '{}'".format(name))
     except ImportError as err:
-        _log.warn(
+        _log.warning(
             "seabreeze can't load '{}' backend - error: '{}'".format(name, repr(err)),
             exc_info=True,
         )

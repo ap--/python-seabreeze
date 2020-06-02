@@ -13,7 +13,7 @@ import sys
 import tempfile
 import time
 import zipfile
-from builtins import input, str
+from builtins import input
 from textwrap import dedent
 
 from future.standard_library import hooks
@@ -149,6 +149,7 @@ def _is_contained_in_dir(files, cdir=None):
 
 def _unicode(x):
     try:
+        # noinspection PyUnresolvedReferences
         return unicode(x)
     except NameError:
         return x
@@ -228,7 +229,7 @@ def windows_install_drivers():
         cmd = [pnputil, "-i", "-a", os.path.join(tmp_dir, "*.inf")]
         return_code = subprocess.call(cmd, shell=True)
 
-        _log.warn(
+        _log.warning(
             dedent(
                 """\
             Note: Some of the drivers currently don't have valid signatures.

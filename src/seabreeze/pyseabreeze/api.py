@@ -7,6 +7,7 @@ most of this code is based on implementations from
 
 """
 import logging
+import weakref
 
 import usb.core
 import usb.util
@@ -90,7 +91,7 @@ class SeaBreezeAPI(object):
         devices = []
         for pyusb_dev in USBTransport.list_devices():
             # get the correct communication interface
-            dev = SeaBreezeDevice(pyusb_dev)
+            dev = _seabreeze_device_factory(pyusb_dev)
             if dev.is_open:
                 was_open_before = True
             else:
@@ -120,3 +121,17 @@ class SeaBreezeAPI(object):
             list of model names that are supported by this backend
         """
         return [x for x in sorted(_model_class_registry.keys())]
+
+
+# create only one SeaBreezeDevice instance per handle
+_seabreeze_device_instance_registry = weakref.WeakValueDictionary()
+
+
+def _seabreeze_device_factory(handle):
+    """return existing instances instead of creating temporary ones"""
+    ident = handle.idVendor, handle.idProduct, handle.bus, handle.address
+    try:
+        return _seabreeze_device_instance_registry[ident]
+    except KeyError:
+        dev = _seabreeze_device_instance_registry[ident] = SeaBreezeDevice(handle)
+        return dev

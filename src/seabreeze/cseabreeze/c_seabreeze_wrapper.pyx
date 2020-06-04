@@ -8,6 +8,8 @@ cimport c_seabreeze as csb
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 from libcpp cimport bool as bool_t
 
+import weakref
+
 import numpy as np
 
 
@@ -215,7 +217,7 @@ cdef class SeaBreezeAPI(object):
         device_ids = self._list_device_ids()
         devices = []
         for handle in device_ids:
-            dev = SeaBreezeDevice(handle)
+            dev = _seabreeze_device_factory(handle)
             if dev.is_open:
                 was_open_before = True
             else:
@@ -271,6 +273,8 @@ cdef class SeaBreezeDevice(object):
     cdef readonly long handle
     cdef readonly str _model, _serial_number
     cdef csb.SeaBreezeAPI *sbapi
+    # enable weak references
+    cdef object __weakref__
 
     def __cinit__(self, handle):
         self.sbapi = csb.SeaBreezeAPI.getInstance()
@@ -447,6 +451,17 @@ cdef class SeaBreezeDevice(object):
                 for identifier, features in feature_dict.items():
                     setattr(self, identifier, features[0] if features else None)  # TODO: raise FeatureNotAvailable?
         return FeatureAccessHandler(self.features)
+
+
+# create only one SeaBreezeDevice instance per handle
+_seabreeze_device_instance_registry = weakref.WeakValueDictionary()
+def _seabreeze_device_factory(handle):
+    """return existing instances instead of creating temporary ones"""
+    try:
+        return _seabreeze_device_instance_registry[handle]
+    except KeyError:
+        dev = _seabreeze_device_instance_registry[handle] = SeaBreezeDevice(handle)
+        return dev
 
 
 cdef class SeaBreezeFeature(object):

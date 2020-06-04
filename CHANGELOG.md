@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- *csb* fix list_devices closes opened devices bug
 - *csb* fix compile warnings on linux
 - fix pytest handling on continuous integration servers
 - potential numpy dependency fix for python>3.5 pkgs on piwheels

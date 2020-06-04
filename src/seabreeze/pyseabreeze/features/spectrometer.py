@@ -111,7 +111,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         return float(self._spectrum_max_value)
 
     def get_electric_dark_pixel_indices(self):
-        return numpy.array(self._dark_pixel_indices)
+        return list(self._dark_pixel_indices)
 
     @property
     def _spectrum_length(self):
@@ -355,7 +355,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
         return float(self._spectrum_max_value)
 
     def get_electric_dark_pixel_indices(self):
-        return numpy.array(self._dark_pixel_indices)
+        return list(self._dark_pixel_indices)
 
     @property
     def _spectrum_length(self):

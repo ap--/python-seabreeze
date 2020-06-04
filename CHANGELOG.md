@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Fixed
+- *csb* fix compile warnings on linux
+- fix pytest handling on continuous integration servers
+- potential numpy dependency fix for python>3.5 pkgs on piwheels
 
 ## [1.1.0] - 2020-05-22
 ### Added

@@ -663,7 +663,7 @@ class USB4000(SeaBreezeDevice):
         DarkPixelIndices.from_ranges((5, 16)),
     )  # as in seabreeze-3.0.9
     integration_time_min = 10
-    integration_time_max = 655350000
+    integration_time_max = 65535000
     integration_time_base = 1
     spectrum_num_pixel = 3840
     spectrum_raw_length = (3840 * 2) + 1

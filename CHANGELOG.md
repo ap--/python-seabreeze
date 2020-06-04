@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- *psb* fix max integration time for USB4000
 - *psb* fix list_devices closes opened devices bug
 - *csb* fix list_devices closes opened devices bug
 - *csb* fix compile warnings on linux

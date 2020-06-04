@@ -41,7 +41,7 @@ class SeaBreezeAPI(object):
             except Exception as err:
                 SeaBreezeAPI._log.debug(
                     "initialize failed: {}('{}')".format(
-                        err.__class__.__name__, err.message
+                        err.__class__.__name__, getattr(err, "message", "no message")
                     )
                 )
 
@@ -58,7 +58,7 @@ class SeaBreezeAPI(object):
             except Exception as err:
                 SeaBreezeAPI._log.debug(
                     "shutdown failed: {}('{}')".format(
-                        err.__class__.__name__, err.message
+                        err.__class__.__name__, getattr(err, "message", "no message")
                     )
                 )
 

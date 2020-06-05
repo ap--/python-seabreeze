@@ -34,17 +34,7 @@ class SeaBreezeAPI(object):
         normally this function does not have to be called directly by the user.
         it resets all usb devices on load
         """
-        # create the handles and associate protocols
-        for device in USBTransport.list_devices():
-            try:
-                device.reset()
-                usb.util.dispose_resources(device)
-            except Exception as err:
-                SeaBreezeAPI._log.debug(
-                    "initialize failed: {}('{}')".format(
-                        err.__class__.__name__, getattr(err, "message", "no message")
-                    )
-                )
+        USBTransport.initialize()
 
     @staticmethod
     def shutdown():
@@ -53,15 +43,7 @@ class SeaBreezeAPI(object):
         normally this function does not have to be called directly by the user
         """
         # dispose usb resources
-        for device in USBTransport.list_devices():
-            try:
-                usb.util.dispose_resources(device)
-            except Exception as err:
-                SeaBreezeAPI._log.debug(
-                    "shutdown failed: {}('{}')".format(
-                        err.__class__.__name__, getattr(err, "message", "no message")
-                    )
-                )
+        USBTransport.shutdown()
 
     @staticmethod
     def add_rs232_device_location(device_type, bus_path, baudrate):

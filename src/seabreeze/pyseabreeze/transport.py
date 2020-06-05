@@ -3,6 +3,7 @@
 Some spectrometers can support different transports (usb, network, rs232, etc.)
 
 """
+import logging
 import warnings
 from functools import partial
 
@@ -95,6 +96,9 @@ class USBTransport(TransportInterface):
     _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")
     vendor_id = 0x2457
     product_ids = {}
+
+    # add logging
+    _log = logging.getLogger(__name__)
 
     def __init__(self, usb_product_id, usb_endpoint_map, usb_protocol):
         super(USBTransport, self).__init__()
@@ -221,3 +225,29 @@ class USBTransport(TransportInterface):
             {"__init__": partialmethod(cls.__init__, **kwargs)},
         )
         return specialized_class
+
+    @classmethod
+    def initialize(cls):
+        for device in cls.list_devices():
+            try:
+                device.reset()
+                # usb.util.dispose_resources(device)  <- already done by device.reset()
+            except Exception as err:
+                cls._log.debug(
+                    "initialize failed: {}('{}')".format(
+                        err.__class__.__name__, getattr(err, "message", "no message")
+                    )
+                )
+
+    @classmethod
+    def shutdown(cls):
+        # dispose usb resources
+        for device in cls.list_devices():
+            try:
+                usb.util.dispose_resources(device)
+            except Exception as err:
+                cls._log.debug(
+                    "shutdown failed: {}('{}')".format(
+                        err.__class__.__name__, getattr(err, "message", "no message")
+                    )
+                )

@@ -109,11 +109,17 @@ class SeaBreezeAPI(object):
 _seabreeze_device_instance_registry = weakref.WeakValueDictionary()
 
 
-def _seabreeze_device_factory(handle):
-    """return existing instances instead of creating temporary ones"""
-    ident = handle.idVendor, handle.idProduct, handle.bus, handle.address
+def _seabreeze_device_factory(pyusb_device):
+    """return existing instances instead of creating temporary ones
+
+    Parameters
+    ----------
+    pyusb_device : usb.core.Device
+    """
+    # noinspection PyUnresolvedReferences
+    ident = pyusb_device.idVendor, pyusb_device.idProduct, pyusb_device.bus, pyusb_device.address
     try:
         return _seabreeze_device_instance_registry[ident]
     except KeyError:
-        dev = _seabreeze_device_instance_registry[ident] = SeaBreezeDevice(handle)
+        dev = _seabreeze_device_instance_registry[ident] = SeaBreezeDevice(pyusb_device)
         return dev

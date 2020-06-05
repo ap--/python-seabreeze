@@ -187,7 +187,7 @@ class USBTransport(TransportInterface):
 
         Returns
         -------
-        devices : list of usb.core.Device
+        devices : list[usb.core.Device]
             unique pyusb devices for each available spectrometer
         """
         # get all matching devices

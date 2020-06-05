@@ -96,7 +96,7 @@ def backendlify(request):
     # Spectrometer
     Spectrometer._backend = backend
     try:
-        yield
+        yield backend
     finally:
         _api.shutdown()
 
@@ -124,33 +124,24 @@ def test_cant_find_serial():
         Spectrometer.from_serial_number("i-do-not-exist")
 
 
-def test_pyseabreeze_device_cleanup_on_exit(pyseabreeze_api):
+def test_device_cleanup_on_exit(backendlify):
     """test if opened devices cleanup correctly"""
-    devices = pyseabreeze_api.list_devices()
-    if len(devices) == 0:
-        pytest.skip("no supported device connected")
-    del devices
+    try:
+        devices = list_devices()
+        if len(devices) == 0:
+            pytest.skip("no supported device connected")
+        del devices
+    finally:
+        # noinspection PyProtectedMember
+        list_devices._api.shutdown()
+
+    # noinspection PyProtectedMember
+    backend_name = backendlify._backend_
 
     cmd = [
         "python",
         "-c",
-        "import seabreeze.pyseabreeze as psb; d = psb.SeaBreezeAPI().list_devices()[0]; d.open()",
-    ]
-    p = subprocess.run(cmd, capture_output=True)
-    assert p.returncode == 0
-
-
-def test_cseabreeze_device_cleanup_on_exit(cseabreeze_api):
-    """test if opened devices cleanup correctly"""
-    devices = list(cseabreeze_api.list_devices())
-    if len(devices) == 0:
-        pytest.skip("no supported device connected")
-    del devices
-
-    cmd = [
-        "python",
-        "-c",
-        "import seabreeze.cseabreeze as csb; d = csb.SeaBreezeAPI().list_devices()[0]; d.open()",
+        "import seabreeze.%s as sb; d = sb.SeaBreezeAPI().list_devices()[0]; d.open()" % backend_name,
     ]
     p = subprocess.run(cmd, capture_output=True)
     assert p.returncode == 0

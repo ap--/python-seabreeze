@@ -31,13 +31,11 @@ def test_backend_features_interface(cseabreeze, pyseabreeze):
         assert c_attrs == py_attrs, "feature {} differs in attrs".format(feature)
 
 
-def test_cseabreeze_seabreezeapi(cseabreeze):
+def test_cseabreeze_seabreezeapi(cseabreeze_api):
     """check if list_devices doesn't crash"""
-    api = cseabreeze.SeaBreezeAPI()
-    api.list_devices()
+    cseabreeze_api.list_devices()
 
 
-def test_pyseabreeze_seabreezeapi(pyseabreeze):
+def test_pyseabreeze_seabreezeapi(pyseabreeze_api):
     """check if list_devices doesn't crash"""
-    api = pyseabreeze.SeaBreezeAPI()
-    api.list_devices()
+    pyseabreeze_api.list_devices()

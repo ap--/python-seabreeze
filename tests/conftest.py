@@ -38,3 +38,21 @@ def cseabreeze():
 def pyseabreeze():
     """try importing the pyseabreeze backend"""
     yield pytest.importorskip("seabreeze.pyseabreeze")
+
+
+@pytest.fixture(scope='function')
+def cseabreeze_api(cseabreeze):
+    api = cseabreeze.SeaBreezeAPI()
+    try:
+        yield api
+    finally:
+        api.shutdown()
+
+
+@pytest.fixture(scope='function')
+def pyseabreeze_api(pyseabreeze):
+    api = pyseabreeze.SeaBreezeAPI()
+    try:
+        yield api
+    finally:
+        api.shutdown()

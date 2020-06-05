@@ -124,15 +124,12 @@ def test_cant_find_serial():
         Spectrometer.from_serial_number("i-do-not-exist")
 
 
-def test_pyseabreeze_device_cleanup_on_exit(pyseabreeze):
+def test_pyseabreeze_device_cleanup_on_exit(pyseabreeze_api):
     """test if opened devices cleanup correctly"""
-    api = pyseabreeze.SeaBreezeAPI()
-    devices = list(api.list_devices())
+    devices = pyseabreeze_api.list_devices()
     if len(devices) == 0:
         pytest.skip("no supported device connected")
     del devices
-    api.shutdown()
-    del api
 
     cmd = [
         "python",
@@ -143,15 +140,12 @@ def test_pyseabreeze_device_cleanup_on_exit(pyseabreeze):
     assert p.returncode == 0
 
 
-def test_cseabreeze_device_cleanup_on_exit(cseabreeze):
+def test_cseabreeze_device_cleanup_on_exit(cseabreeze_api):
     """test if opened devices cleanup correctly"""
-    api = cseabreeze.SeaBreezeAPI()
-    devices = list(api.list_devices())
+    devices = list(cseabreeze_api.list_devices())
     if len(devices) == 0:
         pytest.skip("no supported device connected")
     del devices
-    api.shutdown()
-    del api
 
     cmd = [
         "python",

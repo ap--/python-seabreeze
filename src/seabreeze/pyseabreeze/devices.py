@@ -1,6 +1,6 @@
-"""
+"""device classes for pyseabreeze
 
-
+Author: Andreas Poehlmann
 """
 import enum
 import itertools

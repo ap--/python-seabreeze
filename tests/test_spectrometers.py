@@ -1,3 +1,5 @@
+import subprocess
+
 import pytest
 
 
@@ -120,6 +122,44 @@ def test_cant_find_serial():
     exc = Spectrometer._backend.SeaBreezeError
     with pytest.raises(exc):
         Spectrometer.from_serial_number("i-do-not-exist")
+
+
+def test_pyseabreeze_device_cleanup_on_exit(pyseabreeze):
+    """test if opened devices cleanup correctly"""
+    api = pyseabreeze.SeaBreezeAPI()
+    devices = list(api.list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+    del devices
+    api.shutdown()
+    del api
+
+    cmd = [
+        "python",
+        "-c",
+        "import seabreeze.pyseabreeze as psb; d = psb.SeaBreezeAPI().list_devices()[0]; d.open()",
+    ]
+    p = subprocess.run(cmd, capture_output=True)
+    assert p.returncode == 0
+
+
+def test_cseabreeze_device_cleanup_on_exit(cseabreeze):
+    """test if opened devices cleanup correctly"""
+    api = cseabreeze.SeaBreezeAPI()
+    devices = list(api.list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+    del devices
+    api.shutdown()
+    del api
+
+    cmd = [
+        "python",
+        "-c",
+        "import seabreeze.cseabreeze as csb; d = csb.SeaBreezeAPI().list_devices()[0]; d.open()",
+    ]
+    p = subprocess.run(cmd, capture_output=True)
+    assert p.returncode == 0
 
 
 def test_read_model(backendlified_serial):

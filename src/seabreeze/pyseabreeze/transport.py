@@ -90,6 +90,40 @@ class TransportInterface(object):
         raise NotImplementedError("implement in derived transport class")
 
 
+# encapsulate usb.core.USBError
+class USBTransportError(Exception):
+    def __init__(self, *args, errno=None, error_code=None):
+        self.errno = errno
+        self.backend_error_code = error_code
+
+    @classmethod
+    def from_usberror(cls, err):
+        return cls(str(err), errno=err.errno, error_code=err.backend_error_code)
+
+
+class USBTransportDeviceInUse(Exception):
+    pass
+
+
+# this can and should be opaque to pyseabreeze
+class USBTransportHandle(object):
+    def __init__(self, pyusb_device):
+        """encapsulation for pyusb device classes
+
+        Parameters
+        ----------
+        pyusb_device : usb.core.Device
+        """
+        self.pyusb_device = pyusb_device
+        # noinspection PyUnresolvedReferences
+        self.identity = (
+            pyusb_device.idVendor,
+            pyusb_device.idProduct,
+            pyusb_device.bus,
+            pyusb_device.address,
+        )
+
+
 class USBTransport(TransportInterface):
     """implementation of the usb transport interface for spectrometers"""
 
@@ -123,10 +157,10 @@ class USBTransport(TransportInterface):
         self._protocol = None
 
     def open_device(self, device):
-        if not isinstance(device, usb.core.Device):
-            raise TypeError("device needs to be usb.core.Device")
+        if not isinstance(device, USBTransportHandle):
+            raise TypeError("device needs to be a USBTransportHandle")
         # device.reset()
-        self._device = device
+        self._device = device.pyusb_device
         try:
             if self._device.is_kernel_driver_active(0):
                 self._device.detach_kernel_driver(0)
@@ -138,7 +172,10 @@ class USBTransport(TransportInterface):
             if err.errno == 16:
                 # TODO: warn as in cseabreeze
                 self._opened = True
-            raise
+                raise USBTransportDeviceInUse(
+                    "device probably used by another thread/process"
+                )
+            raise USBTransportError.from_usberror(err)
         else:
             self._opened = True
         # This will initialize the communication protocol
@@ -185,18 +222,21 @@ class USBTransport(TransportInterface):
         Note: this includes spectrometers that are currently opened in other
         processes on the machine.
 
-        Returns
-        -------
-        devices : list[usb.core.Device]
+        Yields
+        ------
+        devices : USBTransportHandle
             unique pyusb devices for each available spectrometer
         """
         # get all matching devices
-        return usb.core.find(
+        pyusb_devices = usb.core.find(
             find_all=True,
             custom_match=lambda dev: (
                 dev.idVendor == cls.vendor_id and dev.idProduct in cls.product_ids
             ),
         )
+        # encapsulate
+        for pyusb_device in pyusb_devices:
+            yield USBTransportHandle(pyusb_device)
 
     @classmethod
     def register_model(cls, model_name, **kwargs):
@@ -209,10 +249,16 @@ class USBTransport(TransportInterface):
 
     @classmethod
     def supported_model(cls, device):
-        if not isinstance(device, usb.core.Device):
+        """return supported model
+
+        Parameters
+        ----------
+        device : USBTransportHandle
+        """
+        if not isinstance(device, USBTransportHandle):
             return None
         # noinspection PyUnresolvedReferences
-        return cls.product_ids[device.idProduct]
+        return cls.product_ids[device.pyusb_device.idProduct]
 
     @classmethod
     def specialize(cls, model_name, **kwargs):
@@ -230,7 +276,7 @@ class USBTransport(TransportInterface):
     def initialize(cls):
         for device in cls.list_devices():
             try:
-                device.reset()
+                device.pyusb_device.reset()
                 # usb.util.dispose_resources(device)  <- already done by device.reset()
             except Exception as err:
                 cls._log.debug(
@@ -244,7 +290,7 @@ class USBTransport(TransportInterface):
         # dispose usb resources
         for device in cls.list_devices():
             try:
-                usb.util.dispose_resources(device)
+                usb.util.dispose_resources(device.pyusb_device)
             except Exception as err:
                 cls._log.debug(
                     "shutdown failed: {}('{}')".format(

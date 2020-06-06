@@ -9,11 +9,13 @@ most of this code is based on implementations from
 import logging
 import weakref
 
-import usb.core
-import usb.util
-
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice, _model_class_registry
-from seabreeze.pyseabreeze.transport import USBTransport
+from seabreeze.pyseabreeze.transport import (
+    USBTransport,
+    USBTransportDeviceInUse,
+    USBTransportError,
+    USBTransportHandle,
+)
 
 __all__ = ["SeaBreezeAPI"]
 
@@ -71,23 +73,21 @@ class SeaBreezeAPI(object):
         """
         # get all matching devices
         devices = []
-        for pyusb_dev in USBTransport.list_devices():
+        for usb_dev in USBTransport.list_devices():
             # get the correct communication interface
-            dev = _seabreeze_device_factory(pyusb_dev)
-            if dev.is_open:
-                was_open_before = True
-            else:
-                was_open_before = False
+            dev = _seabreeze_device_factory(usb_dev)
+            if not dev.is_open:
+                # opening the device will populate its serial number
                 try:
                     dev.open()
-                except usb.core.USBError as usb_error:
-                    if usb_error.errno == 16:
-                        # device used by another thread?
-                        continue
-                    else:
-                        raise
-            if not was_open_before:
-                dev.close()
+                except USBTransportDeviceInUse:
+                    # device used by another thread? -> exclude
+                    continue
+                except USBTransportError:
+                    # todo: investigate if there are ways to recover from here
+                    raise
+                else:
+                    dev.close()
             devices.append(dev)
         return devices
 
@@ -109,17 +109,22 @@ class SeaBreezeAPI(object):
 _seabreeze_device_instance_registry = weakref.WeakValueDictionary()
 
 
-def _seabreeze_device_factory(pyusb_device):
+def _seabreeze_device_factory(device):
     """return existing instances instead of creating temporary ones
 
     Parameters
     ----------
-    pyusb_device : usb.core.Device
+    device : USBTransportHandle
+
+    Returns
+    -------
+    dev : SeaBreezeDevice
     """
-    # noinspection PyUnresolvedReferences
-    ident = pyusb_device.idVendor, pyusb_device.idProduct, pyusb_device.bus, pyusb_device.address
+    if not isinstance(device, USBTransportHandle):
+        raise TypeError("needs to be instance of USBTransportHandle")
+    ident = device.identity
     try:
         return _seabreeze_device_instance_registry[ident]
     except KeyError:
-        dev = _seabreeze_device_instance_registry[ident] = SeaBreezeDevice(pyusb_device)
+        dev = _seabreeze_device_instance_registry[ident] = SeaBreezeDevice(device)
         return dev

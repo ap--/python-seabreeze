@@ -141,7 +141,8 @@ def test_device_cleanup_on_exit(backendlify):
     cmd = [
         "python",
         "-c",
-        "import seabreeze.%s as sb; d = sb.SeaBreezeAPI().list_devices()[0]; d.open()" % backend_name,
+        "import seabreeze.%s as sb; d = sb.SeaBreezeAPI().list_devices()[0]; d.open()"
+        % backend_name,
     ]
     p = subprocess.run(cmd, capture_output=True)
     assert p.returncode == 0

@@ -188,7 +188,6 @@ class USBTransport(TransportInterface):
 
     def close_device(self):
         if self._device is not None:
-            usb.util.dispose_resources(self._device)
             self._device.reset()
             self._device = None
         self._opened = False

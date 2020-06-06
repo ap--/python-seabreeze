@@ -10,6 +10,7 @@ import hashlib
 import struct
 import time
 import warnings
+import weakref
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
@@ -28,7 +29,7 @@ class ProtocolInterface(object):
             and isinstance(transport.read, Callable)
         ):
             raise TypeError("transport does not implement read and write methods")
-        self.transport = transport
+        self.transport = weakref.proxy(transport)
 
     def send(self, msg_type, payload, timeout_ms=None, **kwargs):
         raise NotImplementedError("implement in derived classes")

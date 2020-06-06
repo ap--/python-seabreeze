@@ -67,6 +67,10 @@ class TransportInterface(object):
     def default_timeout_ms(self):
         raise NotImplementedError("implement in derived transport class")
 
+    @property
+    def protocol(self):
+        raise NotImplementedError("implement in derived transport class")
+
     @classmethod
     def list_devices(cls):
         raise NotImplementedError("implement in derived transport class")
@@ -214,6 +218,10 @@ class USBTransport(TransportInterface):
     @property
     def default_timeout_ms(self):
         return self._device.default_timeout if self._device else None
+
+    @property
+    def protocol(self):
+        return self._protocol
 
     @classmethod
     def list_devices(cls):

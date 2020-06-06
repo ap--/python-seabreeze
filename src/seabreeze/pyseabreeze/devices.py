@@ -358,8 +358,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         serial_number: str
         """
         try:
-            # noinspection PyProtectedMember
-            protocol = self._transport._protocol
+            protocol = self._transport.protocol
             if protocol is None:
                 raise AttributeError("transport not opened")
 
@@ -391,8 +390,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         features : `dict` [`str`, `seabreeze.cseabreeze.SeaBreezeFeature`]
         """
         if not self._cached_features:
-            # noinspection PyProtectedMember
-            protocol = self._transport._protocol
+            protocol = self._transport.protocol
             self._cached_features = {}
             for identifier in sbf.SeaBreezeFeature.get_feature_class_registry():
                 f_list = self._cached_features.setdefault(identifier, [])
@@ -403,8 +401,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
                     )
                     if not feature_cls.supports_protocol(protocol):
                         continue
-                    # noinspection PyProtectedMember
-                    f_list.append(feature_cls(self._transport._protocol, len(f_list)))
+                    f_list.append(feature_cls(self._transport.protocol, len(f_list)))
         return self._cached_features
 
     @property

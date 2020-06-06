@@ -337,7 +337,8 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         -------
         None
         """
-        self._transport.close_device()
+        if self.is_open:
+            self._transport.close_device()
 
     @property
     def is_open(self):

@@ -1,3 +1,4 @@
+import weakref
 from functools import partial
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
@@ -41,7 +42,7 @@ class SeaBreezeFeature(object):
         # check protocol support
         if not isinstance(protocol, self._required_protocol_cls):
             raise SeaBreezeError("FeatureError: Protocol not supported by feature")
-        self.protocol = protocol
+        self.protocol = weakref.proxy(protocol)
         self.feature_id = feature_id
 
     def __repr__(self):

@@ -3,6 +3,8 @@
 Some spectrometers can support different transports (usb, network, rs232, etc.)
 
 """
+import importlib
+import inspect
 import logging
 import warnings
 from functools import partial
@@ -126,6 +128,7 @@ class USBTransportHandle(object):
             pyusb_device.bus,
             pyusb_device.address,
         )
+        self.pyusb_backend = get_name_from_pyusb_backend(pyusb_device.backend)
 
 
 class USBTransport(TransportInterface):
@@ -224,7 +227,7 @@ class USBTransport(TransportInterface):
         return self._protocol
 
     @classmethod
-    def list_devices(cls):
+    def list_devices(cls, **kwargs):
         """list pyusb devices for all available spectrometers
 
         Note: this includes spectrometers that are currently opened in other
@@ -235,12 +238,15 @@ class USBTransport(TransportInterface):
         devices : USBTransportHandle
             unique pyusb devices for each available spectrometer
         """
+        # check if a specific pyusb backend is requested
+        _pyusb_backend = kwargs.get("_pyusb_backend", None)
         # get all matching devices
         pyusb_devices = usb.core.find(
             find_all=True,
             custom_match=lambda dev: (
                 dev.idVendor == cls.vendor_id and dev.idProduct in cls.product_ids
             ),
+            backend=get_pyusb_backend_from_name(name=_pyusb_backend),
         )
         # encapsulate
         for pyusb_device in pyusb_devices:
@@ -281,8 +287,8 @@ class USBTransport(TransportInterface):
         return specialized_class
 
     @classmethod
-    def initialize(cls):
-        for device in cls.list_devices():
+    def initialize(cls, **_kwargs):
+        for device in cls.list_devices(**_kwargs):
             try:
                 device.pyusb_device.reset()
                 # usb.util.dispose_resources(device)  <- already done by device.reset()
@@ -294,9 +300,9 @@ class USBTransport(TransportInterface):
                 )
 
     @classmethod
-    def shutdown(cls):
+    def shutdown(cls, **_kwargs):
         # dispose usb resources
-        for device in cls.list_devices():
+        for device in cls.list_devices(**_kwargs):
             try:
                 usb.util.dispose_resources(device.pyusb_device)
             except Exception as err:
@@ -305,3 +311,25 @@ class USBTransport(TransportInterface):
                         err.__class__.__name__, getattr(err, "message", "no message")
                     )
                 )
+
+
+def get_pyusb_backend_from_name(name):
+    """internal: allow requesting a specific pyusb backend for testing"""
+    if name is None:
+        # default is pick first that works: ('libusb1', 'libusb0', 'openusb0')
+        _backend = None
+    else:
+        m = importlib.import_module("usb.backend.{}".format(name))
+        _backend = m.get_backend()
+        # raise if a pyusb backend was requested but can't be loaded
+        if _backend is None:
+            raise RuntimeError("pyusb '{}' backend failed to load")
+    return _backend
+
+
+def get_name_from_pyusb_backend(backend):
+    """internal: return backend name from loaded backend"""
+    module = inspect.getmodule(backend)
+    if not module:
+        return None
+    return module.__name__.split(".")[-1]

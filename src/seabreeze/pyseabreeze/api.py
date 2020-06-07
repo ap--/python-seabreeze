@@ -25,42 +25,38 @@ class SeaBreezeAPI(object):
 
     _log = logging.getLogger(__name__)
 
-    def __init__(self, initialize=True):
+    def __init__(self, initialize=True, **_kwargs):
+        self._kwargs = _kwargs  # allow passing additional kwargs to transports
         if initialize:
             self.initialize()
 
-    @staticmethod
-    def initialize():
+    def initialize(self):
         """initialize the api backend
 
         normally this function does not have to be called directly by the user.
         it resets all usb devices on load
         """
-        USBTransport.initialize()
+        USBTransport.initialize(**self._kwargs)
 
-    @staticmethod
-    def shutdown():
+    def shutdown(self):
         """shutdown the api backend
 
         normally this function does not have to be called directly by the user
         """
         # dispose usb resources
-        USBTransport.shutdown()
+        USBTransport.shutdown(**self._kwargs)
 
-    @staticmethod
-    def add_rs232_device_location(device_type, bus_path, baudrate):
+    def add_rs232_device_location(self, device_type, bus_path, baudrate):
         """add RS232 device location"""
         # RS232Transport.register_device(device_type, bus_path, baudrate)
         raise NotImplementedError("rs232 communication not implemented for pyseabreeze")
 
-    @staticmethod
-    def add_ipv4_device_location(device_type, ip_address, port):
+    def add_ipv4_device_location(self, device_type, ip_address, port):
         """add ipv4 device location"""
         # IPV4Transport.register_device(device_type, ip_address, port)
         raise NotImplementedError("ipv4 communication not implemented for pyseabreeze")
 
-    @staticmethod
-    def list_devices():
+    def list_devices(self):
         """returns available SeaBreezeDevices
 
         list all connected Ocean Optics devices supported
@@ -73,7 +69,7 @@ class SeaBreezeAPI(object):
         """
         # get all matching devices
         devices = []
-        for usb_dev in USBTransport.list_devices():
+        for usb_dev in USBTransport.list_devices(**self._kwargs):
             # get the correct communication interface
             dev = _seabreeze_device_factory(usb_dev)
             if not dev.is_open:
@@ -91,6 +87,7 @@ class SeaBreezeAPI(object):
             devices.append(dev)
         return devices
 
+    # note: to be fully consistent with cseabreeze this shouldn't be a staticmethod
     @staticmethod
     def supported_models():
         """returns SeaBreezeDevices supported by the backend

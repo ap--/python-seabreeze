@@ -181,6 +181,16 @@ def test_read_serial_number(backendlified_serial):
     assert len(serial) > 0
 
 
+@pytest.mark.xfail(reason='check if following tests work after crash')
+def test_crash_may_not_influence_following_tests(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+
+    _ = Spectrometer.from_serial_number(backendlified_serial)
+    raise Exception('crash on purpose')
+
+
 def test_read_intensities(backendlified_serial):
     devices = list(list_devices())
     if len(devices) == 0:

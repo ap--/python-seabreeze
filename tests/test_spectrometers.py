@@ -130,10 +130,17 @@ def test_cant_find_serial():
 
 def test_device_cleanup_on_exit(backendlify):
     """test if opened devices cleanup correctly"""
+    usb_backend = ""
     try:
         devices = list_devices()
         if len(devices) == 0:
             pytest.skip("no supported device connected")
+        else:
+            if isinstance(devices[0], psb.SeaBreezeDevice):
+                # noinspection PyProtectedMember
+                usb_backend = "_pyusb_backend='{}'".format(
+                    devices[0]._raw_device.pyusb_backend
+                )
         del devices
     finally:
         # noinspection PyProtectedMember
@@ -145,11 +152,12 @@ def test_device_cleanup_on_exit(backendlify):
     cmd = [
         "python",
         "-c",
-        "import seabreeze.%s as sb; d = sb.SeaBreezeAPI().list_devices()[0]; d.open()"
-        % backend_name,
+        "import seabreeze.%s as sb; d = sb.SeaBreezeAPI(%s).list_devices()[0]; d.open()"
+        % (backend_name, usb_backend),
     ]
-    p = subprocess.run(cmd, capture_output=True)
-    assert p.returncode == 0
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = p.communicate()
+    assert p.returncode == 0, stderr
 
 
 def test_read_model(backendlified_serial):

@@ -104,22 +104,22 @@ def backendlify(request):
         yield backend
     finally:
         _api.shutdown()
+        delattr(list_devices, "_api")
 
 
 @pytest.fixture(scope="function", **_retr())  # request all spectrometers on module load
 def backendlified_serial(request):
     backend, serial = request.param
     # list_devices
-    _api = getattr(list_devices, "_api", None)
-    if not isinstance(_api, backend.SeaBreezeAPI):
-        _api = backend.SeaBreezeAPI()
-        setattr(list_devices, "_api", _api)
+    _api = backend.SeaBreezeAPI()
+    setattr(list_devices, "_api", _api)
     # Spectrometer
     Spectrometer._backend = backend
     try:
         yield serial
     finally:
         _api.shutdown()
+        delattr(list_devices, "_api")
 
 
 @pytest.mark.usefixtures("backendlify")

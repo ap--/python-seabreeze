@@ -117,6 +117,7 @@ def _seabreeze_device_factory(device):
     -------
     dev : SeaBreezeDevice
     """
+    global _seabreeze_device_instance_registry
     if not isinstance(device, USBTransportHandle):
         raise TypeError("needs to be instance of USBTransportHandle")
     ident = device.identity

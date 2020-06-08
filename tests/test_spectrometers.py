@@ -81,10 +81,10 @@ def _retr():
 @pytest.fixture(
     scope="function",
     params=[
-        csb or pytest.param(csb, marks=pytest.mark.skip),
         psb or pytest.param(psb, marks=pytest.mark.skip),
+        csb or pytest.param(csb, marks=pytest.mark.skip),
     ],
-    ids=["cseabreeze", "pyseabreeze"],
+    ids=["pyseabreeze", "cseabreeze"],
 )
 def backendlify(request):
     backend = request.param

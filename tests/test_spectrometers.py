@@ -81,18 +81,22 @@ def _retr():
 @pytest.fixture(
     scope="function",
     params=[
-        psb or pytest.param(psb, marks=pytest.mark.skip),
-        csb or pytest.param(csb, marks=pytest.mark.skip),
+        (psb, "libusb0") if psb else pytest.param((), marks=pytest.mark.skip),
+        (psb, "libusb1") if psb else pytest.param((), marks=pytest.mark.skip),
+        (csb, None) if csb else pytest.param((), marks=pytest.mark.skip),
     ],
-    ids=["pyseabreeze", "cseabreeze"],
+    ids=["pyseabreeze(libusb0)", "pyseabreeze(libusb1)", "cseabreeze"],
 )
 def backendlify(request):
-    backend = request.param
+    backend, usb_backend = request.param
     # list_devices
-    _api = getattr(list_devices, "_api", None)
-    if not isinstance(_api, backend.SeaBreezeAPI):
-        _api = backend.SeaBreezeAPI()
-        setattr(list_devices, "_api", _api)
+    kwargs = {} if usb_backend is None else {"_pyusb_backend": usb_backend}
+    try:
+        _api = backend.SeaBreezeAPI(**kwargs)
+    except RuntimeError:
+        pytest.skip("can't load pyusb backend '{}'".format(usb_backend))
+        _api = None
+    setattr(list_devices, "_api", _api)
     # Spectrometer
     Spectrometer._backend = backend
     try:

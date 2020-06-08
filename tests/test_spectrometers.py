@@ -191,6 +191,22 @@ def test_read_intensities(backendlified_serial):
     assert arr.size == spec.pixels
 
 
+def test_correct_dark_pixels(backendlified_serial):
+    devices = list(list_devices())
+    if len(devices) == 0:
+        pytest.skip("no supported device connected")
+    # noinspection PyProtectedMember
+    SeaBreezeError = Spectrometer._backend.SeaBreezeError
+
+    spec = Spectrometer.from_serial_number(backendlified_serial)
+    try:
+        arr = spec.intensities(correct_dark_counts=True)
+    except SeaBreezeError:
+        pytest.skip("does not support dark counts")
+    else:
+        assert arr.size == spec.pixels
+
+
 def test_read_wavelengths(backendlified_serial):
     devices = list(list_devices())
     if len(devices) == 0:

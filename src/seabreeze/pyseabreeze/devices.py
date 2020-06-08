@@ -12,11 +12,9 @@ from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature
 from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
-
-# spectrometer models for pyseabreeze
-#
 from seabreeze.pyseabreeze.transport import TransportInterface, USBTransport
 
+# class registry for all spectrometer models
 _model_class_registry = {}
 
 

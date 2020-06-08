@@ -81,11 +81,12 @@ def _retr():
 @pytest.fixture(
     scope="function",
     params=[
+        (psb, "openusb") if psb else pytest.param((), marks=pytest.mark.skip),
         (psb, "libusb0") if psb else pytest.param((), marks=pytest.mark.skip),
         (psb, "libusb1") if psb else pytest.param((), marks=pytest.mark.skip),
         (csb, None) if csb else pytest.param((), marks=pytest.mark.skip),
     ],
-    ids=["pyseabreeze(libusb0)", "pyseabreeze(libusb1)", "cseabreeze"],
+    ids=["pyseabreeze(openusb)", "pyseabreeze(libusb0)", "pyseabreeze(libusb1)", "cseabreeze"],
 )
 def backendlify(request):
     backend, usb_backend = request.param

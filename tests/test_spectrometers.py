@@ -137,7 +137,7 @@ def test_device_cleanup_on_exit(backendlify):
         if len(devices) == 0:
             pytest.skip("no supported device connected")
         else:
-            if isinstance(devices[0], psb.SeaBreezeDevice):
+            if psb and isinstance(devices[0], psb.SeaBreezeDevice):
                 # noinspection PyProtectedMember
                 usb_backend = "_pyusb_backend='{}'".format(
                     devices[0]._raw_device.pyusb_backend

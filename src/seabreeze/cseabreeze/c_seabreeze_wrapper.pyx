@@ -116,9 +116,9 @@ cdef class SeaBreezeAPI(object):
 
         normally this function does not have to be called directly by the user
         """
-        # csb.SeaBreezeAPI.shutdown()
-        # self.sbapi = NULL
-        pass  # disable python level SeaBreezeAPI shutdown
+        if self.sbapi:
+            csb.SeaBreezeAPI.shutdown()
+            self.sbapi = NULL
 
     def add_rs232_device_location(self, device_type, bus_path, baudrate):
         """add RS232 device location
@@ -145,6 +145,8 @@ cdef class SeaBreezeAPI(object):
         c_baudrate = int(baudrate)
         cdef char* p_devtype = c_devtype
         cdef char* p_buspath = c_buspath
+        if not self.sbapi:
+            raise RuntimeError("SeaBreezeAPI not initialized")
         output = self.sbapi.addRS232DeviceLocation(p_devtype, p_buspath, c_baudrate)
         return not bool(output)
 
@@ -171,6 +173,8 @@ cdef class SeaBreezeAPI(object):
         c_port = int(port)
         cdef char* p_devtype = c_devtype
         cdef char* p_ipaddr = c_ipaddr
+        if not self.sbapi:
+            raise RuntimeError("SeaBreezeAPI not initialized")
         output = self.sbapi.addTCPIPv4DeviceLocation(p_devtype, p_ipaddr, c_port)
         return not bool(output)
 
@@ -188,6 +192,8 @@ cdef class SeaBreezeAPI(object):
         cdef int num_devices
         cdef long* c_device_ids
         cdef int found_devices
+        if not self.sbapi:
+            raise RuntimeError("SeaBreezeAPI not initialized")
         self.sbapi.probeDevices()
         num_devices = self.sbapi.getNumberOfDeviceIDs()
         c_device_ids = <long*> PyMem_Malloc(num_devices * sizeof(long))
@@ -249,6 +255,8 @@ cdef class SeaBreezeAPI(object):
         cdef int error_code
         cdef char c_buffer[_MAXBUFLEN]
         cdef int bytes_written
+        if not self.sbapi:
+            raise RuntimeError("SeaBreezeAPI not initialized")
         num_devices = self.sbapi.getNumberOfSupportedModels()
 
         output = []

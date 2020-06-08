@@ -19,6 +19,31 @@ from seabreeze.pyseabreeze.transport import (
 
 __all__ = ["SeaBreezeAPI"]
 
+# create only one SeaBreezeDevice instance per handle
+_seabreeze_device_instance_registry = weakref.WeakValueDictionary()
+
+
+def _seabreeze_device_factory(device):
+    """return existing instances instead of creating temporary ones
+
+    Parameters
+    ----------
+    device : USBTransportHandle
+
+    Returns
+    -------
+    dev : SeaBreezeDevice
+    """
+    global _seabreeze_device_instance_registry
+    if not isinstance(device, USBTransportHandle):
+        raise TypeError("needs to be instance of USBTransportHandle")
+    ident = device.identity
+    try:
+        return _seabreeze_device_instance_registry[ident]
+    except KeyError:
+        dev = _seabreeze_device_instance_registry[ident] = SeaBreezeDevice(device)
+        return dev
+
 
 class SeaBreezeAPI(object):
     """SeaBreeze API interface"""
@@ -44,6 +69,7 @@ class SeaBreezeAPI(object):
         normally this function does not have to be called directly by the user
         """
         # dispose usb resources
+        _seabreeze_device_instance_registry.clear()
         USBTransport.shutdown(**self._kwargs)
 
     def add_rs232_device_location(self, device_type, bus_path, baudrate):
@@ -100,29 +126,3 @@ class SeaBreezeAPI(object):
             list of model names that are supported by this backend
         """
         return [x for x in sorted(_model_class_registry.keys())]
-
-
-# create only one SeaBreezeDevice instance per handle
-_seabreeze_device_instance_registry = weakref.WeakValueDictionary()
-
-
-def _seabreeze_device_factory(device):
-    """return existing instances instead of creating temporary ones
-
-    Parameters
-    ----------
-    device : USBTransportHandle
-
-    Returns
-    -------
-    dev : SeaBreezeDevice
-    """
-    global _seabreeze_device_instance_registry
-    if not isinstance(device, USBTransportHandle):
-        raise TypeError("needs to be instance of USBTransportHandle")
-    ident = device.identity
-    try:
-        return _seabreeze_device_instance_registry[ident]
-    except KeyError:
-        dev = _seabreeze_device_instance_registry[ident] = SeaBreezeDevice(device)
-        return dev

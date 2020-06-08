@@ -300,9 +300,6 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         except SeaBreezeError:
             pass
 
-    def __del__(self):
-        self.close()
-
     @property
     def model(self):
         return self._model_name

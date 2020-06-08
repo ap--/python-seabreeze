@@ -130,6 +130,22 @@ class USBTransportHandle(object):
         )
         self.pyusb_backend = get_name_from_pyusb_backend(pyusb_device.backend)
 
+    def close(self):
+        self.pyusb_device.reset()
+
+    def __del__(self):
+        if self.pyusb_backend == "libusb1":
+            # have to check if .finalize() has been called
+            # -> todo: maybe better to fix this in the api initialization of cseabreeze
+            # -> todo: will probably have to check pyusb versions and only do this when necessary
+            if not getattr(self.pyusb_device.backend, "_finalize_called", False):
+                # if usb.core.Device.reset() gets called but the backend has been finalized already
+                # (this happens only during interpreter shutdown)
+                self.close()
+        else:
+            self.close()
+        self.pyusb_device = None
+
 
 class USBTransport(TransportInterface):
     """implementation of the usb transport interface for spectrometers"""
@@ -167,14 +183,15 @@ class USBTransport(TransportInterface):
         if not isinstance(device, USBTransportHandle):
             raise TypeError("device needs to be a USBTransportHandle")
         # device.reset()
-        self._device = device.pyusb_device
+        self._device = device
+        pyusb_device = self._device.pyusb_device
         try:
-            if self._device.is_kernel_driver_active(0):
-                self._device.detach_kernel_driver(0)
+            if pyusb_device.is_kernel_driver_active(0):
+                pyusb_device.detach_kernel_driver(0)
         except NotImplementedError:
             pass  # unavailable on some systems/backends
         try:
-            self._device.set_configuration()
+            pyusb_device.set_configuration()
         except usb.core.USBError as err:
             if err.errno == 16:
                 # TODO: warn as in cseabreeze
@@ -195,7 +212,7 @@ class USBTransport(TransportInterface):
 
     def close_device(self):
         if self._device is not None:
-            self._device.reset()
+            self._device.close()
             self._device = None
         self._opened = False
         self._protocol = None
@@ -205,7 +222,9 @@ class USBTransport(TransportInterface):
             raise RuntimeError("device not opened")
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        return self._device.write(self._endpoint_map.ep_out, data, timeout=timeout_ms)
+        return self._device.pyusb_device.write(
+            self._endpoint_map.ep_out, data, timeout=timeout_ms
+        )
 
     def read(self, size=None, timeout_ms=None, mode=None, **kwargs):
         if self._device is None:
@@ -216,11 +235,11 @@ class USBTransport(TransportInterface):
             size = self._default_read_size[mode]
         if kwargs:
             warnings.warn("kwargs provided but ignored: {}".format(kwargs))
-        return self._device.read(endpoint, size, timeout=timeout_ms)
+        return self._device.pyusb_device.read(endpoint, size, timeout=timeout_ms)
 
     @property
     def default_timeout_ms(self):
-        return self._device.default_timeout if self._device else None
+        return self._device.pyusb_device.default_timeout if self._device else None
 
     @property
     def protocol(self):
@@ -313,17 +332,24 @@ class USBTransport(TransportInterface):
                 )
 
 
+_pyusb_backend_instances = {}
+
+
 def get_pyusb_backend_from_name(name):
     """internal: allow requesting a specific pyusb backend for testing"""
     if name is None:
         # default is pick first that works: ('libusb1', 'libusb0', 'openusb0')
         _backend = None
     else:
-        m = importlib.import_module("usb.backend.{}".format(name))
-        _backend = m.get_backend()
-        # raise if a pyusb backend was requested but can't be loaded
-        if _backend is None:
-            raise RuntimeError("pyusb '{}' backend failed to load")
+        try:
+            _backend = _pyusb_backend_instances[name]
+        except KeyError:
+            m = importlib.import_module("usb.backend.{}".format(name))
+            _backend = m.get_backend()
+            # raise if a pyusb backend was requested but can't be loaded
+            if _backend is None:
+                raise RuntimeError("pyusb '{}' backend failed to load")
+            _pyusb_backend_instances[name] = _backend
     return _backend
 
 

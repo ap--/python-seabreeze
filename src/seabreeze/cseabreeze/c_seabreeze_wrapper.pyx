@@ -116,6 +116,7 @@ cdef class SeaBreezeAPI(object):
 
         normally this function does not have to be called directly by the user
         """
+        _seabreeze_device_instance_registry.clear()
         if self.sbapi:
             csb.SeaBreezeAPI.shutdown()
             self.sbapi = NULL
@@ -303,6 +304,13 @@ cdef class SeaBreezeDevice(object):
     def __dealloc__(self):
         cdef int error_code
         # always returns 1
+        # under normal circumstances this is fine because it'll return
+        # the pointer to the same instance.
+        # In a pytest scenario where SeaBreezeAPI.shutdown is called to
+        # allow switching to other backends, this will prevent a segfault
+        # (and create a little bit of overhead because it recreates the
+        # DeviceFactory instance...)
+        self.sbapi = csb.SeaBreezeAPI.getInstance()
         self.sbapi.closeDevice(self.handle, &error_code)
 
     cdef _get_info(self):

@@ -98,9 +98,12 @@ class TransportInterface(object):
 
 # encapsulate usb.core.USBError
 class USBTransportError(Exception):
-    def __init__(self, *args, errno=None, error_code=None):
-        self.errno = errno
-        self.backend_error_code = error_code
+    def __init__(self, *args, **kwargs):
+        super(USBTransportError, self).__init__(*args)
+        self.errno = kwargs.pop("errno", None)
+        self.backend_error_code = kwargs.pop("error_code", None)
+        if kwargs:
+            raise TypeError("USBTransportError got unexpected kwarg")
 
     @classmethod
     def from_usberror(cls, err):

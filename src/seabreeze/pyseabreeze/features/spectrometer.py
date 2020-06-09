@@ -1,4 +1,5 @@
 import struct
+import warnings
 
 import numpy
 
@@ -146,8 +147,11 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
             self._integration_time_max * 1e-3
             + self.protocol.transport.default_timeout_ms
         )
+        # noinspection PyProtectedMember
         tmp[:] = self.protocol.receive(
-            size=self._spectrum_raw_length, timeout_ms=timeout, mode="high_speed"
+            size=self._spectrum_raw_length,
+            timeout_ms=timeout,
+            mode=self.protocol.transport._default_read_spectrum_endpoint,
         )
         return tmp
 
@@ -179,10 +183,22 @@ class SeaBreezeSpectrometerFeatureOOIFPGA(SeaBreezeSpectrometerFeatureOOI):
         self.protocol.send(0xFE)
         ret = self.protocol.receive(size=16)
         data = struct.unpack("<HLBBBBBBBBBB", ret[:])
-        # FIXME: check data[10] return values
-        self.protocol.transport._default_read_endpoint = (
-            "low_speed" if data[10] else "high_speed"
-        )
+        speed = data[10]
+        if speed == 0x00:
+            # USB1.0 port
+            self.protocol.transport._default_read_spectrum_endpoint = "low_speed"
+            warnings.warn(
+                "The device is connected to a USB1.0 port. "
+                "This might not work. Please report this issue upstream."
+            )
+        elif speed == 0x80:
+            # USB2.0+ port
+            self.protocol.transport._default_read_spectrum_endpoint = "high_speed"
+        else:
+            # raise if the value is not what's expected from the datasheets
+            raise ValueError(
+                "Unknown speed setting '{}' please file this as a bug!".format(speed)
+            )
 
 
 class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA):
@@ -194,7 +210,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA)
         )
         self.protocol.send(0x09)
         # noinspection PyProtectedMember
-        if self.protocol.transport._default_read_endpoint == "low_speed":
+        if self.protocol.transport._default_read_spectrum_endpoint == "low_speed":
             tmp[:] = self.protocol.receive(
                 size=self._spectrum_raw_length, timeout_ms=timeout
             )

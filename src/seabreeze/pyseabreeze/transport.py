@@ -177,6 +177,7 @@ class USBTransport(TransportInterface):
             "high_speed_alt": "highspeed_in2",
         }
         self._default_read_endpoint = "low_speed"
+        self._default_read_spectrum_endpoint = "high_speed"
         # internal state
         self._device = None
         self._opened = None

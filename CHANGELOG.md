@@ -13,7 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Added
+- *docs* added raw usb example to feature docstring
+- *psb* USBTransport.protocol property (for use when implementing new features)
+
 ### Fixed
+- *psb* fix multiple deprecation warnings
+- *csb* fix device cleanup after api shutdown
+- *psb* multiple fixes regarding device cleanup for all pyusb backends
+- add python-3.8 testing to github actions
 - *psb* fix dark pixel correction
 - *psb* fix max integration time for USB4000
 - *psb* fix list_devices closes opened devices bug

@@ -2,27 +2,13 @@ import mock
 import pytest
 
 
-def _running_on_ci():
-    """returns if we're currently running on a CI"""
-    import os
-
-    CI = os.environ.get("CI", "").lower()
-    CONDA_BUILD = os.environ.get("CONDA_BUILD", "").lower()
-    if CONDA_BUILD in {"1", "true"}:
-        return True
-    if CI in {"1", "true", "azure", "travis", "appveyor", "circleci"}:
-        return True
-    return False
-
-
-@pytest.fixture(scope="session", autouse=_running_on_ci())
+@pytest.fixture(scope="session")
 def mock_pyusb_core_find():
     """mock usb.core.find
 
-    when running on a ci, the libusb0 backend of pyusb can crash if access
+    when running on a ci, the pyusb can crash if access
     to the usbfs is denied: https://github.com/pyusb/pyusb/issues/151
 
-    this fixture is automatically loaded when the CI env var is set.
     """
     with mock.patch("usb.core.find", return_value=[]):
         yield
@@ -40,7 +26,7 @@ def pyseabreeze():
     yield pytest.importorskip("seabreeze.pyseabreeze")
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def cseabreeze_api(cseabreeze):
     api = cseabreeze.SeaBreezeAPI()
     try:
@@ -49,10 +35,23 @@ def cseabreeze_api(cseabreeze):
         api.shutdown()
 
 
-@pytest.fixture(scope="function")
-def pyseabreeze_api(pyseabreeze):
-    api = pyseabreeze.SeaBreezeAPI()
+@pytest.fixture(
+    scope="function",
+    params=[None, "openusb", "libusb0", "libusb1"],
+    ids=["any", "openusb", "libusb0", "libusb1"],
+)
+def pyseabreeze_pyusb_backend(request):
+    yield request.param
+
+
+@pytest.fixture(scope="module")
+def pyseabreeze_api(pyseabreeze, pyseabreeze_pyusb_backend):
     try:
-        yield api
-    finally:
-        api.shutdown()
+        api = pyseabreeze.SeaBreezeAPI(_pyusb_backend=pyseabreeze_pyusb_backend)
+    except RuntimeError:
+        pytest.skip("can't load pyusb backend {}".format(pyseabreeze_pyusb_backend))
+    else:
+        try:
+            yield api
+        finally:
+            api.shutdown()

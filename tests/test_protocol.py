@@ -36,7 +36,7 @@ def mock_transport(obp_message):
     yield mock_transport
 
 
-def test_obp_protocol_messages(mock_transport):
+def test_pyseabreeze_protocol_messages(mock_transport):
     """test the parsing code for the OBP protocol implementation of pyseabreeze"""
     from seabreeze.pyseabreeze.protocol import OBPProtocol
 

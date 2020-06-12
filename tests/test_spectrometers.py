@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 import time
@@ -175,6 +176,9 @@ class TestHardware(object):
         assert len(serial) > 0
 
     @pytest.mark.xfail(reason="check if following tests work after crash")
+    @pytest.mark.skipif(
+        os.name == "nt", reason="FIXME: TEST BREAKS OTHER TESTS ON WINDOWS"
+    )
     def test_crash_may_not_influence_following_tests(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -198,6 +202,8 @@ class TestHardware(object):
             pytest.skip("does not support dark counts")
         else:
             assert arr.size == spec.pixels
+        finally:
+            spec.close()
 
     def test_read_wavelengths(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
@@ -255,10 +261,12 @@ class TestHardware(object):
         spec = Spectrometer.from_serial_number(serial_number)
         spec.trigger_mode(0x00)  # <- normal mode
 
+    def test_trigger_mode_wrong(self, serial_number):
+        from seabreeze.spectrometers import Spectrometer, SeaBreezeError
+
+        spec = Spectrometer.from_serial_number(serial_number)
         with pytest.raises(SeaBreezeError):
             spec.trigger_mode(0xF0)  # <- should be unsupported for all specs
-        # test again to see if the bus is locked
-        spec.trigger_mode(0x00)  # <- normal mode
 
     @pytest.mark.skipif(_SPEC_NUM == 0, reason="no spectrometers connected")
     def test_list_devices_dont_close_opened_devices(self):

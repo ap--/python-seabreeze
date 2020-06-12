@@ -51,4 +51,5 @@ def ls():
     # output format:
     # MY_MODEL   SERIAL_1234  cseabreeze,pyseabreeze
     for model_serial_number, info in itertools.groupby(connected, key=key_func):
-        print("{}\t{}\t{}".format(*model_serial_number, ",".join(b[2] for b in info)))
+        model, serial = model_serial_number
+        print("{}\t{}\t{}".format(model, serial, ",".join(b[2] for b in info)))

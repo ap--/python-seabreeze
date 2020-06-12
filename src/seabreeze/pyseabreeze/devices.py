@@ -365,7 +365,8 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
                 return self.f.eeprom.eeprom_read_slot(0)
 
             elif isinstance(protocol, OBPProtocol):
-                return protocol.query(0x00000100).decode("utf8")
+                serial_len = ord(protocol.query(0x00000101))
+                return protocol.query(0x00000100)[:serial_len].decode("utf8")
 
             else:
                 raise NotImplementedError(

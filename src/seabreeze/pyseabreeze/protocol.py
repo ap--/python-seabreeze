@@ -158,6 +158,7 @@ class OBPProtocol(ProtocolInterface):
         code: struct.Struct(msg).pack
         for code, msg in {
             0x00000100: "",  # GET_SERIAL
+            0x00000101: "",  # GET_SERIAL_LENGTH
             0x00100928: "",  # GET_BUF_SPEC32_META
             0x00101000: "",  # GET_RAW_SPECTRUM_NOW_HDX
             0x00101100: "",  # GET_RAW_SPECTRUM_NOW
@@ -272,9 +273,12 @@ class OBPProtocol(ProtocolInterface):
             return bytes_written
 
         response = self.transport.read(timeout_ms=timeout_ms)
-        remaining_bytes, checksum_type = self._check_incoming_message_header(
-            response[:44]
-        )
+        try:
+            remaining_bytes, checksum_type = self._check_incoming_message_header(
+                response[:44]
+            )
+        except SeaBreezeError:
+            return 0
         # ? assert remaining_bytes == 20
         checksum = self._check_incoming_message_footer(response[-20:])
 
@@ -307,9 +311,14 @@ class OBPProtocol(ProtocolInterface):
             data returned from the spectrometer
         """
         response = self.transport.read(size=64, timeout_ms=timeout_ms)
-        remaining_bytes, checksum_type = self._check_incoming_message_header(
-            response[:44]
-        )
+        try:
+            remaining_bytes, checksum_type = self._check_incoming_message_header(
+                response[:44]
+            )
+        except SeaBreezeError:
+            # empty buffer if error raised
+            self.transport.read(size=None, timeout_ms=500)
+            raise
         length_payload_footer = remaining_bytes
 
         # we already received some data

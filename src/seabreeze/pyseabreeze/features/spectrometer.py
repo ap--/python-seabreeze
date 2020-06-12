@@ -351,7 +351,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
 
     def set_trigger_mode(self, mode):
         if mode in self._trigger_modes:
-            self.protocol.send(0x00110110, mode, request_ack=False)
+            self.protocol.send(0x00110110, mode, request_ack=True)
         else:
             raise SeaBreezeError("Only supports: %s" % str(self._trigger_modes))
 

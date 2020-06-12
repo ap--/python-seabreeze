@@ -134,7 +134,14 @@ class USBTransportHandle(object):
         self.pyusb_backend = get_name_from_pyusb_backend(pyusb_device.backend)
 
     def close(self):
-        self.pyusb_device.reset()
+        try:
+            self.pyusb_device.reset()
+        except usb.core.USBError:
+            logging.debug(
+                "USBError while calling USBTransportHandle.close on {}:{}".format(
+                    self.identity[0], self.identity[1]
+                )
+            )
 
     def __del__(self):
         if self.pyusb_backend == "libusb1":

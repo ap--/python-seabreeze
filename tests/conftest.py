@@ -5,6 +5,7 @@ import pytest
 def pytest_addoption(parser):
     pyusb_choices = [
         "any",
+        "all",
         "cseabreeze",
         "pyseabreeze",
         "pyseabreeze:libusb0",
@@ -22,8 +23,17 @@ def pytest_addoption(parser):
 def pytest_generate_tests(metafunc):
     if "backendlify" in metafunc.fixturenames:
         backend = metafunc.config.getoption("--seabreeze-backend")
+        if backend == "all":
+            argvalues = [
+                "cseabreeze",
+                "pyseabreeze:libusb0",
+                "pyseabreeze:libusb1",
+                "pyseabreeze:openusb",
+            ]
+        else:
+            argvalues = [backend]
         metafunc.parametrize(
-            "backendlify", argvalues=[backend], ids="backend({})".format, indirect=True
+            "backendlify", argvalues=argvalues, ids="backend({})".format, indirect=True,
         )
 
 

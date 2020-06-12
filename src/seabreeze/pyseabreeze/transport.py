@@ -264,13 +264,16 @@ class USBTransport(TransportInterface):
         # check if a specific pyusb backend is requested
         _pyusb_backend = kwargs.get("_pyusb_backend", None)
         # get all matching devices
-        pyusb_devices = usb.core.find(
-            find_all=True,
-            custom_match=lambda dev: (
-                dev.idVendor == cls.vendor_id and dev.idProduct in cls.product_ids
-            ),
-            backend=get_pyusb_backend_from_name(name=_pyusb_backend),
-        )
+        try:
+            pyusb_devices = usb.core.find(
+                find_all=True,
+                custom_match=lambda dev: (
+                    dev.idVendor == cls.vendor_id and dev.idProduct in cls.product_ids
+                ),
+                backend=get_pyusb_backend_from_name(name=_pyusb_backend),
+            )
+        except usb.core.NoBackendError:
+            raise RuntimeError("No pyusb backend found")
         # encapsulate
         for pyusb_device in pyusb_devices:
             yield USBTransportHandle(pyusb_device)

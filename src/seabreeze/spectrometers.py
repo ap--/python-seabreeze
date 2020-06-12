@@ -30,7 +30,8 @@ def list_devices():
         connected Spectrometer instances
     """
     if not hasattr(list_devices, "_api"):
-        list_devices._api = _lib.SeaBreezeAPI()
+        # noinspection PyProtectedMember
+        list_devices._api = _lib.SeaBreezeAPI(**_lib._api_kwargs)
     # noinspection PyProtectedMember
     return list_devices._api.list_devices()
 

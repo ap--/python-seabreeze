@@ -30,10 +30,11 @@ _SeaBreezeConfig = {
     "requested_backend": "cseabreeze",  # default is cseabreeze
     "available_backends": ("cseabreeze", "pyseabreeze"),
     "allow_fallback": False,
+    "_api_kwargs": {},  # for pytests
 }
 
 
-def use(backend, force=True):
+def use(backend, force=True, **_kwargs):
     """
     select the backend used for communicating with the spectrometer
 
@@ -55,6 +56,9 @@ def use(backend, force=True):
         )
     _SeaBreezeConfig["requested_backend"] = backend
     _SeaBreezeConfig["allow_fallback"] = not force
+    _SeaBreezeConfig["_api_kwargs"] = _kwargs.pop("_api_kwargs", {})
+    if _kwargs:
+        raise TypeError("unknown keyword arguments")
 
 
 def get_backend():
@@ -93,5 +97,8 @@ def get_backend():
 
     if backend is None:
         raise ImportError("Could not import backend. Requested: {}".format(requested))
+
+    # provide for testing purposes
+    backend._api_kwargs = _SeaBreezeConfig["_api_kwargs"]
 
     return backend

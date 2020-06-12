@@ -86,7 +86,7 @@ def serial_number(request):
 @pytest.fixture(scope="class")
 def backendlify(request):
     """setup the imports"""
-    backend = request.config.getoption("--seabreeze-backend")
+    backend = request.param
     if backend == "any":
         pass
 

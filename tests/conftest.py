@@ -19,6 +19,14 @@ def pytest_addoption(parser):
     )
 
 
+def pytest_generate_tests(metafunc):
+    if "backendlify" in metafunc.fixturenames:
+        backend = metafunc.config.getoption("--seabreeze-backend")
+        metafunc.parametrize(
+            "backendlify", argvalues=[backend], ids="backend({})".format, indirect=True
+        )
+
+
 @pytest.fixture(scope="function")
 def mock_pyusb_core_find():
     """mock usb.core.find

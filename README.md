@@ -126,3 +126,4 @@ If you want me to add your project here, let me know. Happy to add it.
 - [SeaBreeze](https://sourceforge.net/projects/seabreeze/) - Ocean Optics' SeaBreeze C library.
 - [libseabreeze](https://github.com/ap--/libseabreeze) - github clone of the C library. _internal use only_ (has pre-built libraries if you know what you're doing)
 - [python-seabreeze-feedstock](https://github.com/ap--/python-seabreeze) - anaconda feedstock for automated package deployment. _internal use only_
+- [yaqd-seabreaeze](https://gitlab.com/yaq/yaqd-seabreeze) - A seabreeze interface for the [yaq instrument control framework](https://yaq.fyi)

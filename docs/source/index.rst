@@ -48,11 +48,14 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
 - SeaBreeze_ - Ocean Optics' SeaBreeze C library.
 - libseabreeze_ - github clone of the C library. *internal use only* (has pre-built libraries if you know what you're doing)
 - python-seabreeze-feedstock_ - anaconda feedstock for automated package deployment. *internal use only*
+- yaqd-seabreeze_ - A seabreeze interface for the `yaq instrument control framework`_
 
 .. _`python-seatease by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seatease
 .. _`python-seabreeze-server by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seabreeze-server
 .. _libseabreeze: https://github.com/ap--/libseabreeze
 .. _python-seabreeze-feedstock: https://github.com/ap--/python-seabreeze
+.. _yaqd-seabreeze: https://gitlab.com/yaq/yaqd-seabreeze
+.. _`yaq instrument control framework`: https://yaq.fyi
 
 
 ---------------------------------------------------------------------------------------------------

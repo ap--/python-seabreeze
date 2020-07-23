@@ -1,8 +1,8 @@
 # udev rules file for Ocean Optics, Inc. spectrometers
 # ====================================================
 #
-# version: 2.1
-# updated: 2020-03-29
+# version: 2.2
+# updated: 2020-07-23
 # maintainer: Andreas Poehlmann <andreas@poehlmann.io>
 #
 # [info] Previous versions are missing this header.
@@ -14,6 +14,7 @@
 #   $ seabreeze_os_setup
 #
 # Changes:
+# - added support for QE-PRO class of OceanOptics spectrometers
 # - set MODE instead of group (Fedora doesn't use `plugdev`)
 # - match parent SUBSYSTEMS for compatibility with older udev versions
 # - match both actions 'add' and 'bind' (fixes https://github.com/systemd/systemd/issues/8221)

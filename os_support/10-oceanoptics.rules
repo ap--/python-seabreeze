@@ -81,5 +81,7 @@ ATTR{idVendor}=="0547", ATTR{idProduct}=="2131", SYMLINK+="ezUSB-%n", MODE:="066
 ATTR{idVendor}=="0547", ATTR{idProduct}=="2235", SYMLINK+="ezUSB-FX-%n", MODE:="0666"
 # unprogrammed EzUSB-FX2
 ATTR{idVendor}=="04b4", ATTR{idProduct}=="8613", SYMLINK+="ezUSB-FX2-%n", MODE:="0666"
+# Ocean Insight Inc. HDX spectrometer
+ATTR{idVendor}=="2457", ATTR{idProduct}=="2003", SYMLINK+="oceanhdx-%n", MODE:="0666"
 
 LABEL="oceanoptics_rules_end"

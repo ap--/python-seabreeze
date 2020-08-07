@@ -565,3 +565,14 @@ class SeaBreezeSpectrometerFeatureVENTANA(SeaBreezeSpectrometerFeatureOBP):
 
 class SeaBreezeSpectrometerFeatureSPARK(SeaBreezeSpectrometerFeatureOBP):
     pass
+
+class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
+    def _get_spectrum_raw(self):
+        timeout = int(
+            self._integration_time_max * 1e-3
+            + self.protocol.transport.default_timeout_ms
+        )
+        # the message type is different than the default defined in the protocol,
+        # requires addition of a new message type in protocol to work
+        datastring = self.protocol.query(0x00101000, timeout_ms=timeout)
+        return numpy.fromstring(datastring, dtype=numpy.uint8)

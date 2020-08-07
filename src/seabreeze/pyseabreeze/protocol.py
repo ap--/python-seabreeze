@@ -159,6 +159,7 @@ class OBPProtocol(ProtocolInterface):
         for code, msg in {
             0x00000100: "",  # GET_SERIAL
             0x00100928: "",  # GET_BUF_SPEC32_META
+            0x00101000: "",  # GET_RAW_SPECTRUM_NOW_HDX
             0x00101100: "",  # GET_RAW_SPECTRUM_NOW
             0x00110010: "<L",  # SET_ITIME_USEC
             0x00110110: "<B",  # SET_TRIG_MODE

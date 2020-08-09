@@ -1039,15 +1039,17 @@ class SPARK(SeaBreezeDevice):
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
+
 class HDX(SeaBreezeDevice):
 
-    model_name = 'HDX'
+    model_name = "HDX"
 
     # communication config
-    transport = (USBTransport, )
+    transport = (USBTransport,)
     usb_product_id = 0x2003
-    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81,
-                                   highspeed_in=0x82, highspeed_in2=0x86)
+    usb_endpoint_map = EndPointMap(
+        ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
+    )
     usb_protocol = OBPProtocol
 
     # spectrometer config
@@ -1058,13 +1060,13 @@ class HDX(SeaBreezeDevice):
     spectrum_num_pixel = 2068
     spectrum_raw_length = (2068 * 2) + 64  # XXX: Metadata
     spectrum_max_value = 65535
-    trigger_modes = TriggerMode.supported("OBP_NORMAL", "OBP_LEVEL", "OBP_EDGE", "DISABLED")
+    trigger_modes = TriggerMode.supported(
+        "OBP_NORMAL", "OBP_LEVEL", "OBP_EDGE", "DISABLED"
+    )
 
     # features
     feature_classes = (
-        sbf.spectrometer.SeaBreezeSpectrometerFeatureHDX, 
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureHDX,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
         sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP,
-        #sbf.continuousstrobe.SeaBreezeContinuousStrobeFeatureOBP, # Implementation untested
-        #sbf.straylightcoefficients.StrayLightCoefficientsFeatureOBP, # Implementation untested
     )

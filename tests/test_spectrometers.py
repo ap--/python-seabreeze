@@ -129,7 +129,7 @@ def shutdown_api():
 @pytest.mark.usefixtures("shutdown_api")
 class TestHardware(object):
     def test_cant_find_serial(self):
-        from seabreeze.spectrometers import Spectrometer, SeaBreezeError
+        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 
         with pytest.raises(SeaBreezeError):
             Spectrometer.from_serial_number("i-do-not-exist")
@@ -237,7 +237,7 @@ class TestHardware(object):
         assert 0 < low < high < 2 ** 64
 
     def test_integration_time(self, serial_number):
-        from seabreeze.spectrometers import Spectrometer, SeaBreezeError
+        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 
         spec = Spectrometer.from_serial_number(serial_number)
 
@@ -256,13 +256,13 @@ class TestHardware(object):
         spec.integration_time_micros(10000)
 
     def test_trigger_mode(self, serial_number):
-        from seabreeze.spectrometers import Spectrometer, SeaBreezeError
+        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 
         spec = Spectrometer.from_serial_number(serial_number)
         spec.trigger_mode(0x00)  # <- normal mode
 
     def test_trigger_mode_wrong(self, serial_number):
-        from seabreeze.spectrometers import Spectrometer, SeaBreezeError
+        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 
         spec = Spectrometer.from_serial_number(serial_number)
         with pytest.raises(SeaBreezeError):

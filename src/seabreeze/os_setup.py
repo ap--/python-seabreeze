@@ -19,8 +19,8 @@ from textwrap import dedent
 from future.standard_library import hooks
 
 with hooks():
-    from urllib.request import urlopen
     from urllib.error import HTTPError
+    from urllib.request import urlopen
 
 try:
     # noinspection PyProtectedMember

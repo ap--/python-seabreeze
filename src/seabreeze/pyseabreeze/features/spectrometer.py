@@ -566,6 +566,7 @@ class SeaBreezeSpectrometerFeatureVENTANA(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureSPARK(SeaBreezeSpectrometerFeatureOBP):
     pass
 
+
 class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self):
         timeout = int(

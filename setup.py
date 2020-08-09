@@ -158,6 +158,7 @@ setup(
         "write_to": "src/seabreeze/_version.py",
         "write_to_template": '__version__ = "{version}"',
         "tag_regex": r"^(?P<pkg>python-seabreeze-)?(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$",
+        "version_scheme": "post-release",
     },
     setup_requires=[
         "setuptools>=18.0",

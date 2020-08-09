@@ -3,6 +3,7 @@ import subprocess
 import sys
 import time
 import warnings
+from functools import wraps
 
 import pytest
 
@@ -31,8 +32,9 @@ def _aquire_connected_usb_spectrometers(timeout=10.0):
     # params and ids will be populated with the parametrization
     params = []
     ids = []
+    supports = {}
 
-    _skip = ([pytest.param("?", marks=pytest.mark.skip)], ["no-spectrometer"], 0)
+    _skip = ([pytest.param("?", marks=pytest.mark.skip)], ["no-spectrometer"], 0, {})
     if RUNNING_ON_CI:
         # don't run on CI
         return _skip
@@ -56,23 +58,19 @@ def _aquire_connected_usb_spectrometers(timeout=10.0):
             model, serial_number, backends = spectrometer.split("\t")
             backends = backends.split(",")
 
-            # set correct marks
-            marks = []
-            if "cseabreeze" in backends:
-                marks.append(pytest.mark.cseabreeze)
-            if "pyseabreeze" in backends:
-                marks.append(pytest.mark.pyseabreeze)
+            # set supports dict
+            supports[serial_number] = backends
 
             # append the pytest.param
-            params.append(pytest.param(serial_number, marks=marks))
+            params.append(serial_number)
             ids.append("{}:{}".format(model, serial_number))
 
     if not params:
         return _skip
-    return params, ids, len(ids)
+    return params, ids, len(ids), supports
 
 
-_SPEC_PARAMS, _SPEC_IDS, _SPEC_NUM = _aquire_connected_usb_spectrometers()
+_SPEC_PARAMS, _SPEC_IDS, _SPEC_NUM, _SPEC_SUPPORTS = _aquire_connected_usb_spectrometers()
 
 
 @pytest.fixture(scope="function", params=_SPEC_PARAMS, ids=_SPEC_IDS)
@@ -124,6 +122,22 @@ def shutdown_api():
             delattr(list_devices, "_api")
 
 
+def skip_if_serial_unsupported_by_backend(arg_pos=0):
+    def decorator(method):
+        @wraps(method)
+        def wrapper(self, *args, **kwargs):
+            try:
+                serial = kwargs['serial_number']
+            except KeyError:
+                serial = args[arg_pos]
+            # noinspection PyProtectedMember
+            if self.backend._backend_ not in _SPEC_SUPPORTS[serial]:
+                pytest.skip("spectrometer unsupported by backend")
+            return method(self, *args, **kwargs)
+        return wrapper
+    return decorator
+
+
 # noinspection PyMethodMayBeStatic
 @pytest.mark.usefixtures("backendlify")
 @pytest.mark.usefixtures("shutdown_api")
@@ -161,6 +175,7 @@ class TestHardware(object):
         stdout, stderr = p.communicate()
         assert p.returncode == 0, stderr
 
+    @skip_if_serial_unsupported_by_backend()
     def test_read_model(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -168,6 +183,7 @@ class TestHardware(object):
         model = spec.model
         assert len(model) > 0
 
+    @skip_if_serial_unsupported_by_backend()
     def test_read_serial_number(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -179,12 +195,14 @@ class TestHardware(object):
     @pytest.mark.skipif(
         os.name == "nt", reason="FIXME: TEST BREAKS OTHER TESTS ON WINDOWS"
     )
+    @skip_if_serial_unsupported_by_backend()
     def test_crash_may_not_influence_following_tests(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
         _ = Spectrometer.from_serial_number(serial_number)
         raise Exception("crash on purpose")
 
+    @skip_if_serial_unsupported_by_backend()
     def test_read_intensities(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -192,6 +210,7 @@ class TestHardware(object):
         arr = spec.intensities()
         assert arr.size == spec.pixels
 
+    @skip_if_serial_unsupported_by_backend()
     def test_correct_dark_pixels(self, serial_number):
         from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 
@@ -205,6 +224,7 @@ class TestHardware(object):
         finally:
             spec.close()
 
+    @skip_if_serial_unsupported_by_backend()
     def test_read_wavelengths(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -212,6 +232,7 @@ class TestHardware(object):
         arr = spec.wavelengths()
         assert arr.size == spec.pixels
 
+    @skip_if_serial_unsupported_by_backend()
     def test_read_spectrum(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -219,6 +240,7 @@ class TestHardware(object):
         arr = spec.spectrum()
         assert arr.shape == (2, spec.pixels)
 
+    @skip_if_serial_unsupported_by_backend()
     def test_max_intensity(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -227,6 +249,7 @@ class TestHardware(object):
         assert isinstance(value, float)
         assert 0 < value < 1e8
 
+    @skip_if_serial_unsupported_by_backend()
     def test_integration_time_limits(self, serial_number):
         from seabreeze.spectrometers import Spectrometer
 
@@ -236,6 +259,7 @@ class TestHardware(object):
         assert isinstance(high, int)
         assert 0 < low < high < 2 ** 64
 
+    @skip_if_serial_unsupported_by_backend()
     def test_integration_time(self, serial_number):
         from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 
@@ -254,13 +278,16 @@ class TestHardware(object):
             spec.integration_time_micros(2 ** 64)
 
         spec.integration_time_micros(10000)
+        spec.intensities()
 
+    @skip_if_serial_unsupported_by_backend()
     def test_trigger_mode(self, serial_number):
-        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
+        from seabreeze.spectrometers import Spectrometer
 
         spec = Spectrometer.from_serial_number(serial_number)
         spec.trigger_mode(0x00)  # <- normal mode
 
+    @skip_if_serial_unsupported_by_backend()
     def test_trigger_mode_wrong(self, serial_number):
         from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 

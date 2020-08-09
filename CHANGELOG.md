@@ -13,15 +13,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+...
+
+## [1.2.0] - 2020-08-09
 ### Added
+- *psb* added support for HDX Spectrometer (thanks @Lavikjo)
+- added HDX to udev rules
+- added QE-Pro to udev rules (thanks @Tyrannican)
+- added yaqd-seabreeze to docs (thanks @ksunden)
 - *docs* added raw usb example to feature docstring
 - *psb* USBTransport.protocol property (for use when implementing new features)
+- switched to black formatting
+- add python-3.8 testing to github actions
+
+### Changed
+- *psb* OBP pyseabreeze device error handling changed
+- switch to post-release version scheme for setuptools_scm
 
 ### Fixed
+- improved handling of backends in pytests
+- *psb* fix usb full/high speed handling
 - *psb* fix multiple deprecation warnings
 - *csb* fix device cleanup after api shutdown
 - *psb* multiple fixes regarding device cleanup for all pyusb backends
-- add python-3.8 testing to github actions
 - *psb* fix dark pixel correction
 - *psb* fix max integration time for USB4000
 - *psb* fix list_devices closes opened devices bug
@@ -116,7 +130,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/ap--/python-seabreeze/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ap--/python-seabreeze/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/ap--/python-seabreeze/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ap--/python-seabreeze/compare/v1.0.0...v1.0.1

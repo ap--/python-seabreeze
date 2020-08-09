@@ -12,8 +12,6 @@ import logging
 import os
 import platform
 import sys
-from distutils.sysconfig import customize_compiler
-from distutils.util import strtobool
 
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
@@ -24,6 +22,10 @@ except ImportError:
     WARN_NO_CYTHON = True
 else:
     WARN_NO_CYTHON = False
+
+from distutils.sysconfig import customize_compiler
+from distutils.util import strtobool
+
 
 if "--without-cseabreeze" in sys.argv:
     # user requests to not install cython wrapper

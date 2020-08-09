@@ -1,4 +1,5 @@
 import os
+import platform
 import subprocess
 import sys
 import time
@@ -70,7 +71,12 @@ def _aquire_connected_usb_spectrometers(timeout=10.0):
     return params, ids, len(ids), supports
 
 
-_SPEC_PARAMS, _SPEC_IDS, _SPEC_NUM, _SPEC_SUPPORTS = _aquire_connected_usb_spectrometers()
+(
+    _SPEC_PARAMS,
+    _SPEC_IDS,
+    _SPEC_NUM,
+    _SPEC_SUPPORTS,
+) = _aquire_connected_usb_spectrometers()
 
 
 @pytest.fixture(scope="function", params=_SPEC_PARAMS, ids=_SPEC_IDS)
@@ -120,6 +126,7 @@ def shutdown_api():
         if api:
             api.shutdown()
             delattr(list_devices, "_api")
+            time.sleep(0.1)
 
 
 def skip_if_serial_unsupported_by_backend(arg_pos=0):
@@ -127,14 +134,46 @@ def skip_if_serial_unsupported_by_backend(arg_pos=0):
         @wraps(method)
         def wrapper(self, *args, **kwargs):
             try:
-                serial = kwargs['serial_number']
+                serial = kwargs["serial_number"]
             except KeyError:
                 serial = args[arg_pos]
             # noinspection PyProtectedMember
             if self.backend._backend_ not in _SPEC_SUPPORTS[serial]:
                 pytest.skip("spectrometer unsupported by backend")
             return method(self, *args, **kwargs)
+
         return wrapper
+
+    return decorator
+
+
+def skip_if_backend_and_os(backend, osname, pyusb_backend=None):
+    def decorator(method):
+        @wraps(method)
+        def wrapper(self, *args, **kwargs):
+            from seabreeze.backends import _SeaBreezeConfig as _Config
+
+            # noinspection PyProtectedMember
+            if (
+                self.backend._backend_.startswith(backend)
+                and platform.system() == osname
+            ):
+                requested = _Config["_api_kwargs"].get("_pyusb_backend", "any")
+
+                if (
+                    pyusb_backend is None
+                    or requested == "any"
+                    or pyusb_backend == requested
+                ):
+                    pytest.skip(
+                        "skipping because {} on {}:{}".format(
+                            backend, osname, requested
+                        )
+                    )
+            return method(self, *args, **kwargs)
+
+        return wrapper
+
     return decorator
 
 
@@ -149,6 +188,7 @@ class TestHardware(object):
             Spectrometer.from_serial_number("i-do-not-exist")
 
     @pytest.mark.skipif(_SPEC_NUM == 0, reason="no spectrometers connected")
+    @skip_if_backend_and_os("pyseabreeze", "Darwin", "libusb1")
     def test_device_cleanup_on_exit(self):
         """test if opened devices cleanup correctly"""
         # noinspection PyProtectedMember
@@ -294,6 +334,9 @@ class TestHardware(object):
         spec = Spectrometer.from_serial_number(serial_number)
         with pytest.raises(SeaBreezeError):
             spec.trigger_mode(0xF0)  # <- should be unsupported for all specs
+
+        spec.trigger_mode(0x00)  # <- normal mode
+        spec.intensities()
 
     @pytest.mark.skipif(_SPEC_NUM == 0, reason="no spectrometers connected")
     def test_list_devices_dont_close_opened_devices(self):

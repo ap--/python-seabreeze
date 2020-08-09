@@ -138,9 +138,10 @@ class USBTransportHandle(object):
             self.pyusb_device.reset()
         except usb.core.USBError:
             logging.debug(
-                "USBError while calling USBTransportHandle.close on {}:{}".format(
+                "USBError while calling USBTransportHandle.close on {:04x}:{:04x}".format(
                     self.identity[0], self.identity[1]
-                )
+                ),
+                exc_info=True,
             )
 
     def __del__(self):
@@ -359,6 +360,7 @@ def get_pyusb_backend_from_name(name):
             _backend = _pyusb_backend_instances[name]
         except KeyError:
             m = importlib.import_module("usb.backend.{}".format(name))
+            # noinspection PyUnresolvedReferences
             _backend = m.get_backend()
             # raise if a pyusb backend was requested but can't be loaded
             if _backend is None:

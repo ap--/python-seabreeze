@@ -428,9 +428,9 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 # SPECTROMETER DEFINITIONS
 # ========================
 #
-class USB2000PLUS(SeaBreezeDevice):
+class _USB2000PLUSBase(SeaBreezeDevice):
 
-    model_name = "USB2000PLUS"
+    model_name = "_USB2000PLUSBase"
 
     # communication config
     transport = (USBTransport,)
@@ -459,6 +459,16 @@ class USB2000PLUS(SeaBreezeDevice):
         sbf.continuousstrobe.SeaBreezeContinuousStrobeFeatureOOI,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
+
+
+class USB2000PLUS(_USB2000PLUSBase):
+
+    model_name = "USB2000PLUS"  # needs to override base class
+
+
+class FlameS(_USB2000PLUSBase):
+
+    model_name = "FLAMES"
 
 
 class USB2000(SeaBreezeDevice):

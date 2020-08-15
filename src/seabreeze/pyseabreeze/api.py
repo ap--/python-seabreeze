@@ -125,4 +125,6 @@ class SeaBreezeAPI(object):
         devices: list of str
             list of model names that are supported by this backend
         """
-        return [x for x in sorted(_model_class_registry.keys()) if not x.startswith('_')]
+        return [
+            x for x in sorted(_model_class_registry.keys()) if not x.startswith("_")
+        ]

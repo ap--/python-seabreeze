@@ -158,7 +158,9 @@ class _SeaBreezeDeviceMeta(type):
             not isinstance(supported_feature_classes, tuple)
             or not supported_feature_classes
         ):
-            raise TypeError("{}.feature_classes not a tuple of len > 0".format(class_name))
+            raise TypeError(
+                "{}.feature_classes not a tuple of len > 0".format(class_name)
+            )
         for idx, feature_cls in enumerate(supported_feature_classes):
             # for each supported feature of the spectrometer, gather the configuration
             # from the spectrometer class and subclass the feature_cls with the provided
@@ -309,7 +311,9 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
             raise TypeError("No transport supports device.")
         try:
             # sneakily switch in the correct subclass in case it's needed
-            self.__class__ = self.__class__._substitute_compatible_subclass(self._transport)
+            self.__class__ = self.__class__._substitute_compatible_subclass(
+                self._transport
+            )
         except AttributeError:
             pass
         try:
@@ -491,6 +495,7 @@ class USB2000PLUS(SeaBreezeDevice):
 
         # noinspection PyUnresolvedReferences,PyProtectedMember
         from seabreeze.pyseabreeze.features.fpga import _FPGARegisterFeatureOOI
+
         fpga = _FPGARegisterFeatureOOI(transport.protocol)
         if fpga.get_firmware_version()[0] >= 3:
             return FLAMES

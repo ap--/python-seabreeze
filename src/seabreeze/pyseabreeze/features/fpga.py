@@ -8,6 +8,7 @@ class _FPGARegisterFeatureOOI(object):
 
     (has no equivalent in cseabreeze)
     """
+
     class Codes(enum.IntEnum):
         FIRMWARE_VERSION = 0x04
         V1_CONTINUOUS_STROBE_TIMER_INTERVAL_DIVISOR = (

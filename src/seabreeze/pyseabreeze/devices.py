@@ -52,14 +52,28 @@ class _SeaBreezeDeviceMeta(type):
             if not isinstance(model_name, str):
                 raise TypeError("{}.model_name not a str".format(name))
 
-            # gather the transport classes defined on the class
-            transport_classes = mcs._extract_transform_classes(
-                model_name, class_name=name, attr_dict=attr_dict
-            )
+            new_attr_dict = {
+                "_model_name": model_name,
+            }
+
+            if any(base is SeaBreezeDevice for base in bases):
+                # gather the transport classes defined on the class
+                transport_classes = mcs._extract_transform_classes(
+                    model_name, class_name=name, attr_dict=attr_dict
+                )
+                new_attr_dict["_transport_classes"] = transport_classes
             # gather the feature classes defined on the class
             feature_classes = mcs._extract_feature_classes(
                 model_name, class_name=name, attr_dict=attr_dict
             )
+            new_attr_dict["_feature_classes"] = feature_classes
+
+            try:
+                # move classmethod to new class for dynamic model class subsitution
+                k = "_substitute_compatible_subclass"
+                new_attr_dict[k] = attr_dict[k]
+            except KeyError:
+                pass
 
             if any(not attr.startswith("_") for attr in attr_dict):
                 raise ValueError(
@@ -69,12 +83,8 @@ class _SeaBreezeDeviceMeta(type):
                         )
                     )
                 )
-
-            attr_dict = {
-                "_model_name": model_name,
-                "_transport_classes": transport_classes,
-                "_feature_classes": feature_classes,
-            }
+            else:
+                attr_dict = new_attr_dict
 
         return super(_SeaBreezeDeviceMeta, mcs).__new__(mcs, name, bases, attr_dict)
 
@@ -298,6 +308,11 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         else:
             raise TypeError("No transport supports device.")
         try:
+            # sneakily switch in the correct subclass in case it's needed
+            self.__class__ = self.__class__._substitute_compatible_subclass(self._transport)
+        except AttributeError:
+            pass
+        try:
             self._serial_number = self.get_serial_number()
         except SeaBreezeError:
             pass
@@ -310,6 +325,10 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
     def serial_number(self):
         return self._serial_number
 
+    @classmethod
+    def _substitute_compatible_subclass(cls, transport):
+        return cls
+
     def __repr__(self):
         return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial_number)
 
@@ -321,6 +340,8 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         None
         """
         self._transport.open_device(self._raw_device)
+        # substitute subclass if needed
+        self.__class__ = self.__class__._substitute_compatible_subclass(self._transport)
         # cache features
         self._cached_features = {}
         _ = self.features
@@ -428,9 +449,9 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 # SPECTROMETER DEFINITIONS
 # ========================
 #
-class _USB2000PLUSBase(SeaBreezeDevice):
+class USB2000PLUS(SeaBreezeDevice):
 
-    model_name = "_USB2000PLUSBase"
+    model_name = "USB2000PLUS"
 
     # communication config
     transport = (USBTransport,)
@@ -460,15 +481,45 @@ class _USB2000PLUSBase(SeaBreezeDevice):
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
 
+    @classmethod
+    def _substitute_compatible_subclass(cls, transport):
+        """return the correct subclass of the usb2000plus like model"""
+        protocol = transport.protocol
+        if protocol is None:
+            raise AttributeError("transport not opened")
 
-class USB2000PLUS(_USB2000PLUSBase):
+        # noinspection PyUnresolvedReferences,PyProtectedMember
+        from seabreeze.pyseabreeze.features.fpga import _FPGARegisterFeatureOOI
+        fpga = _FPGARegisterFeatureOOI(transport.protocol)
+        if fpga.get_firmware_version()[0] >= 3:
+            return FLAMES
+        else:
+            return USB2000PLUS
 
-    model_name = "USB2000PLUS"  # needs to override base class
 
-
-class FlameS(_USB2000PLUSBase):
+class FLAMES(USB2000PLUS):
 
     model_name = "FLAMES"
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges((6, 21))  # as in seabreeze-3.0.9
+    integration_time_min = 1000
+    integration_time_max = 655350000
+    integration_time_base = 1
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 1
+    spectrum_max_value = 65535
+    trigger_modes = TriggerMode.supported(
+        "NORMAL", "SOFTWARE", "SYNCHRONIZATION", "HARDWARE"
+    )
+
+    # features
+    feature_classes = (
+        sbf.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB2000PLUS,
+        sbf.continuousstrobe.SeaBreezeContinuousStrobeFeatureOOI,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
+    )
 
 
 class USB2000(SeaBreezeDevice):

@@ -477,6 +477,7 @@ class USB2000PLUS(SeaBreezeDevice):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB2000PLUS,
+        sbf.nonlinearity.NonlinearityCoefficientsEEPromFeatureOOI,
         sbf.continuousstrobe.SeaBreezeContinuousStrobeFeatureOOI,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )

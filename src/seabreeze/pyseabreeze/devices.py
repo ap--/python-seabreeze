@@ -95,12 +95,12 @@ class _SeaBreezeDeviceMeta(type):
         try:
             supported_transport_classes = attr_dict.pop("transport")
         except KeyError:
-            raise AttributeError("{}.transport not provided")
+            raise AttributeError("{}.transport not provided".format(class_name))
         if (
             not isinstance(supported_transport_classes, tuple)
             or not supported_transport_classes
         ):
-            raise TypeError("{}.transport not a tuple of len > 0")
+            raise TypeError("{}.transport not a tuple of len > 0".format(class_name))
 
         for idx, transport_cls in enumerate(supported_transport_classes):
             # for each supported transport of the spectrometer, gather the configuration from
@@ -143,12 +143,12 @@ class _SeaBreezeDeviceMeta(type):
         try:
             supported_feature_classes = attr_dict.pop("feature_classes")
         except KeyError:
-            raise AttributeError("{}.feature_classes not provided")
+            raise AttributeError("{}.feature_classes not provided".format(class_name))
         if (
             not isinstance(supported_feature_classes, tuple)
             or not supported_feature_classes
         ):
-            raise TypeError("{}.feature_classes not a tuple of len > 0")
+            raise TypeError("{}.feature_classes not a tuple of len > 0".format(class_name))
         for idx, feature_cls in enumerate(supported_feature_classes):
             # for each supported feature of the spectrometer, gather the configuration
             # from the spectrometer class and subclass the feature_cls with the provided
@@ -158,7 +158,7 @@ class _SeaBreezeDeviceMeta(type):
             if not issubclass(feature_cls, SeaBreezeFeature):
                 raise TypeError(
                     "{}.feature_classes[{:d}] '{}' does not derive from SeaBreezeFeature".format(
-                        model_name, idx, feature_cls.__name__
+                        class_name, idx, feature_cls.__name__
                     )
                 )
             # noinspection PyProtectedMember
@@ -166,7 +166,7 @@ class _SeaBreezeDeviceMeta(type):
             if not required.issubset(feature_classes):
                 raise KeyError(
                     "{}.feature_classes[{:d}] '{}' requires '{}'. To fix, re-order or add.".format(
-                        model_name,
+                        class_name,
                         idx,
                         feature_cls.__name__,
                         ", ".join(required - set(feature_classes)),

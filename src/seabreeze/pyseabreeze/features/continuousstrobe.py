@@ -1,8 +1,7 @@
 import math
-import struct
-import time
 
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.features.fpga import _FPGARegisterFeatureOOI
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 
 
@@ -16,33 +15,6 @@ class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
 
     def set_period_micros(self, period_micros):
         raise NotImplementedError("implement in derived class")
-
-
-class _FPGARegisterFeatureOOI(object):
-    class Codes(object):
-        FIRMWARE_VERSION = 0x04
-        V1_CONTINUOUS_STROBE_TIMER_INTERVAL_DIVISOR = (
-            V3_CONTINUOUS_STROBE_TIMER_MSB
-        ) = 0x08
-        V1_CONTINUOUS_STROBE_BASE_CLOCK_DIVISOR = V3_CONTINUOUS_STROBE_TIMER_LSB = 0x0C
-
-    def __init__(self, protocol):
-        self.protocol = protocol
-
-    def get_major_version(self):
-        fw_raw = self.protocol.query(0x6B, self.Codes.FIRMWARE_VERSION)
-        command, data = struct.unpack("<BH", fw_raw)
-        assert command == self.Codes.FIRMWARE_VERSION
-        fw_version = (
-            (data >> 12) & 0x0F,  # major
-            (data >> 4) & 0xFF,  # minor
-            data & 0xF,  # patch
-        )
-        return fw_version[0]
-
-    def write_register(self, register, data):
-        self.protocol.send(0x6A, payload=(register, data))
-        time.sleep(0.0001)  # guarantee 100us sleep between commands
 
 
 class SeaBreezeContinuousStrobeFeatureOOI(SeaBreezeContinuousStrobeFeature):
@@ -87,7 +59,7 @@ class SeaBreezeContinuousStrobeFeatureOOI(SeaBreezeContinuousStrobeFeature):
         if period_micros <= 0:
             raise ValueError("requires period_micros > 0")
 
-        fpga_major_version = self._fpga.get_major_version()
+        fpga_major_version = self._fpga.get_firmware_version()[0]
 
         # ported from cseabreeze
         if fpga_major_version == 1:

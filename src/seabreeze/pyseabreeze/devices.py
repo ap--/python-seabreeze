@@ -516,7 +516,7 @@ class FLAMES(USB2000PLUS):
     spectrum_raw_length = (2048 * 2) + 1
     spectrum_max_value = 65535
     trigger_modes = TriggerMode.supported(
-        "NORMAL", "SOFTWARE", "SYNCHRONIZATION", "HARDWARE"
+        "NORMAL", "SOFTWARE", "SYNCHRONIZATION", "HARDWARE", "SINGLE_SHOT"
     )
 
     # features

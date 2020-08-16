@@ -523,6 +523,7 @@ class FLAMES(USB2000PLUS):
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureUSB2000PLUS,
+        sbf.nonlinearity.NonlinearityCoefficientsEEPromFeatureOOI,
         sbf.continuousstrobe.SeaBreezeContinuousStrobeFeatureOOI,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )

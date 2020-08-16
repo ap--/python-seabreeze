@@ -22,7 +22,7 @@ class _FPGARegisterFeatureOOI(object):
     def read_register(self, register):
         fw_raw = self.protocol.query(0x6B, register)
         command, data = struct.unpack("<BH", fw_raw)
-        assert command == self.Codes.FIRMWARE_VERSION
+        assert command == self.Codes.FIRMWARE_VERSION, str(list(map(hex, fw_raw)))
         return data
 
     def write_register(self, register, data):

@@ -42,7 +42,7 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-const long QEProSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 10000;
+const long QEProSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 8000;
 const long QEProSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 1600000000;
 const long QEProSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1;
 const long QEProSpectrometerFeature::INTEGRATION_TIME_BASE = 1;

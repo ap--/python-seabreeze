@@ -1037,7 +1037,7 @@ class QEPRO(SeaBreezeDevice):
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((0, 4), (1040, 1044))
-    integration_time_min = 10000
+    integration_time_min = 8000
     integration_time_max = 1600000000
     integration_time_base = 1
     spectrum_num_pixel = 1044

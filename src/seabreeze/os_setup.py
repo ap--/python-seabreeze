@@ -247,7 +247,7 @@ def windows_install_drivers():
             _log.error("pnputil returned with {}".format(return_code))
 
     except Exception:
-        _log.error("Error when installing drivers")
+        _log.error("Error when installing drivers", exc_info=True)
 
     finally:
         shutil.rmtree(tmp_dir)

@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ...
 
+## [1.3.0] - 2020-08-23
+### Added
+- *psb* more informative error output for seabreeze_os_setup
+- *psb* 1st level support for Flame-S
+- *psb* support trigger mode 4 for USB2000+ and Flame-S
+- *psb* nonlinearity feature for USB2000+ and Flame-S
+- warn if seabreeze.use is called after importing seabreeze.spectrometers
+
+### Changed
+- *psb* *csb* QE-Pro support min integration time 8ms
+
 ## [1.2.0] - 2020-08-09
 ### Added
 - *psb* added support for HDX Spectrometer (thanks @Lavikjo)

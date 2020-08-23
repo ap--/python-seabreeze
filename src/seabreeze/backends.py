@@ -1,4 +1,5 @@
 import logging
+import sys
 import warnings
 
 __all__ = ["use", "get_backend"]
@@ -54,6 +55,11 @@ def use(backend, force=True, **_kwargs):
                 ", ".join(_SeaBreezeConfig["available_backends"])
             )
         )
+    if 'seabreeze.spectrometers' in sys.modules:
+        warnings.warn(
+            "seabreeze.use has to be called before importing seabreeze.spectrometers",
+        )
+
     _SeaBreezeConfig["requested_backend"] = backend
     _SeaBreezeConfig["allow_fallback"] = not force
     _SeaBreezeConfig["_api_kwargs"] = _kwargs.pop("_api_kwargs", {})

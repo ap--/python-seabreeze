@@ -35,6 +35,8 @@ DEF _MAXBUFLEN = 32
 DEF _MAXDBUFLEN = 256
 
 
+# DO NOT DIRECTLY IMPORT EXCEPTIONS FROM HERE!
+# ALWAYS IMPORT FROM `seabreeze.spectrometers`
 class SeaBreezeError(Exception):
 
     _error_msgs = (

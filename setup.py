@@ -89,7 +89,7 @@ else:
         "seabreeze.cseabreeze._wrapper",
         language="c++",
         sources=[os.path.relpath(s) for s in sources],
-        **compile_opts
+        **compile_opts,
     )
 
     building_sphinx_documentation = bool(
@@ -173,14 +173,12 @@ setup(
     ],
     extras_require={
         "cseabreeze": [],
-        "pyseabreeze": [
-            "pyusb >=1.0"
-        ],
+        "pyseabreeze": ["pyusb >=1.0"],
         "tests": [
             "pytest",
-        ]
+        ],
     },
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     cmdclass={"build_ext": sb_build_ext},
     ext_modules=extensions,
     packages=find_packages(where="src"),

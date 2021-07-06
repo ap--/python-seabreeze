@@ -30,14 +30,14 @@ inspect.isfunction = isfunction
 
 # -- Project information -----------------------------------------------------
 
-project = u"python-seabreeze"
-copyright = u"2019, Andreas Poehlmann"
-author = u"Andreas Poehlmann"
+project = "python-seabreeze"
+copyright = "2019, Andreas Poehlmann"
+author = "Andreas Poehlmann"
 
 # The short X.Y version
-version = u""
+version = ""
 # The full version, including alpha/beta/rc tags
-release = u""
+release = ""
 
 
 # -- General configuration ---------------------------------------------------
@@ -150,8 +150,8 @@ latex_documents = [
     (
         master_doc,
         "python-seabreeze.tex",
-        u"python-seabreeze Documentation",
-        u"Andreas Poehlmann",
+        "python-seabreeze Documentation",
+        "Andreas Poehlmann",
         "manual",
     ),
 ]
@@ -162,7 +162,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, "python-seabreeze", u"python-seabreeze Documentation", [author], 1)
+    (master_doc, "python-seabreeze", "python-seabreeze Documentation", [author], 1)
 ]
 
 
@@ -175,7 +175,7 @@ texinfo_documents = [
     (
         master_doc,
         "python-seabreeze",
-        u"python-seabreeze Documentation",
+        "python-seabreeze Documentation",
         author,
         "python-seabreeze",
         "One line description of project.",

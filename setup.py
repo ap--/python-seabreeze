@@ -80,7 +80,7 @@ else:
     sources = ["src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx"]
     for root, subdirs, fns in os.walk("src/libseabreeze/src"):
         subdirs[:] = (d for d in subdirs if d not in ignore_subdirs)
-        sources.extend((os.path.join(root, fn) for fn in fns))
+        sources.extend(os.path.join(root, fn) for fn in fns)
     # Add seabreeze include dirs
     compile_opts["include_dirs"].append(os.path.relpath("src/libseabreeze/include"))
 
@@ -166,26 +166,21 @@ setup(
         "wheel>=0.31.0",
         "setuptools_scm",
         "pkgconfig",
-        "pytest-runner",
     ],
     install_requires=[
-        "numpy<1.17 ; python_version<'3.6'",  # numpy support for <3.6 dropped with 1.17
         "numpy<1.19 ; python_version=='3.6.*'",
         "numpy ; python_version>='3.7'",
-        "future",
     ],
     extras_require={
         "cseabreeze": [],
-        "pyseabreeze": ["pyusb >=1.0", "enum34 ; python_version<'3.4'"],
+        "pyseabreeze": [
+            "pyusb >=1.0"
+        ],
+        "tests": [
+            "pytest",
+        ]
     },
-    tests_require=[
-        "pytest<5",
-        # mock and zipp break python setup.py pytest on python 2.7
-        "mock<4 ; python_version<'3.6'",
-        "mock ; python_version>='3.6'",
-        "zipp<2 ; python_version<'3.6'",
-        "zipp ; python_version>='3.6'",
-    ],
+    python_requires='>=3.6',
     cmdclass={"build_ext": sb_build_ext},
     ext_modules=extensions,
     packages=find_packages(where="src"),
@@ -199,11 +194,10 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     classifiers=[
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
 )

@@ -1,6 +1,6 @@
 import struct
 
-import mock
+from unittest import mock
 import pytest
 
 

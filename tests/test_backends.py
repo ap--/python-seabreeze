@@ -57,9 +57,7 @@ def test_seabreeze_pyseabreeze_api_init(pyseabreeze, pyseabreeze_pyusb_backend):
         if pyseabreeze_pyusb_backend is None:
             raise  # fail if no backend library is available
         else:
-            pytest.skip(
-                "pyusb_backend {} not available".format(pyseabreeze_pyusb_backend)
-            )
+            pytest.skip(f"pyusb_backend {pyseabreeze_pyusb_backend} not available")
 
 
 def _get_class_public_interface_dict(backend):
@@ -69,7 +67,7 @@ def _get_class_public_interface_dict(backend):
     interface_dict = {}
     for fcls in feature_classes:
         name = fcls.__name__
-        attrs = set(attr for attr in dir(fcls) if not attr.startswith("_"))
+        attrs = {attr for attr in dir(fcls) if not attr.startswith("_")}
         interface_dict[name] = attrs
     return interface_dict
 
@@ -95,4 +93,4 @@ def test_seabreeze_compare_backend_feature_interfaces(cseabreeze, pyseabreeze):
         c_attrs = c_feature_interface[feature] - CSEABREEZE_CUSTOM
         py_attrs = py_feature_interface[feature] - PYSEABREEZE_CUSTOM
         # for each feature test if there's a difference between cseabreeze and pyseabreeze
-        assert c_attrs == py_attrs, "feature {} differs in attrs".format(feature)
+        assert c_attrs == py_attrs, f"feature {feature} differs in attrs"

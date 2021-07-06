@@ -1,4 +1,4 @@
-import mock
+from unittest import mock
 import pytest
 
 
@@ -33,7 +33,10 @@ def pytest_generate_tests(metafunc):
         else:
             argvalues = [backend]
         metafunc.parametrize(
-            "backendlify", argvalues=argvalues, ids="backend({})".format, indirect=True,
+            "backendlify",
+            argvalues=argvalues,
+            ids="backend({})".format,
+            indirect=True,
         )
 
 

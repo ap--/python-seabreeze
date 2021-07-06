@@ -64,7 +64,7 @@ def _aquire_connected_usb_spectrometers(timeout=10.0):
 
             # append the pytest.param
             params.append(serial_number)
-            ids.append("{}:{}".format(model, serial_number))
+            ids.append(f"{model}:{serial_number}")
 
     if not params:
         return _skip
@@ -180,7 +180,7 @@ def skip_if_backend_and_os(backend, osname, pyusb_backend=None):
 # noinspection PyMethodMayBeStatic
 @pytest.mark.usefixtures("backendlify")
 @pytest.mark.usefixtures("shutdown_api")
-class TestHardware(object):
+class TestHardware:
     def test_cant_find_serial(self):
         from seabreeze.spectrometers import SeaBreezeError, Spectrometer
 

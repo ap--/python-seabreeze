@@ -45,7 +45,7 @@ def _seabreeze_device_factory(device):
         return dev
 
 
-class SeaBreezeAPI(object):
+class SeaBreezeAPI:
     """SeaBreeze API interface"""
 
     _log = logging.getLogger(__name__)

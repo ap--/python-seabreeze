@@ -13,14 +13,10 @@ import sys
 import tempfile
 import time
 import zipfile
-from builtins import input
 from textwrap import dedent
 
-from future.standard_library import hooks
-
-with hooks():
-    from urllib.error import HTTPError
-    from urllib.request import urlopen
+from urllib.error import HTTPError
+from urllib.request import urlopen
 
 try:
     # noinspection PyProtectedMember
@@ -28,7 +24,7 @@ try:
 except ImportError:
     # noinspection PyUnusedLocal
     def _indent(text, prefix, predicate=None):
-        return u"".join(prefix + line for line in text.splitlines(True))
+        return "".join(prefix + line for line in text.splitlines(True))
 
 
 _GITHUB_REPO_URL = (
@@ -50,7 +46,7 @@ def _diff_files(file1, file2):
 def _request_confirmation(question):
     """require user input to continue"""
     while True:
-        user_input = input("{} [y/n] ".format(question)).lower()
+        user_input = input(f"{question} [y/n] ").lower()
         if user_input not in {"y", "n"}:
             _log.info("Please enter 'y' or 'n'.")
         elif user_input[0] == "n":
@@ -78,7 +74,7 @@ def linux_install_udev_rules():
 
     if args.rules:
         if not os.path.exists(args.rules):
-            raise IOError("rules file '{}' doesn't exist".format(args.rules))
+            raise OSError(f"rules file '{args.rules}' doesn't exist")
         udev_tmp_file = None
         udev_fn = args.rules
 
@@ -89,12 +85,12 @@ def linux_install_udev_rules():
     try:
         # download rules from github if no file is provided
         if udev_tmp_file is not None:
-            url = "{}/{}".format(_GITHUB_REPO_URL, os.path.basename(_UDEV_RULES_PATH))
+            url = f"{_GITHUB_REPO_URL}/{os.path.basename(_UDEV_RULES_PATH)}"
             try:
                 _log.info("downloading rules from github")
                 udev_data = urlopen(url).read()
             except HTTPError:
-                _log.error("can't download '{}'".format(url))
+                _log.error(f"can't download '{url}'")
                 sys.exit(1)
             udev_tmp_file.write(udev_data)
             udev_tmp_file.flush()
@@ -107,7 +103,7 @@ def linux_install_udev_rules():
                 _log.info("udev rules already newest version")
                 sys.exit(0)
             else:
-                _log.info(_indent(rules_differ, u"  ").rstrip())
+                _log.info(_indent(rules_differ, "  ").rstrip())
                 _log.info(
                     "udev rules differ. To overwrite run with '--overwrite-existing'"
                 )
@@ -117,7 +113,7 @@ def linux_install_udev_rules():
             sys.exit(0)
 
         # cp rules and execute
-        _log.info("Copying udev rules to {}".format(_UDEV_RULES_PATH))
+        _log.info(f"Copying udev rules to {_UDEV_RULES_PATH}")
         subprocess.call(["sudo", "cp", udev_fn, _UDEV_RULES_PATH])
         _log.info("Calling udevadm control --reload-rules")
         subprocess.call(["sudo", "udevadm", "control", "--reload-rules"])
@@ -174,7 +170,7 @@ def windows_install_drivers():
         if ret > 32:
             _log.info("Launched admin shell")
         else:
-            _log.info("Failed to launch admin shell. Error code {}".format(ret))
+            _log.info(f"Failed to launch admin shell. Error code {ret}")
         sys.exit(0 if ret > 32 else 1)
 
     # running as admin
@@ -189,9 +185,7 @@ def windows_install_drivers():
 
     if args.drivers_zip:
         if not os.path.exists(args.drivers_zip):
-            raise IOError(
-                "drivers_zip file '{}' doesn't exist".format(args.drivers_zip)
-            )
+            raise OSError(f"drivers_zip file '{args.drivers_zip}' doesn't exist")
         drivers_zip = args.drivers_zip
     else:
         drivers_zip = None
@@ -201,14 +195,14 @@ def windows_install_drivers():
     try:
         # download driver files
         if drivers_zip is None:
-            url = "{}/{}".format(_GITHUB_REPO_URL, os.path.basename(_DRIVERS_ZIP_FN))
+            url = f"{_GITHUB_REPO_URL}/{os.path.basename(_DRIVERS_ZIP_FN)}"
             drivers_zip = os.path.join(tmp_dir, _DRIVERS_ZIP_FN)
             with open(drivers_zip, "wb") as dzip:
                 try:
                     _log.info("Downloading windows drivers from github")
                     drivers_zip_data = urlopen(url).read()
                 except HTTPError:
-                    _log.error("Can't download '{}'".format(url))
+                    _log.error(f"Can't download '{url}'")
                     sys.exit(1)
                 dzip.write(drivers_zip_data)
 
@@ -217,7 +211,7 @@ def windows_install_drivers():
             if not _is_contained_in_dir(dzip.namelist()):
                 raise Exception("Zipfile contains non subdir paths")
             dzip.extractall(tmp_dir)
-        _log.info("Extracted to temporary directory {}".format(tmp_dir))
+        _log.info(f"Extracted to temporary directory {tmp_dir}")
 
         # use correct pnputil with 32bit pythons
         if "32bit" in platform.architecture():
@@ -244,7 +238,7 @@ def windows_install_drivers():
         elif return_code == 3010:
             _log.info("Success! REBOOT REQUIRED!")
         else:
-            _log.error("pnputil returned with {}".format(return_code))
+            _log.error(f"pnputil returned with {return_code}")
 
     except Exception:
         _log.error("Error when installing drivers", exc_info=True)
@@ -262,7 +256,7 @@ def main():
     elif system == "Linux":
         linux_install_udev_rules()
     else:
-        _log.info("Nothing to do for system '{}'".format(system))
+        _log.info(f"Nothing to do for system '{system}'")
     sys.exit(0)
 
 

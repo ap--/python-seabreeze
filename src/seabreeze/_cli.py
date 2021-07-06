@@ -18,8 +18,6 @@ Request implementing the functionality.
 
 author: Andreas Poehlmann
 """
-from __future__ import print_function
-
 import importlib
 import itertools
 import operator
@@ -31,7 +29,7 @@ def ls():
     for backend in ("cseabreeze", "pyseabreeze"):
         # noinspection PyBroadException
         try:
-            sb_backend = importlib.import_module("seabreeze.{}".format(backend))
+            sb_backend = importlib.import_module(f"seabreeze.{backend}")
             api = sb_backend.SeaBreezeAPI()
             try:
                 devices = api.list_devices()

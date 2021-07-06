@@ -16,7 +16,7 @@ def _deprecation_warning(old_method, new_feature_method, version):
     )
 
 
-class DeprecatedSpectrometerMixin(object):
+class DeprecatedSpectrometerMixin:
     @property
     def f(self):
         """implemented in class using mixin"""
@@ -161,9 +161,9 @@ class DeprecatedSpectrometerMixin(object):
         self.close()
 
 
-class DeprecatedLightSource(object):
+class DeprecatedLightSource:
     def __init__(self, spectrometer, index):
-        self._id = "{}:{}".format(spectrometer.model, spectrometer.serial_number)
+        self._id = f"{spectrometer.model}:{spectrometer.serial_number}"
         self._f, self._idx = spectrometer.f.light_source, index
         self._has_enable = self._f.has_enable(self._idx)
         self._has_varint = self._f.has_variable_intensity(self._idx)

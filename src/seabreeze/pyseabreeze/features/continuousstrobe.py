@@ -21,9 +21,7 @@ class SeaBreezeContinuousStrobeFeatureOOI(SeaBreezeContinuousStrobeFeature):
     _required_protocol_cls = OOIProtocol
 
     def __init__(self, protocol, feature_id, **kwargs):
-        super(SeaBreezeContinuousStrobeFeatureOOI, self).__init__(
-            protocol, feature_id, **kwargs
-        )
+        super().__init__(protocol, feature_id, **kwargs)
         self._fpga = _FPGARegisterFeatureOOI(protocol)
 
     def set_enable(self, strobe_enable):

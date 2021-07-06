@@ -78,9 +78,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
     _trigger_modes = None
 
     def __init__(self, device, feature_id, **kwargs):
-        super(SeaBreezeSpectrometerFeatureOOI, self).__init__(
-            device, feature_id, **kwargs
-        )
+        super().__init__(device, feature_id, **kwargs)
         self._dark_pixel_indices = kwargs["dark_pixel_indices"]
         self._integration_time_min = kwargs["integration_time_min"]
         self._integration_time_max = kwargs["integration_time_max"]
@@ -103,7 +101,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
             i_time = int(integration_time_micros / self._integration_time_base)
             self.protocol.send(0x02, i_time)
         else:
-            raise SeaBreezeError("Integration not in [{:d}, {:d}]".format(t_min, t_max))
+            raise SeaBreezeError(f"Integration not in [{t_min:d}, {t_max:d}]")
 
     def get_integration_time_micros_limits(self):
         return self._integration_time_min, self._integration_time_max
@@ -177,9 +175,7 @@ class SeaBreezeSpectrometerFeatureOOI2K(SeaBreezeSpectrometerFeatureOOI):
 
 class SeaBreezeSpectrometerFeatureOOIFPGA(SeaBreezeSpectrometerFeatureOOI):
     def __init__(self, device, feature_id, **kwargs):
-        super(SeaBreezeSpectrometerFeatureOOIFPGA, self).__init__(
-            device, feature_id, **kwargs
-        )
+        super().__init__(device, feature_id, **kwargs)
         self.protocol.send(0xFE)
         ret = self.protocol.receive(size=16)
         data = struct.unpack("<HLBBBBBBBBBB", ret[:])
@@ -197,7 +193,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGA(SeaBreezeSpectrometerFeatureOOI):
         else:
             # raise if the value is not what's expected from the datasheets
             raise ValueError(
-                "Unknown speed setting '{}' please file this as a bug!".format(speed)
+                f"Unknown speed setting '{speed}' please file this as a bug!"
             )
 
 
@@ -226,7 +222,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA)
         return tmp
 
 
-class _SeaBreezeSpectrometerSaturationMixin(object):
+class _SeaBreezeSpectrometerSaturationMixin:
     def _saturation_unpack(self, ret):
         return struct.unpack("<H", ret[6:8])[0]
 
@@ -254,9 +250,7 @@ class SeaBreezeSpectrometerFeatureOOIGain(
 ):
     def __init__(self, device, feature_id, **kwargs):
         # set the usbspeed
-        super(SeaBreezeSpectrometerFeatureOOIGain, self).__init__(
-            device, feature_id, **kwargs
-        )
+        super().__init__(device, feature_id, **kwargs)
         # load the saturation value
         self._normalization_value = self._saturation_get_normalization_value()
 
@@ -266,9 +260,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGAGain(
 ):
     def __init__(self, device, feature_id, **kwargs):
         # set the usbspeed
-        super(SeaBreezeSpectrometerFeatureOOIFPGAGain, self).__init__(
-            device, feature_id, **kwargs
-        )
+        super().__init__(device, feature_id, **kwargs)
         # load the saturation value
         self._normalization_value = self._saturation_get_normalization_value()
 
@@ -278,9 +270,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGA4KGain(
 ):
     def __init__(self, device, feature_id, **kwargs):
         # set the usbspeed
-        super(SeaBreezeSpectrometerFeatureOOIFPGA4KGain, self).__init__(
-            device, feature_id, **kwargs
-        )
+        super().__init__(device, feature_id, **kwargs)
         # get the saturation value
         self._normalization_value = self._saturation_get_normalization_value()
 
@@ -337,9 +327,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
     _trigger_modes = None
 
     def __init__(self, device, feature_id, **kwargs):
-        super(SeaBreezeSpectrometerFeatureOBP, self).__init__(
-            device, feature_id, **kwargs
-        )
+        super().__init__(device, feature_id, **kwargs)
         self._dark_pixel_indices = kwargs["dark_pixel_indices"]
         self._integration_time_min = kwargs["integration_time_min"]
         self._integration_time_max = kwargs["integration_time_max"]
@@ -362,7 +350,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
             i_time = int(integration_time_micros / self._integration_time_base)
             self.protocol.send(0x00110010, i_time)
         else:
-            raise SeaBreezeError("Integration not in [{:d}, {:d}]".format(t_min, t_max))
+            raise SeaBreezeError(f"Integration not in [{t_min:d}, {t_max:d}]")
 
     def get_integration_time_micros_limits(self):
         return self._integration_time_min, self._integration_time_max

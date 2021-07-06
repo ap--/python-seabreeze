@@ -20,7 +20,7 @@ except ImportError:  # Python27
     from collections import Callable
 
 
-class ProtocolInterface(object):
+class ProtocolInterface:
     def __init__(self, transport):
         if not (
             hasattr(transport, "write")
@@ -62,7 +62,7 @@ class OOIProtocol(ProtocolInterface):
     }  # add more here if you implement new features
 
     def __init__(self, transport):
-        super(OOIProtocol, self).__init__(transport)
+        super().__init__(transport)
         # initialize the spectrometer
         self.send(0x01)
         time.sleep(0.1)  # wait shortly after init command
@@ -88,7 +88,7 @@ class OOIProtocol(ProtocolInterface):
             the number of bytes sent
         """
         if kwargs:
-            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
         payload = payload if isinstance(payload, (tuple, list)) else (payload,)
         data = self.msgs[msg_type](*payload)
         return self.transport.write(data, timeout_ms=timeout_ms)
@@ -116,7 +116,7 @@ class OOIProtocol(ProtocolInterface):
             data returned from the spectrometer
         """
         if kwargs:
-            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
         return self.transport.read(
             size=size, timeout_ms=timeout_ms, mode=mode, **kwargs
         )
@@ -174,7 +174,7 @@ class OBPProtocol(ProtocolInterface):
         }.items()
     }  # add more here if you implement new features
 
-    class OBP(object):
+    class OBP:
         """All relevant constants are stored here"""
 
         HEADER_START_BYTES = 0xC0C1
@@ -257,7 +257,7 @@ class OBPProtocol(ProtocolInterface):
             the number of bytes sent
         """
         if kwargs:
-            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
         payload = payload if isinstance(payload, (tuple, list)) else (payload,)
         data = self.msgs[msg_type](*payload)
 

@@ -356,4 +356,4 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         self._dev.close()
 
     def __repr__(self):
-        return "<Spectrometer %s:%s>" % (self.model, self.serial_number)
+        return f"<Spectrometer {self.model}:{self.serial_number}>"

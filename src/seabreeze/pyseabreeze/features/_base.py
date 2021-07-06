@@ -17,7 +17,7 @@ except ImportError:
             return partial(self.func, instance, *args, **kwargs)
 
 
-class SeaBreezeFeature(object):
+class SeaBreezeFeature:
     identifier = "base_feature"
 
     _required_kwargs = ()
@@ -46,7 +46,7 @@ class SeaBreezeFeature(object):
         self.feature_id = feature_id
 
     def __repr__(self):
-        return "<{} id={}>".format(self.__class__.__name__, self.feature_id)
+        return f"<{self.__class__.__name__} id={self.feature_id}>"
 
     @classmethod
     def get_feature_class_registry(cls):
@@ -64,7 +64,7 @@ class SeaBreezeFeature(object):
     def specialize(cls, model_name, **kwargs):
         assert set(kwargs) == set(cls._required_kwargs)
         specialized_class = type(
-            "{}{}".format(cls.__name__, model_name),
+            f"{cls.__name__}{model_name}",
             (cls,),
             {"__init__": partialmethod(cls.__init__, **kwargs)},
         )

@@ -25,7 +25,7 @@ except ImportError:
             return partial(self.func, instance, *args, **kwargs)
 
 
-class TransportInterface(object):
+class TransportInterface:
 
     _required_init_kwargs = ()
 
@@ -99,7 +99,7 @@ class TransportInterface(object):
 # encapsulate usb.core.USBError
 class USBTransportError(Exception):
     def __init__(self, *args, **kwargs):
-        super(USBTransportError, self).__init__(*args)
+        super().__init__(*args)
         self.errno = kwargs.pop("errno", None)
         self.backend_error_code = kwargs.pop("error_code", None)
         if kwargs:
@@ -115,7 +115,7 @@ class USBTransportDeviceInUse(Exception):
 
 
 # this can and should be opaque to pyseabreeze
-class USBTransportHandle(object):
+class USBTransportHandle:
     def __init__(self, pyusb_device):
         """encapsulation for pyusb device classes
 
@@ -169,7 +169,7 @@ class USBTransport(TransportInterface):
     _log = logging.getLogger(__name__)
 
     def __init__(self, usb_product_id, usb_endpoint_map, usb_protocol):
-        super(USBTransport, self).__init__()
+        super().__init__()
         self._product_id = usb_product_id
         self._endpoint_map = usb_endpoint_map
         self._protocol_cls = usb_protocol
@@ -233,7 +233,7 @@ class USBTransport(TransportInterface):
         if self._device is None:
             raise RuntimeError("device not opened")
         if kwargs:
-            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
         return self._device.pyusb_device.write(
             self._endpoint_map.ep_out, data, timeout=timeout_ms
         )
@@ -246,7 +246,7 @@ class USBTransport(TransportInterface):
         if size is None:
             size = self._default_read_size[mode]
         if kwargs:
-            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
         return self._device.pyusb_device.read(endpoint, size, timeout=timeout_ms)
 
     @property
@@ -290,9 +290,7 @@ class USBTransport(TransportInterface):
     def register_model(cls, model_name, **kwargs):
         product_id = kwargs.get("usb_product_id")
         if product_id in cls.product_ids:
-            raise ValueError(
-                "product_id 0x{:04x} already in registry".format(product_id)
-            )
+            raise ValueError(f"product_id 0x{product_id:04x} already in registry")
         cls.product_ids[product_id] = model_name
 
     @classmethod
@@ -314,7 +312,7 @@ class USBTransport(TransportInterface):
         # usb transport register automatically on registration
         cls.register_model(model_name, **kwargs)
         specialized_class = type(
-            "USBTransport{}".format(model_name),
+            f"USBTransport{model_name}",
             (cls,),
             {"__init__": partialmethod(cls.__init__, **kwargs)},
         )
@@ -359,7 +357,7 @@ def get_pyusb_backend_from_name(name):
         try:
             _backend = _pyusb_backend_instances[name]
         except KeyError:
-            m = importlib.import_module("usb.backend.{}".format(name))
+            m = importlib.import_module(f"usb.backend.{name}")
             # noinspection PyUnresolvedReferences
             _backend = m.get_backend()
             # raise if a pyusb backend was requested but can't be loaded

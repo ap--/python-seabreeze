@@ -6,8 +6,6 @@ import enum
 import itertools
 from collections import defaultdict
 
-from future.utils import with_metaclass
-
 from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature
@@ -45,12 +43,10 @@ class _SeaBreezeDeviceMeta(type):
             # available in the instances later. (look at how attr_dict is modified below).
             #
             if "model_name" not in attr_dict:
-                raise AttributeError(
-                    "'model_name' not provided for class '{}'".format(name)
-                )
+                raise AttributeError(f"'model_name' not provided for class '{name}'")
             model_name = attr_dict.pop("model_name")
             if not isinstance(model_name, str):
-                raise TypeError("{}.model_name not a str".format(name))
+                raise TypeError(f"{name}.model_name not a str")
 
             new_attr_dict = {
                 "_model_name": model_name,
@@ -86,7 +82,7 @@ class _SeaBreezeDeviceMeta(type):
             else:
                 attr_dict = new_attr_dict
 
-        return super(_SeaBreezeDeviceMeta, mcs).__new__(mcs, name, bases, attr_dict)
+        return super().__new__(mcs, name, bases, attr_dict)
 
     def __init__(cls, name, bases, attr_dict):
         if name != "SeaBreezeDevice":
@@ -95,7 +91,7 @@ class _SeaBreezeDeviceMeta(type):
             assert isinstance(model_name, str), "model name not a str"
             _model_class_registry[model_name] = cls
 
-        super(_SeaBreezeDeviceMeta, cls).__init__(name, bases, attr_dict)
+        super().__init__(name, bases, attr_dict)
 
     @staticmethod
     def _extract_transform_classes(model_name, class_name, attr_dict):
@@ -105,12 +101,12 @@ class _SeaBreezeDeviceMeta(type):
         try:
             supported_transport_classes = attr_dict.pop("transport")
         except KeyError:
-            raise AttributeError("{}.transport not provided".format(class_name))
+            raise AttributeError(f"{class_name}.transport not provided")
         if (
             not isinstance(supported_transport_classes, tuple)
             or not supported_transport_classes
         ):
-            raise TypeError("{}.transport not a tuple of len > 0".format(class_name))
+            raise TypeError(f"{class_name}.transport not a tuple of len > 0")
 
         for idx, transport_cls in enumerate(supported_transport_classes):
             # for each supported transport of the spectrometer, gather the configuration from
@@ -153,14 +149,12 @@ class _SeaBreezeDeviceMeta(type):
         try:
             supported_feature_classes = attr_dict.pop("feature_classes")
         except KeyError:
-            raise AttributeError("{}.feature_classes not provided".format(class_name))
+            raise AttributeError(f"{class_name}.feature_classes not provided")
         if (
             not isinstance(supported_feature_classes, tuple)
             or not supported_feature_classes
         ):
-            raise TypeError(
-                "{}.feature_classes not a tuple of len > 0".format(class_name)
-            )
+            raise TypeError(f"{class_name}.feature_classes not a tuple of len > 0")
         for idx, feature_cls in enumerate(supported_feature_classes):
             # for each supported feature of the spectrometer, gather the configuration
             # from the spectrometer class and subclass the feature_cls with the provided
@@ -208,7 +202,7 @@ class _SeaBreezeDeviceMeta(type):
         return feature_classes
 
 
-class EndPointMap(object):
+class EndPointMap:
     """internal endpoint map for spectrometer classes"""
 
     def __init__(
@@ -232,9 +226,7 @@ class DarkPixelIndices(tuple):
         indices : iterable
             index of electric dark pixel
         """
-        return super(DarkPixelIndices, cls).__new__(
-            DarkPixelIndices, sorted(set(indices))
-        )
+        return super().__new__(DarkPixelIndices, sorted(set(indices)))
 
     @classmethod
     def from_ranges(cls, *ranges):
@@ -273,10 +265,10 @@ class TriggerMode(enum.IntEnum):
 
     @classmethod
     def supported(cls, *mode_strings):
-        return set(getattr(cls, mode_string) for mode_string in mode_strings)
+        return {getattr(cls, mode_string) for mode_string in mode_strings}
 
 
-class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
+class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
 
     # internal attribute
     _model_name = None
@@ -295,7 +287,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         else:
             raise TypeError("No transport supports device.")
         specialized_cls = _model_class_registry[supported_model]
-        return super(SeaBreezeDevice, cls).__new__(specialized_cls)
+        return super().__new__(specialized_cls)
 
     def __init__(self, raw_device=None):
         if raw_device is None:
@@ -334,7 +326,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
         return cls
 
     def __repr__(self):
-        return "<SeaBreezeDevice %s:%s>" % (self.model, self.serial_number)
+        return f"<SeaBreezeDevice {self.model}:{self.serial_number}>"
 
     def open(self):
         """open the spectrometer usb connection
@@ -440,7 +432,7 @@ class SeaBreezeDevice(with_metaclass(_SeaBreezeDeviceMeta)):
 
         """
 
-        class FeatureAccessHandler(object):
+        class FeatureAccessHandler:
             def __init__(self, feature_dict):
                 for identifier, features in feature_dict.items():
                     setattr(
@@ -922,7 +914,9 @@ class APEX(SeaBreezeDevice):
     spectrum_num_pixel = 2304
     spectrum_raw_length = (2304 * 2) + 1
     spectrum_max_value = 64000
-    trigger_modes = TriggerMode.supported("NORMAL",)
+    trigger_modes = TriggerMode.supported(
+        "NORMAL",
+    )
 
     # features
     feature_classes = (

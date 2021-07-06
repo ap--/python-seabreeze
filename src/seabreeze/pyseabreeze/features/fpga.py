@@ -3,7 +3,7 @@ import time
 import enum
 
 
-class _FPGARegisterFeatureOOI(object):
+class _FPGARegisterFeatureOOI:
     """extract fpga register feature
 
     (has no equivalent in cseabreeze)
@@ -24,7 +24,7 @@ class _FPGARegisterFeatureOOI(object):
         command, data = struct.unpack("<BH", fw_raw)
         assert command in {
             self.Codes.FIRMWARE_VERSION,  # as specified in datasheets
-            0xFE  # FlameS seems to return this?
+            0xFE,  # FlameS seems to return this?
         }, str(list(map(hex, fw_raw)))
         return data
 

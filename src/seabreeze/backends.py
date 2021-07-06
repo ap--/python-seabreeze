@@ -15,10 +15,10 @@ def _use_backend(name):
         elif name == "pyseabreeze":
             import seabreeze.pyseabreeze as sbb
         else:
-            raise ValueError("unknown backend '{}'".format(name))
+            raise ValueError(f"unknown backend '{name}'")
     except ImportError as err:
         _log.warning(
-            "seabreeze can't load '{}' backend - error: '{}'".format(name, repr(err)),
+            f"seabreeze can't load '{name}' backend - error: '{repr(err)}'",
             exc_info=True,
         )
         return None
@@ -55,7 +55,7 @@ def use(backend, force=True, **_kwargs):
                 ", ".join(_SeaBreezeConfig["available_backends"])
             )
         )
-    if 'seabreeze.spectrometers' in sys.modules:
+    if "seabreeze.spectrometers" in sys.modules:
         warnings.warn(
             "seabreeze.use has to be called before importing seabreeze.spectrometers",
         )
@@ -102,7 +102,7 @@ def get_backend():
             )
 
     if backend is None:
-        raise ImportError("Could not import backend. Requested: {}".format(requested))
+        raise ImportError(f"Could not import backend. Requested: {requested}")
 
     # provide for testing purposes
     backend._api_kwargs = _SeaBreezeConfig["_api_kwargs"]

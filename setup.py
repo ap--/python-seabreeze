@@ -133,7 +133,7 @@ def win_spawn(self, cmd):
         if cmd[0].endswith("link.exe"):
             with open("ihatewindowssomuch.rsp", "w") as f:
                 f.write(list2cmdline(cmd[1:]) + "\n\r")
-            return spawn(cmd[:1] + ["@{}".format(os.path.abspath(f.name))])
+            return spawn(cmd[:1] + [f"@{os.path.abspath(f.name)}"])
         else:
             return spawn(cmd)
     finally:

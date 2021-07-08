@@ -172,9 +172,7 @@ setup(
     extras_require={
         "cseabreeze": [],
         "pyseabreeze": ["pyusb >=1.0"],
-        "tests": [
-            "pytest",
-        ],
+        "tests": ["pytest"],
     },
     python_requires=">=3.6",
     cmdclass={"build_ext": sb_build_ext},

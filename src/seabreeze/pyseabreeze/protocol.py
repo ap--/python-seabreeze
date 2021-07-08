@@ -11,13 +11,10 @@ import struct
 import time
 import warnings
 import weakref
+from collections.abc import Callable
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
-try:
-    from collections.abc import Callable
-except ImportError:  # Python27
-    from collections import Callable
 
 
 class ProtocolInterface:

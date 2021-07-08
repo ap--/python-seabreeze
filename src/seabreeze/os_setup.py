@@ -14,17 +14,10 @@ import tempfile
 import time
 import zipfile
 from textwrap import dedent
+from textwrap import indent
 
 from urllib.error import HTTPError
 from urllib.request import urlopen
-
-try:
-    # noinspection PyProtectedMember
-    from textwrap import indent as _indent
-except ImportError:
-    # noinspection PyUnusedLocal
-    def _indent(text, prefix, predicate=None):
-        return "".join(prefix + line for line in text.splitlines(True))
 
 
 _GITHUB_REPO_URL = (
@@ -103,7 +96,7 @@ def linux_install_udev_rules():
                 _log.info("udev rules already newest version")
                 sys.exit(0)
             else:
-                _log.info(_indent(rules_differ, "  ").rstrip())
+                _log.info(indent(rules_differ, "  ").rstrip())
                 _log.info(
                     "udev rules differ. To overwrite run with '--overwrite-existing'"
                 )
@@ -143,14 +136,6 @@ def _is_contained_in_dir(files, cdir=None):
     return True
 
 
-def _unicode(x):
-    try:
-        # noinspection PyUnresolvedReferences
-        return unicode(x)
-    except NameError:
-        return x
-
-
 def windows_install_drivers():
     """install driver inf files via pnputil in an elevated shell"""
     if not _request_confirmation("Install windows drivers?"):
@@ -161,9 +146,9 @@ def windows_install_drivers():
         argv = [__file__] + sys.argv[1:]
         ret = ctypes.windll.shell32.ShellExecuteW(
             None,
-            _unicode("runas"),
-            _unicode(sys.executable),
-            _unicode(subprocess.list2cmdline(argv)),
+            "runas",
+            sys.executable,
+            subprocess.list2cmdline(argv),
             None,
             1,
         )

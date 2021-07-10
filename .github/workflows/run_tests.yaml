@@ -23,8 +23,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install --upgrade setuptools
-        pip install 'cython>=0.18' 'wheel>=0.31.0' 'pytest<5' 'mock'
         pip install -e .[pyseabreeze,tests]
     - name: Test with pytest
       run: |

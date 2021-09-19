@@ -16,7 +16,6 @@ from collections.abc import Callable
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
 
-
 class ProtocolInterface:
     def __init__(self, transport):
         if not (
@@ -165,6 +164,11 @@ class OBPProtocol(ProtocolInterface):
             0x00180101: "<B",  # GET_WL_COEFF
             0x00181100: "",  # GET_NL_COEFF_COUNT
             0x00181101: "<B",  # GET_NL_COEFF
+            0x00200000: "",
+            0x00200100: "",
+            0x00200110: "<LL",
+            0x00200300: "",
+            0x00200310: "<LL",
             0x00420004: "",  # GET_TE_TEMPERATURE
             0x00420010: "<B",  # SET_TE_ENABLE
             0x00420011: "<f",  # SET_TE_SETPOINT

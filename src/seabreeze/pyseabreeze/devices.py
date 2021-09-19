@@ -1041,6 +1041,7 @@ class QEPRO(SeaBreezeDevice):
 
     # features
     feature_classes = (
+        sbf.gpio.SeaBreezeGPIOFeatureOBP,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureQEPRO,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )

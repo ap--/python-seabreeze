@@ -3,22 +3,16 @@ environment:
   matrix:
 
     # 32bit pythons
-    - PYTHON: C:\Python27
-      WDDK_INC_PATH: C:\WinDDK\7600.16385.1\inc\api;C:\WinDDK\7600.16385.1\inc\ddk;
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wxp\i386;
-    - PYTHON: C:\Python35
     - PYTHON: C:\Python36
     - PYTHON: C:\Python37
     - PYTHON: C:\Python38
+    - PYTHON: C:\Python39
 
     # 64bit pythons
-    - PYTHON: C:\Python27-x64
-      WDDK_INC_PATH: C:\WinDDK\7600.16385.1\inc\api;C:\WinDDK\7600.16385.1\inc\ddk;
-      WDDK_LIB_PATH: C:\WinDDK\7600.16385.1\lib\wlh\amd64;
-    - PYTHON: C:\Python35-x64
     - PYTHON: C:\Python36-x64
     - PYTHON: C:\Python37-x64
     - PYTHON: C:\Python38-x64
+    - PYTHON: C:\Python39-x64
 
 install:
   # Setup the build environment

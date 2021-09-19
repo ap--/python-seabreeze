@@ -28,3 +28,6 @@ exclude = '''
 
 [tool.isort]
 profile = "black"
+
+[tool.cibuildwheel.linux]
+before-build = "yum install -y libusb-devel"

@@ -38,6 +38,9 @@ jobs:
         uses: actions/setup-python@v2.2.2
         with:
           python-version: 3.8
+      - name: Setup libusb-dev
+        run: |
+          sudo apt-get install -y libusb-dev
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

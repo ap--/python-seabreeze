@@ -351,18 +351,21 @@ _pyusb_backend_instances = {}
 def get_pyusb_backend_from_name(name):
     """internal: allow requesting a specific pyusb backend for testing"""
     if name is None:
-        # default is pick first that works: ('libusb1', 'libusb0', 'openusb0')
+        # default is pick first that works: ('libusb1', 'libusb0', 'openusb')
         _backend = None
     else:
         try:
             _backend = _pyusb_backend_instances[name]
         except KeyError:
-            m = importlib.import_module(f"usb.backend.{name}")
+            try:
+                m = importlib.import_module(f"usb.backend.{name}")
+            except ImportError:
+                raise RuntimeError(f"unknown pyusb backend: {name!r}")
             # noinspection PyUnresolvedReferences
             _backend = m.get_backend()
             # raise if a pyusb backend was requested but can't be loaded
             if _backend is None:
-                raise RuntimeError("pyusb '{}' backend failed to load")
+                raise RuntimeError(f"pyusb backend failed to load: {name!r}")
             _pyusb_backend_instances[name] = _backend
     return _backend
 

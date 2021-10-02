@@ -168,6 +168,7 @@ setup(
     install_requires=[
         "numpy<1.19 ; python_version=='3.6.*'",
         "numpy ; python_version>='3.7'",
+        "typing_extensions ; python_version<'3.8'",
     ],
     extras_require={
         "cseabreeze": [],

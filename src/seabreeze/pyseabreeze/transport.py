@@ -270,7 +270,7 @@ class USBTransport(TransportInterface):
             unique pyusb devices for each available spectrometer
         """
         # check if a specific pyusb backend is requested
-        _pyusb_backend = kwargs.get("_pyusb_backend", None)
+        _pyusb_backend = kwargs.get("pyusb_backend", None)
         # get all matching devices
         try:
             pyusb_devices = usb.core.find(

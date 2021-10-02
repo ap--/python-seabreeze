@@ -2,40 +2,26 @@ import logging
 import sys
 import warnings
 
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
+
 __all__ = ["use", "get_backend"]
 
-_log = logging.getLogger(__name__)
+
+class BackendConfig:
+    """*internal* config dict"""
+
+    requested = "cseabreeze"  # default is cseabreeze
+    available = ("cseabreeze", "pyseabreeze")
+    allow_fallback = False
+    api_kwargs = {}  # for pytests
 
 
-def _use_backend(name):
-    # internal: import the libseabreeze cython wrapper -> cseabreeze
-    try:
-        if name == "cseabreeze":
-            import seabreeze.cseabreeze as sbb
-        elif name == "pyseabreeze":
-            import seabreeze.pyseabreeze as sbb
-        else:
-            raise ValueError(f"unknown backend '{name}'")
-    except ImportError as err:
-        _log.warning(
-            f"seabreeze can't load '{name}' backend - error: '{repr(err)}'",
-            exc_info=True,
-        )
-        return None
-    else:
-        return sbb
-
-
-# internal config dict used exclusively in this submodule
-_SeaBreezeConfig = {
-    "requested_backend": "cseabreeze",  # default is cseabreeze
-    "available_backends": ("cseabreeze", "pyseabreeze"),
-    "allow_fallback": False,
-    "_api_kwargs": {},  # for pytests
-}
-
-
-def use(backend, force=True, **_kwargs):
+def use(
+    backend: Literal["cseabreeze", "pyseabreeze"], force: bool = True, **kwargs
+) -> None:
     """
     select the backend used for communicating with the spectrometer
 
@@ -48,23 +34,35 @@ def use(backend, force=True, **_kwargs):
         and the requested backend can not be imported. force=True should
         be used in user code to ensure that the correct backend is being
         loaded.
+
+    pyseabreeze only
+    ----------------
+    pyusb_backend: str
+        either libusb1, libusb0 or openusb
+
     """
-    if backend not in _SeaBreezeConfig["available_backends"]:
+    if backend not in BackendConfig.available:
         raise ValueError(
-            "backend not in: {}".format(
-                ", ".join(_SeaBreezeConfig["available_backends"])
-            )
+            "backend not in: {}".format(", ".join(BackendConfig.available))
         )
     if "seabreeze.spectrometers" in sys.modules:
         warnings.warn(
             "seabreeze.use has to be called before importing seabreeze.spectrometers",
+            stacklevel=2,
         )
 
-    _SeaBreezeConfig["requested_backend"] = backend
-    _SeaBreezeConfig["allow_fallback"] = not force
-    _SeaBreezeConfig["_api_kwargs"] = _kwargs.pop("_api_kwargs", {})
-    if _kwargs:
-        raise TypeError("unknown keyword arguments")
+    BackendConfig.requested = backend
+    BackendConfig.allow_fallback = not force
+    BackendConfig.api_kwargs = {}
+
+    if backend == "pyseabreeze":
+        if "pyusb_backend" in kwargs:
+            pyusb_backend = kwargs.pop("pyusb_backend")
+            BackendConfig.api_kwargs["pyusb_backend"] = pyusb_backend
+    if kwargs:
+        raise TypeError(
+            f"unknown keyword arguments {set(kwargs)!r} for backend {backend!r}"
+        )
 
 
 def get_backend():
@@ -77,17 +75,34 @@ def get_backend():
     backend:
         a backend interface for communicating with the spectrometers
     """
-    requested = _SeaBreezeConfig["requested_backend"]
-    fallback = _SeaBreezeConfig["allow_fallback"]
-    backends = _SeaBreezeConfig["available_backends"]
+
+    def _use_backend(name):
+        # internal: import the libseabreeze cython wrapper -> cseabreeze
+        try:
+            if name == "cseabreeze":
+                import seabreeze.cseabreeze as sbb
+            elif name == "pyseabreeze":
+                import seabreeze.pyseabreeze as sbb
+            else:
+                raise ValueError(f"unknown backend {name!r}")
+        except ImportError as err:
+            logging.getLogger(__name__).warning(
+                f"seabreeze can't load {name!r} backend - error: '{err!r}'",
+                exc_info=True,
+            )
+            return None
+        else:
+            return sbb
+
+    requested = BackendConfig.requested
+    fallback = BackendConfig.allow_fallback
+    backends = BackendConfig.available
 
     backend = _use_backend(requested)  # trying to import requested backend
     if backend is None and fallback:
 
         warnings.warn(
-            "seabreeze failed to load user requested '{}' backend but will try fallback backends".format(
-                requested
-            ),
+            f"seabreeze failed to load user requested {requested!r} backend but will try fallback backends",
             category=ImportWarning,
         )
 
@@ -105,6 +120,6 @@ def get_backend():
         raise ImportError(f"Could not import backend. Requested: {requested}")
 
     # provide for testing purposes
-    backend._api_kwargs = _SeaBreezeConfig["_api_kwargs"]
+    backend._api_kwargs = BackendConfig.api_kwargs
 
     return backend

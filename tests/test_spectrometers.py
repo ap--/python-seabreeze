@@ -104,7 +104,7 @@ def backendlify(request):
         _backend, _pyusb_backend = backend.split(":")
         import seabreeze
 
-        seabreeze.use(_backend, _api_kwargs={"_pyusb_backend": _pyusb_backend})
+        seabreeze.use(_backend, pyusb_backend=_pyusb_backend)
 
     else:
         raise ValueError("unknown option '%s'" % backend)
@@ -151,14 +151,15 @@ def skip_if_backend_and_os(backend, osname, pyusb_backend=None):
     def decorator(method):
         @wraps(method)
         def wrapper(self, *args, **kwargs):
-            from seabreeze.backends import _SeaBreezeConfig as _Config
+            # noinspection PyProtectedMember
+            from seabreeze.backends import BackendConfig
 
             # noinspection PyProtectedMember
             if (
                 self.backend._backend_.startswith(backend)
                 and platform.system() == osname
             ):
-                requested = _Config["_api_kwargs"].get("_pyusb_backend", "any")
+                requested = BackendConfig.api_kwargs.get("pyusb_backend", "any")
 
                 if (
                     pyusb_backend is None
@@ -194,10 +195,10 @@ class TestHardware:
         # noinspection PyProtectedMember
         backend_name = self.backend._backend_
         # noinspection PyProtectedMember
-        from seabreeze.backends import _SeaBreezeConfig as _Config
+        from seabreeze.backends import BackendConfig
 
         api_kwargs_str = ", ".join(
-            "%s='%s'" % item for item in _Config["_api_kwargs"].items()
+            "%s='%s'" % item for item in BackendConfig.api_kwargs.items()
         )
 
         cmd = [

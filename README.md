@@ -2,8 +2,7 @@
 
 [![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/seabreeze?label=conda)](https://anaconda.org/conda-forge/seabreeze)
 [![PyPI](https://img.shields.io/pypi/v/seabreeze)](https://pypi.org/project/seabreeze/)
-[![AppVeyor](https://img.shields.io/appveyor/ci/ap--/python-seabreeze.svg?label=win)](https://ci.appveyor.com/project/ap--/python-seabreeze)
-[![Travis](https://img.shields.io/travis/ap--/python-seabreeze.svg?label=linux%7Cosx)](https://travis-ci.org/ap--/python-seabreeze)
+[![test build deploy](https://github.com/ap--/python-seabreeze/actions/workflows/run_test_build_deploy.yaml/badge.svg)](https://github.com/ap--/python-seabreeze/actions/workflows/run_test_build_deploy.yaml)
 [![Github All Releases](https://img.shields.io/github/downloads/ap--/python-seabreeze/total.svg?label=github)](https://github.com/ap--/python-seabreeze/releases)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/seabreeze?label=pypi)](https://pypi.org/project/seabreeze/)
 [![MIT license](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](http://opensource.org/licenses/MIT)

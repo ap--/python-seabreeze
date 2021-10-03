@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - drop support for Python 2.7 to 3.5 (require py36+)
+- expose selecting `pyusb_backend` via `seabreeze.use` for `pyseabreeze`
 
 ## [1.3.0] - 2020-08-23
 ### Added

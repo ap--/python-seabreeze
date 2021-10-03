@@ -61,20 +61,20 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
 ---------------------------------------------------------------------------------------------------
 
 .. sidebar:: A note from the author
-    :subtitle: (ノ\*-_-\*)ノ┴—┴
+    :subtitle: ʕっ•ᴥ•ʔっ Hello everyone!
 
-    Over the years, maintaining this project made me aware that supporting the authors of
-    open source projects is a crucial (but mostly ignored) part of the open source community.
-    If python-seabreeze_ saved you some development time, consider `contributing to the
-    project <https://github.com/ap--/python-seabreeze>`_, or
-    `send me an email <mailto:mail+seabreeze@poehlmann.io>`_ and tell me about your project,
-    or consider `buying me a coffee <https://www.buymeacoffee.com/poehlmann>`_,
-    or support me via `patreon <https://patreon.com/apoehlmann>`_ or
-    `paypal <https://paypal.me/apoehlmann>`_. Something small like that
-    puts a smile on my face for weeks, and it's extremely motivating.
+    I have been maintaining this project now since 2012 and I'm always keen
+    to learn about the different projects that python-seabreeze_ is used for!
+    So please go ahead and `send me an email <mailto:mail+seabreeze@poehlmann.io>`_ to tell
+    me about your science or work project!
+    Something small like that puts a smile on my face for weeks, and is extremely motivating.
 
-    .. rubric:: Anyways, enough ranting (^_^") think about it and let's science!
+    And in case python-seabreeze_ saved you some development time, consider `contributing to the
+    project <https://github.com/ap--/python-seabreeze>`_
+    or `buying me a coffee <https://www.buymeacoffee.com/poehlmann>`_,
+    or support me via `GitHub Sponsors <https://github.com/sponsors/ap-->`_.
 
+    .. rubric:: And now let's science!
 
     .. image:: https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png
         :target: https://www.buymeacoffee.com/poehlmann

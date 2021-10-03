@@ -49,6 +49,7 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
 - libseabreeze_ - github clone of the C library. *internal use only* (has pre-built libraries if you know what you're doing)
 - python-seabreeze-feedstock_ - anaconda feedstock for automated package deployment. *internal use only*
 - yaqd-seabreeze_ - A seabreeze interface for the `yaq instrument control framework`_
+- SpectraSorter_ - Software for droplet sorting based on the analysis of high-speed spectrophotometer (OceanFX) measurements (written in C#, not using python-seabreeze)
 
 .. _`python-seatease by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seatease
 .. _`python-seabreeze-server by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seabreeze-server
@@ -56,6 +57,7 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
 .. _python-seabreeze-feedstock: https://github.com/ap--/python-seabreeze
 .. _yaqd-seabreeze: https://gitlab.com/yaq/yaqd-seabreeze
 .. _`yaq instrument control framework`: https://yaq.fyi
+.. _SpectraSorter: https://github.com/SpectraSorter/SpectraSorter
 
 
 ---------------------------------------------------------------------------------------------------

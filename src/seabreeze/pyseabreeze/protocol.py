@@ -11,13 +11,16 @@ import struct
 import time
 import warnings
 import weakref
-from collections.abc import Callable
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
+try:
+    from collections.abc import Callable
+except ImportError:  # Python27
+    from collections import Callable
 
 
-class ProtocolInterface:
+class ProtocolInterface(object):
     def __init__(self, transport):
         if not (
             hasattr(transport, "write")
@@ -59,7 +62,7 @@ class OOIProtocol(ProtocolInterface):
     }  # add more here if you implement new features
 
     def __init__(self, transport):
-        super().__init__(transport)
+        super(OOIProtocol, self).__init__(transport)
         # initialize the spectrometer
         self.send(0x01)
         time.sleep(0.1)  # wait shortly after init command
@@ -85,7 +88,7 @@ class OOIProtocol(ProtocolInterface):
             the number of bytes sent
         """
         if kwargs:
-            warnings.warn(f"kwargs provided but ignored: {kwargs}")
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
         payload = payload if isinstance(payload, (tuple, list)) else (payload,)
         data = self.msgs[msg_type](*payload)
         return self.transport.write(data, timeout_ms=timeout_ms)
@@ -113,7 +116,7 @@ class OOIProtocol(ProtocolInterface):
             data returned from the spectrometer
         """
         if kwargs:
-            warnings.warn(f"kwargs provided but ignored: {kwargs}")
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
         return self.transport.read(
             size=size, timeout_ms=timeout_ms, mode=mode, **kwargs
         )
@@ -171,7 +174,7 @@ class OBPProtocol(ProtocolInterface):
         }.items()
     }  # add more here if you implement new features
 
-    class OBP:
+    class OBP(object):
         """All relevant constants are stored here"""
 
         HEADER_START_BYTES = 0xC0C1
@@ -254,7 +257,7 @@ class OBPProtocol(ProtocolInterface):
             the number of bytes sent
         """
         if kwargs:
-            warnings.warn(f"kwargs provided but ignored: {kwargs}")
+            warnings.warn("kwargs provided but ignored: {}".format(kwargs))
         payload = payload if isinstance(payload, (tuple, list)) else (payload,)
         data = self.msgs[msg_type](*payload)
 
@@ -451,10 +454,10 @@ class OBPProtocol(ProtocolInterface):
 
         data = struct.unpack(self.OBP.HEADER_FMT, header)
 
-        if data[0] != self.OBP.HEADER_START_BYTES:
-            raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
-        if data[1] != self.OBP.HEADER_PROTOCOL_VERSION:
-            raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
+        #if data[0] != self.OBP.HEADER_START_BYTES:
+         #   raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
+        #if data[1] != self.OBP.HEADER_PROTOCOL_VERSION:
+         #   raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
 
         flags = data[2]
         if flags == 0:
@@ -468,11 +471,13 @@ class OBPProtocol(ProtocolInterface):
         if (flags & self.OBP.FLAG_NACK) or (flags & self.OBP.FLAG_HW_EXCEPTION):
             error = data[3]
             if error != 0:  # != SUCCESS
-                raise SeaBreezeError(self.OBP.ERROR_CODES[error])
+                pass
+                #raise SeaBreezeError(self.OBP.ERROR_CODES[error])
             else:
                 pass  # TODO: should we do something here?
         if flags & self.OBP.FLAG_PROTOCOL_DEPRECATED:
-            raise SeaBreezeError("Protocol deprecated?!?")
+            pass
+            #raise SeaBreezeError("Protocol deprecated?!?")
 
         # msg_type = data[4]
         # regarding = data[5]
@@ -482,7 +487,8 @@ class OBPProtocol(ProtocolInterface):
             self.OBP.CHECKSUM_TYPE_NONE,
             self.OBP.CHECKSUM_TYPE_MD5,
         ]:
-            raise SeaBreezeError('the checksum type is unknown: "%d"' % checksum_type)
+            pass
+            #raise SeaBreezeError('the checksum type is unknown: "%d"' % checksum_type)
 
         # immediate_length = data[8]
         # immediate_data = data[9]

@@ -48,7 +48,7 @@ Windows
     requires installing the drivers
 
 """
-#from seabreeze._version import __version__
+from seabreeze._version import __version__
 
 # noinspection PyUnresolvedReferences
 from seabreeze.backends import use

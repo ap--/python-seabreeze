@@ -23,8 +23,6 @@ except ImportError:
 else:
     WARN_NO_CYTHON = False
 
-from distutils.sysconfig import customize_compiler
-
 
 def strtobool(val: str) -> int:
     """distutils.util.strtobool(val)
@@ -121,38 +119,29 @@ class sb_build_ext(build_ext):
     def build_extensions(self):
         # Deal with windows command line limit
         if os.name == "nt":
+            def win_spawn(_, cmd):
+                # the windows shell can't handle all the object files provided to link.exe
+                from subprocess import run
+                from subprocess import list2cmdline
+
+                if cmd[0].endswith("link.exe"):
+                    with open("ihatewindowssomuch.rsp", "w") as f:
+                        f.write(list2cmdline(cmd[1:]) + "\n\r")
+                    return run(cmd[:1] + [f"@{os.path.abspath(f.name)}"])
+                else:
+                    return run(cmd)
             # noinspection PyArgumentList
             self.compiler.spawn = win_spawn.__get__(self.compiler)
+
         # prevent cpp compiler warning
         # - see: https://stackoverflow.com/a/36293331
         # - see: https://github.com/python/cpython/pull/7476/files
-        customize_compiler(self.compiler)
         try:
             self.compiler.compiler_so.remove("-Wstrict-prototypes")
         except (AttributeError, ValueError):
             pass
-        # call superclass
-        build_ext.build_extensions(self)
 
-
-# the windows shell can't handle all the object files provided to link.exe
-def win_spawn(self, cmd):
-    from distutils.spawn import spawn
-    from subprocess import list2cmdline
-
-    old_path = os.getenv("path")
-    try:
-        if hasattr(self, "_paths"):  # msv9 compat
-            os.environ["path"] = self._paths
-        if cmd[0].endswith("link.exe"):
-            with open("ihatewindowssomuch.rsp", "w") as f:
-                f.write(list2cmdline(cmd[1:]) + "\n\r")
-            return spawn(cmd[:1] + [f"@{os.path.abspath(f.name)}"])
-        else:
-            return spawn(cmd)
-    finally:
-        if hasattr(self, "_paths"):
-            os.environ["path"] = old_path
+        super().build_extensions()
 
 
 if WARN_NO_CYTHON and extensions:
@@ -213,5 +202,6 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
 )

@@ -31,3 +31,25 @@ profile = "black"
 
 [tool.cibuildwheel.linux]
 before-build = "yum install -y libusb-devel"
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+files = "./src/**/*.py"
+exclude = """
+(?x)(
+   ^build|
+   ^docs|
+   ^tests|
+   setup.py
+)
+"""
+
+[[tool.mypy.overrides]]
+module = "seabreeze.cseabreeze._wrapper"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "usb.*"
+ignore_missing_imports = true

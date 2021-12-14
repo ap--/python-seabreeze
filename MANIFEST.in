@@ -1,2 +1,6 @@
 include pyproject.toml
 include LICENSE.md
+# remove github related files
+prune .github
+exclude .gitignore
+exclude .readthedocs.yml

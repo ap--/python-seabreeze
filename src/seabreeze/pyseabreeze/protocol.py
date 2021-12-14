@@ -16,7 +16,6 @@ from collections.abc import Callable
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
 
-
 class ProtocolInterface:
     def __init__(self, transport):
         if not (

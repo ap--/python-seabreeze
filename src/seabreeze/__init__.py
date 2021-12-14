@@ -48,8 +48,10 @@ Windows
     requires installing the drivers
 
 """
-from seabreeze._version import __version__
+from seabreeze._version import __version__ as _version
 from seabreeze.backends import use
 
+__all__ = ["use"]
+__version__ = _version
 __author__ = "Andreas Poehlmann"
 __email__ = "andreas@poehlmann.io"

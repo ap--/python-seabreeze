@@ -1,7 +1,7 @@
 """This is a wrapper for the c-implementation of the seabreeze-library
 
 """
-# noinspection PyUnresolvedReferences,PyProtectedMember
+# noinspection PyProtectedMember
 from seabreeze.cseabreeze._wrapper import (
     SeaBreezeAcquisitionDelayFeature,
     SeaBreezeAPI,
@@ -37,5 +37,42 @@ from seabreeze.cseabreeze._wrapper import (
     SeaBreezeThermoElectricFeature,
     SeaBreezeWifiConfigurationFeature,
 )
+
+__all__ = [
+    "_backend_",
+    "SeaBreezeAcquisitionDelayFeature",
+    "SeaBreezeAPI",
+    "SeaBreezeContinuousStrobeFeature",
+    "SeaBreezeDataBufferFeature",
+    "SeaBreezeDevice",
+    "SeaBreezeDHCPServerFeature",
+    "SeaBreezeEEPROMFeature",
+    "SeaBreezeError",
+    "SeaBreezeEthernetConfigurationFeature",
+    "SeaBreezeFastBufferFeature",
+    "SeaBreezeFeature",
+    "SeaBreezeGPIOFeature",
+    "SeaBreezeI2CMasterFeature",
+    "SeaBreezeIntrospectionFeature",
+    "SeaBreezeIPv4Feature",
+    "SeaBreezeIrradCalFeature",
+    "SeaBreezeLightSourceFeature",
+    "SeaBreezeMulticastFeature",
+    "SeaBreezeNetworkConfigurationFeature",
+    "SeaBreezeNonlinearityCoefficientsFeature",
+    "SeaBreezeNumFeaturesError",
+    "SeaBreezeOpticalBenchFeature",
+    "SeaBreezePixelBinningFeature",
+    "SeaBreezeRawUSBBusAccessFeature",
+    "SeaBreezeRevisionFeature",
+    "SeaBreezeShutterFeature",
+    "SeaBreezeSpectrometerFeature",
+    "SeaBreezeSpectrumProcessingFeature",
+    "SeaBreezeStrayLightCoefficientsFeature",
+    "SeaBreezeStrobeLampFeature",
+    "SeaBreezeTemperatureFeature",
+    "SeaBreezeThermoElectricFeature",
+    "SeaBreezeWifiConfigurationFeature",
+]
 
 _backend_ = "cseabreeze"

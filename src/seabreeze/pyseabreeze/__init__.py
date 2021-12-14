@@ -40,4 +40,41 @@ from seabreeze.pyseabreeze.features import (
 # noinspection PyUnresolvedReferences,PyProtectedMember
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
+__all__ = [
+    "_backend_",
+    "SeaBreezeAcquisitionDelayFeature",
+    "SeaBreezeAPI",
+    "SeaBreezeContinuousStrobeFeature",
+    "SeaBreezeDataBufferFeature",
+    "SeaBreezeDevice",
+    "SeaBreezeDHCPServerFeature",
+    "SeaBreezeEEPROMFeature",
+    "SeaBreezeError",
+    "SeaBreezeEthernetConfigurationFeature",
+    "SeaBreezeFastBufferFeature",
+    "SeaBreezeFeature",
+    "SeaBreezeGPIOFeature",
+    "SeaBreezeI2CMasterFeature",
+    "SeaBreezeIntrospectionFeature",
+    "SeaBreezeIPv4Feature",
+    "SeaBreezeIrradCalFeature",
+    "SeaBreezeLightSourceFeature",
+    "SeaBreezeMulticastFeature",
+    "SeaBreezeNetworkConfigurationFeature",
+    "SeaBreezeNonlinearityCoefficientsFeature",
+    "SeaBreezeNumFeaturesError",
+    "SeaBreezeOpticalBenchFeature",
+    "SeaBreezePixelBinningFeature",
+    "SeaBreezeRawUSBBusAccessFeature",
+    "SeaBreezeRevisionFeature",
+    "SeaBreezeShutterFeature",
+    "SeaBreezeSpectrometerFeature",
+    "SeaBreezeSpectrumProcessingFeature",
+    "SeaBreezeStrayLightCoefficientsFeature",
+    "SeaBreezeStrobeLampFeature",
+    "SeaBreezeTemperatureFeature",
+    "SeaBreezeThermoElectricFeature",
+    "SeaBreezeWifiConfigurationFeature",
+]
+
 _backend_ = "pyseabreeze"

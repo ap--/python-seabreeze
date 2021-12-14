@@ -69,7 +69,7 @@ namespace seabreeze {
          * will be sent or received.  This allows for some freedom in buffer
          * management.
          */
-        Transfer(std::vector<ProtocolHint *> *hints, std::vector<byte> *buffer,
+        Transfer(std::vector<ProtocolHint *> *hints, std::vector<unsigned char> *buffer,
                 direction_t direction, unsigned int length);
 
         virtual ~Transfer();
@@ -92,7 +92,7 @@ namespace seabreeze {
         void checkBufferSize();
 
         unsigned int length;
-        std::vector<byte> *buffer;
+        std::vector<unsigned char> *buffer;
         direction_t direction;
 
     };

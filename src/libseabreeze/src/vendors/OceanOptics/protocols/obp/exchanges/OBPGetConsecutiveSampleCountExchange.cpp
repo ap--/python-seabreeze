@@ -51,7 +51,7 @@ unsigned int OBPGetConsecutiveSampleCountExchange::queryConsecutiveSampleCount(
         TransferHelper *helper) {
 
     unsigned int consecutiveSampleCount;
-    vector<byte> *result;
+    vector<unsigned char> *result;
 
     result = this->queryDevice(helper);
     if(NULL == result || result->size() < sizeof(unsigned int)) {

@@ -50,19 +50,19 @@ namespace seabreeze {
         OBPMessage();
         ~OBPMessage();
 
-        static OBPMessage *parseHeaderFromByteStream(std::vector<byte> *stream);
-        static OBPMessage *parseByteStream(std::vector<byte> *stream);
+        static OBPMessage *parseHeaderFromByteStream(std::vector<unsigned char> *stream);
+        static OBPMessage *parseByteStream(std::vector<unsigned char> *stream);
 
-        std::vector<byte> *toByteStream();
-        std::vector<byte> *getData();
+        std::vector<unsigned char> *toByteStream();
+        std::vector<unsigned char> *getData();
         unsigned int getBytesRemaining();
         byte getChecksumType();
         unsigned short getErrno();
         unsigned short getFlags();
-        std::vector<byte> *getImmediateData();
+        std::vector<unsigned char> *getImmediateData();
         byte getImmediateDataLength();
         unsigned int getMessageType();
-        std::vector<byte> *getPayload();
+        std::vector<unsigned char> *getPayload();
         unsigned short getProtocolVersion();
         unsigned int getRegarding();
 
@@ -72,19 +72,19 @@ namespace seabreeze {
         void setAckRequestedFlag();
         void setBytesRemaining(unsigned int bytesRemaining);
         void setChecksumType(byte checksumType);
-        void setData(std::vector<byte> *data);
+        void setData(std::vector<unsigned char> *data);
         void setErrorNumber(unsigned short errorNumber);
         void setFlags(unsigned short flags);
-        void setImmediateData(std::vector<byte> *immediateData);
+        void setImmediateData(std::vector<unsigned char> *immediateData);
         void setImmediateDataLength(byte immediateDataLength);
         void setMessageType(unsigned int messageType);
-        void setPayload(std::vector<byte> *payload);
+        void setPayload(std::vector<unsigned char> *payload);
         void setProtocolVersion(unsigned short protocolVersion);
         void setRegarding(unsigned int regarding);
 
     protected:
         void setupMessage();
-        std::vector<byte> *header;
+        std::vector<unsigned char> *header;
         unsigned short protocolVersion;
         unsigned short flags;
         unsigned short errorNumber;
@@ -92,11 +92,11 @@ namespace seabreeze {
         unsigned int regarding;
         byte checksumType;
         byte immediateDataLength;
-        std::vector<byte> *immediateData;
+        std::vector<unsigned char> *immediateData;
         unsigned int bytesRemaining;
-        std::vector<byte> *payload;
-        std::vector<byte> *checksum;
-        std::vector<byte> *footer;
+        std::vector<unsigned char> *payload;
+        std::vector<unsigned char> *checksum;
+        std::vector<unsigned char> *footer;
     };
 
   }

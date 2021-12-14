@@ -65,7 +65,7 @@ namespace seabreeze
 			unsigned char addressIndex,
 			std::vector<unsigned char> *IPv4_Address, 
 			unsigned char *netMask);
-		virtual std::vector<byte> get_IPv4_Default_Gateway(
+		virtual std::vector<unsigned char> get_IPv4_Default_Gateway(
 			const Protocol &protocol,
 			const Bus &bus, 
 			unsigned char interfaceIndex);
@@ -73,12 +73,12 @@ namespace seabreeze
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> IPv4_Gateway_Address);
+			const std::vector<unsigned char> IPv4_Gateway_Address);
 		virtual void add_IPv4_Address(
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> IPv4_Gateway_Address,
+			const std::vector<unsigned char> IPv4_Gateway_Address,
 			unsigned char netMask);
 		virtual void delete_IPv4_Address(
 			const Protocol &protocol, 

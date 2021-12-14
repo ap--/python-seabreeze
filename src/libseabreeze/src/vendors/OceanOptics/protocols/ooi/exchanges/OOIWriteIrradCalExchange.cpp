@@ -75,7 +75,7 @@ int OOIWriteIrradCalExchange::setCalibration(const vector<float> &cal) {
         vector<ProtocolHint *> *requestHints = new vector<ProtocolHint *>;
 
         /* create buffer for holding the bytes of the request */
-        vector<byte> *requestBuffer = new vector<byte>;
+        vector<unsigned char> *requestBuffer = new vector<unsigned char>;
 
         /* resize the request buffer to hold a request */
         requestBuffer->resize(BLOCK_TRANSFER_SIZE + 3);
@@ -86,8 +86,8 @@ int OOIWriteIrradCalExchange::setCalibration(const vector<float> &cal) {
         requestHints->push_back(new ControlHint());
 
         (*(requestBuffer))[0] = OpCodes::OP_WRITE_IRRAD_CAL;
-        (*(requestBuffer))[1] = (byte)( (addr) & 0x00FF);
-        (*(requestBuffer))[2] = (byte)((addr >> 8) & 0x00FF);
+        (*(requestBuffer))[1] = (unsigned char)( (addr) & 0x00FF);
+        (*(requestBuffer))[2] = (unsigned char)((addr >> 8) & 0x00FF);
         for(i = 0; i < BLOCK_TRANSFER_SIZE && factorIndex < factors; i += 4, factorIndex++) {
             fptr = (unsigned int *)&cal[factorIndex];
             /* Convert the floats to a byte array, MSB first */

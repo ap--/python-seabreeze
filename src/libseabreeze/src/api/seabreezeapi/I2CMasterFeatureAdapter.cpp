@@ -96,7 +96,7 @@ unsigned short  I2CMasterFeatureAdapter::i2cMasterReadBus(int *errorCode, unsign
 unsigned short I2CMasterFeatureAdapter::i2cMasterWriteBus(int *errorCode, unsigned char busIndex, unsigned char slaveAddress, const unsigned char *writeData, unsigned short numberOfBytes)
 {
 	unsigned short i2cWriteLength = 0;
-    vector<unsigned char> *i2cWriteData = new vector<byte>(numberOfBytes);
+    vector<unsigned char> *i2cWriteData = new vector<unsigned char>(numberOfBytes);
     memcpy(&((*i2cWriteData)[0]), writeData, numberOfBytes);
 
     try {

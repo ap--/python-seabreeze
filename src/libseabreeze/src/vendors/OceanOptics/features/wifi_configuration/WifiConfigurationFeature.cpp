@@ -62,7 +62,7 @@ unsigned char WifiConfigurationFeature::getMode(const Protocol &protocol, const 
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
-	byte mode;
+	unsigned char mode;
 
     try {
         proto = lookupProtocolImpl(protocol);
@@ -116,7 +116,7 @@ unsigned char WifiConfigurationFeature::getSecurityType(const Protocol &protocol
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
-	byte securityType;
+	unsigned char securityType;
 
     try {
         proto = lookupProtocolImpl(protocol);

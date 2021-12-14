@@ -123,7 +123,7 @@ unsigned char EthernetConfigurationFeature::get_GbE_Enable_Status(const Protocol
 {
 	EthernetConfigurationProtocolInterface *ethernetConfigurationPI = NULL;
 	ProtocolHelper *proto;
-	byte enableStatus;
+	unsigned char enableStatus;
 
     try {
         proto = lookupProtocolImpl(protocol);

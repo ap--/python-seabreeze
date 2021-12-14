@@ -68,7 +68,7 @@ vector<unsigned char> OBPMulticastProtocol::getGroupAddress(const Bus &bus, unsi
 	request.setInterfaceIndex(interfaceIndex);
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    vector<byte> *raw = request.queryDevice(helper);
+    vector<unsigned char> *raw = request.queryDevice(helper);
     if (NULL == raw) {
         string error("Expected queryDevice to produce a non-null result "
             "containing calibration data.  Without this data, it is not possible to "
@@ -76,7 +76,7 @@ vector<unsigned char> OBPMulticastProtocol::getGroupAddress(const Bus &bus, unsi
         throw ProtocolException(error);
     }
 
-    vector<byte> result = *raw;
+    vector<unsigned char> result = *raw;
 
     delete raw;
 
@@ -127,14 +127,14 @@ unsigned char OBPMulticastProtocol::getEnableState(const Bus &bus, unsigned char
 	request.setInterfaceIndex(interfaceIndex);
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    vector<byte> *raw = request.queryDevice(helper);
+    vector<unsigned char> *raw = request.queryDevice(helper);
     if (NULL == raw) {
         string error("Expected queryDevice to produce a non-null result "
             "containing calibration data.  Without this data, it is not possible to continue.");
         throw ProtocolException(error);
     }
 
-    if(raw->size() < sizeof(byte)) {
+    if(raw->size() < sizeof(unsigned char)) {
         string error("Failed to get back expected number of bytes that should have held the enable state");
         delete raw;
         throw ProtocolException(error);

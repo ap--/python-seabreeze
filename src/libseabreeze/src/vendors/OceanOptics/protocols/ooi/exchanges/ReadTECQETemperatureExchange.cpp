@@ -46,7 +46,7 @@ ReadTECQETemperatureExchange::ReadTECQETemperatureExchange() {
     vector<ProtocolHint *> *requestHints = new vector<ProtocolHint *>;
     requestHints->push_back(new ControlHint());
 
-    vector<byte> *requestBuffer = new vector<byte>;
+    vector<unsigned char> *requestBuffer = new vector<unsigned char>;
     requestBuffer->resize(1);
     (*(requestBuffer))[0] = OpCodes::OP_READTEC_QE;
 
@@ -55,7 +55,7 @@ ReadTECQETemperatureExchange::ReadTECQETemperatureExchange() {
     vector<ProtocolHint *> *responseHints = new vector<ProtocolHint *>;
     responseHints->push_back(new ControlHint());
 
-    vector<byte> *responseBuffer = new vector<byte>;
+    vector<unsigned char> *responseBuffer = new vector<unsigned char>;
     responseBuffer->resize(2);
 
     Transfer *response = new Transfer(responseHints, responseBuffer, Transfer::FROM_DEVICE, 2);
@@ -88,7 +88,7 @@ Data *ReadTECQETemperatureExchange::transfer(TransferHelper *helper) {
      * check for type safety.
      */
     ByteVector *resp = (ByteVector *)xfer;
-    vector<byte> raw = resp->getByteVector();
+    vector<unsigned char> raw = resp->getByteVector();
 
     /* Need to put this into a short to preserve the sign bit */
     counts = ((raw[1] << 8) & 0xFF00) | (raw[0] & 0x00FF);

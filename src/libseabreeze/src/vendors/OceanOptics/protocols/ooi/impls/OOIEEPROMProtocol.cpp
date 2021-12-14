@@ -50,7 +50,7 @@ OOIEEPROMProtocol::~OOIEEPROMProtocol() {
 
 }
 
-vector<byte> *OOIEEPROMProtocol::readEEPROMSlot(const Bus &bus, int slot) {
+vector<unsigned char> *OOIEEPROMProtocol::readEEPROMSlot(const Bus &bus, int slot) {
 
     ByteVector *bv = NULL;
     Data *result = NULL;
@@ -74,8 +74,8 @@ vector<byte> *OOIEEPROMProtocol::readEEPROMSlot(const Bus &bus, int slot) {
     bv = static_cast<ByteVector *>(result);
 
     // strip off leading two bytes (echoed request)
-    vector<byte> raw = bv->getByteVector();
-    vector<byte> *retval = new vector<byte>(raw.size() - 2);
+    vector<unsigned char> raw = bv->getByteVector();
+    vector<unsigned char> *retval = new vector<unsigned char>(raw.size() - 2);
     memcpy(&((*retval)[0]), &(raw[2]), retval->size());
 
     delete result; /* a.k.a. bv */
@@ -83,7 +83,7 @@ vector<byte> *OOIEEPROMProtocol::readEEPROMSlot(const Bus &bus, int slot) {
     return retval;
 }
 
-int OOIEEPROMProtocol::writeEEPROMSlot(const Bus &bus, int slot, const vector<byte> &data) {
+int OOIEEPROMProtocol::writeEEPROMSlot(const Bus &bus, int slot, const vector<unsigned char> &data) {
 
     WriteEEPROMSlotExchange xchange(slot, data);
 

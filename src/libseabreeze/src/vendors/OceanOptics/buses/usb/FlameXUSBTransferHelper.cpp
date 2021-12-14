@@ -46,14 +46,14 @@ FlameXUSBTransferHelper::~FlameXUSBTransferHelper() {
 
 }
 
-int FlameXUSBTransferHelper::receive(vector<byte> &buffer,
+int FlameXUSBTransferHelper::receive(vector<unsigned char> &buffer,
         unsigned int length) {
     if(0 != (length % WORD_SIZE_BYTES)) {
-        vector<byte> *inBuffer;
+        vector<unsigned char> *inBuffer;
         int paddedLength;
         
         paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));
-        inBuffer = new vector<byte>(paddedLength);
+        inBuffer = new vector<unsigned char>(paddedLength);
         
         int result = USBTransferHelper::receive(*inBuffer, paddedLength);
         if(result != paddedLength) {
@@ -71,14 +71,14 @@ int FlameXUSBTransferHelper::receive(vector<byte> &buffer,
     }
 }
 
-int FlameXUSBTransferHelper::send(const std::vector<byte> &buffer,
+int FlameXUSBTransferHelper::send(const std::vector<unsigned char> &buffer,
         unsigned int length) const {
     
     if(0 != (length % WORD_SIZE_BYTES)) {
         /* Pad up to a multiple of the word size */
         int paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));
-        vector<byte> *outBuffer = new vector<byte>(paddedLength);
-        memcpy((byte*) &outBuffer[0], (byte*) &buffer[0], length);
+        vector<unsigned char> *outBuffer = new vector<unsigned char>(paddedLength);
+        memcpy((unsigned char*) &outBuffer[0], (unsigned char*) &buffer[0], length);
         int result = USBTransferHelper::send(*outBuffer, paddedLength);
         delete outBuffer;
         return result;

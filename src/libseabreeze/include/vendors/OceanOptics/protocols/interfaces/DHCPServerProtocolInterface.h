@@ -49,11 +49,11 @@ namespace seabreeze {
         /**
          * Get the DHCP server address from the device.
          */
-        virtual void getServerAddress(const Bus &bus, unsigned char interfaceIndex, std::vector<byte> *serverAddress, unsigned char *netMask) = 0;
+        virtual void getServerAddress(const Bus &bus, unsigned char interfaceIndex, std::vector<unsigned char> *serverAddress, unsigned char *netMask) = 0;
         /**
          *  Set the DHCP server address.
          */
-        virtual void setServerAddress(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> serverAddressIPv4, unsigned char netMask) = 0;
+        virtual void setServerAddress(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> serverAddressIPv4, unsigned char netMask) = 0;
 
         /**
          * Get the DHCP server enable status from the device.

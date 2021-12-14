@@ -120,7 +120,7 @@ unsigned char DHCPServerFeature::getServerEnableState(const Protocol &protocol, 
 {
 	DHCPServerProtocolInterface *dhcpServerPI = NULL;
 	ProtocolHelper *proto;
-	byte enableStatus;
+	unsigned char enableStatus;
 
     try {
         proto = lookupProtocolImpl(protocol);

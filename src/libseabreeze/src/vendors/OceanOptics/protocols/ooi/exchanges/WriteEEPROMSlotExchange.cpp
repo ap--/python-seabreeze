@@ -38,12 +38,12 @@ using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 using std::vector;
 
-WriteEEPROMSlotExchange::WriteEEPROMSlotExchange(int slot, const vector<byte>& data) {
+WriteEEPROMSlotExchange::WriteEEPROMSlotExchange(int slot, const vector<unsigned char>& data) {
     vector<ProtocolHint *> *requestHints = new vector<ProtocolHint *>;
 
     requestHints->push_back(new ControlHint());
 
-    vector<byte> *requestBuffer = new vector<byte>(2 + MAX_EEPROM_SLOT_DATA_LENGTH, 0x00);
+    vector<unsigned char> *requestBuffer = new vector<unsigned char>(2 + MAX_EEPROM_SLOT_DATA_LENGTH, 0x00);
     requestBuffer->at(0) = OpCodes::OP_SETINFO;
     requestBuffer->at(1) = (byte) slot;
 

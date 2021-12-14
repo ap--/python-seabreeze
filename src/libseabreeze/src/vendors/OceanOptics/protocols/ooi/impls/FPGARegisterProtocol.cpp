@@ -72,7 +72,7 @@ unsigned int FPGARegisterProtocol::readRegister(const Bus &bus, byte address) {
         throw ProtocolException(string("Expected ByteVector from FPGARegisterReadExchange"));
     }
 
-    vector<byte> byteVec = bv->getByteVector();
+    vector<unsigned char> byteVec = bv->getByteVector();
     if(3 != byteVec.size()) {
         throw ProtocolException(string("Expected 3 bytes from FPGARegisterReadExchange"));
     }

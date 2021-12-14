@@ -61,7 +61,7 @@ EthernetConfigurationFeatureAdapter::~EthernetConfigurationFeatureAdapter()
 void EthernetConfigurationFeatureAdapter::get_MAC_Address(int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
 {
 
-    vector<byte> macAddressVector;
+    vector<unsigned char> macAddressVector;
 
     try 
 	{
@@ -80,7 +80,7 @@ void EthernetConfigurationFeatureAdapter::get_MAC_Address(int *errorCode, unsign
 void EthernetConfigurationFeatureAdapter::set_MAC_Address(int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6])
 {
 
-    vector<byte> *macAddressVector = new vector<byte>(6);
+    vector<unsigned char> *macAddressVector = new vector<unsigned char>(6);
     memcpy(&((*macAddressVector)[0]), macAddress, 6);
 
     try {

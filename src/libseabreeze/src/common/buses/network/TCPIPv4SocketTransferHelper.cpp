@@ -42,7 +42,7 @@ TCPIPv4SocketTransferHelper::~TCPIPv4SocketTransferHelper() {
      */
 }
 
-int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
+int TCPIPv4SocketTransferHelper::receive(vector<unsigned char> &buffer,
         unsigned int length) {
     
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];
@@ -74,7 +74,7 @@ int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
     return bytesRead;
 }
 
-int TCPIPv4SocketTransferHelper::send(const vector<byte> &buffer,
+int TCPIPv4SocketTransferHelper::send(const vector<unsigned char> &buffer,
         unsigned int length) const {
     
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];

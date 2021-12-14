@@ -52,9 +52,9 @@ OBPSpectrumProcessingProtocol::~OBPSpectrumProcessingProtocol() {
 
 unsigned short int OBPSpectrumProcessingProtocol::readSpectrumProcessingScansToAverage(const Bus &bus)
 {
-    vector<byte> *result = NULL;
+    vector<unsigned char> *result = NULL;
     unsigned short int scansToAverage;
-    byte *bptr;
+    unsigned char *bptr;
         
     OBPGetScansToAverageExchange xchange;
     
@@ -74,7 +74,7 @@ unsigned short int OBPSpectrumProcessingProtocol::readSpectrumProcessingScansToA
     }
     
     // queryDevice returns a byte stream, turn that into a float... mind our endians.
-    bptr = (byte *)&scansToAverage;
+    bptr = (unsigned char *)&scansToAverage;
     for(unsigned int j = 0; j < sizeof(unsigned short int); j++) {
         bptr[j] = (*result)[j];
     }
@@ -108,7 +108,7 @@ void OBPSpectrumProcessingProtocol::writeSpectrumProcessingScansToAverage(
 
 unsigned char OBPSpectrumProcessingProtocol::readSpectrumProcessingBoxcarWidth(const Bus &bus)
 {
-    vector<byte> *result = NULL;
+    vector<unsigned char> *result = NULL;
     unsigned char boxcarWidth;
     
     OBPGetBoxcarWidthExchange xchange;

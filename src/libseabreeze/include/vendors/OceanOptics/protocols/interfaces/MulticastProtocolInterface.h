@@ -60,11 +60,11 @@ namespace seabreeze {
 		/**
 		*  Get the  group address.
 		*/
-		virtual std::vector<byte> getGroupAddress(const Bus &bus, unsigned char interfaceIndex) = 0;
+		virtual std::vector<unsigned char> getGroupAddress(const Bus &bus, unsigned char interfaceIndex) = 0;
 		/**
 		*  Set the  group address.
 		*/
-		virtual void setGroupAddress(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> groupAddress) = 0;
+		virtual void setGroupAddress(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> groupAddress) = 0;
 #endif
     };
 

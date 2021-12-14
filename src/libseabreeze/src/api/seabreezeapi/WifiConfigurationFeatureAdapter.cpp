@@ -164,7 +164,7 @@ void WifiConfigurationFeatureAdapter::setSSID(int *errorCode, unsigned char inte
 void WifiConfigurationFeatureAdapter::setPassPhrase(int *errorCode, unsigned char interfaceIndex, const unsigned char *passPhrase, unsigned char passPhraseLength)
 {
 
-    vector<byte> *passPhraseVector = new vector<byte>(passPhraseLength);
+    vector<unsigned char> *passPhraseVector = new vector<unsigned char>(passPhraseLength);
     memcpy(&((*passPhraseVector)[0]), passPhrase, passPhraseLength);
 
     try {

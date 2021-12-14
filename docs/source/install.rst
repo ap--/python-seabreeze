@@ -127,4 +127,3 @@ to pip and then you should be able to install via:
 .. code:: bash
 
     pip3 install seabreeze
-

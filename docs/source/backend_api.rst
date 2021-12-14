@@ -390,4 +390,3 @@ SeaBreezeFeatures
 
 .. autoclass:: SeaBreezeI2CMasterFeature
     :members:
-

@@ -104,6 +104,9 @@ class USBTransportDeviceInUse(Exception):
     pass
 
 
+DeviceIdentity = Tuple[int, int, int, int]
+
+
 # this can and should be opaque to pyseabreeze
 class USBTransportHandle:
     def __init__(self, pyusb_device):
@@ -115,7 +118,7 @@ class USBTransportHandle:
         """
         self.pyusb_device = pyusb_device
         # noinspection PyUnresolvedReferences
-        self.identity = (
+        self.identity: DeviceIdentity = (
             pyusb_device.idVendor,
             pyusb_device.idProduct,
             pyusb_device.bus,

@@ -1,5 +1,6 @@
 import weakref
 from functools import partialmethod
+from typing import Tuple
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.protocol import ProtocolInterface
@@ -8,8 +9,8 @@ from seabreeze.pyseabreeze.protocol import ProtocolInterface
 class SeaBreezeFeature:
     identifier = "base_feature"
 
-    _required_kwargs = ()
-    _required_features = ()
+    _required_kwargs: Tuple[str, ...] = ()
+    _required_features: Tuple[str, ...] = ()
     _required_protocol_cls = ProtocolInterface
 
     def __init__(self, protocol, feature_id, **kwargs):

@@ -11,6 +11,7 @@ import weakref
 
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice, _model_class_registry
 from seabreeze.pyseabreeze.transport import (
+    DeviceIdentity,
     USBTransport,
     USBTransportDeviceInUse,
     USBTransportError,
@@ -20,7 +21,9 @@ from seabreeze.pyseabreeze.transport import (
 __all__ = ["SeaBreezeAPI"]
 
 # create only one SeaBreezeDevice instance per handle
-_seabreeze_device_instance_registry = weakref.WeakValueDictionary()
+_seabreeze_device_instance_registry: weakref.WeakValueDictionary[
+    DeviceIdentity, SeaBreezeDevice
+] = weakref.WeakValueDictionary()
 
 
 def _seabreeze_device_factory(device):

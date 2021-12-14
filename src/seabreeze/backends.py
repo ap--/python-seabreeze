@@ -1,6 +1,8 @@
 import logging
 import sys
 import warnings
+from typing import Any
+from typing import Dict
 
 if sys.version_info >= (3, 8):
     from typing import Literal
@@ -16,7 +18,7 @@ class BackendConfig:
     requested = "cseabreeze"  # default is cseabreeze
     available = ("cseabreeze", "pyseabreeze")
     allow_fallback = False
-    api_kwargs = {}  # for pytests
+    api_kwargs: Dict[str, Any] = {}  # for pytests
 
 
 def use(

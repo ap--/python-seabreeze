@@ -49,8 +49,6 @@ Windows
 
 """
 from seabreeze._version import __version__
-
-# noinspection PyUnresolvedReferences
 from seabreeze.backends import use
 
 __author__ = "Andreas Poehlmann"

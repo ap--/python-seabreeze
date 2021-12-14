@@ -33,4 +33,3 @@ _Step by step instructions to reproduce the error. The more detailed the better,
 ```python
 copy of minimal code example and error messages
 ```
-

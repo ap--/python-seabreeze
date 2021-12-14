@@ -7,22 +7,10 @@ import importlib
 import inspect
 import logging
 import warnings
-from functools import partial
+from functools import partialmethod
 
 import usb.core
 import usb.util
-
-try:
-    from functools import partialmethod
-except ImportError:
-    # https://gist.github.com/carymrobbins/8940382
-    # noinspection PyPep8Naming
-    class partialmethod(partial):
-        def __get__(self, instance, owner):
-            if instance is None:
-                return self
-            args, kwargs = self.args or (), self.keywords or {}
-            return partial(self.func, instance, *args, **kwargs)
 
 
 class TransportInterface:

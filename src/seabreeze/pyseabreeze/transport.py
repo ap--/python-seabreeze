@@ -8,6 +8,8 @@ import inspect
 import logging
 import warnings
 from functools import partialmethod
+from typing import Dict
+from typing import Tuple
 
 import usb.core
 import usb.util
@@ -15,7 +17,7 @@ import usb.util
 
 class TransportInterface:
 
-    _required_init_kwargs = ()
+    _required_init_kwargs: Tuple[str, ...] = ()
 
     def open_device(self, device):
         """open a seabreeze device
@@ -151,7 +153,7 @@ class USBTransport(TransportInterface):
 
     _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")
     vendor_id = 0x2457
-    product_ids = {}
+    product_ids: Dict[int, str] = {}
 
     # add logging
     _log = logging.getLogger(__name__)
@@ -333,7 +335,7 @@ class USBTransport(TransportInterface):
                 )
 
 
-_pyusb_backend_instances = {}
+_pyusb_backend_instances: Dict[str, usb.backend.IBackend] = {}
 
 
 def get_pyusb_backend_from_name(name):

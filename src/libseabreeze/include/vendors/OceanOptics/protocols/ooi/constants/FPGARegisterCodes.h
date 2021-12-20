@@ -50,29 +50,29 @@ namespace seabreeze {
             */
             class Base {
             public:
-                static const byte FIRMWARE_VERSION;
-                static const byte SINGLE_STROBE_HIGH_CLOCK_TRANSITION_DELAY_COUNT;
-                static const byte SINGLE_STROBE_LOW_CLOCK_TRANSITION_DELAY_COUNT;
-                static const byte LAMP_ENABLE;
-                static const byte GPIO_MUX_REGISTER;
-                static const byte GPIO_OUTPUT_ENABLE;
-                static const byte GPIO_DATA_REGISTER;
-                static const byte OFFSET_VALUE;
-                static const byte OFFSET_CONTROL;
-                static const byte MAXIMUM_SATURATION_LEVEL;
+                static const unsigned char FIRMWARE_VERSION;
+                static const unsigned char SINGLE_STROBE_HIGH_CLOCK_TRANSITION_DELAY_COUNT;
+                static const unsigned char SINGLE_STROBE_LOW_CLOCK_TRANSITION_DELAY_COUNT;
+                static const unsigned char LAMP_ENABLE;
+                static const unsigned char GPIO_MUX_REGISTER;
+                static const unsigned char GPIO_OUTPUT_ENABLE;
+                static const unsigned char GPIO_DATA_REGISTER;
+                static const unsigned char OFFSET_VALUE;
+                static const unsigned char OFFSET_CONTROL;
+                static const unsigned char MAXIMUM_SATURATION_LEVEL;
 
             };
 
             class V1 : public Base {
             public:
-                static const byte CONTINUOUS_STROBE_TIMER_INTERVAL_DIVISOR;
-                static const byte CONTINUOUS_STROBE_BASE_CLOCK_DIVISOR;
+                static const unsigned char CONTINUOUS_STROBE_TIMER_INTERVAL_DIVISOR;
+                static const unsigned char CONTINUOUS_STROBE_BASE_CLOCK_DIVISOR;
             };
 
             class V3 : public Base {
             public:
-                static const byte CONTINUOUS_STROBE_TIMER_MSB;
-                static const byte CONTINUOUS_STROBE_TIMER_LSB;
+                static const unsigned char CONTINUOUS_STROBE_TIMER_MSB;
+                static const unsigned char CONTINUOUS_STROBE_TIMER_LSB;
             };
         }
     }

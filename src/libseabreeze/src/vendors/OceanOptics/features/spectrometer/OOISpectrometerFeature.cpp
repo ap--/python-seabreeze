@@ -100,14 +100,14 @@ vector<double> *OOISpectrometerFeature::getFormattedSpectrum(const Protocol &pro
     return retval;
 }
 
-vector<byte> *OOISpectrometerFeature::getUnformattedSpectrum(
+vector<unsigned char> *OOISpectrometerFeature::getUnformattedSpectrum(
         const Protocol &protocol, const Bus &bus) {
     LOG(__FUNCTION__);
     writeRequestUnformattedSpectrum(protocol, bus);
     return readUnformattedSpectrum(protocol, bus);
 }
 
-vector<byte> *OOISpectrometerFeature::getFastBufferSpectrum(
+vector<unsigned char> *OOISpectrometerFeature::getFastBufferSpectrum(
 	const Protocol &protocol, const Bus &bus, unsigned int numberOfSamplesToRetrieve) {
 	LOG(__FUNCTION__);
 	writeRequestFastBufferSpectrum(protocol, bus, numberOfSamplesToRetrieve);
@@ -208,7 +208,7 @@ void OOISpectrometerFeature::writeRequestFastBufferSpectrum(const Protocol &prot
 	}
 }
 
-vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &protocol,
+vector<unsigned char> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &protocol,
         const Bus &bus) {
     LOG(__FUNCTION__);
     // logger.debug("starting OOISpectrometerFeature::readUnformattedSpectrum");
@@ -226,7 +226,7 @@ vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &pr
         throw FeatureProtocolNotFoundException(error);
     }
 
-    vector<byte> *retval;
+    vector<unsigned char> *retval;
 
     try {
         retval = spec->readUnformattedSpectrum(bus);
@@ -241,7 +241,7 @@ vector<byte> *OOISpectrometerFeature::readUnformattedSpectrum(const Protocol &pr
     return retval;
 }
 
-vector<byte> *OOISpectrometerFeature::readFastBufferSpectrum(const Protocol &protocol,
+vector<unsigned char> *OOISpectrometerFeature::readFastBufferSpectrum(const Protocol &protocol,
 	const Bus &bus, unsigned int numberOfSamplesToRetrieve) {
 	LOG(__FUNCTION__);
 	// logger.debug("starting OOISpectrometerFeature::readUnformattedSpectrum");
@@ -260,7 +260,7 @@ vector<byte> *OOISpectrometerFeature::readFastBufferSpectrum(const Protocol &pro
 		throw FeatureProtocolNotFoundException(error);
 	}
 
-	vector<byte> *retval;
+	vector<unsigned char> *retval;
 
 	try {
 		retval = spec->readFastBufferSpectrum(bus, numberOfSamplesToRetrieve);

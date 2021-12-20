@@ -40,14 +40,14 @@ namespace seabreeze {
     public:
         EEPROMSlotFeature(unsigned int numberOfSlots);
         virtual ~EEPROMSlotFeature();
-        virtual std::vector< std::vector<byte> * > *readAllEEPROMSlots(const Protocol &protocol,
+        virtual std::vector< std::vector<unsigned char> * > *readAllEEPROMSlots(const Protocol &protocol,
                 const Bus &bus);
 
         /* Overriding this to change its visibility */
-        virtual std::vector<byte> *readEEPROMSlot(const Protocol &protocol,
+        virtual std::vector<unsigned char> *readEEPROMSlot(const Protocol &protocol,
                 const Bus &bus, unsigned int slot);
         virtual int writeEEPROMSlot(const Protocol &protocol,
-                const Bus &bus, unsigned int slot, const std::vector<byte> &data);
+                const Bus &bus, unsigned int slot, const std::vector<unsigned char> &data);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

@@ -68,8 +68,8 @@ Data *TriggerModeExchange::transfer(TransferHelper *helper) {
     (*(this->buffer))[0] = OpCodes::OP_SETTRIGMODE;
 
     /* Then fill in the trigger mode, LSB first. */
-    (*(this->buffer))[1] = (byte)(this->triggerMode & 0x00000000FF);
-    (*(this->buffer))[2] = (byte)((this->triggerMode & 0x000000FF00) >> 8);
+    (*(this->buffer))[1] = (unsigned char)(this->triggerMode & 0x00000000FF);
+    (*(this->buffer))[2] = (unsigned char)((this->triggerMode & 0x000000FF00) >> 8);
 
     /* Now delegate to the superclass to move the buffer. */
     return Transfer::transfer(helper);

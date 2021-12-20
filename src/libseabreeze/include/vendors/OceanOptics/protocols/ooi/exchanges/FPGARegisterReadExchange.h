@@ -36,7 +36,7 @@ namespace seabreeze {
 
     class FPGARegisterReadExchange : public Transaction {
     public:
-        FPGARegisterReadExchange(byte address);
+        FPGARegisterReadExchange(unsigned char address);
         virtual ~FPGARegisterReadExchange();
     };
 

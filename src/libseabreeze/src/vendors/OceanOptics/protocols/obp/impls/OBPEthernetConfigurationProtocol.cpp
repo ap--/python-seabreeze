@@ -69,7 +69,7 @@ vector<unsigned char> OBPEthernetConfigurationProtocol::get_MAC_Address(const Bu
 	request.setInterfaceIndex(interfaceIndex);
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    vector<byte> *raw = request.queryDevice(helper);
+    vector<unsigned char> *raw = request.queryDevice(helper);
     if (NULL == raw) {
         string error("Expected queryDevice to produce a non-null result "
             "containing calibration data.  Without this data, it is not possible to "
@@ -77,7 +77,7 @@ vector<unsigned char> OBPEthernetConfigurationProtocol::get_MAC_Address(const Bu
         throw ProtocolException(error);
     }
 
-    vector<byte> result = *raw;
+    vector<unsigned char> result = *raw;
 
     delete raw;
 
@@ -127,7 +127,7 @@ unsigned char OBPEthernetConfigurationProtocol::get_GbE_Enable_Status(const Bus 
 	request.setInterfaceIndex(interfaceIndex);
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    vector<byte> *raw = request.queryDevice(helper);
+    vector<unsigned char> *raw = request.queryDevice(helper);
     if (NULL == raw) {
         string error("Expected queryDevice to produce a non-null result "
             "containing calibration data.  Without this data, it is not possible to "
@@ -135,7 +135,7 @@ unsigned char OBPEthernetConfigurationProtocol::get_GbE_Enable_Status(const Bus 
         throw ProtocolException(error);
     }
 
-    if(raw->size() < sizeof(byte)) {
+    if(raw->size() < sizeof(unsigned char)) {
         string error("Failed to get back expected number of bytes that should"
             " have held collection area.");
         delete raw;

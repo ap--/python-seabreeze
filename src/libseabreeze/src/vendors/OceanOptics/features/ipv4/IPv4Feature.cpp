@@ -61,7 +61,7 @@ unsigned char IPv4Feature::get_IPv4_DHCP_Enable_State(const Protocol &protocol, 
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
-	byte enableStatus;
+	unsigned char enableStatus;
 
 	try {
 		proto = lookupProtocolImpl(protocol);
@@ -119,7 +119,7 @@ unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
-	byte numberOfAddresses;
+	unsigned char numberOfAddresses;
 
 	try {
 		proto = lookupProtocolImpl(protocol);
@@ -178,7 +178,7 @@ void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, uns
     }
 }
 
-vector<byte> IPv4Feature::get_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
+vector<unsigned char> IPv4Feature::get_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 
 	vector<unsigned char> data;

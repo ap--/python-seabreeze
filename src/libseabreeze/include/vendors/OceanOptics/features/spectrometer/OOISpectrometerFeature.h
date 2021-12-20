@@ -55,10 +55,10 @@ namespace seabreeze {
                 const Bus &bus);
 		
         /* Request and read out the raw spectrum data stream */
-        virtual std::vector<byte> *getUnformattedSpectrum(const Protocol &protocol,
+        virtual std::vector<unsigned char> *getUnformattedSpectrum(const Protocol &protocol,
                 const Bus &bus);
 
-		virtual std::vector<byte> *getFastBufferSpectrum(const Protocol &protocol,
+		virtual std::vector<unsigned char> *getFastBufferSpectrum(const Protocol &protocol,
 			const Bus &bus, unsigned int numberOfSamplesToRetrieve);
 
         /* Request and read out the wavelengths in nanometers as a vector of doubles */
@@ -66,10 +66,10 @@ namespace seabreeze {
                 const Bus &bus);
 
         /* Read the raw spectrum data stream.  No request is made first. */
-        virtual std::vector<byte> *readUnformattedSpectrum(const Protocol &protocol,
+        virtual std::vector<unsigned char> *readUnformattedSpectrum(const Protocol &protocol,
                 const Bus &bus);
 
-		virtual std::vector<byte> *readFastBufferSpectrum(const Protocol &protocol,
+		virtual std::vector<unsigned char> *readFastBufferSpectrum(const Protocol &protocol,
 			const Bus &bus, unsigned int numberOfSamplesToReceive);
 
         /* Set the integration time of the spectrometer */

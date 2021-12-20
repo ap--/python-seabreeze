@@ -139,7 +139,7 @@ unsigned char gpioFeatureAdapter::getEGPIO_NumberOfPins(int *errorCode)
 unsigned char gpioFeatureAdapter::getEGPIO_AvailableModes(int *errorCode, unsigned char pinNumber, unsigned char *availableModes, unsigned char maximumModeCount )
 {
 
-	vector<byte> availableModesVector;
+	vector<unsigned char> availableModesVector;
 
 	try
 	{

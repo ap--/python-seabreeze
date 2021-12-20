@@ -72,7 +72,7 @@ unsigned char OBPI2CMasterProtocol::i2cMasterGetNumberOfBuses(const Bus &bus)
     }
 
     /* This transfer() may cause a ProtocolException to be thrown. */
-    vector<byte> *raw = request.queryDevice(helper);
+    vector<unsigned char> *raw = request.queryDevice(helper);
     if (NULL == raw) {
         string error("Expected to produce a non-null result "
             "containing the number of i2c buses.  Without this data, it is not possible to continue.");
@@ -110,14 +110,14 @@ std::vector<unsigned char> OBPI2CMasterProtocol::i2cMasterReadBus(const Bus &bus
 	request.setNumberOfBytes(numberOfBytes);
 
 	/* This transfer() may cause a ProtocolException to be thrown. */
-	vector<byte> *raw = request.queryDevice(helper);
+	vector<unsigned char> *raw = request.queryDevice(helper);
 	if (NULL == raw) {
 		string error("Expected queryDevice to produce a non-null result "
 			"containing calibration data.  Without this data, it is not possible to continue.");
 		throw ProtocolException(error);
 	}
 
-	vector<byte> result = *raw;
+	vector<unsigned char> result = *raw;
 
 	delete raw;
 
@@ -140,7 +140,7 @@ unsigned short OBPI2CMasterProtocol::i2cMasterWriteBus(const Bus &bus, unsigned 
 	request.dataToWrite(writeData);
 
 	/* This transfer() may cause a ProtocolException to be thrown. */
-	vector<byte> *raw = request.queryDevice(helper);
+	vector<unsigned char> *raw = request.queryDevice(helper);
 	if (NULL == raw) {
 		string error("Expected to produce a non-null result "
 			"containing the number of i2c buses.  Without this data, it is not possible to continue.");

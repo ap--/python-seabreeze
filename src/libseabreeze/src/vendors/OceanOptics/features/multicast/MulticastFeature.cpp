@@ -124,7 +124,7 @@ unsigned char MulticastFeature::getEnableState(const Protocol &protocol, const B
 {
 	MulticastProtocolInterface *multicastPI = NULL;
 	ProtocolHelper *proto;
-	byte enableStatus;
+	unsigned char enableStatus;
 
     try {
         proto = lookupProtocolImpl(protocol);

@@ -61,7 +61,7 @@ DHCPServerFeatureAdapter::~DHCPServerFeatureAdapter()
 void DHCPServerFeatureAdapter::getServerAddress(int *errorCode, unsigned char interfaceIndex, unsigned char (*serverAddress)[4], unsigned char *netMask)
 {
 
-    vector<byte> serverAddressVector;
+    vector<unsigned char> serverAddressVector;
 
     try 
 	{
@@ -80,7 +80,7 @@ void DHCPServerFeatureAdapter::getServerAddress(int *errorCode, unsigned char in
 void DHCPServerFeatureAdapter::setServerAddress(int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask)
 {
 
-    vector<byte> *serverAddressVector = new vector<byte>(4);
+    vector<unsigned char> *serverAddressVector = new vector<unsigned char>(4);
     memcpy(&((*serverAddressVector)[0]), serverAddress, 4);
 
     try {

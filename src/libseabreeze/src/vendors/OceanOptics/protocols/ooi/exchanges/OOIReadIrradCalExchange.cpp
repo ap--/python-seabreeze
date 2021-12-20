@@ -61,13 +61,13 @@ OOIReadIrradCalExchange::OOIReadIrradCalExchange(int numberOfPixels)
         vector<ProtocolHint *> *responseHints = new vector<ProtocolHint *>;
 
         /* create buffer for bytes of response */
-        vector<byte> *responseBuffer = new vector<byte>;
+        vector<unsigned char> *responseBuffer = new vector<unsigned char>;
 
         /* resize the response buffer to hold 60 bytes */
         responseBuffer->resize(BLOCK_TRANSFER_SIZE);
 
         /* create buffer for holding the bytes of the request */
-        vector<byte> *requestBuffer = new vector<byte>;
+        vector<unsigned char> *requestBuffer = new vector<unsigned char>;
 
         /* resize the request buffer to hold a request */
         requestBuffer->resize(3);
@@ -79,8 +79,8 @@ OOIReadIrradCalExchange::OOIReadIrradCalExchange(int numberOfPixels)
         responseHints->push_back(new ControlHint());
 
         (*(requestBuffer))[0] = OpCodes::OP_READ_IRRAD_CAL;
-        (*(requestBuffer))[1] = (byte)( (addr) & 0x00FF);
-        (*(requestBuffer))[2] = (byte)((addr>>8) & 0x00FF);
+        (*(requestBuffer))[1] = (unsigned char)( (addr) & 0x00FF);
+        (*(requestBuffer))[2] = (unsigned char)((addr>>8) & 0x00FF);
 
         Transfer *request = new Transfer(requestHints,
             requestBuffer, Transfer::TO_DEVICE, 3);

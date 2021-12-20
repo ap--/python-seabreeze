@@ -55,7 +55,7 @@ namespace seabreeze
 			unsigned char interfaceIndex,
 			unsigned char enableState);
 #if 0
-		virtual std::vector<byte> getGroupAddress(
+		virtual std::vector<unsigned char> getGroupAddress(
 			const Protocol &protocol,
 			const Bus &bus, 
 			unsigned char interfaceIndex);
@@ -63,7 +63,7 @@ namespace seabreeze
 			const Protocol &protocol, 
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> macAddress);
+			const std::vector<unsigned char> macAddress);
 #endif
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();

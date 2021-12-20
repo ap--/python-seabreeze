@@ -51,7 +51,7 @@ unsigned char OBPGetFastBufferingEnableExchange::queryBufferingEnable(
         TransferHelper *helper) {
 
     unsigned char isEnabled;
-    vector<byte> *result;
+    vector<unsigned char> *result;
 
     result = this->queryDevice(helper);
     if(NULL == result || result->size() < 1) {

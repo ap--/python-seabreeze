@@ -54,8 +54,8 @@ Data *MayaProSpectrumExchange::transfer(TransferHelper *helper) {
 
     unsigned int i;
     Data *xfer;
-    byte lsb;
-    byte msb;
+    unsigned char lsb;
+    unsigned char msb;
     double maxIntensity;
     double saturationLevel;
     double scalingFactor;

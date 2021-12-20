@@ -46,7 +46,7 @@ unsigned int SaturationEEPROMSlotFeature::getSaturation(const Protocol &protocol
     
     unsigned int saturation;
 
-    vector<byte> *slot = readEEPROMSlot(protocol, bus, this->autonullingSlot);
+    vector<unsigned char> *slot = readEEPROMSlot(protocol, bus, this->autonullingSlot);
     
     if(NULL == slot || slot->size() < 6) {
         if(NULL != slot) {

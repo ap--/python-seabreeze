@@ -36,7 +36,7 @@ namespace seabreeze {
 
     class FPGARegisterWriteExchange : public Transfer {
     public:
-        FPGARegisterWriteExchange(byte address, unsigned short value);
+        FPGARegisterWriteExchange(unsigned char address, unsigned short value);
         virtual ~FPGARegisterWriteExchange();
     };
 

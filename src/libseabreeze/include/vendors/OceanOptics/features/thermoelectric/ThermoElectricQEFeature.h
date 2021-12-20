@@ -58,7 +58,7 @@ namespace seabreeze {
         virtual bool initialize(const Protocol &protocol, const Bus &bus);
 
     private:
-        std::vector<byte> *readTECDefaults(const Protocol &protocol,
+        std::vector<unsigned char> *readTECDefaults(const Protocol &protocol,
                 const Bus &bus);
     };
 

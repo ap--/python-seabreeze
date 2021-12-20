@@ -70,18 +70,18 @@ namespace seabreeze {
         /**
          * Get the IPv4 gateway for the indexed interface
          */
-        virtual std::vector<byte> get_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex) = 0;
+        virtual std::vector<unsigned char> get_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex) = 0;
 
         /**
          *  Set the gateway address for indexed interface
          */
-        virtual void set_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> IPv4_Gateway_Address) = 0;
+        virtual void set_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> IPv4_Gateway_Address) = 0;
             
             
         /**
          *  Add an IPv4 address to the indexed interface
          */
-        virtual void add_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> IPv4_Address, unsigned char netMask) = 0;
+        virtual void add_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> IPv4_Address, unsigned char netMask) = 0;
 
        /**
          *  Remove and IPv4 address from the indexed interface

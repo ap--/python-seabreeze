@@ -74,7 +74,7 @@ OOISpectrometerProtocol::~OOISpectrometerProtocol() {
     delete this->triggerModeExchange;
 }
 
-vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus) {
+vector<unsigned char> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus) {
     LOG(__FUNCTION__);
 
     Data *result;
@@ -98,7 +98,7 @@ vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus) {
 
     ByteVector *bv = static_cast<ByteVector *>(result);
 
-    vector<byte> *retval = new vector<byte > (bv->getByteVector());
+    vector<unsigned char> *retval = new vector<unsigned char> (bv->getByteVector());
 
     delete result;
 
@@ -111,7 +111,7 @@ vector<byte> *OOISpectrometerProtocol::readUnformattedSpectrum(const Bus &bus) {
     return retval;
 }
 
-vector<byte> *OOISpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve) {
+vector<unsigned char> *OOISpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve) {
 	LOG(__FUNCTION__);
 
 	Data *result;
@@ -135,7 +135,7 @@ vector<byte> *OOISpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, un
 
 	ByteVector *bv = static_cast<ByteVector *>(result);
 
-	vector<byte> *retval = new vector<byte >(bv->getByteVector());
+	vector<unsigned char> *retval = new vector<unsigned char>(bv->getByteVector());
 
 	delete result;
 

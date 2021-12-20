@@ -45,7 +45,7 @@ WriteEEPROMSlotExchange::WriteEEPROMSlotExchange(int slot, const vector<unsigned
 
     vector<unsigned char> *requestBuffer = new vector<unsigned char>(2 + MAX_EEPROM_SLOT_DATA_LENGTH, 0x00);
     requestBuffer->at(0) = OpCodes::OP_SETINFO;
-    requestBuffer->at(1) = (byte) slot;
+    requestBuffer->at(1) = (unsigned char) slot;
 
     for (unsigned i = 0; i < data.size(); i++) {
         requestBuffer->at(i + 2) = data[i];

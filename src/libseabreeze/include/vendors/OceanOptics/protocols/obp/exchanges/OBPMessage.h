@@ -56,11 +56,11 @@ namespace seabreeze {
         std::vector<unsigned char> *toByteStream();
         std::vector<unsigned char> *getData();
         unsigned int getBytesRemaining();
-        byte getChecksumType();
+        unsigned char getChecksumType();
         unsigned short getErrno();
         unsigned short getFlags();
         std::vector<unsigned char> *getImmediateData();
-        byte getImmediateDataLength();
+        unsigned char getImmediateDataLength();
         unsigned int getMessageType();
         std::vector<unsigned char> *getPayload();
         unsigned short getProtocolVersion();
@@ -71,12 +71,12 @@ namespace seabreeze {
 
         void setAckRequestedFlag();
         void setBytesRemaining(unsigned int bytesRemaining);
-        void setChecksumType(byte checksumType);
+        void setChecksumType(unsigned char checksumType);
         void setData(std::vector<unsigned char> *data);
         void setErrorNumber(unsigned short errorNumber);
         void setFlags(unsigned short flags);
         void setImmediateData(std::vector<unsigned char> *immediateData);
-        void setImmediateDataLength(byte immediateDataLength);
+        void setImmediateDataLength(unsigned char immediateDataLength);
         void setMessageType(unsigned int messageType);
         void setPayload(std::vector<unsigned char> *payload);
         void setProtocolVersion(unsigned short protocolVersion);
@@ -90,8 +90,8 @@ namespace seabreeze {
         unsigned short errorNumber;
         unsigned int messageType;
         unsigned int regarding;
-        byte checksumType;
-        byte immediateDataLength;
+        unsigned char checksumType;
+        unsigned char immediateDataLength;
         std::vector<unsigned char> *immediateData;
         unsigned int bytesRemaining;
         std::vector<unsigned char> *payload;

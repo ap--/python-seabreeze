@@ -65,8 +65,8 @@ void OBPIntegrationTimeExchange::setIntegrationTimeMicros(
      */
     this->integrationTime_usec = intTime_usec / this->integrationTimeBase_usec;
 
-    this->payload[0] = (byte) (this->integrationTime_usec & 0x00FF);
-    this->payload[1] = (byte) ((this->integrationTime_usec >> 8) & 0x00FF);
-    this->payload[2] = (byte) ((this->integrationTime_usec >> 16) & 0x00FF);
-    this->payload[3] = (byte) ((this->integrationTime_usec >> 24) & 0x00FF);
+    this->payload[0] = (unsigned char) (this->integrationTime_usec & 0x00FF);
+    this->payload[1] = (unsigned char) ((this->integrationTime_usec >> 8) & 0x00FF);
+    this->payload[2] = (unsigned char) ((this->integrationTime_usec >> 16) & 0x00FF);
+    this->payload[3] = (unsigned char) ((this->integrationTime_usec >> 24) & 0x00FF);
 }

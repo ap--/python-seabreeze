@@ -36,7 +36,7 @@ using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 using std::vector;
 
-FPGARegisterReadExchange::FPGARegisterReadExchange(byte address) {
+FPGARegisterReadExchange::FPGARegisterReadExchange(unsigned char address) {
 
     vector<ProtocolHint *> *requestHints  = new vector<ProtocolHint *>;
     vector<ProtocolHint *> *responseHints = new vector<ProtocolHint *>;

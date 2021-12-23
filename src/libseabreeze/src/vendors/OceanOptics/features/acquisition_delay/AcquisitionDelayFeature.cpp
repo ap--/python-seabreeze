@@ -114,4 +114,3 @@ FeatureFamily AcquisitionDelayFeature::getFeatureFamily() {
 
     return families.ACQUISITION_DELAY;
 }
-

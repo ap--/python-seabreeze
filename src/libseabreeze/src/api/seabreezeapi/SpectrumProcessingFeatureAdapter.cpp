@@ -59,14 +59,14 @@ SpectrumProcessingFeatureAdapter::~SpectrumProcessingFeatureAdapter() {
 
 unsigned char SpectrumProcessingFeatureAdapter::readSpectrumProcessingBoxcarWidth(int *errorCode) {
     unsigned char returnValue;
-    
+
     // no memory allocated, just pass it through
     try {
         returnValue=this->feature->readSpectrumProcessingBoxcarWidth(*this->protocol, *this->bus);
         SET_ERROR_CODE(ERROR_SUCCESS);
     }
     catch (FeatureException &fe) {
-        returnValue=-1; 
+        returnValue=-1;
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
     return returnValue;
@@ -75,7 +75,7 @@ unsigned char SpectrumProcessingFeatureAdapter::readSpectrumProcessingBoxcarWidt
 
 unsigned short int SpectrumProcessingFeatureAdapter::readSpectrumProcessingScansToAverage(int *errorCode) {
     unsigned short int returnValue;
-    
+
     // no memory allocated, just pass it through
     try {
         returnValue=this->feature->readSpectrumProcessingScansToAverage(*this->protocol, *this->bus);
@@ -119,4 +119,3 @@ void SpectrumProcessingFeatureAdapter::writeSpectrumProcessingBoxcarWidth(int *e
 
     return;
 }
-

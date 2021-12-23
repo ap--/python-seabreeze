@@ -53,7 +53,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
 OBPGPIOProtocol::OBPGPIOProtocol()
-        : GPIOProtocolInterface(new OceanBinaryProtocol()) 
+        : GPIOProtocolInterface(new OceanBinaryProtocol())
 {
 
 }

@@ -84,4 +84,3 @@ vector<double> *OBPWaveCalProtocol::readWavelengthCoeffs(const Bus &bus) {
 
     return retval;
 }
-

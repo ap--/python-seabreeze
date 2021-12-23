@@ -43,13 +43,13 @@ using namespace std;
 EthernetConfigurationFeatureAdapter::EthernetConfigurationFeatureAdapter(
         EthernetConfigurationFeatureInterface *intf, const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<EthernetConfigurationFeatureInterface>(intf, f, p, b, instanceIndex) 
+        : FeatureAdapterTemplate<EthernetConfigurationFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
 
-EthernetConfigurationFeatureAdapter::~EthernetConfigurationFeatureAdapter() 
+EthernetConfigurationFeatureAdapter::~EthernetConfigurationFeatureAdapter()
 {
     /* This is just a wrapper around existing instances -- nothing to delete */
 }
@@ -63,15 +63,15 @@ void EthernetConfigurationFeatureAdapter::get_MAC_Address(int *errorCode, unsign
 
     vector<unsigned char> macAddressVector;
 
-    try 
+    try
 	{
         macAddressVector = this->feature->get_MAC_Address(*this->protocol, *this->bus, interfaceIndex);
 
         memcpy(macAddress, &(macAddressVector[0]), 6);
 
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
-	catch (FeatureException &fe) 
+    }
+	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
@@ -95,7 +95,7 @@ void EthernetConfigurationFeatureAdapter::set_MAC_Address(int *errorCode, unsign
 }
 
 
-unsigned char EthernetConfigurationFeatureAdapter::get_GbE_Enable_Status(int *errorCode, unsigned char interfaceIndex) 
+unsigned char EthernetConfigurationFeatureAdapter::get_GbE_Enable_Status(int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char enableStatus = 0;
     try {
@@ -107,13 +107,13 @@ unsigned char EthernetConfigurationFeatureAdapter::get_GbE_Enable_Status(int *er
     return enableStatus;
 }
 
-void EthernetConfigurationFeatureAdapter::set_GbE_Enable_Status(int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus) 
+void EthernetConfigurationFeatureAdapter::set_GbE_Enable_Status(int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus)
 {
-    try 
+    try
 	{
         this->feature->set_GbE_Enable_Status(*this->protocol, *this->bus, interfaceIndex, enableStatus);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);

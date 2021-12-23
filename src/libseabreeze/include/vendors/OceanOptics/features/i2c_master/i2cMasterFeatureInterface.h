@@ -50,12 +50,12 @@ namespace seabreeze {
 			unsigned char busIndex,
 			unsigned char slaveAddress,
 			unsigned short numberOfBytes) = 0;
-		
+
 		virtual unsigned short i2cMasterWriteBus(
 			const Protocol &protocol,
 			const Bus &bus,
-			unsigned char busIndex, 
-			unsigned char slaveAddress, 
+			unsigned char busIndex,
+			unsigned char slaveAddress,
 			const std::vector<unsigned char> writeData) = 0;
     };
 
@@ -64,4 +64,3 @@ namespace seabreeze {
 }
 
 #endif /* I2CMASTERFEATUREINTERFACE_H */
-

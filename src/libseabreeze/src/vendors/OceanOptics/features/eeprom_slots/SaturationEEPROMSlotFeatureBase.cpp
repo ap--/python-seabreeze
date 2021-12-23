@@ -52,7 +52,7 @@ bool SaturationEEPROMSlotFeatureBase::initialize(const Protocol &protocol,
     } catch (FeatureException &fe) {
         this->valid = false;
     }
-    
+
     return true;
 }
 
@@ -60,7 +60,7 @@ unsigned int SaturationEEPROMSlotFeatureBase::getSaturation() {
     if(false == this->valid) {
         throw FeatureException("Saturation level not properly initialized");
     }
-    
+
     return this->saturation;
 }
 

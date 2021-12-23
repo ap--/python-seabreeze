@@ -43,8 +43,8 @@ namespace seabreeze {
                 : public FeatureAdapterTemplate<IntrospectionFeatureInterface> {
         public:
             IntrospectionFeatureAdapter(IntrospectionFeatureInterface *intf,
-                const FeatureFamily &f, 
-				Protocol *p, 
+                const FeatureFamily &f,
+				Protocol *p,
 				Bus *b,
                 unsigned short instanceIndex);
 
@@ -61,4 +61,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* INTROSPECTION_FEATURE_ADAPTER_H */
-

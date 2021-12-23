@@ -38,16 +38,16 @@ SaturationEEPROMSlotFeature::SaturationEEPROMSlotFeature(int slot) {
 }
 
 SaturationEEPROMSlotFeature::~SaturationEEPROMSlotFeature() {
-    
+
 }
 
 unsigned int SaturationEEPROMSlotFeature::getSaturation(const Protocol &protocol,
         const Bus &bus) {
-    
+
     unsigned int saturation;
 
     vector<unsigned char> *slot = readEEPROMSlot(protocol, bus, this->autonullingSlot);
-    
+
     if(NULL == slot || slot->size() < 6) {
         if(NULL != slot) {
             delete slot;
@@ -58,7 +58,6 @@ unsigned int SaturationEEPROMSlotFeature::getSaturation(const Protocol &protocol
     saturation = ((*slot)[4] & 0x00FF) | (((*slot)[5] & 0x00FF) << 8);
 
     delete slot;
-    
+
     return saturation;
 }
-        

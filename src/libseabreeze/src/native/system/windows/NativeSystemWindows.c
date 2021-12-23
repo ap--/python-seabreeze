@@ -49,14 +49,14 @@ int systemInitialize() {
     WSADATA wsaData;
     WORD wVersionRequested;
     int err;
-    
+
     wVersionRequested = MAKEWORD(2, 2);
     err = WSAStartup(wVersionRequested, &wsaData);
     if(0 != err) {
         /* Unable to find suitable WinSock implementation. */
         return -1;
     }
-    
+
     return 0;
 }
 

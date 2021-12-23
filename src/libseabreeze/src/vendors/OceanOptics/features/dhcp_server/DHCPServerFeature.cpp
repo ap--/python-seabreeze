@@ -42,17 +42,17 @@ using namespace std;
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-DHCPServerFeature::DHCPServerFeature(vector<ProtocolHelper *> helpers) 
+DHCPServerFeature::DHCPServerFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }
 }
 
-DHCPServerFeature::~DHCPServerFeature() 
+DHCPServerFeature::~DHCPServerFeature()
 {
 
 }
@@ -63,12 +63,12 @@ void DHCPServerFeature::getServerAddress(const Protocol &protocol, const Bus &bu
 	DHCPServerProtocolInterface *DHCPServerPI = NULL;
     ProtocolHelper *proto;
 
-    try 
+    try
     {
         proto = lookupProtocolImpl(protocol);
 		DHCPServerPI = static_cast<DHCPServerProtocolInterface *>(proto);
-    } 
-	catch (FeatureProtocolNotFoundException &e) 
+    }
+	catch (FeatureProtocolNotFoundException &e)
 	{
         string error(
         "Could not find matching protocol implementation to get calibration.");
@@ -76,11 +76,11 @@ void DHCPServerFeature::getServerAddress(const Protocol &protocol, const Bus &bu
         throw FeatureProtocolNotFoundException(error);
     }
 
-    try 
+    try
 	{
         DHCPServerPI->getServerAddress(bus, interfaceIndex, serverAddress, netMask);
-    } 
-	catch (ProtocolException &pe) 
+    }
+	catch (ProtocolException &pe)
 	{
         string error("Caught protocol exception: ");
         error += pe.what();

@@ -45,7 +45,7 @@ namespace seabreeze {
     public:
         DHCPServerProtocolInterface(Protocol *protocol);
         virtual ~DHCPServerProtocolInterface();
-	
+
         /**
          * Get the DHCP server address from the device.
          */

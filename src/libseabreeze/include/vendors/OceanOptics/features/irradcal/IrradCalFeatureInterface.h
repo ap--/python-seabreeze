@@ -43,7 +43,7 @@ namespace seabreeze {
     class IrradCalFeatureInterface {
     public:
         virtual ~IrradCalFeatureInterface() = 0;
-        
+
         virtual std::vector<float> *readIrradCalibration(const Protocol &protocol,
             const Bus &bus) = 0;
         virtual int writeIrradCalibration(const Protocol &protocol,

@@ -43,7 +43,7 @@ OBPSetGPIOExtensionModeExchange::OBPSetGPIOExtensionModeExchange()
 
     this->messageType = OBPMessageTypes::OBP_SET_EGPIO_MODE;
 
-    this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned char) + sizeof(float)); 
+    this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned char) + sizeof(float));
 }
 
 OBPSetGPIOExtensionModeExchange::~OBPSetGPIOExtensionModeExchange()

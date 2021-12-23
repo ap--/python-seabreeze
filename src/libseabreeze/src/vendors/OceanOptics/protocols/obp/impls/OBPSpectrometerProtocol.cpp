@@ -146,7 +146,7 @@ vector<unsigned char> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bu
     TransferHelper *helper;
 
     helper = bus.getHelper(this->readUnformattedSpectrumExchange->getHints());
-    if (NULL == helper) 
+    if (NULL == helper)
 	{
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
@@ -155,7 +155,7 @@ vector<unsigned char> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bu
     /* This transfer() may cause a ProtocolException to be thrown. */
     result = this->readUnformattedSpectrumExchange->transfer(helper);
 
-    if (NULL == result) 
+    if (NULL == result)
 	{
         string error("Got NULL when expecting spectral data which was unexpected.");
         throw ProtocolException(error);
@@ -181,7 +181,7 @@ vector<unsigned char> *OBPSpectrometerProtocol::readFastBufferSpectrum(const Bus
 	TransferHelper *helper;
 
 	helper = bus.getHelper(this->readFastBufferSpectrumExchange->getHints());
-	if (NULL == helper) 
+	if (NULL == helper)
 	{
 		string error("Failed to find a helper to bridge given protocol and bus.");
 		throw ProtocolBusMismatchException(error);
@@ -308,7 +308,7 @@ void OBPSpectrometerProtocol::requestFastBufferSpectrum(const Bus &bus, unsigned
 		string error("Failed to find a helper to bridge given protocol and bus.");
 		throw ProtocolBusMismatchException(error);
 	}
-	
+
 	// workaround for setting the number of samples to be taken by the buffered get spectrum in the Flame X
 	// See transfer.h for more details
 	this->requestFastBufferSpectrumExchange->setParametersFunction(this->requestFastBufferSpectrumExchange, numberOfSamplesToRetrieve);

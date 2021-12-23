@@ -53,4 +53,3 @@ void OBPDataBufferRemoveOldestExchange::setNumberOfSpectraToRemove(unsigned int 
 {
 	memcpy(&(this->payload[0]), &numberOfSpectra, sizeof(unsigned int));
 }
-

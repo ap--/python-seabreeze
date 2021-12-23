@@ -55,16 +55,16 @@ unsigned short int OBPSpectrumProcessingProtocol::readSpectrumProcessingScansToA
     vector<unsigned char> *result = NULL;
     unsigned short int scansToAverage;
     unsigned char *bptr;
-        
+
     OBPGetScansToAverageExchange xchange;
-    
+
     TransferHelper *helper = bus.getHelper(xchange.getHints());
-    if(NULL == helper) 
+    if(NULL == helper)
     {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
-    
+
     result = xchange.queryDevice(helper);
     if(NULL == result) {
         string error("Expected queryDevice to produce a non-null result "
@@ -72,7 +72,7 @@ unsigned short int OBPSpectrumProcessingProtocol::readSpectrumProcessingScansToA
             "continue.");
         throw ProtocolException(error);
     }
-    
+
     // queryDevice returns a byte stream, turn that into a float... mind our endians.
     bptr = (unsigned char *)&scansToAverage;
     for(unsigned int j = 0; j < sizeof(unsigned short int); j++) {
@@ -110,16 +110,16 @@ unsigned char OBPSpectrumProcessingProtocol::readSpectrumProcessingBoxcarWidth(c
 {
     vector<unsigned char> *result = NULL;
     unsigned char boxcarWidth;
-    
+
     OBPGetBoxcarWidthExchange xchange;
-    
+
     TransferHelper *helper = bus.getHelper(xchange.getHints());
-    if(NULL == helper) 
+    if(NULL == helper)
     {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
-    
+
     result = xchange.queryDevice(helper);
     if(NULL == result) {
         string error("Expected queryDevice to produce a non-null result "
@@ -127,10 +127,10 @@ unsigned char OBPSpectrumProcessingProtocol::readSpectrumProcessingBoxcarWidth(c
             "continue.");
         throw ProtocolException(error);
     }
-        
-    boxcarWidth=(*result)[0]; 
+
+    boxcarWidth=(*result)[0];
     delete result;
-    
+
     return boxcarWidth;
 }
 
@@ -156,4 +156,3 @@ void OBPSpectrumProcessingProtocol::writeSpectrumProcessingBoxcarWidth(
         throw ProtocolException(error);
     }
 }
-

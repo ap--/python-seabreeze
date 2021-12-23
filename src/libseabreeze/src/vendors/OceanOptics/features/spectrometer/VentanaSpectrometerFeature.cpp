@@ -69,7 +69,7 @@ VentanaSpectrometerFeature::VentanaSpectrometerFeature() {
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(obpProtocol);
 
@@ -97,4 +97,3 @@ vector<double> *VentanaSpectrometerFeature::getWavelengths(const Protocol &proto
 
     return wavecal.readWavelengths(protocol, bus);
 }
-

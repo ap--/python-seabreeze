@@ -59,7 +59,7 @@ bool System::initialize() {
     if(0 == result) {
         return true;
     }
-    
+
     return false;
 }
 

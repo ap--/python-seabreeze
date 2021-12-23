@@ -48,4 +48,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_OOIIRRADCALEXCHANGE_H */
-

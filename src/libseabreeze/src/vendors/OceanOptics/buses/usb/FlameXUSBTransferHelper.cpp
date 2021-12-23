@@ -51,10 +51,10 @@ int FlameXUSBTransferHelper::receive(vector<unsigned char> &buffer,
     if(0 != (length % WORD_SIZE_BYTES)) {
         vector<unsigned char> *inBuffer;
         int paddedLength;
-        
+
         paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));
         inBuffer = new vector<unsigned char>(paddedLength);
-        
+
         int result = USBTransferHelper::receive(*inBuffer, paddedLength);
         if(result != paddedLength) {
             string error("Failed to read padded message length: ");
@@ -73,7 +73,7 @@ int FlameXUSBTransferHelper::receive(vector<unsigned char> &buffer,
 
 int FlameXUSBTransferHelper::send(const std::vector<unsigned char> &buffer,
         unsigned int length) const {
-    
+
     if(0 != (length % WORD_SIZE_BYTES)) {
         /* Pad up to a multiple of the word size */
         int paddedLength = length + (WORD_SIZE_BYTES - (length % WORD_SIZE_BYTES));

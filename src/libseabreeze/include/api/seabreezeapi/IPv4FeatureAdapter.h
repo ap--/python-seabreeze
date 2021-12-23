@@ -36,13 +36,13 @@
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
 #include "vendors/OceanOptics/features/ipv4/IPv4FeatureInterface.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace api 
+    namespace api
     {
 
         class IPv4FeatureAdapter
-                : public FeatureAdapterTemplate<IPv4FeatureInterface> 
+                : public FeatureAdapterTemplate<IPv4FeatureInterface>
 		{
         	public:
             	IPv4FeatureAdapter(IPv4FeatureInterface *intf, const FeatureFamily &f, Protocol *p, Bus *b, unsigned short instanceIndex);

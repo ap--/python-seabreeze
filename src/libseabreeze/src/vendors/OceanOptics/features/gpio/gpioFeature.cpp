@@ -46,7 +46,7 @@ GPIOFeature::GPIOFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }

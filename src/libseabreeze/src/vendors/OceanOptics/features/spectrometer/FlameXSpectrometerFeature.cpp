@@ -56,20 +56,20 @@ const long FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
 const long FlameXSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
 FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *introspection, FlameXFastBufferFeature *fastBuffer ) {
-    
+
 	myIntrospection = introspection;
 	myFastBuffer = fastBuffer;
 
     this->numberOfPixels = 2136;
 	this->numberOfBytesPerPixel = sizeof(unsigned short);
     this->maxIntensity = 65535;
-	
+
     this->integrationTimeMinimum = FlameXSpectrometerFeature::INTEGRATION_TIME_MINIMUM;
     this->integrationTimeMaximum = FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = FlameXSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    for(int i = 14; i <= 29; i++) 
+    for(int i = 14; i <= 29; i++)
 	{
         this->electricDarkPixelIndices.push_back(i);
     }
@@ -85,11 +85,11 @@ FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *intro
 
 	OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-	OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+	OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
-	
+
 	this->protocols.push_back(obpProtocol);
-    
+
 	this->triggerModes.push_back(
 		new SpectrometerTriggerMode(SPECTROMETER_TRIGGER_MODE_NORMAL));
 	this->triggerModes.push_back(
@@ -131,11 +131,11 @@ bool FlameXSpectrometerFeature::initialize(const Protocol &protocol, const Bus &
 		this->activePixelIndices = *(myIntrospection->getActivePixelRanges(protocol, bus));
 		this->electricDarkPixelIndices = *(myIntrospection->getElectricDarkPixelRanges(protocol, bus));
 		this->opticalDarkPixelIndices = *(myIntrospection->getOpticalDarkPixelRanges(protocol, bus));
-		
-		for(unsigned int i=0; i<this->protocols.size();i++) 
+
+		for(unsigned int i=0; i<this->protocols.size();i++)
 		{
 			ProtocolHelper *myProtocolHelper = this->protocols[i];
-			
+
 			if (myProtocolHelper->getProtocol().equals(protocol))
 			{
 
@@ -153,16 +153,14 @@ bool FlameXSpectrometerFeature::initialize(const Protocol &protocol, const Bus &
 				OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
 				OBPSpectrometerProtocol *anOBP = (OBPSpectrometerProtocol *)myProtocolHelper;
-				
-				anOBP->Initialize(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+
+				anOBP->Initialize(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 					requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
 
 			}
 		}
-		
+
 		result = true;
 	}
 	return result;
 }
-
-

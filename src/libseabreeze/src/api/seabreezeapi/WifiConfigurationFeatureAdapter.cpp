@@ -43,13 +43,13 @@ using namespace std;
 WifiConfigurationFeatureAdapter::WifiConfigurationFeatureAdapter(
         WifiConfigurationFeatureInterface *intf, const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<WifiConfigurationFeatureInterface>(intf, f, p, b, instanceIndex) 
+        : FeatureAdapterTemplate<WifiConfigurationFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
 
-WifiConfigurationFeatureAdapter::~WifiConfigurationFeatureAdapter() 
+WifiConfigurationFeatureAdapter::~WifiConfigurationFeatureAdapter()
 {
     /* This is just a wrapper around existing instances -- nothing to delete */
 }
@@ -58,7 +58,7 @@ WifiConfigurationFeatureAdapter::~WifiConfigurationFeatureAdapter()
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-unsigned char WifiConfigurationFeatureAdapter::getMode(int *errorCode, unsigned char interfaceIndex) 
+unsigned char WifiConfigurationFeatureAdapter::getMode(int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char mode = 0;
     try {
@@ -70,20 +70,20 @@ unsigned char WifiConfigurationFeatureAdapter::getMode(int *errorCode, unsigned 
     return mode;
 }
 
-void WifiConfigurationFeatureAdapter::setMode(int *errorCode, unsigned char interfaceIndex, unsigned char mode) 
+void WifiConfigurationFeatureAdapter::setMode(int *errorCode, unsigned char interfaceIndex, unsigned char mode)
 {
-    try 
+    try
 	{
         this->feature->setMode(*this->protocol, *this->bus, interfaceIndex, mode);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 }
 
-unsigned char WifiConfigurationFeatureAdapter::getSecurityType(int *errorCode, unsigned char interfaceIndex) 
+unsigned char WifiConfigurationFeatureAdapter::getSecurityType(int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char securityType = 0;
     try {
@@ -95,13 +95,13 @@ unsigned char WifiConfigurationFeatureAdapter::getSecurityType(int *errorCode, u
     return securityType;
 }
 
-void WifiConfigurationFeatureAdapter::setSecurityType(int *errorCode, unsigned char interfaceIndex, unsigned char securityType) 
+void WifiConfigurationFeatureAdapter::setSecurityType(int *errorCode, unsigned char interfaceIndex, unsigned char securityType)
 {
-    try 
+    try
 	{
         this->feature->setSecurityType(*this->protocol, *this->bus, interfaceIndex, securityType);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
@@ -113,13 +113,13 @@ unsigned char WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned 
 
     vector<unsigned char> ssidVector;
 
-    try 
+    try
 	{
 
 		ssidVector = this->feature->getSSID(*this->protocol, *this->bus, interfaceIndex);
 		// remove the null termination
 		//ssidVector.resize(std::find(ssidVector.begin(), ssidVector.end(), 0) - ssidVector.begin());
-        
+
         // can't use c++11 yet
         unsigned char index;
         for(index = 0; index<ssidVector.size(); index++)
@@ -130,14 +130,14 @@ unsigned char WifiConfigurationFeatureAdapter::getSSID(int *errorCode, unsigned 
         	}
         }
         ssidVector.resize(index);
-        
+
         memcpy(ssid, &ssidVector[0], ssidVector.size());
 
         SET_ERROR_CODE(ERROR_SUCCESS);
 		return ssidVector.size() & 0xFF;
 
-    } 
-	catch (FeatureException &fe) 
+    }
+	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 		return 0;
@@ -177,4 +177,3 @@ void WifiConfigurationFeatureAdapter::setPassPhrase(int *errorCode, unsigned cha
 
     }
 }
-

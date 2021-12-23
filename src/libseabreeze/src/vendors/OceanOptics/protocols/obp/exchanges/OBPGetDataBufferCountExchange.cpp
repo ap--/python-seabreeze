@@ -67,4 +67,3 @@ unsigned long OBPGetDataBufferElementCountExchange::queryNumberOfElements(
 
     return elementCount;
 }
-

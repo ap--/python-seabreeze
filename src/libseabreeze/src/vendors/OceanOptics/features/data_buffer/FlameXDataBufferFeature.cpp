@@ -51,4 +51,3 @@ FlameXDataBufferFeature::FlameXDataBufferFeature() {
 FlameXDataBufferFeature::~FlameXDataBufferFeature() {
 
 }
-

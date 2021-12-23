@@ -55,7 +55,7 @@ namespace seabreeze {
 		virtual void setConsecutiveSampleCount(const Protocol &protocol, const Bus &bus,
 			const FastBufferIndex_t bufferIndex,
 			const FastBufferSampleCount_t consecutiveSampleCount) = 0;
-			
+
     };
 
     /* Default implementation for (otherwise) pure virtual destructor */
@@ -65,4 +65,3 @@ namespace seabreeze {
 
 
 #endif /* FASTBUFFERFEATUREINTERFACE_H */
-

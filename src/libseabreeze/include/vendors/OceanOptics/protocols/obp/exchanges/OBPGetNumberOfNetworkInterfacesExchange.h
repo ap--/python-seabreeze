@@ -32,11 +32,11 @@
 
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace oceanBinaryProtocol 
+    namespace oceanBinaryProtocol
     {
-        class OBPGetNumberOfNetworkInterfacesExchange : public OBPQuery 
+        class OBPGetNumberOfNetworkInterfacesExchange : public OBPQuery
         {
         public:
             OBPGetNumberOfNetworkInterfacesExchange();

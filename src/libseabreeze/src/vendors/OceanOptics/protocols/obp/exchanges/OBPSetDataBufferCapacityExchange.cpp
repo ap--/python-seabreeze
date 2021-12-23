@@ -61,4 +61,3 @@ void OBPSetDataBufferCapacityExchange::setBufferCapacity(
         this->payload[i] = cptr[i];
     }
 }
-

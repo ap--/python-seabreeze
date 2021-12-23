@@ -43,7 +43,7 @@ using namespace std;
 gpioFeatureAdapter::gpioFeatureAdapter(
         gpioFeatureInterface *intf, const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<gpioFeatureInterface>(intf, f, p, b, instanceIndex) 
+        : FeatureAdapterTemplate<gpioFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
@@ -86,11 +86,11 @@ unsigned int gpioFeatureAdapter::getGPIO_OutputEnableVector(int *errorCode)
 
 void gpioFeatureAdapter::setGPIO_OutputEnableVector(int *errorCode, unsigned int outputEnableVector, unsigned int bitMask)
 {
-    try 
+    try
 	{
         this->feature->setGPIO_OutputEnableVector(*this->protocol, *this->bus, outputEnableVector, bitMask);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
@@ -240,4 +240,3 @@ void gpioFeatureAdapter::setEGPIO_Value(int *errorCode, unsigned char pinNumber,
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 	}
 }
-

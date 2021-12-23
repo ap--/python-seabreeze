@@ -46,7 +46,7 @@ i2cMasterFeature::i2cMasterFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }
@@ -59,7 +59,7 @@ i2cMasterFeature::~i2cMasterFeature()
 
 unsigned char i2cMasterFeature::i2cMasterGetNumberOfBuses(const Protocol &protocol, const Bus &bus)
 {
-	
+
 	I2CMasterProtocolInterface *i2cMasterPI = NULL;
 	ProtocolHelper *proto;
 	unsigned char numberOfBuses;

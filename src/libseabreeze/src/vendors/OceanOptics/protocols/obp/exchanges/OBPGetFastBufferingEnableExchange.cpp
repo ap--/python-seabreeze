@@ -64,4 +64,3 @@ unsigned char OBPGetFastBufferingEnableExchange::queryBufferingEnable(
 
     return isEnabled;
 }
-

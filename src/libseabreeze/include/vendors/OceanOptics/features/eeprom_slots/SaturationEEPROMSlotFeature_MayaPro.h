@@ -33,7 +33,7 @@
 #include <vector>
 
 namespace seabreeze {
-    
+
     /* This class is intended specifically for getting the saturation level
      * from a MayaPro or devices that are closely related to it.
      */
@@ -42,16 +42,16 @@ namespace seabreeze {
     public:
         SaturationEEPROMSlotFeature_MayaPro(int slot);
         virtual ~SaturationEEPROMSlotFeature_MayaPro();
-        
+
     protected:
         /* Inherited from SaturationEEPROMSlotFeatureBase */
         virtual unsigned int getSaturation(const Protocol &protocol,
                 const Bus &bus);
-        
+
     private:
         int saturationSlot;
     };
-    
+
 } /* end namespace seabreeze */
 
 #endif /* SATURATIONEEPROMSLOTFEATURE_MAYAPRO_H */

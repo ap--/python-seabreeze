@@ -44,7 +44,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
 OBPDHCPServerProtocol::OBPDHCPServerProtocol()
-        : DHCPServerProtocolInterface(new OceanBinaryProtocol()) 
+        : DHCPServerProtocolInterface(new OceanBinaryProtocol())
 {
 
 }
@@ -75,7 +75,7 @@ void OBPDHCPServerProtocol::getServerAddress(const Bus &bus, unsigned char inter
             "containing a DHCP server address and netmask.  Without this data, it is not possible to continue.");
         throw ProtocolException(error);
     }
-	
+
 	// can't use c++11 yet
 	// serverAddress.assign(raw->cbegin(), prev(raw->cend()));
 	serverAddress->assign(raw->begin(), raw->end()-1);

@@ -36,7 +36,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPSaveNetworkInterfaceConnectionSettingsExchange::OBPSaveNetworkInterfaceConnectionSettingsExchange() 
+OBPSaveNetworkInterfaceConnectionSettingsExchange::OBPSaveNetworkInterfaceConnectionSettingsExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
@@ -47,7 +47,7 @@ OBPSaveNetworkInterfaceConnectionSettingsExchange::OBPSaveNetworkInterfaceConnec
 	this->payload[0] = 0;  /* default state of device on startup */
 }
 
-OBPSaveNetworkInterfaceConnectionSettingsExchange::~OBPSaveNetworkInterfaceConnectionSettingsExchange() 
+OBPSaveNetworkInterfaceConnectionSettingsExchange::~OBPSaveNetworkInterfaceConnectionSettingsExchange()
 {
 
 }
@@ -56,4 +56,3 @@ void OBPSaveNetworkInterfaceConnectionSettingsExchange::setInterfaceIndex(unsign
 {
 	this->payload[0] = interfaceIndex;
 }
-

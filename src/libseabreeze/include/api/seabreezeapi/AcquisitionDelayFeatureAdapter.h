@@ -60,4 +60,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* SEABREEZE_ACQUISITION_DELAY_FEATURE_ADAPTER_H */
-

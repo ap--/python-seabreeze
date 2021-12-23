@@ -39,19 +39,19 @@ namespace seabreeze {
     class IPv4FeatureInterface {
     public:
         virtual ~IPv4FeatureInterface() = 0;
-			
+
 		virtual unsigned char get_IPv4_DHCP_Enable_State(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void set_IPv4_DHCP_Enable_State(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState) = 0;
 		virtual unsigned char get_Number_Of_IPv4_Addresses(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void get_IPv4_Address(
 			const Protocol &protocol,
@@ -62,21 +62,21 @@ namespace seabreeze {
 			unsigned char *netMask) = 0;
 		virtual std::vector<unsigned char> get_IPv4_Default_Gateway(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void set_IPv4_Default_Gateway(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> IPv4_Gateway_Address) = 0;
 		virtual void add_IPv4_Address(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> IPv4_Gateway_Address,
 			unsigned char netMask) = 0;
 		virtual void delete_IPv4_Address(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char addressIndex) = 0;
@@ -87,4 +87,3 @@ namespace seabreeze {
 }
 
 #endif /* IPV4FEATUREINTERFACE_H */
-

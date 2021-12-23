@@ -74,7 +74,7 @@ bool HR4000USB::open() {
 
         addHelper(controlHint, new OOIUSBControlTransferHelper(
                 (this->usb), endpointMap));
-        
+
         this->usb->clearStall(endpointMap.getLowSpeedInEP());
         this->usb->clearStall(endpointMap.getHighSpeedInEP());
         this->usb->clearStall(endpointMap.getHighSpeedIn2EP());

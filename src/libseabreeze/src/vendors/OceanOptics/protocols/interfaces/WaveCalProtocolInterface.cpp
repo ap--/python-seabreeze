@@ -40,4 +40,3 @@ WaveCalProtocolInterface::WaveCalProtocolInterface(Protocol *protocol)
 WaveCalProtocolInterface::~WaveCalProtocolInterface() {
 
 }
-

@@ -100,4 +100,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_TRANSFER_H */
-

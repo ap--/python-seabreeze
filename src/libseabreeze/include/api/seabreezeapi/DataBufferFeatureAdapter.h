@@ -61,4 +61,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* SEABREEZE_DATA_BUFFER_FEATURE_ADAPTER_H */
-

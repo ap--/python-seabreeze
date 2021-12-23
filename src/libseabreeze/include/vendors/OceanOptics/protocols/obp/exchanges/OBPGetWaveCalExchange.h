@@ -45,4 +45,3 @@ namespace seabreeze {
 }
 
 #endif /* OBPGETWAVECALEXCHANGE_H */
-

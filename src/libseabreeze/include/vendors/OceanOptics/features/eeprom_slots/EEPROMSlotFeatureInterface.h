@@ -56,4 +56,3 @@ namespace seabreeze {
 }
 
 #endif /* EEPROMSLOTFEATUREINTERFACE_H */
-

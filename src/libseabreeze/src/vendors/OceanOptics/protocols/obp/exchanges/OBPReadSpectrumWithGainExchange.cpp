@@ -51,7 +51,7 @@ OBPReadSpectrumWithGainExchange::~OBPReadSpectrumWithGainExchange() {
 }
 
 Data *OBPReadSpectrumWithGainExchange::transfer(TransferHelper *helper) {
-    
+
     unsigned int i;
     Data *xfer;
     double maxIntensity;
@@ -75,7 +75,7 @@ Data *OBPReadSpectrumWithGainExchange::transfer(TransferHelper *helper) {
     }
 
     maxIntensity = this->spectrometerFeature->getMaximumIntensity();
-    saturationLevel = this->spectrometerFeature->getSaturationLevel(); 
+    saturationLevel = this->spectrometerFeature->getSaturationLevel();
 
     /* Cast the formatted values so that we can get to the array of shorts */
     UShortVector *usv = static_cast<UShortVector *>(xfer);

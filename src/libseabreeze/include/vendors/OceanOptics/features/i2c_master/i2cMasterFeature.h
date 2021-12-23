@@ -36,7 +36,7 @@
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
     class i2cMasterFeature : public FeatureImpl, public i2cMasterFeatureInterface
@@ -55,12 +55,12 @@ namespace seabreeze
 			unsigned char busIndex,
 			unsigned char slaveAddress,
 			unsigned short numberOfBytes);
-		
+
 		virtual unsigned short i2cMasterWriteBus(
 			const Protocol &protocol,
 			const Bus &bus,
-			unsigned char busIndex, 
-			unsigned char slaveAddress, 
+			unsigned char busIndex,
+			unsigned char slaveAddress,
 			const std::vector<unsigned char> writeData);
 
         /* Overriding from Feature */
@@ -71,4 +71,3 @@ namespace seabreeze
 }
 
 #endif /* I2CMASTERFEATURE_H */
-

@@ -39,15 +39,15 @@
 #include "common/exceptions/ProtocolException.h"
 #include "common/protocols/ProtocolHelper.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
-    class GPIOProtocolInterface : public ProtocolHelper 
+    class GPIOProtocolInterface : public ProtocolHelper
 	{
     public:
 		GPIOProtocolInterface(Protocol *protocol);
         virtual ~GPIOProtocolInterface();
-	
+
         /**
          * Get the Number of GPIO pins
          */

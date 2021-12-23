@@ -44,7 +44,7 @@ OBPSetConsecutiveSampleCountExchange::OBPSetConsecutiveSampleCountExchange()
 
 	this->messageType = OBPMessageTypes::OBP_SET_BACK_TO_BACK_SAMPLE_COUNT;
 
-    this->payload.resize(sizeof(unsigned int)); 
+    this->payload.resize(sizeof(unsigned int));
 }
 
 OBPSetConsecutiveSampleCountExchange::~OBPSetConsecutiveSampleCountExchange()
@@ -56,4 +56,3 @@ void OBPSetConsecutiveSampleCountExchange::setConsecutiveSampleCount(unsigned in
 {
 	memcpy(&(this->payload[0]), &consecutiveSampleCount, sizeof(unsigned int));
 }
-

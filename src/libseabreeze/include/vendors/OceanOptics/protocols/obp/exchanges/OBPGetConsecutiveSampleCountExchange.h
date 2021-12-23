@@ -45,4 +45,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* OBPGETCONSECUTIVESAMPLECOUNTEXCHANGE_H */
-

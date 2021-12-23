@@ -36,10 +36,10 @@
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
-    class NetworkConfigurationFeature : public FeatureImpl, public NetworkConfigurationFeatureInterface 
+    class NetworkConfigurationFeature : public FeatureImpl, public NetworkConfigurationFeatureInterface
     {
     public:
         NetworkConfigurationFeature(std::vector<ProtocolHelper *> helpers);
@@ -50,23 +50,23 @@ namespace seabreeze
 			const Bus &bus);
 		virtual unsigned char getNetworkInterfaceConnectionType(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual unsigned char getNetworkInterfaceEnableState(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void setNetworkInterfaceEnableState(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState);
 		virtual unsigned char runNetworkInterfaceSelfTest(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void saveNetworkInterfaceConnectionSettings(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex);
 
@@ -79,4 +79,3 @@ namespace seabreeze
 }
 
 #endif /* NETWORKCONFIGURATIONFEATURE_H */
-

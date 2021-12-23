@@ -43,7 +43,7 @@ namespace seabreeze {
         virtual ~OBPI2CMasterProtocol();
 
         /* Inherited from OBPI2CMasterProtocolInterface */
-        
+
         virtual unsigned char i2cMasterGetNumberOfBuses(const Bus &bus);
 
 		virtual std::vector<unsigned char> i2cMasterReadBus(const Bus &bus, unsigned char busIndex, unsigned char slaveAddress, unsigned short numberOfBytes);

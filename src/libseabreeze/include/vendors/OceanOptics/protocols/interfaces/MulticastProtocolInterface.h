@@ -45,7 +45,7 @@ namespace seabreeze {
     public:
 		MulticastProtocolInterface(Protocol *protocol);
         virtual ~MulticastProtocolInterface();
-	
+
         /**
          * Get the multicast enable state from the device.
          */

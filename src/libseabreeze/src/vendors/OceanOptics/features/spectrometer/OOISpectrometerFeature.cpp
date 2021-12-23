@@ -195,7 +195,7 @@ void OOISpectrometerFeature::writeRequestFastBufferSpectrum(const Protocol &prot
 		logger.error(error.c_str());
 		throw FeatureProtocolNotFoundException(error);
 	}
-	
+
 	try {
 		spec->requestFastBufferSpectrum(bus, numberOfSamplesToRetrieve);
 	}
@@ -405,4 +405,3 @@ FeatureFamily OOISpectrometerFeature::getFeatureFamily() {
 
     return families.SPECTROMETER;
 }
-

@@ -38,10 +38,10 @@ namespace seabreeze {
     public:
         TCPIPv4SocketTransferHelper(Socket *sock);
         virtual ~TCPIPv4SocketTransferHelper();
-        
+
         virtual int receive(std::vector<unsigned char> &buffer, unsigned int length);
         virtual int send(const std::vector<unsigned char> &buffer, unsigned int length) const;
-        
+
     protected:
         Socket *socket;
     };

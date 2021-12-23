@@ -68,7 +68,7 @@ unsigned short OBPIntrospectionProtocol::getNumberOfPixels(const Bus &bus)
 	if (countResult != 0)
 	{
 		// FIXME: The ocean binary protocol document states that the return value is an unsigned short,
-		//  however the command returns an unsigned int. 
+		//  however the command returns an unsigned int.
 		pixelCount = *reinterpret_cast<unsigned short *>(&(*countResult)[0]);
 		delete countResult;
 	}
@@ -81,27 +81,27 @@ std::vector<unsigned int> *OBPIntrospectionProtocol::getActivePixelRanges(const 
 	vector<unsigned char> *queryData = NULL;
 	vector<unsigned int> *retval = new vector<unsigned int>(0);
 	OBPGetActivePixelRangesExchange activePixelRangesExchange;
-	
+
 	TransferHelper *helper = bus.getHelper(activePixelRangesExchange.getHints());
-	if (NULL == helper) 
+	if (NULL == helper)
 	{
 		string error("Failed to find a helper to bridge given protocol and bus.");
 		throw ProtocolBusMismatchException(error);
 	}
 
 	queryData = activePixelRangesExchange.queryDevice(helper);
-	if (NULL == queryData) 
+	if (NULL == queryData)
 	{
 		string error("Expected Transfer::transfer to produce a non-null result "
 			"containing pixel pairs.  Without this data, it is not possible to "
 			"continue.");
 		throw ProtocolException(error);
 	}
-	else 
+	else
 	{
 		// the bytes must be transferred to integers for the return pixel index pairs
 		// data is little endian
-		for (unsigned int i = 0; i < queryData->size(); i=i+sizeof(unsigned int)) 
+		for (unsigned int i = 0; i < queryData->size(); i=i+sizeof(unsigned int))
 		{
 			retval->push_back(*reinterpret_cast<unsigned int *>((&(*queryData)[0] + i)));
 		}
@@ -177,6 +177,3 @@ std::vector<unsigned int> *OBPIntrospectionProtocol::getOpticalDarkPixelRanges(c
 	delete queryData;
 	return retval;
 }
-
-
-

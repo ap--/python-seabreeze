@@ -43,13 +43,13 @@ using namespace std;
 RawUSBBusAccessFeatureAdapter::RawUSBBusAccessFeatureAdapter(
         RawUSBBusAccessFeatureInterface *intf, const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<RawUSBBusAccessFeatureInterface>(intf, f, p, b, instanceIndex) 
+        : FeatureAdapterTemplate<RawUSBBusAccessFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
 
-RawUSBBusAccessFeatureAdapter::~RawUSBBusAccessFeatureAdapter() 
+RawUSBBusAccessFeatureAdapter::~RawUSBBusAccessFeatureAdapter()
 {
     /* This is just a wrapper around existing instances -- nothing to delete */
 }
@@ -57,13 +57,13 @@ RawUSBBusAccessFeatureAdapter::~RawUSBBusAccessFeatureAdapter()
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
-int RawUSBBusAccessFeatureAdapter::readUSB(int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) 
+int RawUSBBusAccessFeatureAdapter::readUSB(int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
 {
     int charactersCopied = 0;
 
     std::vector<unsigned char> data(bufferLength);
 
-    try 
+    try
     {
     	// FIXME: This is probably not any nastier than OOIUSBInterface *__seabreeze_getUSB
     	//        in SeaBreezeWrapper, but still, it takes the first bus and assumes
@@ -74,7 +74,7 @@ int RawUSBBusAccessFeatureAdapter::readUSB(int *errorCode, unsigned char *buffer
         memcpy(buffer, &((data)[0]), characters * sizeof(unsigned char));
 
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
     catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
@@ -83,7 +83,7 @@ int RawUSBBusAccessFeatureAdapter::readUSB(int *errorCode, unsigned char *buffer
     return charactersCopied;
 }
 
-int RawUSBBusAccessFeatureAdapter::writeUSB(int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) 
+int RawUSBBusAccessFeatureAdapter::writeUSB(int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
 {
     int charactersCopied = 0;
 
@@ -91,7 +91,7 @@ int RawUSBBusAccessFeatureAdapter::writeUSB(int *errorCode, unsigned char *buffe
     charVector->resize(bufferLength);
     memcpy(&((*charVector)[0]), buffer, bufferLength * sizeof(unsigned char));
 
-    try 
+    try
     {
         // FIXME: This is probably not any nastier than OOIUSBInterface *__seabreeze_getUSB
     	//        in SeaBreezeWrapper, but still, it takes the first bus and assumes
@@ -99,7 +99,7 @@ int RawUSBBusAccessFeatureAdapter::writeUSB(int *errorCode, unsigned char *buffe
         charactersCopied = this->feature->writeUSB(dynamic_cast<USBInterface *>(this->bus), endpoint, *charVector);
         delete charVector;
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
     catch (const FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
@@ -109,4 +109,3 @@ int RawUSBBusAccessFeatureAdapter::writeUSB(int *errorCode, unsigned char *buffe
 
     return charactersCopied;
 }
-

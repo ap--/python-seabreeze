@@ -128,13 +128,13 @@ namespace seabreeze {
             RevisionFeatureFamily();
             virtual ~RevisionFeatureFamily();
         };
-        
+
         class OpticalBenchFeatureFamily : public FeatureFamily {
         public:
             OpticalBenchFeatureFamily();
             virtual ~OpticalBenchFeatureFamily();
         };
-        
+
         class SpectrumProcessingFeatureFamily : public FeatureFamily {
         public:
             SpectrumProcessingFeatureFamily();
@@ -146,13 +146,13 @@ namespace seabreeze {
             StrayLightCoeffsFeatureFamily();
             virtual ~StrayLightCoeffsFeatureFamily();
         };
-        
+
         class RawUSBBusAccessFeatureFamily : public FeatureFamily {
         public:
             RawUSBBusAccessFeatureFamily();
             virtual ~RawUSBBusAccessFeatureFamily();
         };
-        
+
         class DataBufferFeatureFamily : public FeatureFamily {
         public:
             DataBufferFeatureFamily();
@@ -183,7 +183,7 @@ namespace seabreeze {
 			EthernetConfigurationFeatureFamily();
 			virtual ~EthernetConfigurationFeatureFamily();
 		};
-		
+
 		class MulticastFeatureFamily : public FeatureFamily {
 		public:
 			MulticastFeatureFamily();
@@ -195,7 +195,7 @@ namespace seabreeze {
 			IPv4FeatureFamily();
 			virtual ~IPv4FeatureFamily();
 		};
-		
+
 		class WifiConfigurationFeatureFamily : public FeatureFamily {
 		public:
 			WifiConfigurationFeatureFamily();
@@ -226,7 +226,7 @@ namespace seabreeze {
 			virtual ~I2CMasterFeatureFamily();
 		};
 
-		
+
         class FeatureFamilies {
         public:
             const UndefinedFeatureFamily UNDEFINED;
@@ -276,4 +276,3 @@ namespace seabreeze {
 }
 
 #endif
-

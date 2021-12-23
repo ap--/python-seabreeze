@@ -40,12 +40,12 @@ using namespace seabreeze::api;
 FastBufferFeatureAdapter::FastBufferFeatureAdapter(
     FastBufferFeatureInterface *intf, const FeatureFamily &f,
         Protocol *p, Bus *b, unsigned short instanceIndex)
-    : FeatureAdapterTemplate<FastBufferFeatureInterface>(intf, f, p, b, instanceIndex) 
+    : FeatureAdapterTemplate<FastBufferFeatureInterface>(intf, f, p, b, instanceIndex)
 {
-    
+
 }
 
-FastBufferFeatureAdapter::~FastBufferFeatureAdapter() 
+FastBufferFeatureAdapter::~FastBufferFeatureAdapter()
 {
 
 }
@@ -54,29 +54,29 @@ FastBufferFeatureAdapter::~FastBufferFeatureAdapter()
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-unsigned char FastBufferFeatureAdapter::getBufferingEnable(int *errorCode) 
+unsigned char FastBufferFeatureAdapter::getBufferingEnable(int *errorCode)
 {
     unsigned char retval;
 
-    try 
+    try
     {
         retval = this->feature->getBufferingEnable(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
         return retval;
-    } catch (FeatureException &fe) 
+    } catch (FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
     }
 }
 
-void FastBufferFeatureAdapter::setBufferingEnable(int *errorCode, unsigned char isEnabled) 
+void FastBufferFeatureAdapter::setBufferingEnable(int *errorCode, unsigned char isEnabled)
 {
-    try 
+    try
     {
         this->feature->setBufferingEnable(*this->protocol, *this->bus, 0, isEnabled);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } catch (FeatureException &fe) 
+    } catch (FeatureException &fe)
     {
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
@@ -111,4 +111,3 @@ void FastBufferFeatureAdapter::setConsecutiveSampleCount(int *errorCode, unsigne
 		SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
 	}
 }
-

@@ -61,8 +61,8 @@ Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper) {
     unsigned char lsb;
     unsigned char msb;
 
-    // Use the superclass to move the data into a local buffer. 
-    // This transfer() may cause a ProtocolException to be thrown. 
+    // Use the superclass to move the data into a local buffer.
+    // This transfer() may cause a ProtocolException to be thrown.
     xfer = Transfer::transfer(helper);
     if(NULL == xfer) {
         string error("FlameNIRSpectrumExchange::transfer: "
@@ -73,12 +73,12 @@ Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper) {
         throw ProtocolException(error);
     }
 
-    // At this point, this->buffer should have the raw spectrum data. 
+    // At this point, this->buffer should have the raw spectrum data.
 
-    // We would normally check for synchronization byte here, but Flame-NIR 
+    // We would normally check for synchronization byte here, but Flame-NIR
     // does not send one.
 
-    // Get a local variable by reference to point to that buffer 
+    // Get a local variable by reference to point to that buffer
     logger.debug("demarshalling");
     vector<unsigned short> formatted(this->numberOfPixels);
     for(i = 0; i < this->numberOfPixels; i++) {
@@ -89,21 +89,21 @@ Data *FlameNIRSpectrumExchange::transfer(TransferHelper *helper) {
 
     // confirm we can gain-adjust
     if(NULL == this->spectrometerFeature) {
-        // FIXME: should this throw an illegal state exception instead? 
+        // FIXME: should this throw an illegal state exception instead?
         return xfer;
     }
 
-    // xfer is just a copy of what is already stored in this, so delete it. 
+    // xfer is just a copy of what is already stored in this, so delete it.
     delete xfer;
 
     maxIntensity = this->spectrometerFeature->getMaximumIntensity();
     saturationLevel = this->spectrometerFeature->getSaturationLevel();
 
-    // Cast the formatted values so that we can get to the array of shorts 
+    // Cast the formatted values so that we can get to the array of shorts
     UShortVector *usv = new UShortVector(formatted);
     vector<unsigned short> shortVec = usv->getUShortVector();
 
-    // Create a local buffer to store the gain-adjusted values  
+    // Create a local buffer to store the gain-adjusted values
     vector<double> adjusted(this->numberOfPixels);
 
     for(i = 0; i < this->numberOfPixels; i++) {

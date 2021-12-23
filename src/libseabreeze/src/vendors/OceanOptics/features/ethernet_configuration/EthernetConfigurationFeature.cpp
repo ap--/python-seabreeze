@@ -42,17 +42,17 @@ using namespace std;
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-EthernetConfigurationFeature::EthernetConfigurationFeature(vector<ProtocolHelper *> helpers) 
+EthernetConfigurationFeature::EthernetConfigurationFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }
 }
 
-EthernetConfigurationFeature::~EthernetConfigurationFeature() 
+EthernetConfigurationFeature::~EthernetConfigurationFeature()
 {
 
 }
@@ -64,12 +64,12 @@ vector<unsigned char> EthernetConfigurationFeature::get_MAC_Address(const Protoc
 	EthernetConfigurationProtocolInterface *ethernetConfigurationPI = NULL;
     ProtocolHelper *proto;
 
-    try 
+    try
     {
         proto = lookupProtocolImpl(protocol);
 		ethernetConfigurationPI = static_cast<EthernetConfigurationProtocolInterface *>(proto);
-    } 
-	catch (FeatureProtocolNotFoundException &e) 
+    }
+	catch (FeatureProtocolNotFoundException &e)
 	{
         string error(
         "Could not find matching protocol implementation to get ethernet configuration.");
@@ -77,11 +77,11 @@ vector<unsigned char> EthernetConfigurationFeature::get_MAC_Address(const Protoc
         throw FeatureProtocolNotFoundException(error);
     }
 
-    try 
+    try
 	{
         data = ethernetConfigurationPI->get_MAC_Address(bus, interfaceIndex);
-    } 
-	catch (ProtocolException &pe) 
+    }
+	catch (ProtocolException &pe)
 	{
         string error("Caught protocol exception: ");
         error += pe.what();

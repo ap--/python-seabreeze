@@ -45,10 +45,10 @@ namespace seabreeze {
     public:
         FastBufferProtocolInterface(Protocol *protocol);
         virtual ~FastBufferProtocolInterface();
-                
+
 		virtual unsigned char getBufferingEnable(const Bus &bus,
                 unsigned char bufferIndex) = 0;
-                
+
         virtual void setBufferingEnable(const Bus &bus,
                 unsigned char bufferIndex,
                 const unsigned char isEnabled) = 0;
@@ -64,4 +64,3 @@ namespace seabreeze {
 } /* end namespace */
 
 #endif /*  DATABUFFERPROTOCOLINTERFACE_H */
-

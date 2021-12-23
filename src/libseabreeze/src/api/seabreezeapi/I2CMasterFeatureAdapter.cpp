@@ -43,7 +43,7 @@ using namespace std;
 
 I2CMasterFeatureAdapter::I2CMasterFeatureAdapter(
         i2cMasterFeatureInterface *intf, const FeatureFamily &f, Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<i2cMasterFeatureInterface>(intf, f, p, b, instanceIndex) 
+        : FeatureAdapterTemplate<i2cMasterFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
@@ -77,7 +77,7 @@ unsigned short  I2CMasterFeatureAdapter::i2cMasterReadBus(int *errorCode, unsign
     vector<unsigned char> i2cReadData;
 	unsigned short readDataLength = 0;
 
-    try 
+    try
 	{
         i2cReadData = this->feature->i2cMasterReadBus(*this->protocol, *this->bus, busIndex,slaveAddress, numberOfBytes);
 		readDataLength = (unsigned short)i2cReadData.size();
@@ -85,8 +85,8 @@ unsigned short  I2CMasterFeatureAdapter::i2cMasterReadBus(int *errorCode, unsign
         memcpy(&i2cReadData[0], readData, readDataLength);
 
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
-	catch (FeatureException &fe) 
+    }
+	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
@@ -109,6 +109,3 @@ unsigned short I2CMasterFeatureAdapter::i2cMasterWriteBus(int *errorCode, unsign
     }
 	return i2cWriteLength;
 }
-
-
-

@@ -56,4 +56,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_EXCHANGE_H */
-

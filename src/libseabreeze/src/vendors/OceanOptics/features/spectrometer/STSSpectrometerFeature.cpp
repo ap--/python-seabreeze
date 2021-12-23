@@ -58,7 +58,7 @@ STSSpectrometerFeature::STSSpectrometerFeature()
     this->integrationTimeMaximum = STSSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = STSSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = STSSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
-    
+
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             STSSpectrometerFeature::INTEGRATION_TIME_BASE);
 
@@ -72,7 +72,7 @@ STSSpectrometerFeature::STSSpectrometerFeature()
 	readFastBufferSpectrum = new OBPReadRawSpectrumExchange((this->numberOfPixels * 2) + 64, this->numberOfPixels);
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(obpProtocol);
 
@@ -125,4 +125,3 @@ vector<double> *STSSpectrometerFeature::getWavelengths(const Protocol &protocol,
 
     return wavelengths;
 }
-

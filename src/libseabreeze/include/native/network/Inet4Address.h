@@ -48,11 +48,11 @@ namespace seabreeze {
         Inet4Address(struct in_addr *ipAddr);
         Inet4Address(const Inet4Address &that);
         ~Inet4Address();
-        
+
         struct in_addr getAddress();
-        
+
         std::string getHostAddress();
-        
+
     private:
         struct in_addr in;
     };

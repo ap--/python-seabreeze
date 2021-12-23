@@ -50,7 +50,7 @@ OOISpectrometerProtocol::OOISpectrometerProtocol(
 	Transfer *readUnformattedSpectrum,
 	Transfer *requestFastBufferSpectrum,
 	Transfer *readFastBufferSpectrum,
-    TriggerModeExchange *triggerMode): SpectrometerProtocolInterface(new OOIProtocol()) 
+    TriggerModeExchange *triggerMode): SpectrometerProtocolInterface(new OOIProtocol())
 {
     this->integrationTimeExchange = integrationTime;
     this->requestFormattedSpectrumExchange = requestFormattedSpectrum;
@@ -60,7 +60,7 @@ OOISpectrometerProtocol::OOISpectrometerProtocol(
 	this->requestFastBufferSpectrumExchange = requestFastBufferSpectrum;
 	this->readFastBufferSpectrumExchange = readFastBufferSpectrum;
     this->triggerModeExchange = triggerMode;
-	
+
 }
 
 OOISpectrometerProtocol::~OOISpectrometerProtocol() {

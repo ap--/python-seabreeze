@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetFirmwareRevisionExchange::OBPGetFirmwareRevisionExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_FIRMWARE_REVISION;
-    this->payload.resize(0); 
+    this->payload.resize(0);
 }
 
 OBPGetFirmwareRevisionExchange::~OBPGetFirmwareRevisionExchange() {

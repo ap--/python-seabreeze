@@ -3,7 +3,7 @@
  * @date    March 2017
  * @author  Ocean Optics, Inc.
  *
- * This feature provides an interface to the spectral 
+ * This feature provides an interface to the spectral
  * data buffer in the Flame X.
  *
  * LICENSE:
@@ -46,4 +46,3 @@ namespace seabreeze {
 } /* end namespace */
 
 #endif /* FLAMEXDATABUFFERFEATURE_H */
-

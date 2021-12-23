@@ -57,4 +57,3 @@ namespace seabreeze {
 }
 
 #endif /* WAVELENGTHEEPROMSLOTFEATURE_H */
-

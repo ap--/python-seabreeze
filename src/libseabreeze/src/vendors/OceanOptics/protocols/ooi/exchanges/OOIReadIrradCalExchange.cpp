@@ -132,4 +132,3 @@ Data *OOIReadIrradCalExchange::transfer(TransferHelper *helper) {
 OOIReadIrradCalExchange::~OOIReadIrradCalExchange() {
 
 }
-

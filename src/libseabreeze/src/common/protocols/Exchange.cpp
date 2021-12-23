@@ -53,4 +53,3 @@ Exchange::~Exchange() {
 const vector<ProtocolHint *> &Exchange::getHints() {
     return *(this->hints);
 }
-

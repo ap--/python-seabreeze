@@ -36,7 +36,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPSetWifiConfigurationModeExchange::OBPSetWifiConfigurationModeExchange() 
+OBPSetWifiConfigurationModeExchange::OBPSetWifiConfigurationModeExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
@@ -46,7 +46,7 @@ OBPSetWifiConfigurationModeExchange::OBPSetWifiConfigurationModeExchange()
     this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned char)); // two bytes in immediate data
 }
 
-OBPSetWifiConfigurationModeExchange::~OBPSetWifiConfigurationModeExchange() 
+OBPSetWifiConfigurationModeExchange::~OBPSetWifiConfigurationModeExchange()
 {
 
 }
@@ -56,7 +56,7 @@ void OBPSetWifiConfigurationModeExchange::setInterfaceIndex(unsigned char interf
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPSetWifiConfigurationModeExchange::setMode(unsigned char mode) 
+void OBPSetWifiConfigurationModeExchange::setMode(unsigned char mode)
 {
 	this->payload[1] = mode;
 }

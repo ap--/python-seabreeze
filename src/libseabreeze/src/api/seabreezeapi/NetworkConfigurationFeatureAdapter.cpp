@@ -42,14 +42,14 @@ using namespace std;
 
 NetworkConfigurationFeatureAdapter::NetworkConfigurationFeatureAdapter(
 	NetworkConfigurationFeatureInterface *intf, const FeatureFamily &f,
-                    Protocol *p, Bus *b, unsigned short instanceIndex) 
-	: FeatureAdapterTemplate<NetworkConfigurationFeatureInterface>(intf, f, p, b, instanceIndex) 
+                    Protocol *p, Bus *b, unsigned short instanceIndex)
+	: FeatureAdapterTemplate<NetworkConfigurationFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
 
-NetworkConfigurationFeatureAdapter::~NetworkConfigurationFeatureAdapter() 
+NetworkConfigurationFeatureAdapter::~NetworkConfigurationFeatureAdapter()
 {
     /* This is just a wrapper around existing instances -- nothing to delete */
 }
@@ -84,7 +84,7 @@ unsigned char NetworkConfigurationFeatureAdapter::getNetworkInterfaceConnectionT
 	return interfaceType;
 }
 
-unsigned char NetworkConfigurationFeatureAdapter::getNetworkInterfaceEnableState(int *errorCode, unsigned char interfaceIndex) 
+unsigned char NetworkConfigurationFeatureAdapter::getNetworkInterfaceEnableState(int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char enableStatus = 0;
     try {
@@ -96,13 +96,13 @@ unsigned char NetworkConfigurationFeatureAdapter::getNetworkInterfaceEnableState
     return enableStatus;
 }
 
-void NetworkConfigurationFeatureAdapter::setNetworkInterfaceEnableState(int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus) 
+void NetworkConfigurationFeatureAdapter::setNetworkInterfaceEnableState(int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus)
 {
-    try 
+    try
 	{
         this->feature->setNetworkInterfaceEnableState(*this->protocol, *this->bus, interfaceIndex, enableStatus);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);

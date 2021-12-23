@@ -47,7 +47,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
 OBPIPv4Protocol::OBPIPv4Protocol()
-        : IPv4ProtocolInterface(new OceanBinaryProtocol()) 
+        : IPv4ProtocolInterface(new OceanBinaryProtocol())
 {
 
 }
@@ -78,7 +78,7 @@ void OBPIPv4Protocol::get_IPv4_Address(const Bus &bus, unsigned char interfaceIn
 
 	request.setInterfaceIndex(interfaceIndex);
 	request.setAddressIndex(addressIndex);
-	
+
     /* This transfer() may cause a ProtocolException to be thrown. */
     vector<unsigned char> *raw = request.queryDevice(helper);
     if (NULL == raw) {
@@ -107,7 +107,7 @@ vector<unsigned char> OBPIPv4Protocol::get_IPv4_Default_Gateway(const Bus &bus, 
     }
 
 	request.setInterfaceIndex(interfaceIndex);
-	
+
     /* This transfer() may cause a ProtocolException to be thrown. */
     vector<unsigned char> *raw = request.queryDevice(helper);
     if (NULL == raw) {

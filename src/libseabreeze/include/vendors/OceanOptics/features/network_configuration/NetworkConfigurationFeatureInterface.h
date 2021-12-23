@@ -45,23 +45,23 @@ virtual unsigned char getNumberOfNetworkInterfaces(
 			const Bus &bus) = 0;
 		virtual unsigned char getNetworkInterfaceConnectionType(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual unsigned char getNetworkInterfaceEnableState(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void setNetworkInterfaceEnableState(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState) = 0;
 		virtual unsigned char runNetworkInterfaceSelfTest(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void saveNetworkInterfaceConnectionSettings(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 
@@ -72,4 +72,3 @@ virtual unsigned char getNumberOfNetworkInterfaces(
 }
 
 #endif /* NETWORKCONFIGURATIONFEATUREINTERFACE_H */
-

@@ -42,17 +42,17 @@ using namespace std;
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-MulticastFeature::MulticastFeature(vector<ProtocolHelper *> helpers) 
+MulticastFeature::MulticastFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }
 }
 
-MulticastFeature::~MulticastFeature() 
+MulticastFeature::~MulticastFeature()
 {
 
 }
@@ -65,12 +65,12 @@ vector<unsigned char> MulticastFeature::getGroupAddress(const Protocol &protocol
 	MulticastProtocolInterface *multicastPI = NULL;
     ProtocolHelper *proto;
 
-    try 
+    try
     {
         proto = lookupProtocolImpl(protocol);
 		multicastPI = static_cast<MulticastProtocolInterface *>(proto);
-    } 
-	catch (FeatureProtocolNotFoundException &e) 
+    }
+	catch (FeatureProtocolNotFoundException &e)
 	{
         string error(
         "Could not find matching protocol implementation to get group address.");
@@ -78,11 +78,11 @@ vector<unsigned char> MulticastFeature::getGroupAddress(const Protocol &protocol
         throw FeatureProtocolNotFoundException(error);
     }
 
-    try 
+    try
 	{
         data = multicastPI->getGroupAddress(bus, interfaceIndex);
-    } 
-	catch (ProtocolException &pe) 
+    }
+	catch (ProtocolException &pe)
 	{
         string error("Caught protocol exception: ");
         error += pe.what();

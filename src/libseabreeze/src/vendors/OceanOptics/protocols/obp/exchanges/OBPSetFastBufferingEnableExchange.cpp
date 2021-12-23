@@ -37,7 +37,7 @@ using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
-OBPSetFastBufferingEnableExchange::OBPSetFastBufferingEnableExchange() 
+OBPSetFastBufferingEnableExchange::OBPSetFastBufferingEnableExchange()
 {
     this->hints->push_back(new OBPControlHint());
 
@@ -46,13 +46,12 @@ OBPSetFastBufferingEnableExchange::OBPSetFastBufferingEnableExchange()
     this->payload.resize(sizeof(char));
 }
 
-OBPSetFastBufferingEnableExchange::~OBPSetFastBufferingEnableExchange() 
+OBPSetFastBufferingEnableExchange::~OBPSetFastBufferingEnableExchange()
 {
 
 }
 
-void OBPSetFastBufferingEnableExchange::setBufferingEnable(unsigned char isEnabled) 
+void OBPSetFastBufferingEnableExchange::setBufferingEnable(unsigned char isEnabled)
 {
         this->payload[0] = isEnabled;
 }
-

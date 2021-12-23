@@ -40,4 +40,3 @@ IntrospectionProtocolInterface::IntrospectionProtocolInterface(Protocol *protoco
 IntrospectionProtocolInterface::~IntrospectionProtocolInterface() {
 
 }
-

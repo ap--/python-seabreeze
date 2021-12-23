@@ -42,20 +42,20 @@ namespace seabreeze {
 
 		virtual unsigned char getEnableState(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void setEnableState(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState) = 0;
 #if 0
 		virtual std::vector<unsigned char> getGroupAddress(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void setGroupAddress(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> groupAddress) = 0;
@@ -67,4 +67,3 @@ namespace seabreeze {
 }
 
 #endif /* MULTICASTFEATUREINTERFACE_H */
-

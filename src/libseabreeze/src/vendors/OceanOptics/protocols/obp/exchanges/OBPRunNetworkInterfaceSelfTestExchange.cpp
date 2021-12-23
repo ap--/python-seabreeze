@@ -35,7 +35,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPRunNetworkInterfaceSelfTestExchange::OBPRunNetworkInterfaceSelfTestExchange() 
+OBPRunNetworkInterfaceSelfTestExchange::OBPRunNetworkInterfaceSelfTestExchange()
 {
     this->messageType = OBPMessageTypes::OBP_RUN_INTERFACE_SELFTEST;
 
@@ -53,7 +53,7 @@ void OBPRunNetworkInterfaceSelfTestExchange::setInterfaceIndex(unsigned char int
 	this->payload[0] = interfaceIndex;
 }
 
-OBPRunNetworkInterfaceSelfTestExchange::~OBPRunNetworkInterfaceSelfTestExchange() 
+OBPRunNetworkInterfaceSelfTestExchange::~OBPRunNetworkInterfaceSelfTestExchange()
 {
 
 }

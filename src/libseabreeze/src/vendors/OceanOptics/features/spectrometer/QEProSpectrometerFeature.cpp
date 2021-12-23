@@ -78,7 +78,7 @@ QEProSpectrometerFeature::QEProSpectrometerFeature() {
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum,readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(obpProtocol);
 
@@ -110,4 +110,3 @@ vector<double> *QEProSpectrometerFeature::getWavelengths(const Protocol &protoco
 
     return WaveCal.readWavelengths(protocol, bus);
 }
-

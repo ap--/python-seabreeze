@@ -99,4 +99,3 @@ void Transaction::updateHints() {
         }
     }
 }
-

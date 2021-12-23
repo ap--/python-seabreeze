@@ -44,4 +44,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* OBPDATABUFFERREMOVEOLDESTEXCHANGE_H */
-

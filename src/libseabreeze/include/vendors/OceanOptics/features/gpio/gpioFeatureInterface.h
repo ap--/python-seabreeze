@@ -39,7 +39,7 @@ namespace seabreeze {
     class gpioFeatureInterface {
     public:
         virtual ~gpioFeatureInterface() = 0;
-			
+
 		virtual unsigned char getGPIO_NumberOfPins(
 			const Protocol &protocol,
 			const Bus &bus) = 0;
@@ -47,7 +47,7 @@ namespace seabreeze {
 			const Protocol &protocol,
 			const Bus &bus) = 0;
 		virtual void setGPIO_OutputEnableVector(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned int outputEnableVector,
 			unsigned int bitMask) = 0;
@@ -100,4 +100,3 @@ namespace seabreeze {
 }
 
 #endif /* GPIOFEATUREINTERFACE_H */
-

@@ -236,6 +236,3 @@ void OBPDataBufferProtocol::setBufferCapacity(const Bus &bus,
     exchange.setBufferCapacity(capacity);
     exchange.sendCommandToDevice(helper);
 }
-
-
-

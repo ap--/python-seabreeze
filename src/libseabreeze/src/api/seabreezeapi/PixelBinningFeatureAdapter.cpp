@@ -49,7 +49,7 @@ PixelBinningFeatureAdapter::~PixelBinningFeatureAdapter() {
 }
 
 unsigned char PixelBinningFeatureAdapter::getPixelBinningFactor(int *errorCode) {
-    
+
     unsigned char retval = 0;
 
     try {
@@ -75,7 +75,7 @@ void PixelBinningFeatureAdapter::setPixelBinningFactor(int *errorCode, const uns
 }
 
 unsigned char PixelBinningFeatureAdapter::getDefaultPixelBinningFactor(int *errorCode) {
-    
+
     unsigned char retval = 0;
 
     try {
@@ -113,7 +113,7 @@ void PixelBinningFeatureAdapter::setDefaultPixelBinningFactor(int *errorCode) {
 }
 
 unsigned char PixelBinningFeatureAdapter::getMaxPixelBinningFactor(int *errorCode) {
-    
+
     unsigned char retval = 0;
 
     try {

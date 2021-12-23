@@ -32,9 +32,9 @@
 
 #include "vendors/OceanOptics/protocols/obp/exchanges/OBPQuery.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace oceanBinaryProtocol 
+    namespace oceanBinaryProtocol
     {
         class OBPGetGPIOExtensionNumberOfPinsExchange : public OBPQuery
         {

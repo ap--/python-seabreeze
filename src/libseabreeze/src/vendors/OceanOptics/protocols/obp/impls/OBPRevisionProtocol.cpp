@@ -52,28 +52,28 @@ unsigned char OBPRevisionProtocol::readHardwareRevision(const Bus &bus)
 {
     vector<unsigned char> *result = NULL;
     unsigned char hardwareRevision;
-    
+
     OBPGetHardwareRevisionExchange xchange;
-	
+
     TransferHelper *helper = bus.getHelper(xchange.getHints());
-    if(NULL == helper) 
+    if(NULL == helper)
     {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
-    
+
 	result = xchange.queryDevice(helper);
-	if(NULL == result) 
+	if(NULL == result)
 	{
 		string error("Expected Transfer::transfer to produce a non-null result "
 			"containing temperature.  Without this data, it is not possible to "
 			"continue.");
 		throw ProtocolException(error);
 	}
-		
-	hardwareRevision=(*result)[0]; 
+
+	hardwareRevision=(*result)[0];
 	delete result;
-	
+
 	return hardwareRevision;
 }
 
@@ -82,37 +82,35 @@ unsigned short int OBPRevisionProtocol::readFirmwareRevision(const Bus &bus)
     vector<unsigned char> *result = NULL;
     unsigned short int firmwareRevision;
     unsigned char *bptr;
-    
+
     OBPGetFirmwareRevisionExchange xchange;
-	
+
     TransferHelper *helper = bus.getHelper(xchange.getHints());
-    if(NULL == helper) 
+    if(NULL == helper)
     {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
-    
+
 	result = xchange.queryDevice(helper);
-	if(NULL == result) 
+	if(NULL == result)
 	{
 		string error("Expected Transfer::transfer to produce a non-null result "
 			"containing temperature.  Without this data, it is not possible to "
 			"continue.");
 		throw ProtocolException(error);
 	}
-	
+
 
 	// queryDevice returns a byte stream, turn that into an unsigned int... mind our endians.
 	bptr = (unsigned char *)&firmwareRevision;
-	for(unsigned int j = 0; j < sizeof(unsigned short int); j++) 
+	for(unsigned int j = 0; j < sizeof(unsigned short int); j++)
 	{
 		//printf("unsigned char %d=%x\n", j, (*result)[j]);
 		bptr[j] = (*result)[j];  // little endian 2-byte integer
 	}
 
 	delete result;
-	
+
 	return firmwareRevision;
 }
-
-

@@ -48,4 +48,3 @@ namespace seabreeze {
 }
 
 #endif /* OBPWAVECALPROTOCOL_H */
-

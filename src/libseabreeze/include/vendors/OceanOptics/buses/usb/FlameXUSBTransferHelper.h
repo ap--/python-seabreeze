@@ -49,7 +49,7 @@ namespace seabreeze {
         /* Inherited */
         virtual int receive(std::vector<unsigned char> &buffer, unsigned int length);
         virtual int send(const std::vector<unsigned char> &buffer, unsigned int length) const;
-        
+
     private:
         static const int WORD_SIZE_BYTES;
     };

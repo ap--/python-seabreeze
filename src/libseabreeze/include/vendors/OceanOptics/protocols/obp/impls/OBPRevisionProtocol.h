@@ -43,7 +43,7 @@ namespace seabreeze {
         virtual ~OBPRevisionProtocol();
 
         virtual unsigned char readHardwareRevision(const Bus &bus);
-                
+
         virtual unsigned short int readFirmwareRevision(const Bus &bus);
     };
   }

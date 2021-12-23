@@ -43,7 +43,7 @@ namespace seabreeze {
 
         /* Inherited */
         virtual Data *transfer(TransferHelper *helper);
-        
+
     private:
         GainAdjustedSpectrometerFeature *spectrometerFeature;
     };

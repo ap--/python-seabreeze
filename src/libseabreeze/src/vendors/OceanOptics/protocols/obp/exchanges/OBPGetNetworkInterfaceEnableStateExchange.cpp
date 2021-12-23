@@ -35,7 +35,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPGetNetworkInterfaceEnableStateExchange::OBPGetNetworkInterfaceEnableStateExchange() 
+OBPGetNetworkInterfaceEnableStateExchange::OBPGetNetworkInterfaceEnableStateExchange()
 {
     this->messageType = OBPMessageTypes::OBP_GET_INTERFACE_ENABLE_STATE;
 
@@ -49,7 +49,7 @@ void OBPGetNetworkInterfaceEnableStateExchange::setInterfaceIndex(unsigned char 
 	this->payload[0] = interfaceIndex;
 }
 
-OBPGetNetworkInterfaceEnableStateExchange::~OBPGetNetworkInterfaceEnableStateExchange() 
+OBPGetNetworkInterfaceEnableStateExchange::~OBPGetNetworkInterfaceEnableStateExchange()
 {
 
 }

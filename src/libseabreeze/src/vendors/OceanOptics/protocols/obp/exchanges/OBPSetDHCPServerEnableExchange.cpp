@@ -36,7 +36,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPSetDHCPServerEnableExchange::OBPSetDHCPServerEnableExchange() 
+OBPSetDHCPServerEnableExchange::OBPSetDHCPServerEnableExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
@@ -46,7 +46,7 @@ OBPSetDHCPServerEnableExchange::OBPSetDHCPServerEnableExchange()
     this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned char)); // two bytes in immediate data
 }
 
-OBPSetDHCPServerEnableExchange::~OBPSetDHCPServerEnableExchange() 
+OBPSetDHCPServerEnableExchange::~OBPSetDHCPServerEnableExchange()
 {
 
 }
@@ -56,7 +56,7 @@ void OBPSetDHCPServerEnableExchange::setInterfaceIndex(unsigned char interfaceIn
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPSetDHCPServerEnableExchange::setEnableState(unsigned char enableState) 
+void OBPSetDHCPServerEnableExchange::setEnableState(unsigned char enableState)
 {
 	this->payload[1] = enableState;
 }

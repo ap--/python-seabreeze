@@ -42,11 +42,11 @@ using namespace std;
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-NetworkConfigurationFeature::NetworkConfigurationFeature(vector<ProtocolHelper *> helpers) 
+NetworkConfigurationFeature::NetworkConfigurationFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }
@@ -64,12 +64,12 @@ unsigned char NetworkConfigurationFeature::getNumberOfNetworkInterfaces(const Pr
 	NetworkConfigurationProtocolInterface *networkConfigurationPI = NULL;
     ProtocolHelper *proto;
 
-    try 
+    try
     {
         proto = lookupProtocolImpl(protocol);
 		networkConfigurationPI = static_cast<NetworkConfigurationProtocolInterface *>(proto);
-    } 
-	catch (FeatureProtocolNotFoundException &e) 
+    }
+	catch (FeatureProtocolNotFoundException &e)
 	{
         string error(
         "Could not find matching protocol implementation to get calibration.");
@@ -77,11 +77,11 @@ unsigned char NetworkConfigurationFeature::getNumberOfNetworkInterfaces(const Pr
         throw FeatureProtocolNotFoundException(error);
     }
 
-    try 
+    try
 	{
         data = networkConfigurationPI->getNumberOfNetworkInterfaces(bus);
-    } 
-	catch (ProtocolException &pe) 
+    }
+	catch (ProtocolException &pe)
 	{
         string error("Caught protocol exception: ");
         error += pe.what();

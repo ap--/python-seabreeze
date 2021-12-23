@@ -214,10 +214,10 @@ static void __close_and_dealloc_usb_interface(__usb_interface_t *usb) {
     }
 
     if(NULL != usb->dev) {
-        // MZ: This call to usb_reset() resolves a reported issue in which Linux apps 
-        // would run correctly once, then require spectrometer to be un/replugged to 
+        // MZ: This call to usb_reset() resolves a reported issue in which Linux apps
+        // would run correctly once, then require spectrometer to be un/replugged to
         // run a second time.
-        usb_reset(usb->dev); 
+        usb_reset(usb->dev);
 
         usb_close(usb->dev);
     }

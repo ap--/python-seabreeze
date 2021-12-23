@@ -67,4 +67,3 @@ void OBPAcquisitionDelayProtocol::setAcquisitionDelayMicroseconds(
     }
 
 }
-

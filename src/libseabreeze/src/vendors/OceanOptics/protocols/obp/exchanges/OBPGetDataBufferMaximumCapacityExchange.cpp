@@ -67,4 +67,3 @@ unsigned long OBPGetDataBufferMaximumCapacityExchange::queryBufferMaximumCapacit
 
     return maxCapacity;
 }
-

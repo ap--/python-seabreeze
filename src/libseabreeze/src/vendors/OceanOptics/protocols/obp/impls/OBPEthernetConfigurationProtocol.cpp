@@ -44,7 +44,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
 OBPEthernetConfigurationProtocol::OBPEthernetConfigurationProtocol()
-        : EthernetConfigurationProtocolInterface(new OceanBinaryProtocol()) 
+        : EthernetConfigurationProtocolInterface(new OceanBinaryProtocol())
 {
 
 }

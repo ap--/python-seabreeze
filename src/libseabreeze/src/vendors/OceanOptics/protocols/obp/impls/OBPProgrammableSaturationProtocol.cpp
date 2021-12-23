@@ -39,15 +39,15 @@ using namespace std;
 
 OBPProgrammableSaturationProtocol::OBPProgrammableSaturationProtocol()
     : ProgrammableSaturationProtocolInterface(new OceanBinaryProtocol()) {
-    
+
 }
 
 OBPProgrammableSaturationProtocol::~OBPProgrammableSaturationProtocol() {
-    
+
 }
 
 unsigned int OBPProgrammableSaturationProtocol::getSaturation(const Bus &bus) {
-    
+
     TransferHelper *helper;
     OBPGetSaturationExchange exchange;
 
@@ -58,6 +58,6 @@ unsigned int OBPProgrammableSaturationProtocol::getSaturation(const Bus &bus) {
     }
 
     unsigned int saturation = exchange.querySaturationLevel(helper);
-    
+
     return saturation;
 }

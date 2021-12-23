@@ -40,12 +40,12 @@ using namespace seabreeze::api;
 DataBufferFeatureAdapter::DataBufferFeatureAdapter(
     DataBufferFeatureInterface *intf, const FeatureFamily &f,
         Protocol *p, Bus *b, unsigned short instanceIndex)
-    : FeatureAdapterTemplate<DataBufferFeatureInterface>(intf, f, p, b, instanceIndex) 
+    : FeatureAdapterTemplate<DataBufferFeatureInterface>(intf, f, p, b, instanceIndex)
 {
-    
+
 }
 
-DataBufferFeatureAdapter::~DataBufferFeatureAdapter() 
+DataBufferFeatureAdapter::~DataBufferFeatureAdapter()
 {
 
 }
@@ -53,9 +53,9 @@ DataBufferFeatureAdapter::~DataBufferFeatureAdapter()
 #ifdef _WINDOWS
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
-void DataBufferFeatureAdapter::clearBuffer(int *errorCode) 
+void DataBufferFeatureAdapter::clearBuffer(int *errorCode)
 {
-    try 
+    try
     {
         this->feature->clearBuffer(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -65,9 +65,9 @@ void DataBufferFeatureAdapter::clearBuffer(int *errorCode)
     }
 }
 
-void DataBufferFeatureAdapter::removeOldestSpectraFromBuffer(int *errorCode, unsigned int numberOfSpectra) 
+void DataBufferFeatureAdapter::removeOldestSpectraFromBuffer(int *errorCode, unsigned int numberOfSpectra)
 {
-    try 
+    try
     {
         this->feature->removeOldestSpectraFromBuffer(*this->protocol, *this->bus, 0, numberOfSpectra);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -77,11 +77,11 @@ void DataBufferFeatureAdapter::removeOldestSpectraFromBuffer(int *errorCode, uns
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getNumberOfElements(int *errorCode) 
+unsigned long DataBufferFeatureAdapter::getNumberOfElements(int *errorCode)
 {
     unsigned long retval;
 
-    try 
+    try
     {
         retval = this->feature->getNumberOfElements(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -93,11 +93,11 @@ unsigned long DataBufferFeatureAdapter::getNumberOfElements(int *errorCode)
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getBufferCapacity(int *errorCode) 
+unsigned long DataBufferFeatureAdapter::getBufferCapacity(int *errorCode)
 {
     unsigned long retval;
 
-    try 
+    try
     {
         retval = this->feature->getBufferCapacity(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -109,11 +109,11 @@ unsigned long DataBufferFeatureAdapter::getBufferCapacity(int *errorCode)
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getBufferCapacityMaximum(int *errorCode) 
+unsigned long DataBufferFeatureAdapter::getBufferCapacityMaximum(int *errorCode)
 {
     unsigned long retval;
 
-    try 
+    try
     {
         retval = this->feature->getBufferCapacityMaximum(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -125,11 +125,11 @@ unsigned long DataBufferFeatureAdapter::getBufferCapacityMaximum(int *errorCode)
     }
 }
 
-unsigned long DataBufferFeatureAdapter::getBufferCapacityMinimum(int *errorCode) 
+unsigned long DataBufferFeatureAdapter::getBufferCapacityMinimum(int *errorCode)
 {
     unsigned long retval;
 
-    try 
+    try
     {
         retval = this->feature->getBufferCapacityMinimum(*this->protocol, *this->bus, 0);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -141,9 +141,9 @@ unsigned long DataBufferFeatureAdapter::getBufferCapacityMinimum(int *errorCode)
     }
 }
 
-void DataBufferFeatureAdapter::setBufferCapacity(int *errorCode, unsigned long capacity) 
+void DataBufferFeatureAdapter::setBufferCapacity(int *errorCode, unsigned long capacity)
 {
-    try 
+    try
     {
         this->feature->setBufferCapacity(*this->protocol, *this->bus, 0, capacity);
         SET_ERROR_CODE(ERROR_SUCCESS);
@@ -152,5 +152,3 @@ void DataBufferFeatureAdapter::setBufferCapacity(int *errorCode, unsigned long c
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 }
-
-

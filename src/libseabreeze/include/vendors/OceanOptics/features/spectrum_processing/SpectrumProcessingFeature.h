@@ -54,7 +54,7 @@ namespace seabreeze {
         	const Bus &bus, unsigned char boxcarWidth);
         virtual void writeSpectrumProcessingScansToAverage(const Protocol &protocol,
                 const Bus &bus, unsigned short int scansToAverage);
-                
+
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();
     };

@@ -40,12 +40,12 @@ using namespace std;
 
 IPv4SocketDeviceLocator::IPv4SocketDeviceLocator(const IPv4NetworkProtocol &proto,
         string ip, int portNumber) : protocol(proto), ipAddr(ip), port(portNumber) {
-    
+
     this->locationHash = computeLocationHash();
 }
 
 IPv4SocketDeviceLocator::~IPv4SocketDeviceLocator() {
-    
+
 }
 
 string IPv4SocketDeviceLocator::getIPv4Address() {
@@ -102,13 +102,13 @@ string IPv4SocketDeviceLocator::getDescription() {
 BusFamily IPv4SocketDeviceLocator::getBusFamily() const {
     IPv4NetworkProtocols networkProtocols;
     BusFamilies families;
-    
+
     if(this->protocol.equals(networkProtocols.TCP_IP4)) {
         return families.TCPIPv4;
     } else if(this->protocol.equals(networkProtocols.UDP_IP4)) {
         return families.UDPIPv4;
     }
-    
+
     throw runtime_error("Internal error: unknown IPv4 protocol");
 }
 
@@ -123,7 +123,7 @@ unsigned long IPv4SocketDeviceLocator::computeLocationHash() {
     /* Iterate over the devicePath and compute a sort of hash */
     unsigned long hash = 1;
     string::iterator iter;
-    
+
     string desc = getDescription();
 
     for(iter = desc.begin(); iter != desc.end(); iter++) {

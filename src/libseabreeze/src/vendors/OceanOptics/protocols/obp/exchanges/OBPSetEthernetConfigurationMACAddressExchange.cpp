@@ -45,7 +45,7 @@ OBPSetEthernetConfigurationMacAddressExchange::OBPSetEthernetConfigurationMacAdd
     this->payload.resize(1 + 6); // interface Index and 6 bytes for the Mac Address
 }
 
-OBPSetEthernetConfigurationMacAddressExchange::~OBPSetEthernetConfigurationMacAddressExchange() 
+OBPSetEthernetConfigurationMacAddressExchange::~OBPSetEthernetConfigurationMacAddressExchange()
 {
 
 }
@@ -56,7 +56,7 @@ void OBPSetEthernetConfigurationMacAddressExchange::setInterfaceIndex(unsigned c
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPSetEthernetConfigurationMacAddressExchange::set_MAC_Address(vector<unsigned char> macAddress) 
+void OBPSetEthernetConfigurationMacAddressExchange::set_MAC_Address(vector<unsigned char> macAddress)
 {
 	for (int i = 0; i < 7; i++)
 	{

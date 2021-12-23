@@ -87,18 +87,18 @@ vector<unsigned char> *OBPTransaction::queryDevice(TransferHelper *helper,
     /* Note: copy will be deleted by message when appropriate. */
     message->setData(new vector<unsigned char>(data));
 
-    try 
+    try
 	{
         bytes = message->toByteStream();
         flag = helper->send(*bytes, (unsigned) bytes->size());
-        if(((unsigned int)flag) != bytes->size()) 
+        if(((unsigned int)flag) != bytes->size())
 		{
             /* FIXME: retry, throw exception, something here */
         }
-    } 
+    }
 	catch (const BusException &be)
 	{
-        if(NULL != bytes) 
+        if(NULL != bytes)
 		{
             delete bytes;
         }
@@ -119,28 +119,28 @@ vector<unsigned char> *OBPTransaction::queryDevice(TransferHelper *helper,
          */
         bytes = new vector<unsigned char>(64);
         flag = helper->receive(*bytes, (unsigned) bytes->size());
-        if(((unsigned int)flag) != bytes->size()) 
+        if(((unsigned int)flag) != bytes->size())
 		{
             /* FIXME: retry, throw exception, something here */
         }
 
         /* Parse out the header and see if there is an extended payload. */
-        try 
+        try
 		{
             response = OBPMessage::parseHeaderFromByteStream(bytes);
-        } 
+        }
 		catch (const IllegalArgumentException &iae)
 		{
             response = NULL;
         }
-        if(NULL == response || true == response->isNackFlagSet() || response->getMessageType() != messageType) 
+        if(NULL == response || true == response->isNackFlagSet() || response->getMessageType() != messageType)
 		{
-            if(NULL != bytes) 
+            if(NULL != bytes)
 			{
                 delete bytes;
             }
 
-            if(NULL != response) 
+            if(NULL != response)
 			{
 				char message[64];
 				if (response->getMessageType() == messageType)
@@ -216,7 +216,7 @@ vector<unsigned char> *OBPTransaction::queryDevice(TransferHelper *helper,
 
     /* Make a copy of the response buffer so response can be deleted */
     bytes = new vector<unsigned char>(*response->getData());
-    
+
     delete response;
     return bytes;
 }

@@ -44,7 +44,7 @@
 class SeaBreezeAPI_Impl : SeaBreezeAPI {
 public:
     virtual ~SeaBreezeAPI_Impl();
-    
+
     virtual int probeDevices();
     virtual int addTCPIPv4DeviceLocation(char *deviceTypeName, char *ipAddr, int port);
     virtual int addRS232DeviceLocation(char *deviceTypeName, char *deviceBusPath,
@@ -68,7 +68,7 @@ public:
     virtual int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
     virtual int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
     virtual int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
-    
+
     /* Serial number capabilities */
     virtual int getNumberOfSerialNumberFeatures(long deviceID, int *errorCode);
     virtual int getSerialNumberFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -101,7 +101,7 @@ public:
     virtual void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
     virtual unsigned char binningGetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
     virtual unsigned char binningGetMaxPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode);
-        
+
     /* TEC capabilities */
     virtual int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode);
     virtual int getThermoElectricFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -269,7 +269,7 @@ public:
         int *errorCode, unsigned char boxcarWidth);
     virtual void spectrumProcessingScansToAverageSet(long deviceID, long featureID,
         int *errorCode, unsigned short int scansToAverage);
- 
+
     /* Revision capabilities */
     virtual int getNumberOfRevisionFeatures(long deviceID, int *errorCode);
     virtual int getRevisionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength);
@@ -339,7 +339,7 @@ private:
 
     std::vector<seabreeze::api::DeviceAdapter *> probedDevices;
     std::vector<seabreeze::api::DeviceAdapter *> specifiedDevices;
-    
+
 friend class SeaBreezeAPI;
 
 };

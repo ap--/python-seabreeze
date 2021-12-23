@@ -40,4 +40,3 @@ DataBufferProtocolInterface::DataBufferProtocolInterface(Protocol *protocol)
 DataBufferProtocolInterface::~DataBufferProtocolInterface() {
 
 }
-

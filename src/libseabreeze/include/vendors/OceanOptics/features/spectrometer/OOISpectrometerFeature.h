@@ -53,7 +53,7 @@ namespace seabreeze {
         /* Request and read out a spectrum formatted into intensity (A/D counts) */
         virtual std::vector<double> *getFormattedSpectrum(const Protocol &protocol,
                 const Bus &bus);
-		
+
         /* Request and read out the raw spectrum data stream */
         virtual std::vector<unsigned char> *getUnformattedSpectrum(const Protocol &protocol,
                 const Bus &bus);
@@ -91,7 +91,7 @@ namespace seabreeze {
         /* Setting the external trigger mode for the spectrometer */
         virtual void setTriggerMode(const Protocol &protocol,
                 const Bus &bus, SpectrometerTriggerMode &mode);
-	
+
 		virtual std::vector<SpectrometerTriggerMode *> getTriggerModes() const;
 
 		virtual std::vector<unsigned int> getActivePixelIndices() const;

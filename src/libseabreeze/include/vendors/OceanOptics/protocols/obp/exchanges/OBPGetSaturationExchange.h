@@ -38,11 +38,10 @@ namespace seabreeze {
         public:
             OBPGetSaturationExchange();
             virtual ~OBPGetSaturationExchange();
-            
+
             unsigned int querySaturationLevel(TransferHelper *helper);
         };
     }
 }
 
 #endif /* OBPGETSATURATIONEXCHANGE_H */
-

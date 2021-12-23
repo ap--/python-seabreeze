@@ -93,7 +93,7 @@ static int __rs232_baud_table_length =
         sizeof(__rs232_baud_table) / sizeof(struct __rs232_baud_map_entry);
 
 #ifdef __clang__
-#define ABS 
+#define ABS
 #else
 #define ABS abs
 #endif

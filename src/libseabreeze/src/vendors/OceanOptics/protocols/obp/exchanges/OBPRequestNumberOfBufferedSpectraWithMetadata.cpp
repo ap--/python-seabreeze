@@ -39,7 +39,7 @@ using namespace std;
 #include <string.h> /* for memcpy pre c++11 */
 
 
-OBPRequestNumberOfBufferedSpectraWithMetadataExchange::OBPRequestNumberOfBufferedSpectraWithMetadataExchange() 
+OBPRequestNumberOfBufferedSpectraWithMetadataExchange::OBPRequestNumberOfBufferedSpectraWithMetadataExchange()
 {
 	this->hints->push_back(new OBPSpectrumHint());
 	this->direction = Transfer::TO_DEVICE;
@@ -58,13 +58,13 @@ void OBPRequestNumberOfBufferedSpectraWithMetadataExchange::setNumberOfSamplesTo
 	OBPMessage message;
 	vector<unsigned char> *stream;
 	unsigned int i;
-	
+
 	OBPRequestNumberOfBufferedSpectraWithMetadataExchange *parentClass = (OBPRequestNumberOfBufferedSpectraWithMetadataExchange *)myClass;
 
 	std::vector<unsigned char> *numberOfSamplesToRetrieve = new vector<unsigned char>(sizeof(unsigned int));
 	// no c++11 yet
-	//memcpy(numberOfSamplesToRetrieve.data(), &numberOfSamples, sizeof(unsigned int)); 
-	memcpy(&((*numberOfSamplesToRetrieve)[0]), &numberOfSamples, sizeof(unsigned int)); 
+	//memcpy(numberOfSamplesToRetrieve.data(), &numberOfSamples, sizeof(unsigned int));
+	memcpy(&((*numberOfSamplesToRetrieve)[0]), &numberOfSamples, sizeof(unsigned int));
 
 	message.setMessageType(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META);
 	message.setImmediateData(numberOfSamplesToRetrieve); // sets length automatically ~obpMessage destroys the vector

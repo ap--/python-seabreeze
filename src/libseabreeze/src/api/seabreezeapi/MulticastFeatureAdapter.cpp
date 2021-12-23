@@ -43,13 +43,13 @@ using namespace std;
 MulticastFeatureAdapter::MulticastFeatureAdapter(
         MulticastFeatureInterface *intf, const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<MulticastFeatureInterface>(intf, f, p, b, instanceIndex) 
+        : FeatureAdapterTemplate<MulticastFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
 
-MulticastFeatureAdapter::~MulticastFeatureAdapter() 
+MulticastFeatureAdapter::~MulticastFeatureAdapter()
 {
     /* This is just a wrapper around existing instances -- nothing to delete */
 }
@@ -64,15 +64,15 @@ void MulticastFeatureAdapter::getGroupAddress(int *errorCode, unsigned char inte
 
     vector<unsigned char> groupAddressVector;
 
-    try 
+    try
 	{
         groupAddressVector = this->feature->getGroupAddress(*this->protocol, *this->bus, interfaceIndex);
 
         memcpy(groupAddress, &(groupAddressVector[0]), 4);
 
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
-	catch (FeatureException &fe) 
+    }
+	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
@@ -96,7 +96,7 @@ void MulticastFeatureAdapter::setGroupAddress(int *errorCode, unsigned char inte
 }
 #endif
 
-unsigned char MulticastFeatureAdapter::getEnableState(int *errorCode, unsigned char interfaceIndex) 
+unsigned char MulticastFeatureAdapter::getEnableState(int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char enableState = 0;
     try {
@@ -108,13 +108,13 @@ unsigned char MulticastFeatureAdapter::getEnableState(int *errorCode, unsigned c
     return enableState;
 }
 
-void MulticastFeatureAdapter::setEnableState(int *errorCode, unsigned char interfaceIndex, unsigned char enableState) 
+void MulticastFeatureAdapter::setEnableState(int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
 {
-    try 
+    try
 	{
         this->feature->setEnableState(*this->protocol, *this->bus, interfaceIndex, enableState);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);

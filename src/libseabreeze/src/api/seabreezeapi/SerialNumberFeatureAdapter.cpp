@@ -102,4 +102,3 @@ unsigned char SerialNumberFeatureAdapter::getSerialNumberMaximumLength(int *erro
     SET_ERROR_CODE(ERROR_SUCCESS);
     return length;
 }
-

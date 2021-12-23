@@ -35,7 +35,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPGetNumberOfNetworkInterfacesExchange::OBPGetNumberOfNetworkInterfacesExchange() 
+OBPGetNumberOfNetworkInterfacesExchange::OBPGetNumberOfNetworkInterfacesExchange()
 {
     this->messageType = OBPMessageTypes::OBP_GET_NETWORK_INTERFACE_COUNT;
 
@@ -43,8 +43,7 @@ OBPGetNumberOfNetworkInterfacesExchange::OBPGetNumberOfNetworkInterfacesExchange
 	this->payload.resize(0);
 }
 
-OBPGetNumberOfNetworkInterfacesExchange::~OBPGetNumberOfNetworkInterfacesExchange() 
+OBPGetNumberOfNetworkInterfacesExchange::~OBPGetNumberOfNetworkInterfacesExchange()
 {
 
 }
-

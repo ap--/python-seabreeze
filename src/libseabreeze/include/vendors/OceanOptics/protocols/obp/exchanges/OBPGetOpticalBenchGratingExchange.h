@@ -1,7 +1,7 @@
 /***************************************************//**
  * @file    OBPGetOpticalBenchGratingExchange.h
  * @date    January 2015
- * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra 
+ * @author  Ocean Optics, Inc., Kirk Clendinning, Heliospectra
  *
  * LICENSE:
  *

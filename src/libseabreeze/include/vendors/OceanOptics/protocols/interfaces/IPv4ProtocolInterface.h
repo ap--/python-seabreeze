@@ -45,8 +45,8 @@ namespace seabreeze {
     public:
         IPv4ProtocolInterface(Protocol *protocol);
         virtual ~IPv4ProtocolInterface();
-	
-	
+
+
 	    /**
          * Is the DHCP client enabled for IPv4? 1: enabled, 0: disabled
          */
@@ -61,7 +61,7 @@ namespace seabreeze {
          * Get the number of IPv4 addresses that can be indexed.
          */
         virtual unsigned char get_Number_Of_IPv4_Addresses(const Bus &bus, unsigned char interfaceIndex) = 0;
-            
+
         /**
          * Get an IPv4 address by its index
          */
@@ -76,8 +76,8 @@ namespace seabreeze {
          *  Set the gateway address for indexed interface
          */
         virtual void set_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> IPv4_Gateway_Address) = 0;
-            
-            
+
+
         /**
          *  Add an IPv4 address to the indexed interface
          */

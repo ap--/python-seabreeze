@@ -44,7 +44,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
 OBPI2CMasterProtocol::OBPI2CMasterProtocol()
-        : I2CMasterProtocolInterface(new OceanBinaryProtocol()) 
+        : I2CMasterProtocolInterface(new OceanBinaryProtocol())
 {
 
 }

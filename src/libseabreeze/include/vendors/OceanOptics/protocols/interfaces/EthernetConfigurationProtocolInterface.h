@@ -45,7 +45,7 @@ namespace seabreeze {
     public:
         EthernetConfigurationProtocolInterface(Protocol *protocol);
         virtual ~EthernetConfigurationProtocolInterface();
-	
+
         /**
          * Get the MAC address from the device.
          */

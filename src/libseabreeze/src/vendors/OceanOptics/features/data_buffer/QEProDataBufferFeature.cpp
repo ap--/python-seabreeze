@@ -51,4 +51,3 @@ QEProDataBufferFeature::QEProDataBufferFeature() {
 QEProDataBufferFeature::~QEProDataBufferFeature() {
 
 }
-

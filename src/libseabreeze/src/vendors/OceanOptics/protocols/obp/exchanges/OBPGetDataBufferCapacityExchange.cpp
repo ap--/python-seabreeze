@@ -67,4 +67,3 @@ unsigned long OBPGetDataBufferCapacityExchange::queryBufferCapacity(
 
     return capacity;
 }
-

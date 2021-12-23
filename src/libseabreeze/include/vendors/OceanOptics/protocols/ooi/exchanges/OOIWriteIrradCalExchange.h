@@ -51,4 +51,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_OOIWRITEIRRADCALEXCHANGE_H */
-

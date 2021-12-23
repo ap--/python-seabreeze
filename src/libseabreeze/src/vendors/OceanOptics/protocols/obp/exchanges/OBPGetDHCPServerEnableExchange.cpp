@@ -35,7 +35,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPGetDHCPServerEnableExchange::OBPGetDHCPServerEnableExchange() 
+OBPGetDHCPServerEnableExchange::OBPGetDHCPServerEnableExchange()
 {
     this->messageType = OBPMessageTypes::OBP_GET_DHCP_SERVER_ENABLE_STATE;
 
@@ -49,7 +49,7 @@ void OBPGetDHCPServerEnableExchange::setInterfaceIndex(unsigned char interfaceIn
 	this->payload[0] = interfaceIndex;
 }
 
-OBPGetDHCPServerEnableExchange::~OBPGetDHCPServerEnableExchange() 
+OBPGetDHCPServerEnableExchange::~OBPGetDHCPServerEnableExchange()
 {
 
 }

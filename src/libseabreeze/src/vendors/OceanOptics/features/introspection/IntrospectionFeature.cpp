@@ -42,7 +42,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
-IntrospectionFeature::IntrospectionFeature(vector<ProtocolHelper *> helpers) 
+IntrospectionFeature::IntrospectionFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
@@ -61,7 +61,7 @@ IntrospectionFeature::~IntrospectionFeature() {
 
 unsigned short IntrospectionFeature::getNumberOfPixels(const Protocol &protocol, const Bus &bus)
 {
-	
+
 	IntrospectionProtocolInterface *introspection_protocolInterface = NULL;
 	ProtocolHelper *proto = NULL;
 
@@ -189,4 +189,3 @@ FeatureFamily IntrospectionFeature::getFeatureFamily() {
 
     return families.INTROSPECTION;
 }
-

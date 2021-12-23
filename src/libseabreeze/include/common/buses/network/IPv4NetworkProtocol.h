@@ -47,13 +47,13 @@ namespace seabreeze {
         std::string protocolName;
         int type;
     };
-    
+
     class TCP_IPv4 : public IPv4NetworkProtocol {
     public:
         TCP_IPv4();
         virtual ~TCP_IPv4();
     };
-    
+
     class UDP_IPv4 : public IPv4NetworkProtocol {
     public:
         UDP_IPv4();
@@ -72,4 +72,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_IPV4NETWORKPROTOCOL_H */
-

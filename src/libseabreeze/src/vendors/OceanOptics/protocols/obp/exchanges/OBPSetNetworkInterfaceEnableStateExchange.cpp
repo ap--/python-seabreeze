@@ -36,7 +36,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPSetNetworkInterfaceEnableStateExchange::OBPSetNetworkInterfaceEnableStateExchange() 
+OBPSetNetworkInterfaceEnableStateExchange::OBPSetNetworkInterfaceEnableStateExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
@@ -46,7 +46,7 @@ OBPSetNetworkInterfaceEnableStateExchange::OBPSetNetworkInterfaceEnableStateExch
     this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned char)); // two bytes in immediate data
 }
 
-OBPSetNetworkInterfaceEnableStateExchange::~OBPSetNetworkInterfaceEnableStateExchange() 
+OBPSetNetworkInterfaceEnableStateExchange::~OBPSetNetworkInterfaceEnableStateExchange()
 {
 
 }
@@ -56,7 +56,7 @@ void OBPSetNetworkInterfaceEnableStateExchange::setInterfaceIndex(unsigned char 
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPSetNetworkInterfaceEnableStateExchange::setEnableState(unsigned char enableState) 
+void OBPSetNetworkInterfaceEnableStateExchange::setEnableState(unsigned char enableState)
 {
 	this->payload[1] = enableState;
 }

@@ -112,7 +112,7 @@ DeviceAdapter::~DeviceAdapter() {
     delete this->device;
 }
 
-template <class T, class U> void __create_feature_adapters(Device *device, vector<U *> &adapters, Bus *bus, const FeatureFamily &family) 
+template <class T, class U> void __create_feature_adapters(Device *device, vector<U *> &adapters, Bus *bus, const FeatureFamily &family)
 {
 
     unsigned short i;
@@ -164,7 +164,7 @@ int DeviceAdapter::open(int *errorCode) {
      * set of Feature instances based on what is detected.
      */
     this->device->initialize(*bus);
-    
+
     /* Create raw usb access feature list */
     __create_feature_adapters<RawUSBBusAccessFeatureInterface,
     	            RawUSBBusAccessFeatureAdapter>(this->device,
@@ -264,17 +264,17 @@ int DeviceAdapter::open(int *errorCode) {
     __create_feature_adapters<RevisionFeatureInterface,
                     RevisionFeatureAdapter>(this->device,
             revisionFeatures, bus, featureFamilies.REVISION);
-             
+
      /* Create optical bench feature list */
     __create_feature_adapters<OpticalBenchFeatureInterface,
                     OpticalBenchFeatureAdapter>(this->device,
             opticalBenchFeatures, bus, featureFamilies.OPTICAL_BENCH);
-            
+
      /* Create spectrum processing feature list */
     __create_feature_adapters<SpectrumProcessingFeatureInterface,
                     SpectrumProcessingFeatureAdapter>(this->device,
             spectrumProcessingFeatures, bus, featureFamilies.SPECTRUM_PROCESSING);
-                       
+
     /* Create stray light coefficients feature list */
     __create_feature_adapters<StrayLightCoeffsFeatureInterface,
                     StrayLightCoeffsFeatureAdapter>(this->device,
@@ -382,7 +382,7 @@ template <class T> T *__getFeatureByID(vector<T *> features, long id) {
 
 /* returns a USB endpoint from the device as specified by the enumerator endpointType */
 /*  if the endpoint type is not supported, a 0 is returned. */
-unsigned char DeviceAdapter::getDeviceEndpoint(int *errorCode, usbEndpointType endpointType) 
+unsigned char DeviceAdapter::getDeviceEndpoint(int *errorCode, usbEndpointType endpointType)
 {
     return this->device->getEndpoint(errorCode, endpointType);
 }
@@ -807,26 +807,26 @@ void DeviceAdapter::irradCalibrationWriteCollectionArea(long featureID,
 }
 
 /* Ethernet Configuration feature wrappers */
-int DeviceAdapter::getNumberOfEthernetConfigurationFeatures() 
+int DeviceAdapter::getNumberOfEthernetConfigurationFeatures()
 {
 	return (int) this->ethernetConfigurationFeatures.size();
 }
 
-int DeviceAdapter::getEthernetConfigurationFeatures(long *buffer, int maxFeatures) 
+int DeviceAdapter::getEthernetConfigurationFeatures(long *buffer, int maxFeatures)
 {
 	return __getFeatureIDs<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures, buffer, maxFeatures);
 }
 
-EthernetConfigurationFeatureAdapter *DeviceAdapter::getEthernetConfigurationFeatureByID(long featureID) 
+EthernetConfigurationFeatureAdapter *DeviceAdapter::getEthernetConfigurationFeatureByID(long featureID)
 {
 	return __getFeatureByID<EthernetConfigurationFeatureAdapter>(ethernetConfigurationFeatures, featureID);
 }
 
 
-void DeviceAdapter::ethernetConfiguration_Get_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6]) 
+void DeviceAdapter::ethernetConfiguration_Get_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char (*macAddress)[6])
 {
 	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
-	if (NULL == feature) 
+	if (NULL == feature)
 	{
 		SET_ERROR_CODE(ERROR_FEATURE_NOT_FOUND);
 		return;
@@ -846,7 +846,7 @@ void DeviceAdapter::ethernetConfiguration_Set_MAC_Address(long featureID, int *e
 	feature->set_MAC_Address(errorCode, interfaceIndex, macAddress);
 }
 
-unsigned char DeviceAdapter::ethernetConfiguration_Get_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex) 
+unsigned char DeviceAdapter::ethernetConfiguration_Get_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex)
 {
 	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
 	if (NULL == feature) {
@@ -857,7 +857,7 @@ unsigned char DeviceAdapter::ethernetConfiguration_Get_GbE_Enable_Status(long fe
 	return feature->get_GbE_Enable_Status(errorCode, interfaceIndex);
 }
 
-void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) 
+void DeviceAdapter::ethernetConfiguration_Set_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
 {
 	EthernetConfigurationFeatureAdapter *feature = getEthernetConfigurationFeatureByID(featureID);
 	if (NULL == feature) {
@@ -2051,7 +2051,7 @@ void DeviceAdapter::dataBufferClear(long featureID, int *errorCode) {
     feature->clearBuffer(errorCode);
 }
 
-void DeviceAdapter::dataBufferRemoveOldestSpectra(long featureID, int *errorCode, unsigned int numberOfSpectra) 
+void DeviceAdapter::dataBufferRemoveOldestSpectra(long featureID, int *errorCode, unsigned int numberOfSpectra)
 {
     DataBufferFeatureAdapter *feature = getDataBufferFeatureByID(featureID);
     if(NULL == feature) {
@@ -2286,7 +2286,3 @@ unsigned short DeviceAdapter::i2cMasterWriteBus(long featureID, int *errorCode, 
 
 	return feature->i2cMasterWriteBus(errorCode, busIndex, slaveAddress, writeData, numberOfBytes);
 }
-
-
-
-

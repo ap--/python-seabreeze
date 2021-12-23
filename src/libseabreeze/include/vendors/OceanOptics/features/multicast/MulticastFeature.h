@@ -36,10 +36,10 @@
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
-    class MulticastFeature : public FeatureImpl, public MulticastFeatureInterface 
+    class MulticastFeature : public FeatureImpl, public MulticastFeatureInterface
     {
     public:
         MulticastFeature(std::vector<ProtocolHelper *> helpers);
@@ -47,20 +47,20 @@ namespace seabreeze
 
 		virtual unsigned char getEnableState(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void setEnableState(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState);
 #if 0
 		virtual std::vector<unsigned char> getGroupAddress(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void setGroupAddress(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> macAddress);
@@ -73,4 +73,3 @@ namespace seabreeze
 }
 
 #endif /* MULTICASTFEATURE_H */
-

@@ -69,7 +69,7 @@ public:
      * attempting to find USB devices.
      */
     virtual int probeDevices() = 0;
-    
+
     /**
      * Use the addIPv4DeviceLocation() method to specify that a device may be
      * found on a TCP/IPv4 network on a given port.  Once specified,
@@ -119,7 +119,7 @@ public:
 
     /* Get a string that describes the type of device */
     virtual int getDeviceType(long id, int *errorCode, char *buffer, unsigned int length) = 0;
-    
+
     /* Get the usb endpoint address for a specified type of endpoint */
     virtual unsigned char getDeviceEndpoint(long id, int *error_code, usbEndpointType endpointType) = 0;
 
@@ -128,7 +128,7 @@ public:
     virtual int getRawUSBBusAccessFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
     virtual int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) = 0;
     virtual int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint) = 0;
-    
+
     /* Serial number capabilities */
     virtual int getNumberOfSerialNumberFeatures(long deviceID, int *errorCode) = 0;
     virtual int getSerialNumberFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -161,7 +161,7 @@ public:
     virtual void binningSetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
     virtual unsigned char binningGetDefaultPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
     virtual unsigned char binningGetMaxPixelBinningFactor(long deviceID, long spectrometerFeatureID, int *errorCode) = 0;
-        
+
     /* TEC capabilities */
     virtual int getNumberOfThermoElectricFeatures(long deviceID, int *errorCode) = 0;
     virtual int getThermoElectricFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -185,7 +185,7 @@ public:
     virtual void ethernetConfiguration_Set_MAC_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]) = 0;
     virtual unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex) = 0;
     virtual void ethernetConfiguration_Set_GbE_Enable_Status(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableState) = 0;
-    
+
 	/* Multicast features */
 	virtual int getNumberOfMulticastFeatures(long deviceID, int *errorCode) = 0;
 	virtual int getMulticastFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
@@ -206,7 +206,7 @@ public:
 	virtual void   add_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char IPv4_Address[4], unsigned char netMask) = 0;
 	virtual void   delete_IPv4_Address(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char addressIndex) = 0;
 
-	/* DHCP server features */	
+	/* DHCP server features */
 	virtual int getNumberOfDHCPServerFeatures(long deviceID, int *errorCode) = 0;
 	virtual int getDHCPServerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;
 	virtual void dhcpServerGetAddress(long deviceID, long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char(*serverAddress)[4], unsigned char *netMask) = 0;
@@ -312,7 +312,7 @@ public:
     virtual unsigned short int spectrumProcessingScansToAverageGet(long deviceID, long featureID, int *errorCode) = 0;
     virtual void spectrumProcessingBoxcarWidthSet(long deviceID, long featureID, int *errorCode, unsigned char boxcarWidth) = 0;
     virtual void spectrumProcessingScansToAverageSet(long deviceID, long featureID, int *errorCode, unsigned short int scansToAverage) = 0;
- 
+
     /* Revision capabilities */
     virtual int getNumberOfRevisionFeatures(long deviceID, int *errorCode) = 0;
     virtual int getRevisionFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength) = 0;

@@ -43,4 +43,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* OBPGETI2MASTERNUMBEROFBUSESEXCHANGE_H */
-

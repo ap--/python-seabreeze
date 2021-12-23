@@ -53,7 +53,7 @@
 #define FEATURE_FAMILY_ID_REVISION              	16
 #define FEATURE_FAMILY_ID_SPECTRUM_PROCESSING   	17
 #define FEATURE_FAMILY_ID_DATA_BUFFER           	18
-#define FEATURE_FAMILY_ID_ACQUISITION_DELAY     	19 
+#define FEATURE_FAMILY_ID_ACQUISITION_DELAY     	19
 #define FEATURE_FAMILY_ID_PIXEL_BINNING         	20 // was 18... that appears to have been a bug
 #define FEATURE_FAMILY_ID_INTROSPECTION				21
 #define FEATURE_FAMILY_ID_FAST_BUFFER				22
@@ -366,7 +366,7 @@ seabreeze::api::I2CMasterFeatureFamily::~I2CMasterFeatureFamily() {
 
 vector<FeatureFamily *> seabreeze::api::FeatureFamilies::getAllFeatureFamilies() {
     vector<FeatureFamily *> retval;
-    
+
     /* This creates new instances of these so the class-wide fields do not risk
      * having their const flags ignored.
      */

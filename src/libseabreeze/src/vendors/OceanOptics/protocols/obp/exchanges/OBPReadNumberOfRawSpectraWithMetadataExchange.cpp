@@ -45,7 +45,7 @@ using namespace std;
 #define METADATA_LENGTH         64
 #define OBP_MESSAGE_OVERHEAD    64
 
-OBPReadNumberOfRawSpectraWithMetadataExchange::OBPReadNumberOfRawSpectraWithMetadataExchange(unsigned int pixels, unsigned int numberOfBytesPerPixel) 
+OBPReadNumberOfRawSpectraWithMetadataExchange::OBPReadNumberOfRawSpectraWithMetadataExchange(unsigned int pixels, unsigned int numberOfBytesPerPixel)
 {
 
 	derivedClassPointer = this;
@@ -61,12 +61,12 @@ OBPReadNumberOfRawSpectraWithMetadataExchange::OBPReadNumberOfRawSpectraWithMeta
 
 }
 
-OBPReadNumberOfRawSpectraWithMetadataExchange::~OBPReadNumberOfRawSpectraWithMetadataExchange() 
+OBPReadNumberOfRawSpectraWithMetadataExchange::~OBPReadNumberOfRawSpectraWithMetadataExchange()
 {
 
 }
 
-void OBPReadNumberOfRawSpectraWithMetadataExchange::setNumberOfPixels(int pixels) 
+void OBPReadNumberOfRawSpectraWithMetadataExchange::setNumberOfPixels(int pixels)
 {
     this->numberOfPixels = pixels;
 }
@@ -76,9 +76,9 @@ void OBPReadNumberOfRawSpectraWithMetadataExchange::setNumberOfBytesPerPixel(int
 	this->numberOfBytesPerPixel = numberOfBytes;
 }
 
-unsigned int OBPReadNumberOfRawSpectraWithMetadataExchange::isLegalMessageType(unsigned int t) 
+unsigned int OBPReadNumberOfRawSpectraWithMetadataExchange::isLegalMessageType(unsigned int t)
 {
-    if(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META == t) 
+    if(OBPMessageTypes::OBP_GET_N_BUF_RAW_SPECTRA_META == t)
 	{
         return 1;
     }
@@ -100,7 +100,7 @@ Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *he
     /* This will use the superclass to transfer data from the device
      */
     xfer = Transfer::transfer(helper);
-    if(NULL == xfer) 
+    if(NULL == xfer)
 	{
         string error("Expected Transfer::transfer to produce a non-null result "
                         "containing raw spectral data.  Without this data, it is not "
@@ -114,17 +114,17 @@ Data *OBPReadNumberOfRawSpectraWithMetadataExchange::transfer(TransferHelper *he
     /* Try to parse the buffer into an OBPMessage.  This may throw an exception
      * if the message is badly formed.
      */
-    try 
+    try
 	{
         message = OBPMessage::parseByteStream(this->buffer);
-    } 
-	catch (IllegalArgumentException &iae) 
+    }
+	catch (IllegalArgumentException &iae)
 	{
         string error("Failed to parse message transferred from device");
         throw ProtocolException(error);
     }
 
-    if(0 == isLegalMessageType(message->getMessageType())) 
+    if(0 == isLegalMessageType(message->getMessageType()))
 	{
         string error("Did not get expected message type, got ");
         error += message->getMessageType();
@@ -153,7 +153,7 @@ void OBPReadNumberOfRawSpectraWithMetadataExchange::setNumberOfSamplesToRequest(
 
 	parentClass->numberOfSamplesToRetrieve = numberOfSamples;
 	readoutLength = (((parentClass->numberOfPixels * parentClass->numberOfBytesPerPixel) + parentClass->metadataLength + parentClass->checkSumLength) * numberOfSamples) + OBP_MESSAGE_OVERHEAD;
-	
+
 	parentClass->buffer->resize(readoutLength);
 	parentClass->length = readoutLength;
 	parentClass->checkBufferSize();

@@ -55,7 +55,7 @@ using namespace seabreeze::api;
 Jaz::Jaz() {
 
     this->name = "Jaz";
-        
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
@@ -71,10 +71,10 @@ Jaz::Jaz() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    
+
     ProgrammableSaturationFeature *saturation =
             new SaturationEEPROMSlotFeature(0x0011);
-    
+
     this->features.push_back(new JazSpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(17));

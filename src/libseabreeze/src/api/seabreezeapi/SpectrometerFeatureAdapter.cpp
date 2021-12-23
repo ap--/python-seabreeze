@@ -133,7 +133,7 @@ int SpectrometerFeatureAdapter::getFormattedSpectrum(int *errorCode,
         delete spectrum;
         SET_ERROR_CODE(ERROR_SUCCESS);
     } catch (const FeatureException &fe) {
-		
+
 		// the get spectrum calls should have an argument for the error string so that fe.what can be used
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
         return 0;
@@ -227,7 +227,7 @@ int SpectrometerFeatureAdapter::getWavelengths(int *errorCode,
     return valuesCopied;
 }
 
-unsigned short SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode) 
+unsigned short SpectrometerFeatureAdapter::getNumberOfPixels(int *errorCode)
 {
 // this, of course, is the same as getFormattedSpectrumLength(), but has a more descriptive name.
 

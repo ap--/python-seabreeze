@@ -44,9 +44,9 @@ Inet4Address::Inet4Address() {
 }
 
 Inet4Address::Inet4Address(std::string ipAddressQuads) {
-    
+
     const char *addrString = ipAddressQuads.c_str();
-    
+
 #ifdef _WINDOWS
     this->in.S_un.S_addr = inet_addr(addrString);
 #else
@@ -65,7 +65,7 @@ Inet4Address::Inet4Address(const Inet4Address &that) {
 }
 
 Inet4Address::~Inet4Address() {
-    
+
 }
 
 struct in_addr Inet4Address::getAddress() {

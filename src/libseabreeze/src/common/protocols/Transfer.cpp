@@ -123,4 +123,3 @@ void Transfer::checkBufferSize() {
         this->buffer->resize(this->length);
     }
 }
-

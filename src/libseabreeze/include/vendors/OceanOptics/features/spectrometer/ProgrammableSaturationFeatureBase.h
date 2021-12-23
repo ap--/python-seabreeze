@@ -33,33 +33,33 @@
 #include "vendors/OceanOptics/features/spectrometer/ProgrammableSaturationFeature.h"
 
 namespace seabreeze {
-    
+
     class ProgrammableSaturationFeatureBase
             : public ProgrammableSaturationFeature {
     public:
         ProgrammableSaturationFeatureBase();
         virtual ~ProgrammableSaturationFeatureBase();
-        
+
         /* Inherited from ProgrammableSaturationFeature */
         virtual unsigned int getSaturation();
-        
+
         /* Overriding from Feature */
         virtual bool initialize(const Protocol &protocol, const Bus &bus);
-        
+
         virtual FeatureFamily getFeatureFamily();
-        
+
     protected:
         /* Derived classes must implement this in whatever way is appropriate
          * to get the saturation level for the device.
          */
         virtual unsigned int getSaturation(const Protocol &protocol,
                 const Bus &bus) = 0;
-        
+
     private:
         unsigned int saturation;
         bool valid;
     };
-    
+
 } /* end namespace seabreeze */
 
 #endif /* PROGRAMMABLESATURATIONFEATUREBASE_H */

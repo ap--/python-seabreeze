@@ -51,7 +51,7 @@ using namespace std;
 Apex::Apex() {
 
     this->name = "Apex";
-        
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
@@ -66,10 +66,10 @@ Apex::Apex() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    
+
     ProgrammableSaturationFeature *saturation =
             new SaturationEEPROMSlotFeature_MayaPro(0x0011);
-    
+
     this->features.push_back(new ApexSpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(17));

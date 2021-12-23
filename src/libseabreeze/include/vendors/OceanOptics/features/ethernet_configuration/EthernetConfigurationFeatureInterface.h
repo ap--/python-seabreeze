@@ -42,19 +42,19 @@ namespace seabreeze {
 
 		virtual unsigned char get_GbE_Enable_Status(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void set_GbE_Enable_Status(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState) = 0;
 		virtual std::vector<unsigned char> get_MAC_Address(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void set_MAC_Address(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> macAddress) = 0;
@@ -65,4 +65,3 @@ namespace seabreeze {
 }
 
 #endif /* ETHERNETCONFIGURATIONFEATUREINTERFACE_H */
-

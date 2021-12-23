@@ -42,12 +42,12 @@ namespace seabreeze {
         virtual ~GainAdjustedSpectrometerFeature();
 
         virtual unsigned int getSaturationLevel();
-		
+
         /* Inherited from Feature */
         virtual bool initialize(const Protocol &protocol, const Bus &bus);
 
     protected:
-        ProgrammableSaturationFeature *saturation; 
+        ProgrammableSaturationFeature *saturation;
     };
 
 }

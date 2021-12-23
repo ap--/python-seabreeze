@@ -68,7 +68,7 @@ namespace seabreeze {
 
     private:
         IntegrationTimeExchange *integrationTimeExchange;
-		
+
         /* These are Transfers instead of Exchanges so that we can call getHints() on them.
          * if getHints is promoted up to the level of Exchange, then these can revert back.
          */
@@ -79,7 +79,7 @@ namespace seabreeze {
 		Transfer *requestFastBufferSpectrumExchange;
 		Transfer *readFastBufferSpectrumExchange;
         TriggerModeExchange *triggerModeExchange;
-		
+
     };
   }
 }

@@ -48,7 +48,7 @@ namespace seabreeze {
         virtual void set_IPv4_DHCP_Enable_State(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState);
 
         virtual unsigned char get_Number_Of_IPv4_Addresses(const Bus &bus, unsigned char interfaceIndex);
- 
+
         virtual void get_IPv4_Address(const Bus &bus, unsigned char interfaceIndex, unsigned char addressIndex,  std::vector<unsigned char> *IPv4_Address,  unsigned char *netMask);
 
         virtual std::vector<unsigned char> get_IPv4_Default_Gateway(const Bus &bus, unsigned char interfaceIndex);

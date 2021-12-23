@@ -54,10 +54,9 @@ namespace seabreeze {
         virtual FeatureFamily getFeatureFamily();
 
     protected:
-        
+
     };
 
 } /* end namespace seabreeze */
 
 #endif /* INTROSPECTION_FEATURE_H */
-

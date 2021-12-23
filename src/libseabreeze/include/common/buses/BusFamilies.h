@@ -55,13 +55,13 @@ namespace seabreeze {
         RS232BusFamily();
         virtual ~RS232BusFamily();
     };
-    
+
     class TCPIPv4BusFamily : public BusFamily {
     public:
         TCPIPv4BusFamily();
         virtual ~TCPIPv4BusFamily();
     };
-    
+
     class UDPIPv4BusFamily : public BusFamily {
     public:
         UDPIPv4BusFamily();

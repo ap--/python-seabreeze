@@ -33,7 +33,7 @@
 #include <vector>
 
 namespace seabreeze {
-    
+
     /* This class is intended specifically for getting the saturation level
      * from a NIRQuest256/512.  No other devices should use this class.
      */
@@ -42,16 +42,16 @@ namespace seabreeze {
     public:
         SaturationEEPROMSlotFeature_NIRQuest(int slot);
         virtual ~SaturationEEPROMSlotFeature_NIRQuest();
-        
+
     protected:
         /* Inherited from SaturationEEPROMSlotFeatureBase */
         virtual unsigned int getSaturation(const Protocol &protocol,
                 const Bus &bus);
-        
+
     private:
         int saturationSlot;
     };
-    
+
 } /* end namespace seabreeze */
 
 #endif /* SATURATIONEEPROMSLOTFEATURE_NIRQUEST_H */

@@ -37,11 +37,10 @@ namespace seabreeze {
     public:
         JazTCPIPv4();
         virtual ~JazTCPIPv4();
-        
+
         virtual bool open();
         virtual void close();
     };
 }
 
 #endif /* SEABREEZE_JAZTCPIPV4_H */
-

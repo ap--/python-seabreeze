@@ -33,7 +33,7 @@
 #include "vendors/OceanOptics/features/eeprom_slots/SaturationEEPROMSlotFeatureBase.h"
 
 namespace seabreeze {
-    
+
     /* This class is intended for most devices that store their saturation level
      * in EEPROM in the so-called "autonulling" configuration.  Note that the
      * NIRQuest, MayaPro, Apex and some others do not do things quite the same
@@ -44,16 +44,16 @@ namespace seabreeze {
     public:
         SaturationEEPROMSlotFeature(int slot);
         virtual ~SaturationEEPROMSlotFeature();
-        
+
     protected:
         /* Inherited from SaturationEEPROMSlotFeatureBase */
         virtual unsigned int getSaturation(const Protocol &protocol,
                 const Bus &bus);
-        
+
     private:
         int autonullingSlot;
     };
-    
+
 } /* end namespace seabreeze */
 
 #endif /* SATURATIONEEPROMSLOTFEATURE_EEPROM_H */

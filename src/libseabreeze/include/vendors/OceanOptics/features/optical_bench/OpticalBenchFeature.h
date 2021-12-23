@@ -59,8 +59,8 @@ namespace seabreeze {
                 const Bus &bus);
         virtual std::string *readOpticalBenchGrating(const Protocol &protocol,
                 const Bus &bus);
-                
-                                
+
+
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();
     };

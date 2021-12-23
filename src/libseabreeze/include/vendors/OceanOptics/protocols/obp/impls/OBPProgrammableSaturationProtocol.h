@@ -41,7 +41,7 @@ namespace seabreeze {
         public:
             OBPProgrammableSaturationProtocol();
             virtual ~OBPProgrammableSaturationProtocol();
-            
+
             /* Inherited from ProgrammableSaturationProtocolInterface */
             virtual unsigned int getSaturation(const Bus &bus);
         };
@@ -49,4 +49,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* OBPPROGRAMMABLESATURATIONPROTOCOL_H */
-

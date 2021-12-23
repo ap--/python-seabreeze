@@ -3,7 +3,7 @@
  * @date    October 2015
  * @author  Ocean Optics, Inc.
  *
- * This feature provides an interface to the spectral 
+ * This feature provides an interface to the spectral
  * data buffer in the QE-PRO.
  *
  * LICENSE:
@@ -46,4 +46,3 @@ namespace seabreeze {
 } /* end namespace */
 
 #endif /* QEPRODATABUFFERFEATURE_H */
-

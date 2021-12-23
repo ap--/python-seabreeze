@@ -48,7 +48,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
 OBPWifiConfigurationProtocol::OBPWifiConfigurationProtocol()
-        : WifiConfigurationProtocolInterface(new OceanBinaryProtocol()) 
+        : WifiConfigurationProtocolInterface(new OceanBinaryProtocol())
 {
 
 }

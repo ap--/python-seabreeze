@@ -50,4 +50,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_OOIREADIRRADCALEXCHANGE_H */
-

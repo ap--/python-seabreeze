@@ -43,7 +43,7 @@ IPv4NetworkProtocol::IPv4NetworkProtocol(string name, int id) {
 }
 
 IPv4NetworkProtocol::~IPv4NetworkProtocol() {
-    
+
 }
 
 string IPv4NetworkProtocol::getName() const {
@@ -55,27 +55,27 @@ bool IPv4NetworkProtocol::equals(const IPv4NetworkProtocol &that) const {
 }
 
 TCP_IPv4::TCP_IPv4() : IPv4NetworkProtocol("TCP/IPv4", IP4_PROTOCOL_ID_TCPIP) {
-    
+
 }
 
 TCP_IPv4::~TCP_IPv4() {
-    
+
 }
 
 UDP_IPv4::UDP_IPv4() : IPv4NetworkProtocol("UDP/IPv4", IP4_PROTOCOL_ID_UDPIP) {
-    
+
 }
 
 UDP_IPv4::~UDP_IPv4() {
-    
+
 }
 
 IPv4NetworkProtocols::IPv4NetworkProtocols() {
-    
+
 }
 
 IPv4NetworkProtocols::~IPv4NetworkProtocols() {
-    
+
 }
 
 vector<IPv4NetworkProtocol *> IPv4NetworkProtocols::getAllIPv4NetworkProtocols() {
@@ -86,9 +86,9 @@ vector<IPv4NetworkProtocol *> IPv4NetworkProtocols::getAllIPv4NetworkProtocols()
      */
     IPv4NetworkProtocol *tcp_ipv4 = new TCP_IPv4();
     IPv4NetworkProtocol *udp_ipv4 = new UDP_IPv4();
-    
+
     retval.push_back(tcp_ipv4);
     retval.push_back(udp_ipv4);
-    
+
     return retval;
 }

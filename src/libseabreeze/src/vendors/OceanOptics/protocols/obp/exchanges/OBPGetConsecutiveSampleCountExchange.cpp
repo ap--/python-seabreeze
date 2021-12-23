@@ -40,7 +40,7 @@ using namespace std;
 OBPGetConsecutiveSampleCountExchange::OBPGetConsecutiveSampleCountExchange() {
     this->hints->push_back(new OBPControlHint());
     this->messageType = OBPMessageTypes::OBP_GET_BACK_TO_BACK_SAMPLE_COUNT;
-	this->payload.resize(0);  
+	this->payload.resize(0);
 }
 
 OBPGetConsecutiveSampleCountExchange::~OBPGetConsecutiveSampleCountExchange() {
@@ -59,10 +59,9 @@ unsigned int OBPGetConsecutiveSampleCountExchange::queryConsecutiveSampleCount(
     }
 
 	// cast of a byte pointer(data) to an unsigned integer pointer which is dereferenced
-	consecutiveSampleCount = *(unsigned int *)(&(*result)[0]); 
+	consecutiveSampleCount = *(unsigned int *)(&(*result)[0]);
 
     delete result;
 
     return consecutiveSampleCount;
 }
-

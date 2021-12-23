@@ -59,7 +59,7 @@ Data *FPGASpectrumExchange::transfer(TransferHelper *helper) {
     /* Use the superclass to move the data into a local buffer. */
     xfer = Transfer::transfer(helper);
     if(NULL == xfer) {
-        string error("FPGASpectrumExchange::transfer: " 
+        string error("FPGASpectrumExchange::transfer: "
                 "Expected Transfer::transfer to produce a non-null result "
                 "containing raw spectral data.  Without this data, it is not possible to "
                 "generate a valid formatted spectrum.");

@@ -38,28 +38,28 @@ SaturationEEPROMSlotFeature_NIRQuest::SaturationEEPROMSlotFeature_NIRQuest(int s
 }
 
 SaturationEEPROMSlotFeature_NIRQuest::~SaturationEEPROMSlotFeature_NIRQuest() {
-    
+
 }
-        
+
 unsigned int SaturationEEPROMSlotFeature_NIRQuest::getSaturation(
         const Protocol &protocol, const Bus &bus) {
-    
+
     unsigned int saturation;
-    
+
     vector<unsigned char> *slot = readEEPROMSlot(protocol, bus, this->saturationSlot);
-    
+
     if(NULL == slot || slot->size() < 8) {
         if(NULL != slot) {
             delete slot;
         }
         throw FeatureException("Unable to read EEPROM slot for saturation level");
     }
-    
+
     saturation = ((*slot)[4] & 0x00FF)
                  | (((*slot)[5] & 0x00FF) << 8)
                  | (((*slot)[6] & 0x00FF) << 16)
                  | (((*slot)[7] & 0x00FF) << 24);
-    
+
     delete slot;
 
     return saturation;

@@ -55,14 +55,14 @@ unsigned char OBPTemperatureProtocol::readTemperatureCount(const Bus &bus)
     vector<unsigned char> *countResult;
 
     OBPGetTemperatureCountExchange countExchange;
-    
+
     TransferHelper *helper = bus.getHelper(countExchange.getHints());
-    if(NULL == helper) 
+    if(NULL == helper)
     {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
-    
+
     countResult = countExchange.queryDevice(helper);
 
     count = (*countResult)[0];
@@ -78,21 +78,21 @@ double OBPTemperatureProtocol::readTemperature(const Bus &bus, int index)
     unsigned char *bptr;
     int count = 0;
     vector<unsigned char> *countResult;
-    
+
     OBPGetTemperatureExchange xchange;
     OBPGetTemperatureCountExchange countExchange;
-    
+
     TransferHelper *helper = bus.getHelper(xchange.getHints());
-    if(NULL == helper) 
+    if(NULL == helper)
     {
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
     }
-    
+
     // although the number of temperatures is not needed for the query, it is nice to
     //  confirm that the index is in bounds
     countResult = countExchange.queryDevice(helper);
-    if(NULL == countResult || (*countResult)[0] > 16) 
+    if(NULL == countResult || (*countResult)[0] > 16)
     {
         /* Device is incapable of providing temperature */
         return 0;
@@ -110,7 +110,7 @@ double OBPTemperatureProtocol::readTemperature(const Bus &bus, int index)
                 "continue.");
             throw ProtocolException(error);
         }
-        
+
         // queryDevice returns a byte stream, turn that into a float... mind our endians.
         bptr = (unsigned char *)&temperature;
         for(unsigned int j = 0; j < sizeof(float); j++) { // four bytes returned
@@ -123,13 +123,13 @@ double OBPTemperatureProtocol::readTemperature(const Bus &bus, int index)
         string error("Bad Argument::The temperature index was out of bounds.");
         throw ProtocolException(error);
     }
-        
+
     return temperature;
 }
 
 
 vector<double> *OBPTemperatureProtocol::readAllTemperatures(const Bus &bus) {
-    
+
     vector<unsigned char> *result = NULL;
     unsigned int i;
     vector<double> *retval; // temperatures
@@ -157,9 +157,9 @@ vector<double> *OBPTemperatureProtocol::readAllTemperatures(const Bus &bus) {
     delete countResult;
 
     retval = new vector<double>(count); // temperature array to be returned
-    // query device returns a generic byte array, 
-    // not temperature floats as defined by the actual command 
-    result = xchange.queryDevice(helper); 
+    // query device returns a generic byte array,
+    // not temperature floats as defined by the actual command
+    result = xchange.queryDevice(helper);
     if(NULL == result) {
         string error("Expected Transfer::transfer to produce a non-null result "
             "containing temperature.  Without this data, it is not possible to "
@@ -168,20 +168,19 @@ vector<double> *OBPTemperatureProtocol::readAllTemperatures(const Bus &bus) {
         throw ProtocolException(error);
     }
     else {
-        
+
         // the bytes must be transferred to floats for the return temperatures
         for(i = 0; i < retval->size(); i++) {
-            
+
             bptr = (unsigned char *)&temperatureBuffer;
             for(unsigned int j = 0; j < sizeof(float); j++) {
                 bptr[j] = (*result)[j+(i*sizeof(float))];
             }
 
             // fill the return array with the temperatures
-            (*retval)[i] = (double)temperatureBuffer;  
+            (*retval)[i] = (double)temperatureBuffer;
         }
     }
     delete result;
     return retval;
 }
-

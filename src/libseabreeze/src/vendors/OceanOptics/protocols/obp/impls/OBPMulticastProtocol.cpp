@@ -42,7 +42,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace std;
 
 OBPMulticastProtocol::OBPMulticastProtocol()
-        : MulticastProtocolInterface(new OceanBinaryProtocol()) 
+        : MulticastProtocolInterface(new OceanBinaryProtocol())
 {
 
 }

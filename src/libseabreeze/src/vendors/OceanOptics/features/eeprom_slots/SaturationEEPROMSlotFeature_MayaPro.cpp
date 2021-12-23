@@ -38,26 +38,26 @@ SaturationEEPROMSlotFeature_MayaPro::SaturationEEPROMSlotFeature_MayaPro(int slo
 }
 
 SaturationEEPROMSlotFeature_MayaPro::~SaturationEEPROMSlotFeature_MayaPro() {
-    
+
 }
-        
+
 unsigned int SaturationEEPROMSlotFeature_MayaPro::getSaturation(
         const Protocol &protocol, const Bus &bus) {
-    
+
     unsigned int saturation;
-    
+
     vector<unsigned char> *slot = readEEPROMSlot(protocol, bus, this->saturationSlot);
-    
+
     if(NULL == slot || slot->size() < 8) {
         if(NULL != slot) {
             delete slot;
         }
         throw FeatureException("Unable to read EEPROM slot for saturation level");
     }
-    
+
     saturation = ((*slot)[0] & 0x00FF)
                  | (((*slot)[1] & 0x00FF) << 8);
-    
+
     delete slot;
 
     return saturation;

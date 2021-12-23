@@ -36,7 +36,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPSetEthernetConfigurationGbEEnableExchange::OBPSetEthernetConfigurationGbEEnableExchange() 
+OBPSetEthernetConfigurationGbEEnableExchange::OBPSetEthernetConfigurationGbEEnableExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
@@ -46,7 +46,7 @@ OBPSetEthernetConfigurationGbEEnableExchange::OBPSetEthernetConfigurationGbEEnab
     this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned char)); // two bytes in immediate data
 }
 
-OBPSetEthernetConfigurationGbEEnableExchange::~OBPSetEthernetConfigurationGbEEnableExchange() 
+OBPSetEthernetConfigurationGbEEnableExchange::~OBPSetEthernetConfigurationGbEEnableExchange()
 {
 
 }
@@ -56,7 +56,7 @@ void OBPSetEthernetConfigurationGbEEnableExchange::setInterfaceIndex(unsigned ch
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPSetEthernetConfigurationGbEEnableExchange::setGbE_Enable(unsigned char enableStatus) 
+void OBPSetEthernetConfigurationGbEEnableExchange::setGbE_Enable(unsigned char enableStatus)
 {
 	this->payload[1] = enableStatus;
 }

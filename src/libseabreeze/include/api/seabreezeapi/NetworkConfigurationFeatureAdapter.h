@@ -36,13 +36,13 @@
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
 #include "vendors/OceanOptics/features/network_configuration/NetworkConfigurationFeatureInterface.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace api 
+    namespace api
     {
 
         class NetworkConfigurationFeatureAdapter
-                : public FeatureAdapterTemplate<NetworkConfigurationFeatureInterface> 
+                : public FeatureAdapterTemplate<NetworkConfigurationFeatureInterface>
 		{
         	public:
             	NetworkConfigurationFeatureAdapter(

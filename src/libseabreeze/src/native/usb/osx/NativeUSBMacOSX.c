@@ -230,7 +230,7 @@ void __setup_endpoint_map(__usb_interface_t *usb) {
     for(i = 0; i < count; i++) {
         usb->endpoints[i].pipe = i + 1; /* Pipe 0 is EP0 */
         usb->endpoints[i].endpoint = __get_endpoint(usb, i);
-        
+
         int flag = USBGetEndpointDescriptor(usb, i, &endpointDesc);
         if(0 == flag) {
             usb->endpoints[i].maxPacketSize = endpointDesc.wMaxPacketSize;
@@ -298,7 +298,7 @@ int __get_endpoint(__usb_interface_t *usb, int pipe_index) {
  */
 void __close_and_dealloc_usb_interface(__usb_interface_t *usb) {
     int i;
-    
+
     if(NULL == usb) {
         return;
     }
@@ -314,7 +314,7 @@ void __close_and_dealloc_usb_interface(__usb_interface_t *usb) {
 
     IOObjectRelease(usb->usbDeviceRef);
     /* FIXME: does this need to release handle->confDesc? */
-    
+
     if(NULL != usb->endpoints) {
         for(i = 0; i < usb->endpointCount; i++) {
             if(NULL != usb->endpoints[i].buffer) {
@@ -569,7 +569,7 @@ USBOpen(unsigned long deviceID, int *errorCode) {
         /* Failed to get the dictionary, so clean up and bail out */
         goto error1;
     }
-    
+
     /* Attempt to create vendor reference */
     numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type,
                                &idVendor);
@@ -805,7 +805,7 @@ USBWrite(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByt
     }
 
     usb = (__usb_interface_t *)deviceHandle;
-    
+
     endpoint_desc = __get_endpoint_descriptor(usb, endpoint);
     if(NULL == endpoint_desc) {
         return WRITE_FAILED;
@@ -820,31 +820,31 @@ USBWrite(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByt
 }
 
 int __read_from_cache(__usb_endpoint_t *endpoint, char *target, int bytesToRead) {
-    
+
     int availableBytes = endpoint->length - endpoint->offset;
     int bytesToCopy = 0;
-    
+
     if(availableBytes > 0) {
         bytesToCopy = availableBytes < bytesToRead ? availableBytes : bytesToRead;
         memcpy(target, &endpoint->buffer[endpoint->offset], bytesToCopy);
-        
+
         /* Update the endpoint descriptor */
         endpoint->offset += bytesToCopy;
         availableBytes -= bytesToCopy;
-        
+
         if(0 == availableBytes) {
             /* Reset the endpoint buffer since it has been exhausted */
             endpoint->offset = 0;
             endpoint->length = 0;
         }
     }
-    
+
     return bytesToCopy;
 }
 
 int __read_from_endpoint(__usb_interface_t *usb, __usb_endpoint_t *endpoint) {
     IOReturn flag;
-    
+
     /* Need to always read the maximum packet size for the endpoint.  If not,
      * and the device sends more data than the given read length, then the
      * low-level USB layer will stall the endpoint.
@@ -858,10 +858,10 @@ int __read_from_endpoint(__usb_interface_t *usb, __usb_endpoint_t *endpoint) {
         endpoint->offset = 0;
         return READ_FAILED;
     }
-    
+
     endpoint->length = bytesRead;  /* Update the length to what was written */
     endpoint->offset = 0;
-    
+
     return bytesRead;
 }
 
@@ -878,12 +878,12 @@ USBRead(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByte
     }
 
     usb = (__usb_interface_t *)deviceHandle;
-    
+
     endpoint_desc = __get_endpoint_descriptor(usb, endpoint);
     if(NULL == endpoint_desc) {
         return READ_FAILED;
     }
-    
+
     /* First, try to push whatever might exist in the endpoint buffer back to
      * the caller.  This will be necessary if anything was previously cached.
      */
@@ -895,19 +895,19 @@ USBRead(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByte
         numberOfBytes -= bytesCopied;
         totalCopied += bytesCopied;
     }
-    
+
     if(0 == numberOfBytes) {
         /* Copied out the desired number of bytes, so return that */
         return totalCopied;
     }
-    
+
     /* Now try to read one packet at a time to satisfy the caller */
     do {
         result = __read_from_endpoint(usb, endpoint_desc);
         if(result < 0) {
             return READ_FAILED;
         }
-        
+
         /* The previous call should have loaded up the cache, so now try
          * to flush that into the user buffer
          */
@@ -919,7 +919,7 @@ USBRead(void *deviceHandle, unsigned char endpoint, char *data, int numberOfByte
             totalCopied += bytesCopied;
         }
     } while(numberOfBytes > 0);
-    
+
     return totalCopied;
 }
 
@@ -928,18 +928,18 @@ void
 USBClearStall(void *deviceHandle, unsigned char endpoint) {
     __usb_interface_t *usb;
     __usb_endpoint_t *endpoint_desc;
-    
+
     if(NULL == deviceHandle) {
         return;
     }
-    
+
     usb = (__usb_interface_t *)deviceHandle;
-    
+
     endpoint_desc = __get_endpoint_descriptor(usb, endpoint);
     if(NULL == endpoint_desc) {
         return;
     }
-    
+
     (*usb->intf)->ClearPipeStallBothEnds(usb->intf, endpoint_desc->pipe);
 }
 

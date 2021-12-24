@@ -26,8 +26,7 @@ class BackendConfig:
 
 
 def use(
-    backend: Literal["cseabreeze", "pyseabreeze"], force: bool = True,
-    **kwargs: Any
+    backend: Literal["cseabreeze", "pyseabreeze"], force: bool = True, **kwargs: Any
 ) -> None:
     """
     select the backend used for communicating with the spectrometer

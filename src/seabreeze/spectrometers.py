@@ -22,26 +22,29 @@ import seabreeze.backends
 from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin
 from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
-from seabreeze.types import narrow_list_devices_type
-
-if TYPE_CHECKING:
-    from seabreeze.types import SeaBreezeDevice
-    from seabreeze.types import SeaBreezeError
-    from seabreeze.types import SeaBreezeFeature
-    import numpy.typing as npt
-
-    ST = TypeVar("ST", bound="Spectrometer")
-
 
 # get the backend and add some functions/classes to this module
 _lib: SeaBreezeBackend = seabreeze.backends.get_backend()
-
 SeaBreezeDevice = _lib.SeaBreezeDevice  # type: ignore
 SeaBreezeError = _lib.SeaBreezeError  # type: ignore
 SeaBreezeFeature = _lib.SeaBreezeFeature  # type: ignore
 
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+    from seabreeze.types import SeaBreezeDevice
+    from seabreeze.types import SeaBreezeFeature
+    from seabreeze.types import SeaBreezeAPI
 
-@narrow_list_devices_type
+
+__all__ = [
+    "list_devices",
+    "Spectrometer",
+]
+
+
+ST = TypeVar("ST", bound="Spectrometer")
+
+
 def list_devices() -> List[SeaBreezeDevice]:
     """returns available SeaBreezeDevices
 
@@ -52,17 +55,21 @@ def list_devices() -> List[SeaBreezeDevice]:
     devices: `list[SeaBreezeDevice]`
         connected Spectrometer instances
     """
-    if not hasattr(list_devices, "_api"):
-        # noinspection PyProtectedMember
-        list_devices._api = _lib.SeaBreezeAPI(**_lib._api_kwargs)
-    # noinspection PyProtectedMember
-    return list_devices._api.list_devices()
+    api: SeaBreezeAPI
+    try:
+        api = list_devices._api
+    except AttributeError:
+        _kw = _lib._api_kwargs
+        api = list_devices._api = _lib.SeaBreezeAPI(**_kw)
+    return api.list_devices()
 
 
 class Spectrometer(_DeprecatedSpectrometerMixin):
     """Spectrometer class for all supported spectrometers"""
 
-    _backend: SeaBreezeBackend = _lib  # store reference to backend to allow backend switching in tests
+    _backend: SeaBreezeBackend = (
+        _lib  # store reference to backend to allow backend switching in tests
+    )
 
     def __init__(self, device: SeaBreezeDevice) -> None:
         """create a Spectrometer instance for the provided device
@@ -146,7 +153,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 "No device attached with serial number '%s'." % serial
             )
 
-    def wavelengths(self) -> npt.NDArray[numpy.float_]:
+    def wavelengths(self) -> NDArray[numpy.float_]:
         """wavelength array of the spectrometer
 
         wavelengths in (nm) corresponding to each pixel of the spectrometer
@@ -158,7 +165,9 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         return self._wavelengths
 
-    def intensities(self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False) -> npt.NDArray[numpy.float_]:
+    def intensities(
+        self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False
+    ) -> NDArray[numpy.float_]:
         """measured intensity array in (a.u.)
 
         Measured intensities as numpy array returned by the spectrometer.
@@ -233,7 +242,9 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         return self._dev.f.spectrometer.get_maximum_intensity()
 
-    def spectrum(self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False) -> npt.NDArray[numpy.float_]:
+    def spectrum(
+        self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False
+    ) -> NDArray[numpy.float_]:
         """returns wavelengths and intensities as single array
 
         Convenience method to allow:

@@ -13,6 +13,7 @@ from typing import Tuple
 
 import usb.core
 import usb.util
+import usb.backend
 
 
 class TransportInterface:

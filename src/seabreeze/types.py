@@ -10,22 +10,24 @@ from typing import Callable
 from typing import Dict
 from typing import List
 from typing import Optional
+from typing import TYPE_CHECKING
 from typing import Tuple
 from typing import Type
 from typing import TypeVar
 
-if sys.version_info >= (3, 9):
+if sys.version_info >= (3, 8):
     from typing import Literal
     from typing import Protocol
-elif sys.version_info >= (3, 8):
-    from typing import Literal
-    from typing_extensions import Protocol
 else:
     from typing_extensions import Literal
     from typing_extensions import Protocol
 
 import numpy as np
-from numpy.typing import NDArray
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+else:
+    NDArray = None
 
 
 

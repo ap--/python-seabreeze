@@ -28,7 +28,9 @@ if TYPE_CHECKING:
 else:
     NDArray = None
 
-__all__ = []
+__all__ = [
+    "SeaBreezeAPI",
+]
 
 
 if TYPE_CHECKING:
@@ -53,7 +55,7 @@ if TYPE_CHECKING:
             ...
 
 
-class SeaBreezeAPI:
+class SeaBreezeAPI(Protocol):
     """SeaBreeze API interface"""
 
     def __init__(self, initialize: bool = True, **_kwargs: Any) -> None:

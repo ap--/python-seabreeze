@@ -3,10 +3,12 @@ from __future__ import annotations
 import weakref
 from abc import ABC
 from abc import abstractmethod
+from typing import Generic
 from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Type
+from typing import TypeVar
 from typing import Union
 
 from seabreeze.types import SeaBreezeDevice
@@ -51,7 +53,10 @@ class PySeaBreezeProtocol(ABC):
         ...
 
 
-class PySeaBreezeTransport(ABC):
+DT = TypeVar("DT")
+
+
+class PySeaBreezeTransport(ABC, Generic[DT]):
 
     _required_init_kwargs: Tuple[str, ...] = ()
 
@@ -115,7 +120,7 @@ class PySeaBreezeTransport(ABC):
 
     @classmethod
     @abstractmethod
-    def list_devices(cls) -> List[SeaBreezeDevice]:
+    def list_devices(cls) -> List[DT]:
         ...
 
     @classmethod

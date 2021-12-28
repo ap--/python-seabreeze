@@ -28,27 +28,29 @@ if TYPE_CHECKING:
 else:
     NDArray = None
 
-
-class SeaBreezeError(Exception):
-    ...
+__all__ = []
 
 
-class SeaBreezeNumFeaturesError(SeaBreezeError):
-    ...
+if TYPE_CHECKING:
 
-
-class SeaBreezeDevice:
-    f: SeaBreezeFeatureAccessor
-    is_open: bool
-    serial_number: str
-    model: str  # fixme
-    features: Dict[str, "SeaBreezeFeature"]
-
-    def open(self) -> None:
+    class SeaBreezeError(Exception):
         ...
 
-    def close(self) -> None:
+    class SeaBreezeNumFeaturesError(SeaBreezeError):
         ...
+
+    class SeaBreezeDevice:
+        f: SeaBreezeFeatureAccessor
+        is_open: bool
+        serial_number: str
+        model: str  # fixme
+        features: Dict[str, SeaBreezeFeature]
+
+        def open(self) -> None:
+            ...
+
+        def close(self) -> None:
+            ...
 
 
 class SeaBreezeAPI:

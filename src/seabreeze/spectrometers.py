@@ -22,22 +22,25 @@ import seabreeze.backends
 from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin  # type: ignore
 from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
+from seabreeze.types import SeaBreezeAPI
 
 # get the backend and add some functions/classes to this module
 _lib: SeaBreezeBackend = seabreeze.backends.get_backend()
-SeaBreezeDevice = _lib.SeaBreezeDevice  # type: ignore
-SeaBreezeError = _lib.SeaBreezeError  # type: ignore
-SeaBreezeFeature = _lib.SeaBreezeFeature  # type: ignore
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
     from seabreeze.types import SeaBreezeDevice
+    from seabreeze.types import SeaBreezeError
     from seabreeze.types import SeaBreezeFeature
-    from seabreeze.types import SeaBreezeAPI
 
+else:
+    SeaBreezeDevice = _lib.SeaBreezeDevice
+    SeaBreezeError = _lib.SeaBreezeError
+    SeaBreezeFeature = _lib.SeaBreezeFeature
 
 __all__ = [
     "list_devices",
+    "SeaBreezeError",
     "Spectrometer",
 ]
 
@@ -57,19 +60,18 @@ def list_devices() -> List[SeaBreezeDevice]:
     """
     api: SeaBreezeAPI
     try:
-        api = list_devices._api
+        api = list_devices._api  # type: ignore
     except AttributeError:
         _kw = _lib._api_kwargs
-        api = list_devices._api = _lib.SeaBreezeAPI(**_kw)
+        api = list_devices._api = _lib.SeaBreezeAPI(**_kw)  # type: ignore
     return api.list_devices()
 
 
 class Spectrometer(_DeprecatedSpectrometerMixin):
     """Spectrometer class for all supported spectrometers"""
 
-    _backend: SeaBreezeBackend = (
-        _lib  # store reference to backend to allow backend switching in tests
-    )
+    # store reference to backend to allow backend switching in tests
+    _backend: SeaBreezeBackend = _lib
 
     def __init__(self, device: SeaBreezeDevice) -> None:
         """create a Spectrometer instance for the provided device

@@ -19,7 +19,7 @@ from typing import TypeVar
 import numpy
 
 import seabreeze.backends
-from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin
+from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin  # type: ignore
 from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
 

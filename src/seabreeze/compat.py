@@ -1,3 +1,4 @@
+# type: ignore
 """seabreeze.compat compatibility layer with 0.6.x seabreeze
 
 seabreeze 0.6.x

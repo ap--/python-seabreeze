@@ -10,34 +10,12 @@ import hashlib
 import struct
 import time
 import warnings
-import weakref
-from collections.abc import Callable
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
+from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 
 
-class ProtocolInterface:
-    def __init__(self, transport):
-        if not (
-            hasattr(transport, "write")
-            and isinstance(transport.write, Callable)
-            and hasattr(transport, "read")
-            and isinstance(transport.read, Callable)
-        ):
-            raise TypeError("transport does not implement read and write methods")
-        self.transport = weakref.proxy(transport)
-
-    def send(self, msg_type, payload, timeout_ms=None, **kwargs):
-        raise NotImplementedError("implement in derived classes")
-
-    def receive(self, size=None, timeout_ms=None, **kwargs):
-        raise NotImplementedError("implement in derived classes")
-
-    def query(self, msg_type, payload, timeout_ms=None, **kwargs):
-        raise NotImplementedError("implement in derived classes")
-
-
-class OOIProtocol(ProtocolInterface):
+class OOIProtocol(PySeaBreezeProtocol):
 
     msgs = {
         code: functools.partial(struct.Struct(msg).pack, code)
@@ -148,7 +126,7 @@ class OOIProtocol(ProtocolInterface):
         return self.receive(size=size, timeout_ms=timeout_ms, **kwargs)
 
 
-class OBPProtocol(ProtocolInterface):
+class OBPProtocol(PySeaBreezeProtocol):
 
     msgs = {
         code: struct.Struct(msg).pack

@@ -15,76 +15,8 @@ import usb.core
 import usb.util
 import usb.backend
 
-
-class TransportInterface:
-
-    _required_init_kwargs: Tuple[str, ...] = ()
-
-    def open_device(self, device):
-        """open a seabreeze device
-
-        Parameters
-        ----------
-        device : seabreeze.pyseabreeze.devices.SeaBreezeDevice
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    @property
-    def is_open(self):
-        """return if device is opened
-
-        Returns
-        -------
-        bool
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    def close_device(self):
-        """close the seabreeze device"""
-        raise NotImplementedError("implement in derived transport class")
-
-    def write(self, data, timeout_ms=None, **kwargs):
-        """write data to the device"""
-        raise NotImplementedError("implement in derived transport class")
-
-    def read(self, size=None, timeout_ms=None, **kwargs):
-        """read data from the
-
-        Returns
-        -------
-        str
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    @property
-    def default_timeout_ms(self):
-        raise NotImplementedError("implement in derived transport class")
-
-    @property
-    def protocol(self):
-        raise NotImplementedError("implement in derived transport class")
-
-    @classmethod
-    def list_devices(cls):
-        raise NotImplementedError("implement in derived transport class")
-
-    @classmethod
-    def register_model(cls, model_name, **kwargs):
-        raise NotImplementedError("implement in derived transport class")
-
-    @classmethod
-    def supported_model(cls, device):
-        """return if the device supports the transport or vice versa
-
-        Returns
-        -------
-        model_name : ``
-        """
-        return None
-
-    @classmethod
-    def specialize(cls, model_name, **kwargs):
-        raise NotImplementedError("implement in derived transport class")
+from seabreeze.pyseabreeze.types import PySeaBreezeTransport
+from seabreeze.types import SeaBreezeDevice
 
 
 # encapsulate usb.core.USBError
@@ -152,7 +84,7 @@ class USBTransportHandle:
         self.pyusb_device = None
 
 
-class USBTransport(TransportInterface):
+class USBTransport(PySeaBreezeTransport):
     """implementation of the usb transport interface for spectrometers"""
 
     _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")

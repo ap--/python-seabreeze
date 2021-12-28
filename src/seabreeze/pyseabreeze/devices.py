@@ -10,7 +10,8 @@ from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature
 from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
-from seabreeze.pyseabreeze.transport import TransportInterface, USBTransport
+from seabreeze.pyseabreeze.transport import USBTransport
+from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 
 # class registry for all spectrometer models
 _model_class_registry = {}
@@ -112,7 +113,7 @@ class _SeaBreezeDeviceMeta(type):
             # for each supported transport of the spectrometer, gather the configuration from
             # the spectrometer class and specialize the transport_cls with the provided settings.
             #
-            if not issubclass(transport_cls, TransportInterface):
+            if not issubclass(transport_cls, PySeaBreezeTransport):
                 raise TypeError(
                     "{}.transport[{:d}] '{}' does not derive from TransportInterface".format(
                         class_name, idx, transport_cls.__name__

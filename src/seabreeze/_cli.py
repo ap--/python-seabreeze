@@ -18,9 +18,11 @@ Request implementing the functionality.
 
 author: Andreas Poehlmann
 """
-import importlib
 import itertools
 import operator
+from importlib import import_module
+
+from seabreeze.types import SeaBreezeBackend
 
 
 def ls() -> None:
@@ -28,15 +30,15 @@ def ls() -> None:
     connected = []
     for backend in ("cseabreeze", "pyseabreeze"):
         try:
-            sb_backend = importlib.import_module(f"seabreeze.{backend}")
+            sb_backend: SeaBreezeBackend = import_module(f"seabreeze.{backend}")  # type: ignore
         except ImportError:
             continue
 
-        api = sb_backend.SeaBreezeAPI()  # type: ignore
+        api = sb_backend.SeaBreezeAPI()
         try:
             devices = api.list_devices()
             for d in devices:
-                connected.append((d.model, d.serial_number, sb_backend._backend_))  # type: ignore
+                connected.append((d.model, d.serial_number, sb_backend._backend_))
         finally:
             api.shutdown()
             del sb_backend

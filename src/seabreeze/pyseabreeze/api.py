@@ -12,6 +12,7 @@ import logging
 import weakref
 from typing import Any
 from typing import List
+from typing import TYPE_CHECKING
 
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice, _model_class_registry
 from seabreeze.pyseabreeze.transport import (
@@ -22,6 +23,10 @@ from seabreeze.pyseabreeze.transport import (
     USBTransportHandle,
 )
 from seabreeze.types import SeaBreezeAPI as _SeaBreezeAPIProtocol
+
+if TYPE_CHECKING:
+    from seabreeze.types import SeaBreezeDevice as _SeaBreezeDevice
+
 
 __all__ = ["SeaBreezeAPI"]
 
@@ -94,7 +99,7 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
         # IPV4Transport.register_device(device_type, ip_address, port)
         raise NotImplementedError("ipv4 communication not implemented for pyseabreeze")
 
-    def list_devices(self) -> List[SeaBreezeDevice]:
+    def list_devices(self) -> List[_SeaBreezeDevice]:
         """returns available SeaBreezeDevices
 
         list all connected Ocean Optics devices supported
@@ -102,11 +107,11 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
 
         Returns
         -------
-        devices: list of SeaBreezeDevice
+        devices:
             connected Spectrometer instances
         """
         # get all matching devices
-        devices = []
+        devices: list[_SeaBreezeDevice] = []
         for usb_dev in USBTransport.list_devices(**self._kwargs):
             # get the correct communication interface
             dev = _seabreeze_device_factory(usb_dev)

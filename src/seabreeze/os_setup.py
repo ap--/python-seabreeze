@@ -1,3 +1,4 @@
+# type: ignore
 """operating system relevant deploy functions
 
 author: Andreas Poehlmann

@@ -127,7 +127,7 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
                     raise
                 else:
                     dev.close()
-            devices.append(dev)
+            devices.append(dev)  # type: ignore
         return devices
 
     # note: to be fully consistent with cseabreeze this shouldn't be a staticmethod

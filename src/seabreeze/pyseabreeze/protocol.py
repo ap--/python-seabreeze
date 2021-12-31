@@ -5,14 +5,20 @@ ocean optics spectrometers use two different communication protocols:
 - the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
 
 """
+from __future__ import annotations
+
 import functools
 import hashlib
 import struct
 import time
 import warnings
+from typing import Any
+from typing import Optional
+from typing import Union
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
+from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 
 
 class OOIProtocol(PySeaBreezeProtocol):
@@ -35,13 +41,19 @@ class OOIProtocol(PySeaBreezeProtocol):
         }.items()
     }  # add more here if you implement new features
 
-    def __init__(self, transport):
+    def __init__(self, transport: PySeaBreezeTransport[Any]) -> None:
         super().__init__(transport)
         # initialize the spectrometer
         self.send(0x01)
         time.sleep(0.1)  # wait shortly after init command
 
-    def send(self, msg_type, payload=(), timeout_ms=None, **kwargs):
+    def send(
+        self,
+        msg_type: int,
+        payload: Union[tuple[float | int | str, ...], str, int, float] = (),
+        timeout_ms: Optional[int] = None,
+        **kwargs: Optional[str | int],
+    ) -> int:
         """send a ooi message to the spectrometer
 
         Parameters
@@ -67,26 +79,32 @@ class OOIProtocol(PySeaBreezeProtocol):
         data = self.msgs[msg_type](*payload)
         return self.transport.write(data, timeout_ms=timeout_ms)
 
-    def receive(self, size=None, timeout_ms=None, mode=None, **kwargs):
+    def receive(
+        self,
+        size: Optional[int] = None,
+        timeout_ms: Optional[int] = None,
+        mode: Optional[str] = None,
+        **kwargs: Any,
+    ) -> bytes:
         """receive data from the spectrometer
 
         Parameters
         ----------
-        size : int, optional
+        size:
             number of bytes to receive. if `None` (default) uses the
             default size as specified in the transport layer.
-        timeout_ms : int, optional
+        timeout_ms:
             the timeout after which the transport layer should error.
             `None` means no timeout (default)
-        mode : str, optional
+        mode:
             transport layers can support different modes
             (i.e. {'low_speed', 'high_speed', 'high_speed_alt'} in the usb case)
-        kwargs :
+        kwargs:
             ignored and only present to provide compatible caller interfaces
 
         Returns
         -------
-        data : str
+        data:
             data returned from the spectrometer
         """
         if kwargs:
@@ -95,35 +113,43 @@ class OOIProtocol(PySeaBreezeProtocol):
             size=size, timeout_ms=timeout_ms, mode=mode, **kwargs
         )
 
-    def query(self, msg_type, payload, size=None, timeout_ms=None, mode=None, **kwargs):
+    def query(
+        self,
+        msg_type: int,
+        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
+        timeout_ms: Optional[int] = None,
+        size: Optional[int] = None,
+        mode: Optional[str] = None,
+        **kwargs: Optional[str | int],
+    ) -> bytes:
         """convenience method combining send and receive
 
         Parameters
         ----------
-        msg_type : int
+        msg_type:
             a message type as defined in `OOIProtocol.msgs`
-        payload :
+        payload:
             the payload to be sent. Can be a singe value or a tuple, dependent
             `msg_type`.
-        size : int, optional
+        size:
             number of bytes to receive. if `None` (default) uses the
             default size as specified in the transport layer.
-        timeout_ms : int, optional
+        timeout_ms:
             the timeout after which the transport layer should error.
             `None` means no timeout (default)
-        mode : str, optional
+        mode:
             transport layers can support different modes
             (i.e. {'low_speed', 'high_speed', 'high_speed_alt'} in the usb case)
-        kwargs :
+        kwargs:
             ignored and only present to provide compatible caller interfaces
 
         Returns
         -------
-        data : str
+        data:
             data returned from the spectrometer
         """
         self.send(msg_type, payload, timeout_ms=timeout_ms)
-        return self.receive(size=size, timeout_ms=timeout_ms, **kwargs)
+        return self.receive(size=size, timeout_ms=timeout_ms, mode=mode, **kwargs)
 
 
 class OBPProtocol(PySeaBreezeProtocol):
@@ -208,7 +234,14 @@ class OBPProtocol(PySeaBreezeProtocol):
         FOOTER_FMT = "16s" "L"  # checksum  # footer
 
     # noinspection DuplicatedCode
-    def send(self, msg_type, payload=(), timeout_ms=None, request_ack=True, **kwargs):
+    def send(
+        self,
+        msg_type: int,
+        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
+        timeout_ms: Optional[int] = None,
+        request_ack: bool = True,
+        **kwargs: Any,
+    ) -> int:
         """send a obp message to the spectrometer
 
         Parameters
@@ -265,7 +298,12 @@ class OBPProtocol(PySeaBreezeProtocol):
             )
         return bytes_written
 
-    def receive(self, size=None, timeout_ms=None, **kwargs):
+    def receive(
+        self,
+        size: Optional[int] = None,
+        timeout_ms: Optional[int] = None,
+        **kwargs: Any,
+    ) -> bytes:
         """receive data from the spectrometer
 
         Parameters
@@ -318,7 +356,14 @@ class OBPProtocol(PySeaBreezeProtocol):
 
         return self._extract_message_data(response)
 
-    def query(self, msg_type, payload=(), size=None, timeout_ms=None, **kwargs):
+    def query(
+        self,
+        msg_type: int,
+        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
+        timeout_ms: Optional[int] = None,
+        size: Optional[int] = None,
+        **kwargs: Any,
+    ) -> bytes:
         """convenience method combining send and receive
 
         Parameters
@@ -346,24 +391,28 @@ class OBPProtocol(PySeaBreezeProtocol):
         return self.receive(timeout_ms=timeout_ms)
 
     def _construct_outgoing_message(
-        self, msg_type, payload_string, request_ack=False, regarding=None
-    ):
+        self,
+        msg_type: int,
+        payload_string: bytes,
+        request_ack: bool = False,
+        regarding: Optional[int] = None,
+    ) -> bytes:
         """construct an outgoing OBP message
 
         Parameters
         ----------
-        msg_type : `int`
+        msg_type:
             the obp message type, a 4 byte integer
-        payload_string : `bytes`
+        payload_string:
             a compiled payload_string
-        request_ack : `bool`
+        request_ack:
             request an ack for the sent command from the spectrometer.
-        regarding : `int`
+        regarding:
             see ocean optics obp protocol documentation
 
         Returns
         -------
-        message : `str`
+        message:
             compiled message
         """
         if request_ack is True:
@@ -407,17 +456,17 @@ class OBPProtocol(PySeaBreezeProtocol):
         )
         return msg
 
-    def _check_incoming_message_header(self, header):
+    def _check_incoming_message_header(self, header: bytes) -> tuple[int, int]:
         """check the incoming message header
 
         Parameters
         ----------
-        header : `str`
+        header:
             a obp header of length 44
 
         Returns
         -------
-        bytes_and_checksum_type : tuple[`int`, `int`]
+        bytes_and_checksum_type:
             bytes_remaining after the header (returns 20 for a 64 byte message)
             checksum_type only supports self.OBP.CHECKSUM_TYPE_MD5 for now
         """
@@ -467,17 +516,17 @@ class OBPProtocol(PySeaBreezeProtocol):
 
         return bytes_remaining, checksum_type
 
-    def _check_incoming_message_footer(self, footer):
+    def _check_incoming_message_footer(self, footer: bytes) -> bytes:
         """check the incoming message header
 
         Parameters
         ----------
-        footer : `str`
+        footer:
             a obp footer of length 20
 
         Returns
         -------
-        checksum: `str`
+        checksum:
             the 16 byte checksum of the message
         """
         assert len(footer) == 20, "footer has wrong length! len(footer): %d" % len(
@@ -486,24 +535,24 @@ class OBPProtocol(PySeaBreezeProtocol):
 
         data = struct.unpack("<" + self.OBP.FOOTER_FMT, footer)
 
-        checksum = data[0]
+        checksum: bytes = data[0]
         assert data[1] == self.OBP.FOOTER, (
             "the device returned a wrong footer: %d" % data[1]
         )
 
         return checksum
 
-    def _extract_message_data(self, msg):
+    def _extract_message_data(self, msg: bytes) -> bytes:
         """extract the payload data from a obp message
 
         Parameters
         ----------
-        msg : `str`
+        msg:
             a obp message
 
         Returns
         -------
-        data : `str`
+        data:
             the payload contained in the message
         """
         payload_length = len(msg) - 44 - 20  # - HeaderLength - FooterLength
@@ -516,9 +565,9 @@ class OBPProtocol(PySeaBreezeProtocol):
 
         msg_type = data[4]
 
-        immediate_length = data[8]
-        immediate_data = data[9]
-        payload = data[11]
+        immediate_length: int = data[8]
+        immediate_data: bytes = data[9]
+        payload: bytes = data[11]
 
         if (immediate_length > 0) and len(payload) > 0:
             raise SeaBreezeError("Got immediate AND payload data? cmd: '%d'" % msg_type)

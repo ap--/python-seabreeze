@@ -3,34 +3,33 @@ from __future__ import annotations
 import weakref
 from abc import ABC
 from abc import abstractmethod
+from typing import Any
 from typing import Generic
-from typing import List
+from typing import Iterable
 from typing import Optional
 from typing import Tuple
 from typing import Type
 from typing import TypeVar
 from typing import Union
 
-from seabreeze.types import SeaBreezeDevice
-
 
 class PySeaBreezeProtocol(ABC):
     def __init__(
         self,
-        transport: PySeaBreezeTransport,
+        transport: PySeaBreezeTransport[Any],
     ) -> None:
         if not isinstance(transport, PySeaBreezeTransport):
             raise TypeError("transport does not implement read and write methods")
-        self.transport: PySeaBreezeTransport = weakref.proxy(transport)
+        self.transport: PySeaBreezeTransport[Any] = weakref.proxy(transport)
 
     @abstractmethod
     def send(
         self,
         msg_type: int,
-        payload: Union[tuple[int | str], str, int],
+        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
         timeout_ms: Optional[int] = None,
-        **kwargs: str,
-    ) -> None:
+        **kwargs: Any,
+    ) -> int:
         ...
 
     @abstractmethod
@@ -38,7 +37,7 @@ class PySeaBreezeProtocol(ABC):
         self,
         size: Optional[int] = None,
         timeout_ms: Optional[int] = None,
-        **kwargs: str,
+        **kwargs: Any,
     ) -> bytes:
         ...
 
@@ -46,9 +45,9 @@ class PySeaBreezeProtocol(ABC):
     def query(
         self,
         msg_type: int,
-        payload: Union[tuple[int | str], str, int],
+        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
         timeout_ms: Optional[int] = None,
-        **kwargs: str,
+        **kwargs: Any,
     ) -> bytes:
         ...
 
@@ -61,7 +60,7 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
     _required_init_kwargs: Tuple[str, ...] = ()
 
     @abstractmethod
-    def open_device(self, device: SeaBreezeDevice) -> None:
+    def open_device(self, device: DT) -> None:
         """open a seabreeze device
 
         Parameters
@@ -88,8 +87,8 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
 
     @abstractmethod
     def write(
-        self, data: bytes, timeout_ms: Optional[int] = None, **kwargs: str
-    ) -> None:
+        self, data: bytes, timeout_ms: Optional[int] = None, **kwargs: Any
+    ) -> int:
         """write data to the device"""
         ...
 
@@ -98,13 +97,13 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
         self,
         size: Optional[int] = None,
         timeout_ms: Optional[int] = None,
-        **kwargs: str,
+        **kwargs: Any,
     ) -> bytes:
         """read data from the
 
         Returns
         -------
-        str
+        bytes
         """
         ...
 
@@ -120,7 +119,7 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
 
     @classmethod
     @abstractmethod
-    def list_devices(cls) -> List[DT]:
+    def list_devices(cls) -> Iterable[DT]:
         ...
 
     @classmethod
@@ -130,7 +129,7 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
 
     @classmethod
     @abstractmethod
-    def supported_model(cls, device: SeaBreezeDevice) -> Optional[str]:
+    def supported_model(cls, device: DT) -> Optional[str]:
         """return if the device supports the transport or vice versa
 
         Returns
@@ -141,5 +140,7 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
 
     @classmethod
     @abstractmethod
-    def specialize(cls, model_name: str, **kwargs: str) -> Type[PySeaBreezeTransport]:
+    def specialize(
+        cls, model_name: str, **kwargs: str
+    ) -> Type[PySeaBreezeTransport[Any]]:
         ...

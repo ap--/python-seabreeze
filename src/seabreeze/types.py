@@ -41,7 +41,7 @@ if TYPE_CHECKING:
     class SeaBreezeNumFeaturesError(SeaBreezeError):
         ...
 
-    class SeaBreezeDevice:
+    class SeaBreezeDevice(Protocol):
         f: SeaBreezeFeatureAccessor
         is_open: bool
         serial_number: str
@@ -538,7 +538,7 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     def get_integration_time_micros_limits(self) -> Tuple[int, int]:
         ...
 
-    def get_maximum_intensity(self) -> int:
+    def get_maximum_intensity(self) -> float:
         ...
 
     def get_electric_dark_pixel_indices(self) -> List[int]:

@@ -189,6 +189,7 @@ setup(
     cmdclass={"build_ext": sb_build_ext},
     ext_modules=extensions,
     packages=find_packages(where="src"),
+    package_data={"seabreeze": ["py.typed"]},
     package_dir={"": "src"},
     entry_points={"console_scripts": ["seabreeze_os_setup=seabreeze.os_setup:main"]},
     description=(

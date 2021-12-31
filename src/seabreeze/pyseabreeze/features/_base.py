@@ -1,9 +1,17 @@
+from __future__ import annotations
+
 import weakref
 from functools import partialmethod
+from typing import Any
 from typing import Tuple
+from typing import Type
+from typing import TypeVar
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
-from seabreeze.pyseabreeze.protocol import ProtocolInterface
+from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
+
+
+FT = TypeVar("FT", bound="SeaBreezeFeature")
 
 
 class SeaBreezeFeature:
@@ -11,9 +19,11 @@ class SeaBreezeFeature:
 
     _required_kwargs: Tuple[str, ...] = ()
     _required_features: Tuple[str, ...] = ()
-    _required_protocol_cls = ProtocolInterface
+    _required_protocol_cls = PySeaBreezeProtocol
 
-    def __init__(self, protocol, feature_id, **kwargs):
+    def __init__(
+        self, protocol: PySeaBreezeProtocol, feature_id: int, **kwargs: Any
+    ) -> None:
         """SeaBreezeFeature base class
 
         Parameters
@@ -31,14 +41,14 @@ class SeaBreezeFeature:
         # check protocol support
         if not isinstance(protocol, self._required_protocol_cls):
             raise SeaBreezeError("FeatureError: Protocol not supported by feature")
-        self.protocol = weakref.proxy(protocol)
+        self.protocol: PySeaBreezeProtocol = weakref.proxy(protocol)
         self.feature_id = feature_id
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.__class__.__name__} id={self.feature_id}>"
 
     @classmethod
-    def get_feature_class_registry(cls):
+    def get_feature_class_registry(cls) -> dict[str, Type[SeaBreezeFeature]]:
         # noinspection PyUnresolvedReferences
         return {
             feature_class.identifier: feature_class
@@ -46,11 +56,11 @@ class SeaBreezeFeature:
         }
 
     @classmethod
-    def supports_protocol(cls, protocol):
+    def supports_protocol(cls, protocol: PySeaBreezeProtocol) -> bool:
         return isinstance(protocol, cls._required_protocol_cls)
 
     @classmethod
-    def specialize(cls, model_name, **kwargs):
+    def specialize(cls: Type[FT], model_name: str, **kwargs: Any) -> Type[FT]:
         assert set(kwargs) == set(cls._required_kwargs)
         specialized_class = type(
             f"{cls.__name__}{model_name}",

@@ -9,19 +9,19 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
     identifier = "acquisition_delay"
 
-    def set_delay_microseconds(self, delay_usec):
+    def set_delay_microseconds(self, delay_usec: int) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_delay_microseconds(self):
+    def get_delay_microseconds(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    delay_microseconds = property(get_delay_microseconds, set_delay_microseconds)
+    delay_microseconds: int = property(get_delay_microseconds, set_delay_microseconds)  # type: ignore
 
-    def get_delay_increment_microseconds(self):
+    def get_delay_increment_microseconds(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_maximum_delay_microseconds(self):
+    def get_maximum_delay_microseconds(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_minimum_delay_microseconds(self):
+    def get_minimum_delay_microseconds(self) -> int:
         raise NotImplementedError("implement in derived class")

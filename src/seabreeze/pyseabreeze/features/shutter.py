@@ -9,5 +9,5 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeShutterFeature(SeaBreezeFeature):
     identifier = "shutter"
 
-    def set_shutter_open(self, state):
+    def set_shutter_open(self, state: bool) -> None:
         raise NotImplementedError("implement in derived class")

@@ -1,3 +1,5 @@
+from typing import List
+
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 
@@ -9,11 +11,11 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeTemperatureFeature(SeaBreezeFeature):
     identifier = "temperature"
 
-    def count_temperatures(self):
+    def count_temperatures(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def read_temperature(self, index):
+    def read_temperature(self, index: int) -> float:
         raise NotImplementedError("implement in derived class")
 
-    def temperature_get_all(self):
+    def temperature_get_all(self) -> List[float]:
         raise NotImplementedError("implement in derived class")

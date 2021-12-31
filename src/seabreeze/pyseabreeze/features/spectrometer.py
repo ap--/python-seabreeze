@@ -14,7 +14,6 @@ from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
 from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
-from seabreeze.types import SeaBreezeDevice
 
 if TYPE_CHECKING:
     import numpy as np

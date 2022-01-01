@@ -16,19 +16,14 @@ else:
     from typing_extensions import Literal
     from typing_extensions import Protocol
 
-import numpy as np
-
-if TYPE_CHECKING:
-    from numpy.typing import NDArray
-else:
-    NDArray = None
-
 __all__ = [
     "SeaBreezeAPI",
 ]
 
 
 if TYPE_CHECKING:
+    import numpy as np
+    from numpy.typing import NDArray
 
     class SeaBreezeError(Exception):
         ...

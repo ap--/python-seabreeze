@@ -13,7 +13,9 @@ import os
 import platform
 import sys
 
-from setuptools import Extension, find_packages, setup
+from setuptools import Extension
+from setuptools import find_packages
+from setuptools import setup
 from setuptools.command.build_ext import build_ext
 
 try:
@@ -122,8 +124,8 @@ class sb_build_ext(build_ext):
 
             def win_spawn(_, cmd):
                 # the windows shell can't handle all the object files provided to link.exe
-                from subprocess import run
                 from subprocess import list2cmdline
+                from subprocess import run
 
                 if cmd[0].endswith("link.exe"):
                     with open("ihatewindowssomuch.rsp", "w") as f:
@@ -185,10 +187,11 @@ setup(
             "pytest>=6.2.4; python_version>'3.9'",
         ],
     },
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     cmdclass={"build_ext": sb_build_ext},
     ext_modules=extensions,
     packages=find_packages(where="src"),
+    package_data={"seabreeze": ["py.typed"]},
     package_dir={"": "src"},
     entry_points={"console_scripts": ["seabreeze_os_setup=seabreeze.os_setup:main"]},
     description=(
@@ -200,7 +203,6 @@ setup(
     long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",

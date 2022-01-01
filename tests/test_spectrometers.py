@@ -183,7 +183,8 @@ def skip_if_backend_and_os(backend, osname, pyusb_backend=None):
 @pytest.mark.usefixtures("shutdown_api")
 class TestHardware:
     def test_cant_find_serial(self):
-        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
+        from seabreeze.spectrometers import SeaBreezeError
+        from seabreeze.spectrometers import Spectrometer
 
         with pytest.raises(SeaBreezeError):
             Spectrometer.from_serial_number("i-do-not-exist")
@@ -253,7 +254,8 @@ class TestHardware:
 
     @skip_if_serial_unsupported_by_backend()
     def test_correct_dark_pixels(self, serial_number):
-        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
+        from seabreeze.spectrometers import SeaBreezeError
+        from seabreeze.spectrometers import Spectrometer
 
         spec = Spectrometer.from_serial_number(serial_number)
         try:
@@ -302,7 +304,8 @@ class TestHardware:
 
     @skip_if_serial_unsupported_by_backend()
     def test_integration_time(self, serial_number):
-        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
+        from seabreeze.spectrometers import SeaBreezeError
+        from seabreeze.spectrometers import Spectrometer
 
         spec = Spectrometer.from_serial_number(serial_number)
 
@@ -330,7 +333,8 @@ class TestHardware:
 
     @skip_if_serial_unsupported_by_backend()
     def test_trigger_mode_wrong(self, serial_number):
-        from seabreeze.spectrometers import SeaBreezeError, Spectrometer
+        from seabreeze.spectrometers import SeaBreezeError
+        from seabreeze.spectrometers import Spectrometer
 
         spec = Spectrometer.from_serial_number(serial_number)
         with pytest.raises(SeaBreezeError):

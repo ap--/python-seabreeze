@@ -3,98 +3,40 @@
 Some spectrometers can support different transports (usb, network, rs232, etc.)
 
 """
+from __future__ import annotations
+
 import importlib
 import inspect
 import logging
 import warnings
 from functools import partialmethod
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import Iterable
+from typing import Tuple
 
+import usb.backend
 import usb.core
 import usb.util
 
+from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
+from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 
-class TransportInterface:
-
-    _required_init_kwargs = ()
-
-    def open_device(self, device):
-        """open a seabreeze device
-
-        Parameters
-        ----------
-        device : seabreeze.pyseabreeze.devices.SeaBreezeDevice
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    @property
-    def is_open(self):
-        """return if device is opened
-
-        Returns
-        -------
-        bool
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    def close_device(self):
-        """close the seabreeze device"""
-        raise NotImplementedError("implement in derived transport class")
-
-    def write(self, data, timeout_ms=None, **kwargs):
-        """write data to the device"""
-        raise NotImplementedError("implement in derived transport class")
-
-    def read(self, size=None, timeout_ms=None, **kwargs):
-        """read data from the
-
-        Returns
-        -------
-        str
-        """
-        raise NotImplementedError("implement in derived transport class")
-
-    @property
-    def default_timeout_ms(self):
-        raise NotImplementedError("implement in derived transport class")
-
-    @property
-    def protocol(self):
-        raise NotImplementedError("implement in derived transport class")
-
-    @classmethod
-    def list_devices(cls):
-        raise NotImplementedError("implement in derived transport class")
-
-    @classmethod
-    def register_model(cls, model_name, **kwargs):
-        raise NotImplementedError("implement in derived transport class")
-
-    @classmethod
-    def supported_model(cls, device):
-        """return if the device supports the transport or vice versa
-
-        Returns
-        -------
-        model_name : ``
-        """
-        return None
-
-    @classmethod
-    def specialize(cls, model_name, **kwargs):
-        raise NotImplementedError("implement in derived transport class")
+if TYPE_CHECKING:
+    from seabreeze.pyseabreeze.devices import EndPointMap
 
 
 # encapsulate usb.core.USBError
 class USBTransportError(Exception):
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self, *args: Any, errno: int | None = None, error_code: int | None = None
+    ) -> None:
         super().__init__(*args)
-        self.errno = kwargs.pop("errno", None)
-        self.backend_error_code = kwargs.pop("error_code", None)
-        if kwargs:
-            raise TypeError("USBTransportError got unexpected kwarg")
+        self.errno = errno
+        self.backend_error_code = error_code
 
     @classmethod
-    def from_usberror(cls, err):
+    def from_usberror(cls, err: usb.core.USBError) -> USBTransportError:
         return cls(str(err), errno=err.errno, error_code=err.backend_error_code)
 
 
@@ -102,18 +44,21 @@ class USBTransportDeviceInUse(Exception):
     pass
 
 
+DeviceIdentity = Tuple[int, int, int, int]
+
+
 # this can and should be opaque to pyseabreeze
 class USBTransportHandle:
-    def __init__(self, pyusb_device):
+    def __init__(self, pyusb_device: usb.core.Device) -> None:
         """encapsulation for pyusb device classes
 
         Parameters
         ----------
-        pyusb_device : usb.core.Device
+        pyusb_device
         """
-        self.pyusb_device = pyusb_device
+        self.pyusb_device: usb.core.Device = pyusb_device
         # noinspection PyUnresolvedReferences
-        self.identity = (
+        self.identity: DeviceIdentity = (
             pyusb_device.idVendor,
             pyusb_device.idProduct,
             pyusb_device.bus,
@@ -121,7 +66,7 @@ class USBTransportHandle:
         )
         self.pyusb_backend = get_name_from_pyusb_backend(pyusb_device.backend)
 
-    def close(self):
+    def close(self) -> None:
         try:
             self.pyusb_device.reset()
         except usb.core.USBError:
@@ -132,7 +77,7 @@ class USBTransportHandle:
                 exc_info=True,
             )
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.pyusb_backend == "libusb1":
             # have to check if .finalize() has been called
             # -> todo: maybe better to fix this in the api initialization of cseabreeze
@@ -146,17 +91,22 @@ class USBTransportHandle:
         self.pyusb_device = None
 
 
-class USBTransport(TransportInterface):
+class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
     """implementation of the usb transport interface for spectrometers"""
 
     _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")
     vendor_id = 0x2457
-    product_ids = {}
+    product_ids: dict[int, str] = {}
 
     # add logging
     _log = logging.getLogger(__name__)
 
-    def __init__(self, usb_product_id, usb_endpoint_map, usb_protocol):
+    def __init__(
+        self,
+        usb_product_id: int,
+        usb_endpoint_map: EndPointMap,
+        usb_protocol: type[PySeaBreezeProtocol],
+    ) -> None:
         super().__init__()
         self._product_id = usb_product_id
         self._endpoint_map = usb_endpoint_map
@@ -175,11 +125,11 @@ class USBTransport(TransportInterface):
         self._default_read_endpoint = "low_speed"
         self._default_read_spectrum_endpoint = "high_speed"
         # internal state
-        self._device = None
-        self._opened = None
-        self._protocol = None
+        self._device: USBTransportHandle | None = None
+        self._opened: bool | None = None
+        self._protocol: PySeaBreezeProtocol | None = None
 
-    def open_device(self, device):
+    def open_device(self, device: USBTransportHandle) -> None:
         if not isinstance(device, USBTransportHandle):
             raise TypeError("device needs to be a USBTransportHandle")
         # device.reset()
@@ -207,26 +157,32 @@ class USBTransport(TransportInterface):
             self._protocol = self._protocol_cls(self)
 
     @property
-    def is_open(self):
+    def is_open(self) -> bool:
         return self._opened or False
 
-    def close_device(self):
+    def close_device(self) -> None:
         if self._device is not None:
             self._device.close()
             self._device = None
         self._opened = False
         self._protocol = None
 
-    def write(self, data, timeout_ms=None, **kwargs):
+    def write(self, data: bytes, timeout_ms: int | None = None, **kwargs: Any) -> int:
         if self._device is None:
             raise RuntimeError("device not opened")
         if kwargs:
             warnings.warn(f"kwargs provided but ignored: {kwargs}")
-        return self._device.pyusb_device.write(
+        return self._device.pyusb_device.write(  # type: ignore
             self._endpoint_map.ep_out, data, timeout=timeout_ms
         )
 
-    def read(self, size=None, timeout_ms=None, mode=None, **kwargs):
+    def read(
+        self,
+        size: int | None = None,
+        timeout_ms: int | None = None,
+        mode: str | None = None,
+        **kwargs: Any,
+    ) -> bytes:
         if self._device is None:
             raise RuntimeError("device not opened")
         mode = mode if mode is not None else self._default_read_endpoint
@@ -235,18 +191,25 @@ class USBTransport(TransportInterface):
             size = self._default_read_size[mode]
         if kwargs:
             warnings.warn(f"kwargs provided but ignored: {kwargs}")
-        return self._device.pyusb_device.read(endpoint, size, timeout=timeout_ms)
+        ret: bytes = self._device.pyusb_device.read(
+            endpoint, size, timeout=timeout_ms
+        ).tobytes()
+        return ret
 
     @property
-    def default_timeout_ms(self):
-        return self._device.pyusb_device.default_timeout if self._device else None
+    def default_timeout_ms(self) -> int:
+        if not self._device:
+            raise RuntimeError("no protocol instance available")
+        return self._device.pyusb_device.default_timeout  # type: ignore
 
     @property
-    def protocol(self):
+    def protocol(self) -> PySeaBreezeProtocol:
+        if self._protocol is None:
+            raise RuntimeError("no protocol instance available")
         return self._protocol
 
     @classmethod
-    def list_devices(cls, **kwargs):
+    def list_devices(cls, **kwargs: Any) -> Iterable[USBTransportHandle]:
         """list pyusb devices for all available spectrometers
 
         Note: this includes spectrometers that are currently opened in other
@@ -275,14 +238,16 @@ class USBTransport(TransportInterface):
             yield USBTransportHandle(pyusb_device)
 
     @classmethod
-    def register_model(cls, model_name, **kwargs):
+    def register_model(cls, model_name: str, **kwargs: Any) -> None:
         product_id = kwargs.get("usb_product_id")
+        if not isinstance(product_id, int):
+            raise TypeError(f"product_id {product_id:r} not an integer")
         if product_id in cls.product_ids:
             raise ValueError(f"product_id 0x{product_id:04x} already in registry")
         cls.product_ids[product_id] = model_name
 
     @classmethod
-    def supported_model(cls, device):
+    def supported_model(cls, device: USBTransportHandle) -> str | None:
         """return supported model
 
         Parameters
@@ -295,7 +260,7 @@ class USBTransport(TransportInterface):
         return cls.product_ids[device.pyusb_device.idProduct]
 
     @classmethod
-    def specialize(cls, model_name, **kwargs):
+    def specialize(cls, model_name: str, **kwargs: Any) -> type[USBTransport]:
         assert set(kwargs) == set(cls._required_init_kwargs)
         # usb transport register automatically on registration
         cls.register_model(model_name, **kwargs)
@@ -307,7 +272,7 @@ class USBTransport(TransportInterface):
         return specialized_class
 
     @classmethod
-    def initialize(cls, **_kwargs):
+    def initialize(cls, **_kwargs: Any) -> None:
         for device in cls.list_devices(**_kwargs):
             try:
                 device.pyusb_device.reset()
@@ -320,7 +285,7 @@ class USBTransport(TransportInterface):
                 )
 
     @classmethod
-    def shutdown(cls, **_kwargs):
+    def shutdown(cls, **_kwargs: Any) -> None:
         # dispose usb resources
         for device in cls.list_devices(**_kwargs):
             try:
@@ -333,10 +298,10 @@ class USBTransport(TransportInterface):
                 )
 
 
-_pyusb_backend_instances = {}
+_pyusb_backend_instances: dict[str, usb.backend.IBackend] = {}
 
 
-def get_pyusb_backend_from_name(name):
+def get_pyusb_backend_from_name(name: str) -> usb.backend.IBackend:
     """internal: allow requesting a specific pyusb backend for testing"""
     if name is None:
         # default is pick first that works: ('libusb1', 'libusb0', 'openusb')
@@ -358,7 +323,7 @@ def get_pyusb_backend_from_name(name):
     return _backend
 
 
-def get_name_from_pyusb_backend(backend):
+def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
     """internal: return backend name from loaded backend"""
     module = inspect.getmodule(backend)
     if not module:

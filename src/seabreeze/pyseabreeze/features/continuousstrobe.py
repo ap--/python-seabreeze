@@ -1,30 +1,35 @@
 import math
+from typing import Any
 
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.features.fpga import _FPGARegisterFeatureOOI
 from seabreeze.pyseabreeze.protocol import OOIProtocol
-
+from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 
 # Definition
 # ==========
+
+
 class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
     identifier = "continuous_strobe"
 
-    def set_enable(self, strobe_enable):
+    def set_enable(self, strobe_enable: bool) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def set_period_micros(self, period_micros):
+    def set_period_micros(self, period_micros: int) -> None:
         raise NotImplementedError("implement in derived class")
 
 
 class SeaBreezeContinuousStrobeFeatureOOI(SeaBreezeContinuousStrobeFeature):
     _required_protocol_cls = OOIProtocol
 
-    def __init__(self, protocol, feature_id, **kwargs):
+    def __init__(
+        self, protocol: PySeaBreezeProtocol, feature_id: int, **kwargs: Any
+    ) -> None:
         super().__init__(protocol, feature_id, **kwargs)
         self._fpga = _FPGARegisterFeatureOOI(protocol)
 
-    def set_enable(self, strobe_enable):
+    def set_enable(self, strobe_enable: bool) -> None:
         """
         Sets the Lamp Enable line (J2 pin 4) as follows.
         The Single Strobe and Continuous Strobe signals are enabled/disabled by this Lamp Enable Signal.
@@ -41,7 +46,7 @@ class SeaBreezeContinuousStrobeFeatureOOI(SeaBreezeContinuousStrobeFeature):
         """
         self.protocol.send(0x03, int(strobe_enable))
 
-    def set_period_micros(self, period_micros):
+    def set_period_micros(self, period_micros: int) -> None:
         """set continuous strobe period in microseconds
 
         Parameters

@@ -9,23 +9,23 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeDataBufferFeature(SeaBreezeFeature):
     identifier = "data_buffer"
 
-    def clear(self):
+    def clear(self) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def remove_oldest_spectra(self, number_of_spectra):
+    def remove_oldest_spectra(self, number_of_spectra: int) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_number_of_elements(self):
+    def get_number_of_elements(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_buffer_capacity(self):
+    def get_buffer_capacity(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def set_buffer_capacity(self, capacity):
+    def set_buffer_capacity(self, capacity: int) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_buffer_capacity_maximum(self):
+    def get_buffer_capacity_maximum(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_buffer_capacity_minimum(self):
+    def get_buffer_capacity_minimum(self) -> int:
         raise NotImplementedError("implement in derived class")

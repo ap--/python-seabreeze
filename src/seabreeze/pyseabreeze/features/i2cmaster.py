@@ -9,11 +9,13 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
     identifier = "i2c_master"
 
-    def get_number_of_buses(self):
+    def get_number_of_buses(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def read_bus(self, bus_index, slave_address, buffer_length=1024):
+    def read_bus(
+        self, bus_index: int, slave_address: int, buffer_length: int = 1024
+    ) -> bytes:
         raise NotImplementedError("implement in derived class")
 
-    def write_bus(self, bus_index, slave_address, data):
+    def write_bus(self, bus_index: int, slave_address: int, data: bytes) -> None:
         raise NotImplementedError("implement in derived class")

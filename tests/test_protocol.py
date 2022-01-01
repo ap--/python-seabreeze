@@ -1,7 +1,9 @@
 import struct
-
 from unittest import mock
+
 import pytest
+
+from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 
 
 @pytest.fixture
@@ -31,7 +33,7 @@ def obp_message(pyseabreeze):
 
 @pytest.fixture
 def mock_transport(obp_message):
-    mock_transport = mock.Mock()
+    mock_transport = mock.Mock(spec=PySeaBreezeTransport)
     mock_transport.read.return_value = obp_message
     yield mock_transport
 

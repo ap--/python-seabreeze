@@ -1,5 +1,14 @@
+from __future__ import annotations
+
+import sys
+
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
+
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.protocol import ProtocolInterface
+from seabreeze.pyseabreeze.protocol import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
 
 
@@ -29,20 +38,26 @@ class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
 
     """
     identifier = "raw_usb_bus_access"
-    _required_protocol_cls = ProtocolInterface
+    _required_protocol_cls = PySeaBreezeProtocol
 
     @classmethod
-    def supports_protocol(cls, protocol):
+    def supports_protocol(cls, protocol: PySeaBreezeProtocol) -> bool:
         return isinstance(protocol.transport, USBTransport)
 
-    def raw_usb_write(self, data, endpoint):
+    def raw_usb_write(
+        self, data: bytes, endpoint: Literal["primary_out", "secondary_out"]
+    ) -> None:
         if endpoint not in {"primary_out", "secondary_out"}:
             raise ValueError("endpoint has to be one of 'primary_out', 'secondary_out'")
         if endpoint == "secondary_out":
             pass
         self.protocol.transport.write(data)
 
-    def raw_usb_read(self, endpoint, buffer_length=None):
+    def raw_usb_read(
+        self,
+        endpoint: Literal["primary_in", "secondary_in", "secondary_in2"],
+        buffer_length: int | None = None,
+    ) -> bytes:
         if endpoint == "primary_in":
             return self.protocol.transport.read(size=buffer_length, mode="low_speed")
         elif endpoint == "secondary_in":

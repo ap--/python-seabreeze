@@ -1,3 +1,4 @@
+# type: ignore
 """operating system relevant deploy functions
 
 author: Andreas Poehlmann
@@ -15,10 +16,8 @@ import time
 import zipfile
 from textwrap import dedent
 from textwrap import indent
-
 from urllib.error import HTTPError
 from urllib.request import urlopen
-
 
 _GITHUB_REPO_URL = (
     "https://raw.githubusercontent.com/ap--/python-seabreeze/master/os_support"

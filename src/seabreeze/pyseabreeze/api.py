@@ -10,18 +10,16 @@ from __future__ import annotations
 
 import logging
 import weakref
-from typing import Any
-from typing import List
 from typing import TYPE_CHECKING
+from typing import Any
 
-from seabreeze.pyseabreeze.devices import SeaBreezeDevice, _model_class_registry
-from seabreeze.pyseabreeze.transport import (
-    DeviceIdentity,
-    USBTransport,
-    USBTransportDeviceInUse,
-    USBTransportError,
-    USBTransportHandle,
-)
+from seabreeze.pyseabreeze.devices import SeaBreezeDevice
+from seabreeze.pyseabreeze.devices import _model_class_registry
+from seabreeze.pyseabreeze.transport import DeviceIdentity
+from seabreeze.pyseabreeze.transport import USBTransport
+from seabreeze.pyseabreeze.transport import USBTransportDeviceInUse
+from seabreeze.pyseabreeze.transport import USBTransportError
+from seabreeze.pyseabreeze.transport import USBTransportHandle
 from seabreeze.types import SeaBreezeAPI as _SeaBreezeAPIProtocol
 
 if TYPE_CHECKING:
@@ -99,7 +97,7 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
         # IPV4Transport.register_device(device_type, ip_address, port)
         raise NotImplementedError("ipv4 communication not implemented for pyseabreeze")
 
-    def list_devices(self) -> List[_SeaBreezeDevice]:
+    def list_devices(self) -> list[_SeaBreezeDevice]:
         """returns available SeaBreezeDevices
 
         list all connected Ocean Optics devices supported
@@ -132,7 +130,7 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
 
     # note: to be fully consistent with cseabreeze this shouldn't be a staticmethod
     @staticmethod
-    def supported_models() -> List[str]:
+    def supported_models() -> list[str]:
         """returns SeaBreezeDevices supported by the backend
 
         models supported by the backend

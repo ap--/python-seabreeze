@@ -1,7 +1,8 @@
 import struct
 
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
+from seabreeze.pyseabreeze.protocol import OBPProtocol
+from seabreeze.pyseabreeze.protocol import OOIProtocol
 
 
 # Definition

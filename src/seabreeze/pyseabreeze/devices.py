@@ -9,30 +9,28 @@ import itertools
 from collections import defaultdict
 from typing import Any
 from typing import Iterable
-from typing import Optional
 from typing import Tuple
-from typing import Type
 from typing import TypeVar
 
 from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature
-from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
+from seabreeze.pyseabreeze.protocol import OBPProtocol
+from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 from seabreeze.types import SeaBreezeFeatureAccessor
 
-
 # class registry for all spectrometer models
 
-_model_class_registry: dict[str, Type[SeaBreezeDevice]] = {}
+_model_class_registry: dict[str, type[SeaBreezeDevice]] = {}
 
 
 class _SeaBreezeDeviceMeta(type):
     """metaclass for pyseabreeze devices"""
 
     def __new__(
-        mcs: Type[_SeaBreezeDeviceMeta],
+        mcs: type[_SeaBreezeDeviceMeta],
         name: str,
         bases: tuple[Any],
         attr_dict: dict[str, Any],
@@ -114,7 +112,7 @@ class _SeaBreezeDeviceMeta(type):
     @staticmethod
     def _extract_transform_classes(
         model_name: str, class_name: str, attr_dict: dict[str, Any]
-    ) -> tuple[Type[PySeaBreezeTransport[Any]], ...]:
+    ) -> tuple[type[PySeaBreezeTransport[Any]], ...]:
 
         visited_attrs = set()
         transport_classes = []
@@ -164,10 +162,10 @@ class _SeaBreezeDeviceMeta(type):
     @staticmethod
     def _extract_feature_classes(
         model_name: str, class_name: str, attr_dict: dict[str, Any]
-    ) -> dict[str, list[Type[SeaBreezeFeature]]]:
+    ) -> dict[str, list[type[SeaBreezeFeature]]]:
 
         visited_attrs = set()
-        feature_classes: defaultdict[str, list[Type[SeaBreezeFeature]]] = defaultdict(
+        feature_classes: defaultdict[str, list[type[SeaBreezeFeature]]] = defaultdict(
             list
         )
         try:
@@ -231,10 +229,10 @@ class EndPointMap:
 
     def __init__(
         self,
-        ep_out: Optional[int] = None,
-        lowspeed_in: Optional[int] = None,
-        highspeed_in: Optional[int] = None,
-        highspeed_in2: Optional[int] = None,
+        ep_out: int | None = None,
+        lowspeed_in: int | None = None,
+        highspeed_in: int | None = None,
+        highspeed_in2: int | None = None,
     ) -> None:
         self.primary_out = self.ep_out = ep_out
         self.primary_in = self.lowspeed_in = lowspeed_in
@@ -247,7 +245,7 @@ class DarkPixelIndices(Tuple[int, ...]):
     """internal dark pixel range class"""
 
     def __new__(
-        cls: Type[DarkPixelIndices], indices: Iterable[int]
+        cls: type[DarkPixelIndices], indices: Iterable[int]
     ) -> DarkPixelIndices:
         """dark pixel indices
 
@@ -306,11 +304,11 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
     # internal attribute
     _model_name = None
     _serial_number = "?"
-    _cached_features: Optional[dict[str, list[SeaBreezeFeature]]] = None
-    _transport_classes: tuple[Type[PySeaBreezeTransport[Any]], ...]
+    _cached_features: dict[str, list[SeaBreezeFeature]] | None = None
+    _transport_classes: tuple[type[PySeaBreezeTransport[Any]], ...]
     _feature_classes: dict[str, list[type[SeaBreezeFeature]]]
 
-    def __new__(cls: Type[DT], raw_device: Any = None) -> SeaBreezeDevice:
+    def __new__(cls: type[DT], raw_device: Any = None) -> SeaBreezeDevice:
         if raw_device is None:
             raise SeaBreezeError(
                 "Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`."
@@ -360,8 +358,8 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
 
     @classmethod
     def _substitute_compatible_subclass(
-        cls: Type[DT], transport: PySeaBreezeTransport[Any]
-    ) -> Type[DT]:
+        cls: type[DT], transport: PySeaBreezeTransport[Any]
+    ) -> type[DT]:
         return cls
 
     def __repr__(self) -> str:
@@ -521,8 +519,8 @@ class USB2000PLUS(SeaBreezeDevice):
 
     @classmethod
     def _substitute_compatible_subclass(
-        cls: Type[DT], transport: PySeaBreezeTransport[Any]
-    ) -> Type[DT]:
+        cls: type[DT], transport: PySeaBreezeTransport[Any]
+    ) -> type[DT]:
         """return the correct subclass of the usb2000plus like model"""
         protocol = transport.protocol
         if protocol is None:

@@ -5,7 +5,8 @@ Author: Andreas Poehlmann
 """
 cimport c_seabreeze as csb
 cimport cython
-from cpython.mem cimport PyMem_Free, PyMem_Malloc
+from cpython.mem cimport PyMem_Free
+from cpython.mem cimport PyMem_Malloc
 from libcpp cimport bool as bool_t
 
 import weakref

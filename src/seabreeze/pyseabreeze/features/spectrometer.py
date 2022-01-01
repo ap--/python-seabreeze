@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import struct
 import warnings
-from typing import Any
-from typing import List
 from typing import TYPE_CHECKING
+from typing import Any
 
 import numpy
 
-from seabreeze.pyseabreeze.exceptions import SeaBreezeError, SeaBreezeNotSupported
+from seabreeze.pyseabreeze.exceptions import SeaBreezeError
+from seabreeze.pyseabreeze.exceptions import SeaBreezeNotSupported
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
-from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
+from seabreeze.pyseabreeze.protocol import OBPProtocol
+from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 
@@ -38,7 +39,7 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     def get_maximum_intensity(self) -> float:
         raise NotImplementedError("implement in derived class")
 
-    def get_electric_dark_pixel_indices(self) -> List[int]:
+    def get_electric_dark_pixel_indices(self) -> list[int]:
         raise NotImplementedError("implement in derived class")
 
     def _spectrum_length(self) -> int:

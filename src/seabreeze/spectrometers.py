@@ -8,27 +8,23 @@ Email: andreas@poehlmann.io
 """
 from __future__ import annotations
 
-from typing import Dict
-from typing import List
-from typing import Optional
 from typing import TYPE_CHECKING
-from typing import Tuple
-from typing import Type
 from typing import TypeVar
 
 import numpy
 
 import seabreeze.backends
 from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin  # type: ignore
+from seabreeze.types import SeaBreezeAPI
 from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
-from seabreeze.types import SeaBreezeAPI
 
 # get the backend and add some functions/classes to this module
 _lib: SeaBreezeBackend = seabreeze.backends.get_backend()
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+
     from seabreeze.types import SeaBreezeDevice
     from seabreeze.types import SeaBreezeError
     from seabreeze.types import SeaBreezeFeature
@@ -48,7 +44,7 @@ __all__ = [
 ST = TypeVar("ST", bound="Spectrometer")
 
 
-def list_devices() -> List[SeaBreezeDevice]:
+def list_devices() -> list[SeaBreezeDevice]:
     """returns available SeaBreezeDevices
 
     list all connected Ocean Optics devices supported
@@ -108,7 +104,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         self._wavelengths = self._dev.f.spectrometer.get_wavelengths()
 
     @classmethod
-    def from_first_available(cls: Type[ST]) -> ST:
+    def from_first_available(cls: type[ST]) -> ST:
         """open first available spectrometer
 
         Returns
@@ -123,7 +119,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
             raise cls._backend.SeaBreezeError("No unopened device found.")
 
     @classmethod
-    def from_serial_number(cls: Type[ST], serial: Optional[str] = None) -> ST:
+    def from_serial_number(cls: type[ST], serial: str | None = None) -> ST:
         """open the spectrometer matching the provided serial number
 
         Allows to open a specific spectrometer if multiple are connected.
@@ -302,7 +298,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 raise e
 
     @property
-    def integration_time_micros_limits(self) -> Tuple[int, int]:
+    def integration_time_micros_limits(self) -> tuple[int, int]:
         """return the hardcoded minimum and maximum integration time
 
         Returns
@@ -340,7 +336,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         return self._dev.f.spectrometer._spectrum_length
 
     @property
-    def features(self) -> Dict[str, SeaBreezeFeature]:
+    def features(self) -> dict[str, SeaBreezeFeature]:
         """return a dictionary of all supported features
 
         this returns a dictionary with all supported Features of the spectrometer

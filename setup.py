@@ -13,7 +13,9 @@ import os
 import platform
 import sys
 
-from setuptools import Extension, find_packages, setup
+from setuptools import Extension
+from setuptools import find_packages
+from setuptools import setup
 from setuptools.command.build_ext import build_ext
 
 try:
@@ -122,8 +124,8 @@ class sb_build_ext(build_ext):
 
             def win_spawn(_, cmd):
                 # the windows shell can't handle all the object files provided to link.exe
-                from subprocess import run
                 from subprocess import list2cmdline
+                from subprocess import run
 
                 if cmd[0].endswith("link.exe"):
                     with open("ihatewindowssomuch.rsp", "w") as f:

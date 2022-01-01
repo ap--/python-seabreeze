@@ -3,13 +3,10 @@ from __future__ import annotations
 import weakref
 from functools import partialmethod
 from typing import Any
-from typing import Tuple
-from typing import Type
 from typing import TypeVar
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
-
 
 FT = TypeVar("FT", bound="SeaBreezeFeature")
 
@@ -17,8 +14,8 @@ FT = TypeVar("FT", bound="SeaBreezeFeature")
 class SeaBreezeFeature:
     identifier = "base_feature"
 
-    _required_kwargs: Tuple[str, ...] = ()
-    _required_features: Tuple[str, ...] = ()
+    _required_kwargs: tuple[str, ...] = ()
+    _required_features: tuple[str, ...] = ()
     _required_protocol_cls = PySeaBreezeProtocol
 
     def __init__(
@@ -48,7 +45,7 @@ class SeaBreezeFeature:
         return f"<{self.__class__.__name__} id={self.feature_id}>"
 
     @classmethod
-    def get_feature_class_registry(cls) -> dict[str, Type[SeaBreezeFeature]]:
+    def get_feature_class_registry(cls) -> dict[str, type[SeaBreezeFeature]]:
         # noinspection PyUnresolvedReferences
         return {
             feature_class.identifier: feature_class
@@ -60,7 +57,7 @@ class SeaBreezeFeature:
         return isinstance(protocol, cls._required_protocol_cls)
 
     @classmethod
-    def specialize(cls: Type[FT], model_name: str, **kwargs: Any) -> Type[FT]:
+    def specialize(cls: type[FT], model_name: str, **kwargs: Any) -> type[FT]:
         assert set(kwargs) == set(cls._required_kwargs)
         specialized_class = type(
             f"{cls.__name__}{model_name}",

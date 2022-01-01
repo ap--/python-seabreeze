@@ -13,8 +13,6 @@ import struct
 import time
 import warnings
 from typing import Any
-from typing import Optional
-from typing import Union
 
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
@@ -50,9 +48,9 @@ class OOIProtocol(PySeaBreezeProtocol):
     def send(
         self,
         msg_type: int,
-        payload: Union[tuple[float | int | str, ...], str, int, float] = (),
-        timeout_ms: Optional[int] = None,
-        **kwargs: Optional[str | int],
+        payload: tuple[float | int | str, ...] | str | int | float = (),
+        timeout_ms: int | None = None,
+        **kwargs: str | int | None,
     ) -> int:
         """send a ooi message to the spectrometer
 
@@ -81,9 +79,9 @@ class OOIProtocol(PySeaBreezeProtocol):
 
     def receive(
         self,
-        size: Optional[int] = None,
-        timeout_ms: Optional[int] = None,
-        mode: Optional[str] = None,
+        size: int | None = None,
+        timeout_ms: int | None = None,
+        mode: str | None = None,
         **kwargs: Any,
     ) -> bytes:
         """receive data from the spectrometer
@@ -116,11 +114,11 @@ class OOIProtocol(PySeaBreezeProtocol):
     def query(
         self,
         msg_type: int,
-        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
-        timeout_ms: Optional[int] = None,
-        size: Optional[int] = None,
-        mode: Optional[str] = None,
-        **kwargs: Optional[str | int],
+        payload: tuple[int | str | float, ...] | str | int | float = (),
+        timeout_ms: int | None = None,
+        size: int | None = None,
+        mode: str | None = None,
+        **kwargs: str | int | None,
     ) -> bytes:
         """convenience method combining send and receive
 
@@ -237,8 +235,8 @@ class OBPProtocol(PySeaBreezeProtocol):
     def send(
         self,
         msg_type: int,
-        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
-        timeout_ms: Optional[int] = None,
+        payload: tuple[int | str | float, ...] | str | int | float = (),
+        timeout_ms: int | None = None,
         request_ack: bool = True,
         **kwargs: Any,
     ) -> int:
@@ -300,8 +298,8 @@ class OBPProtocol(PySeaBreezeProtocol):
 
     def receive(
         self,
-        size: Optional[int] = None,
-        timeout_ms: Optional[int] = None,
+        size: int | None = None,
+        timeout_ms: int | None = None,
         **kwargs: Any,
     ) -> bytes:
         """receive data from the spectrometer
@@ -359,9 +357,9 @@ class OBPProtocol(PySeaBreezeProtocol):
     def query(
         self,
         msg_type: int,
-        payload: Union[tuple[int | str | float, ...], str, int, float] = (),
-        timeout_ms: Optional[int] = None,
-        size: Optional[int] = None,
+        payload: tuple[int | str | float, ...] | str | int | float = (),
+        timeout_ms: int | None = None,
+        size: int | None = None,
         **kwargs: Any,
     ) -> bytes:
         """convenience method combining send and receive
@@ -395,7 +393,7 @@ class OBPProtocol(PySeaBreezeProtocol):
         msg_type: int,
         payload_string: bytes,
         request_ack: bool = False,
-        regarding: Optional[int] = None,
+        regarding: int | None = None,
     ) -> bytes:
         """construct an outgoing OBP message
 

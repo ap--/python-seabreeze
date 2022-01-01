@@ -1,8 +1,8 @@
 from __future__ import annotations
+
+import enum
 import struct
 import time
-import enum
-from typing import Tuple
 
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 
@@ -37,7 +37,7 @@ class _FPGARegisterFeatureOOI:
         self.protocol.send(0x6A, payload=(register, data))
         time.sleep(0.0001)  # guarantee 100us sleep between commands
 
-    def get_firmware_version(self) -> Tuple[int, int, int]:
+    def get_firmware_version(self) -> tuple[int, int, int]:
         data = self.read_register(self.Codes.FIRMWARE_VERSION)
         fw_version = (
             (data >> 12) & 0x0F,  # major

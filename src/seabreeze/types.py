@@ -5,13 +5,8 @@ common types used to teach mypy about seabreeze
 from __future__ import annotations
 
 import sys
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
 from typing import TYPE_CHECKING
-from typing import Tuple
-from typing import Type
+from typing import Any
 from typing import TypeVar
 
 if sys.version_info >= (3, 8):
@@ -46,7 +41,7 @@ if TYPE_CHECKING:
         is_open: bool
         serial_number: str
         model: str  # fixme
-        features: Dict[str, SeaBreezeFeature]
+        features: dict[str, SeaBreezeFeature]
 
         def open(self) -> None:
             ...
@@ -77,11 +72,11 @@ class SeaBreezeAPI(Protocol):
     ) -> None:
         ...
 
-    def list_devices(self) -> List[SeaBreezeDevice]:
+    def list_devices(self) -> list[SeaBreezeDevice]:
         ...
 
     @staticmethod
-    def supported_models() -> List[str]:
+    def supported_models() -> list[str]:
         ...
 
 
@@ -104,8 +99,8 @@ class SeaBreezeFeature:
 
     @classmethod
     def specialize(
-        cls: Type[SeaBreezeFeature], model_name: str, **kwargs: str
-    ) -> Type[FT]:
+        cls: type[SeaBreezeFeature], model_name: str, **kwargs: str
+    ) -> type[FT]:
         ...
 
 
@@ -268,13 +263,13 @@ class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
     def number_of_pixels(self) -> int:
         ...
 
-    def get_active_pixel_ranges(self) -> Tuple[Tuple[int, int], ...]:
+    def get_active_pixel_ranges(self) -> tuple[tuple[int, int], ...]:
         ...
 
-    def get_optical_dark_pixel_ranges(self) -> Tuple[Tuple[int, int], ...]:
+    def get_optical_dark_pixel_ranges(self) -> tuple[tuple[int, int], ...]:
         ...
 
-    def get_electric_dark_pixel_ranges(self) -> Tuple[Tuple[int, int], ...]:
+    def get_electric_dark_pixel_ranges(self) -> tuple[tuple[int, int], ...]:
         ...
 
 
@@ -379,7 +374,7 @@ class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
 
 
 class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
-    def get_nonlinearity_coefficients(self) -> List[float]:
+    def get_nonlinearity_coefficients(self) -> list[float]:
         ...
 
 
@@ -437,7 +432,7 @@ class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
     def raw_usb_read(
         self,
         endpoint: Literal["primary_in", "secondary_in", "secondary_in2"],
-        buffer_length: Optional[int] = None,
+        buffer_length: int | None = None,
     ) -> bytes:
         ...
 
@@ -474,7 +469,7 @@ class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
 
 
 class SeaBreezeStrayLightCoefficientsFeature(SeaBreezeFeature):
-    def get_stray_light_coefficients(self) -> List[float]:
+    def get_stray_light_coefficients(self) -> list[float]:
         ...
 
 
@@ -490,7 +485,7 @@ class SeaBreezeTemperatureFeature(SeaBreezeFeature):
     def read_temperature(self, index: int) -> float:
         ...
 
-    def temperature_get_all(self) -> List[float]:
+    def temperature_get_all(self) -> list[float]:
         ...
 
 
@@ -535,13 +530,13 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     def set_integration_time_micros(self, integration_time_micros: int) -> None:
         ...
 
-    def get_integration_time_micros_limits(self) -> Tuple[int, int]:
+    def get_integration_time_micros_limits(self) -> tuple[int, int]:
         ...
 
     def get_maximum_intensity(self) -> float:
         ...
 
-    def get_electric_dark_pixel_indices(self) -> List[int]:
+    def get_electric_dark_pixel_indices(self) -> list[int]:
         ...
 
     _spectrum_length: int
@@ -594,41 +589,41 @@ class SeaBreezeBackend:
     """SeaBreeze Backend interface"""
 
     _backend_: str
-    _api_kwargs: Dict[str, Any]
+    _api_kwargs: dict[str, Any]
 
-    SeaBreezeAPI: Type[SeaBreezeAPI]
-    SeaBreezeDevice: Type[SeaBreezeDevice]
-    SeaBreezeError: Type[SeaBreezeError]
-    SeaBreezeFeature: Type[SeaBreezeFeature]
+    SeaBreezeAPI: type[SeaBreezeAPI]
+    SeaBreezeDevice: type[SeaBreezeDevice]
+    SeaBreezeError: type[SeaBreezeError]
+    SeaBreezeFeature: type[SeaBreezeFeature]
 
-    SeaBreezeAcquisitionDelayFeature: Type[SeaBreezeAcquisitionDelayFeature]
-    SeaBreezeContinuousStrobeFeature: Type[SeaBreezeContinuousStrobeFeature]
-    SeaBreezeDataBufferFeature: Type[SeaBreezeDataBufferFeature]
-    SeaBreezeDHCPServerFeature: Type[SeaBreezeDHCPServerFeature]
-    SeaBreezeEEPROMFeature: Type[SeaBreezeEEPROMFeature]
-    SeaBreezeEthernetConfigurationFeature: Type[SeaBreezeEthernetConfigurationFeature]
-    SeaBreezeFastBufferFeature: Type[SeaBreezeFastBufferFeature]
-    SeaBreezeGPIOFeature: Type[SeaBreezeGPIOFeature]
-    SeaBreezeI2CMasterFeature: Type[SeaBreezeI2CMasterFeature]
-    SeaBreezeIntrospectionFeature: Type[SeaBreezeIntrospectionFeature]
-    SeaBreezeIPv4Feature: Type[SeaBreezeIPv4Feature]
-    SeaBreezeIrradCalFeature: Type[SeaBreezeIrradCalFeature]
-    SeaBreezeLightSourceFeature: Type[SeaBreezeLightSourceFeature]
-    SeaBreezeMulticastFeature: Type[SeaBreezeMulticastFeature]
-    SeaBreezeNetworkConfigurationFeature: Type[SeaBreezeNetworkConfigurationFeature]
-    SeaBreezeNonlinearityCoefficientsFeature: Type[
+    SeaBreezeAcquisitionDelayFeature: type[SeaBreezeAcquisitionDelayFeature]
+    SeaBreezeContinuousStrobeFeature: type[SeaBreezeContinuousStrobeFeature]
+    SeaBreezeDataBufferFeature: type[SeaBreezeDataBufferFeature]
+    SeaBreezeDHCPServerFeature: type[SeaBreezeDHCPServerFeature]
+    SeaBreezeEEPROMFeature: type[SeaBreezeEEPROMFeature]
+    SeaBreezeEthernetConfigurationFeature: type[SeaBreezeEthernetConfigurationFeature]
+    SeaBreezeFastBufferFeature: type[SeaBreezeFastBufferFeature]
+    SeaBreezeGPIOFeature: type[SeaBreezeGPIOFeature]
+    SeaBreezeI2CMasterFeature: type[SeaBreezeI2CMasterFeature]
+    SeaBreezeIntrospectionFeature: type[SeaBreezeIntrospectionFeature]
+    SeaBreezeIPv4Feature: type[SeaBreezeIPv4Feature]
+    SeaBreezeIrradCalFeature: type[SeaBreezeIrradCalFeature]
+    SeaBreezeLightSourceFeature: type[SeaBreezeLightSourceFeature]
+    SeaBreezeMulticastFeature: type[SeaBreezeMulticastFeature]
+    SeaBreezeNetworkConfigurationFeature: type[SeaBreezeNetworkConfigurationFeature]
+    SeaBreezeNonlinearityCoefficientsFeature: type[
         SeaBreezeNonlinearityCoefficientsFeature
     ]
-    SeaBreezeNumFeaturesError: Type[SeaBreezeNumFeaturesError]
-    SeaBreezeOpticalBenchFeature: Type[SeaBreezeOpticalBenchFeature]
-    SeaBreezePixelBinningFeature: Type[SeaBreezePixelBinningFeature]
-    SeaBreezeRawUSBBusAccessFeature: Type[SeaBreezeRawUSBBusAccessFeature]
-    SeaBreezeRevisionFeature: Type[SeaBreezeRevisionFeature]
-    SeaBreezeShutterFeature: Type[SeaBreezeShutterFeature]
-    SeaBreezeSpectrometerFeature: Type[SeaBreezeSpectrometerFeature]
-    SeaBreezeSpectrumProcessingFeature: Type[SeaBreezeSpectrumProcessingFeature]
-    SeaBreezeStrayLightCoefficientsFeature: Type[SeaBreezeStrayLightCoefficientsFeature]
-    SeaBreezeStrobeLampFeature: Type[SeaBreezeStrobeLampFeature]
-    SeaBreezeTemperatureFeature: Type[SeaBreezeTemperatureFeature]
-    SeaBreezeThermoElectricFeature: Type[SeaBreezeThermoElectricFeature]
-    SeaBreezeWifiConfigurationFeature: Type[SeaBreezeWifiConfigurationFeature]
+    SeaBreezeNumFeaturesError: type[SeaBreezeNumFeaturesError]
+    SeaBreezeOpticalBenchFeature: type[SeaBreezeOpticalBenchFeature]
+    SeaBreezePixelBinningFeature: type[SeaBreezePixelBinningFeature]
+    SeaBreezeRawUSBBusAccessFeature: type[SeaBreezeRawUSBBusAccessFeature]
+    SeaBreezeRevisionFeature: type[SeaBreezeRevisionFeature]
+    SeaBreezeShutterFeature: type[SeaBreezeShutterFeature]
+    SeaBreezeSpectrometerFeature: type[SeaBreezeSpectrometerFeature]
+    SeaBreezeSpectrumProcessingFeature: type[SeaBreezeSpectrumProcessingFeature]
+    SeaBreezeStrayLightCoefficientsFeature: type[SeaBreezeStrayLightCoefficientsFeature]
+    SeaBreezeStrobeLampFeature: type[SeaBreezeStrobeLampFeature]
+    SeaBreezeTemperatureFeature: type[SeaBreezeTemperatureFeature]
+    SeaBreezeThermoElectricFeature: type[SeaBreezeThermoElectricFeature]
+    SeaBreezeWifiConfigurationFeature: type[SeaBreezeWifiConfigurationFeature]

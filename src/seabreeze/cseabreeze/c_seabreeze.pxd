@@ -10,6 +10,7 @@
 #
 from libcpp cimport bool
 
+
 cdef extern from "api/USBEndpointTypes.h":
     cpdef enum usbEndpointType:
         kEndpointTypePrimaryOut, # slow speed

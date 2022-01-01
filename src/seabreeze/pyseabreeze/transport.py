@@ -10,17 +10,14 @@ import inspect
 import logging
 import warnings
 from functools import partialmethod
-from typing import Any
-from typing import Dict
-from typing import Iterable
-from typing import Optional
 from typing import TYPE_CHECKING
+from typing import Any
+from typing import Iterable
 from typing import Tuple
-from typing import Type
 
+import usb.backend
 import usb.core
 import usb.util
-import usb.backend
 
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
@@ -32,7 +29,7 @@ if TYPE_CHECKING:
 # encapsulate usb.core.USBError
 class USBTransportError(Exception):
     def __init__(
-        self, *args: Any, errno: Optional[int] = None, error_code: Optional[int] = None
+        self, *args: Any, errno: int | None = None, error_code: int | None = None
     ) -> None:
         super().__init__(*args)
         self.errno = errno
@@ -99,7 +96,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
 
     _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")
     vendor_id = 0x2457
-    product_ids: Dict[int, str] = {}
+    product_ids: dict[int, str] = {}
 
     # add logging
     _log = logging.getLogger(__name__)
@@ -108,7 +105,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
         self,
         usb_product_id: int,
         usb_endpoint_map: EndPointMap,
-        usb_protocol: Type[PySeaBreezeProtocol],
+        usb_protocol: type[PySeaBreezeProtocol],
     ) -> None:
         super().__init__()
         self._product_id = usb_product_id
@@ -128,9 +125,9 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
         self._default_read_endpoint = "low_speed"
         self._default_read_spectrum_endpoint = "high_speed"
         # internal state
-        self._device: Optional[USBTransportHandle] = None
-        self._opened: Optional[bool] = None
-        self._protocol: Optional[PySeaBreezeProtocol] = None
+        self._device: USBTransportHandle | None = None
+        self._opened: bool | None = None
+        self._protocol: PySeaBreezeProtocol | None = None
 
     def open_device(self, device: USBTransportHandle) -> None:
         if not isinstance(device, USBTransportHandle):
@@ -170,9 +167,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
         self._opened = False
         self._protocol = None
 
-    def write(
-        self, data: bytes, timeout_ms: Optional[int] = None, **kwargs: Any
-    ) -> int:
+    def write(self, data: bytes, timeout_ms: int | None = None, **kwargs: Any) -> int:
         if self._device is None:
             raise RuntimeError("device not opened")
         if kwargs:
@@ -183,9 +178,9 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
 
     def read(
         self,
-        size: Optional[int] = None,
-        timeout_ms: Optional[int] = None,
-        mode: Optional[str] = None,
+        size: int | None = None,
+        timeout_ms: int | None = None,
+        mode: str | None = None,
         **kwargs: Any,
     ) -> bytes:
         if self._device is None:
@@ -252,7 +247,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
         cls.product_ids[product_id] = model_name
 
     @classmethod
-    def supported_model(cls, device: USBTransportHandle) -> Optional[str]:
+    def supported_model(cls, device: USBTransportHandle) -> str | None:
         """return supported model
 
         Parameters
@@ -265,7 +260,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
         return cls.product_ids[device.pyusb_device.idProduct]
 
     @classmethod
-    def specialize(cls, model_name: str, **kwargs: Any) -> Type[USBTransport]:
+    def specialize(cls, model_name: str, **kwargs: Any) -> type[USBTransport]:
         assert set(kwargs) == set(cls._required_init_kwargs)
         # usb transport register automatically on registration
         cls.register_model(model_name, **kwargs)
@@ -303,7 +298,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
                 )
 
 
-_pyusb_backend_instances: Dict[str, usb.backend.IBackend] = {}
+_pyusb_backend_instances: dict[str, usb.backend.IBackend] = {}
 
 
 def get_pyusb_backend_from_name(name: str) -> usb.backend.IBackend:
@@ -328,7 +323,7 @@ def get_pyusb_backend_from_name(name: str) -> usb.backend.IBackend:
     return _backend
 
 
-def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> Optional[str]:
+def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
     """internal: return backend name from loaded backend"""
     module = inspect.getmodule(backend)
     if not module:

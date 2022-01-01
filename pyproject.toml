@@ -8,8 +8,7 @@ requires = [
     ]
 
 [tool.black]
-line-length = 88
-target-version = ['py36']
+target-version = ['py37']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -28,6 +27,8 @@ exclude = '''
 
 [tool.isort]
 profile = "black"
+py_version = "37"
+force_single_line = true
 
 [tool.cibuildwheel.linux]
 before-build = "yum install -y libusb-devel"

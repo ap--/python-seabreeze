@@ -1,17 +1,8 @@
 from __future__ import annotations
 
-import sys
-from typing import overload
-
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
-
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.protocol import OOIProtocol
-
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 
 

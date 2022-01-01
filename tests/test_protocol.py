@@ -1,6 +1,6 @@
 import struct
-
 from unittest import mock
+
 import pytest
 
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport

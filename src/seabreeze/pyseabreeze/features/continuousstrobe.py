@@ -6,7 +6,6 @@ from seabreeze.pyseabreeze.features.fpga import _FPGARegisterFeatureOOI
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 
-
 # Definition
 # ==========
 

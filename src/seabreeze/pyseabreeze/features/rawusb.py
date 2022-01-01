@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sys
-from typing import Optional
 
 if sys.version_info >= (3, 8):
     from typing import Literal
@@ -57,7 +56,7 @@ class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
     def raw_usb_read(
         self,
         endpoint: Literal["primary_in", "secondary_in", "secondary_in2"],
-        buffer_length: Optional[int] = None,
+        buffer_length: int | None = None,
     ) -> bytes:
         if endpoint == "primary_in":
             return self.protocol.transport.read(size=buffer_length, mode="low_speed")

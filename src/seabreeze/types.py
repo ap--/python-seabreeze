@@ -8,6 +8,7 @@ import sys
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypeVar
+from typing import runtime_checkable
 
 if sys.version_info >= (3, 8):
     from typing import Literal
@@ -33,6 +34,7 @@ if TYPE_CHECKING:
     class SeaBreezeNumFeaturesError(SeaBreezeError):
         ...
 
+    @runtime_checkable
     class SeaBreezeDevice(Protocol):
         f: SeaBreezeFeatureAccessor
         is_open: bool

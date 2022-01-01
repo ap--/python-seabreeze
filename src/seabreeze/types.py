@@ -18,6 +18,8 @@ else:
 
 __all__ = [
     "SeaBreezeAPI",
+    "SeaBreezeBackend",
+    "SeaBreezeFeatureAccessor",
 ]
 
 

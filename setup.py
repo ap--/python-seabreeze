@@ -53,7 +53,9 @@ if "--without-cseabreeze" in sys.argv:
     #   pyusb is optional
     # - require users to decide which backend they want to install...
     extensions = []
+
 else:
+    compile_opts: dict
 
     # Platform specific libraries and source files
     if platform.system() == "Windows":
@@ -83,12 +85,16 @@ else:
         ignore_subdirs = {"osx", "winusb", "windows"}
         try:
             import pkgconfig
-
-            compile_opts = pkgconfig.parse("libusb")
         except ImportError:
             compile_opts = dict(
                 define_macros=[], include_dirs=[], libraries=["usb"], library_dirs=[]
             )
+        else:
+            compile_opts = pkgconfig.parse("libusb")
+
+    if not strtobool(os.getenv("CSEABREEZE_DEBUG_INFO", "0")):
+        # strip debug symbols
+        compile_opts["extra_compile_args"] = ["-g0"]
 
     # Collect all source files for cseabreeze backend
     sources = ["src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx"]

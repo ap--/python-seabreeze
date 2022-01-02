@@ -8,14 +8,15 @@ import sys
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypeVar
-from typing import runtime_checkable
 
 if sys.version_info >= (3, 8):
     from typing import Literal
     from typing import Protocol
+    from typing import runtime_checkable
 else:
     from typing_extensions import Literal
     from typing_extensions import Protocol
+    from typing_extensions import runtime_checkable
 
 __all__ = [
     "SeaBreezeAPI",

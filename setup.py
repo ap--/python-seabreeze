@@ -104,6 +104,13 @@ else:
     # Add seabreeze include dirs
     compile_opts["include_dirs"].append(os.path.relpath("src/libseabreeze/include"))
 
+    if strtobool(os.getenv("CSEABREEZE_ABI3", "false")):
+        # this will only work once more numpy support lands in the limited api
+        compile_opts["py_limited_api"] = True
+        compile_opts["define_macros"].extend(
+            [("CYTHON_LIMITED_API", "1"), ("Py_LIMITED_API", 0x03070000)]
+        )
+
     # define extension
     libseabreeze = Extension(
         "seabreeze.cseabreeze._wrapper",

@@ -14,7 +14,6 @@ from typing import TypeVar
 import numpy
 
 import seabreeze.backends
-from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin  # type: ignore
 from seabreeze.types import SeaBreezeAPI
 from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
@@ -63,7 +62,7 @@ def list_devices() -> list[SeaBreezeDevice]:
     return api.list_devices()
 
 
-class Spectrometer(_DeprecatedSpectrometerMixin):
+class Spectrometer:
     """Spectrometer class for all supported spectrometers"""
 
     # store reference to backend to allow backend switching in tests

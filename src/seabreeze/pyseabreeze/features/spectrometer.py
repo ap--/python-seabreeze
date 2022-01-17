@@ -426,7 +426,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
             + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00101100, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)
 
     def get_fast_buffer_spectrum(self) -> Any:
         raise SeaBreezeNotSupported(

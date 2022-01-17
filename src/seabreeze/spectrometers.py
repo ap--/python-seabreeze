@@ -220,7 +220,7 @@ class Spectrometer:
         if correct_nonlinearity or correct_dark_counts:
             dark_offset = numpy.mean(out[self._dp]) if self._dp else 0.0
             out -= dark_offset
-        if correct_nonlinearity:
+        if correct_nonlinearity and self._nc:
             out = out / numpy.polyval(self._nc, out)
         if correct_nonlinearity and (not correct_dark_counts):
             # noinspection PyUnboundLocalVariable

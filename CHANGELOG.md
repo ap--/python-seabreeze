@@ -13,9 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Added
+- added `seabreeze.types`
+- fully type annotated seabreeze (improved autocompletion in IDEs)
+- add pre-commit and pre-commit.ci
+
 ### Changed
-- drop support for Python 2.7 to 3.5 (require py36+)
+- drop support for Python 2.7 to 3.6 (require py37+)
 - expose selecting `pyusb_backend` via `seabreeze.use` for `pyseabreeze`
+- *ci* switch to cibuildwheels
+- stop including debugging symbols for `cseabreeze` (reduces wheels size)
+
+### Fixed
+- compile correctly under newer g++
+- prevent deprecation warning due to distutils deprecation
 
 ## [1.3.0] - 2020-08-23
 ### Added

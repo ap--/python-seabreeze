@@ -12,16 +12,19 @@ from typing import TypeVar
 if sys.version_info >= (3, 8):
     from typing import Literal
     from typing import Protocol
+    from typing import TypedDict
     from typing import runtime_checkable
 else:
     from typing_extensions import Literal
     from typing_extensions import Protocol
+    from typing_extensions import TypedDict
     from typing_extensions import runtime_checkable
 
 __all__ = [
     "SeaBreezeAPI",
     "SeaBreezeBackend",
     "SeaBreezeFeatureAccessor",
+    "SeaBreezeFeatureDict",
 ]
 
 
@@ -41,7 +44,7 @@ if TYPE_CHECKING:
         is_open: bool
         serial_number: str
         model: str  # fixme
-        features: dict[str, SeaBreezeFeature]
+        features: SeaBreezeFeatureDict
 
         def open(self) -> None:
             ...
@@ -583,6 +586,37 @@ class SeaBreezeFeatureAccessor(Protocol):
     temperature: SeaBreezeTemperatureFeature
     thermo_electric: SeaBreezeThermoElectricFeature
     wifi_configuration: SeaBreezeWifiConfigurationFeature
+
+
+class SeaBreezeFeatureDict(TypedDict):
+    acquisition_delay: list[SeaBreezeAcquisitionDelayFeature]
+    continuous_strobe: list[SeaBreezeContinuousStrobeFeature]
+    data_buffer: list[SeaBreezeDataBufferFeature]
+    dhcp_server: list[SeaBreezeDHCPServerFeature]
+    eeprom: list[SeaBreezeEEPROMFeature]
+    ethernet_configuration: list[SeaBreezeEthernetConfigurationFeature]
+    fast_buffer: list[SeaBreezeFastBufferFeature]
+    gpio: list[SeaBreezeGPIOFeature]
+    i2c_master: list[SeaBreezeI2CMasterFeature]
+    introspection: list[SeaBreezeIntrospectionFeature]
+    ipv4: list[SeaBreezeIPv4Feature]
+    irrad_cal: list[SeaBreezeIrradCalFeature]
+    light_source: list[SeaBreezeLightSourceFeature]
+    multicast: list[SeaBreezeMulticastFeature]
+    network_configuration: list[SeaBreezeNetworkConfigurationFeature]
+    nonlinearity_coefficients: list[SeaBreezeNonlinearityCoefficientsFeature]
+    optical_bench: list[SeaBreezeOpticalBenchFeature]
+    pixel_binning: list[SeaBreezePixelBinningFeature]
+    raw_usb_bus_access: list[SeaBreezeRawUSBBusAccessFeature]
+    revision: list[SeaBreezeRevisionFeature]
+    shutter: list[SeaBreezeShutterFeature]
+    spectrometer: list[SeaBreezeSpectrometerFeature]
+    spectrum_processing: list[SeaBreezeSpectrumProcessingFeature]
+    stray_light_coefficients: list[SeaBreezeStrayLightCoefficientsFeature]
+    strobe_lamp: list[SeaBreezeStrobeLampFeature]
+    temperature: list[SeaBreezeTemperatureFeature]
+    thermo_electric: list[SeaBreezeThermoElectricFeature]
+    wifi_configuration: list[SeaBreezeWifiConfigurationFeature]
 
 
 class SeaBreezeBackend:

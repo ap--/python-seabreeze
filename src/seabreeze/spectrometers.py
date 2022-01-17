@@ -16,6 +16,7 @@ import seabreeze.backends
 from seabreeze.types import SeaBreezeAPI
 from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
+from seabreeze.types import SeaBreezeFeatureDict
 
 # get the backend and add some functions/classes to this module
 _lib: SeaBreezeBackend = seabreeze.backends.get_backend()
@@ -25,12 +26,10 @@ if TYPE_CHECKING:
 
     from seabreeze.types import SeaBreezeDevice
     from seabreeze.types import SeaBreezeError
-    from seabreeze.types import SeaBreezeFeature
 
 else:
     SeaBreezeDevice = _lib.SeaBreezeDevice
     SeaBreezeError = _lib.SeaBreezeError
-    SeaBreezeFeature = _lib.SeaBreezeFeature
 
 __all__ = [
     "list_devices",
@@ -331,7 +330,7 @@ class Spectrometer:
         return self._dev.f.spectrometer._spectrum_length
 
     @property
-    def features(self) -> dict[str, SeaBreezeFeature]:
+    def features(self) -> SeaBreezeFeatureDict:
         """return a dictionary of all supported features
 
         this returns a dictionary with all supported Features of the spectrometer
@@ -339,7 +338,9 @@ class Spectrometer:
 
         Returns
         -------
-        features : `dict` [`str`, `seabreeze.SeaBreezeFeature`]
+        features :
+            a dictionary mapping feature names to lists of feature instances.
+            An empty list means the feature is not available.
         """
         return self._dev.features
 

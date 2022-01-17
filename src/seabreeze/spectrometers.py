@@ -9,7 +9,6 @@ Email: andreas@poehlmann.io
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import TypeVar
 
 import numpy
 
@@ -38,9 +37,6 @@ __all__ = [
     "SeaBreezeError",
     "Spectrometer",
 ]
-
-
-ST = TypeVar("ST", bound="Spectrometer")
 
 
 def list_devices() -> list[SeaBreezeDevice]:
@@ -103,7 +99,7 @@ class Spectrometer:
         self._wavelengths = self._dev.f.spectrometer.get_wavelengths()
 
     @classmethod
-    def from_first_available(cls: type[ST]) -> ST:
+    def from_first_available(cls) -> Spectrometer:
         """open first available spectrometer
 
         Returns
@@ -118,7 +114,7 @@ class Spectrometer:
             raise cls._backend.SeaBreezeError("No unopened device found.")
 
     @classmethod
-    def from_serial_number(cls: type[ST], serial: str | None = None) -> ST:
+    def from_serial_number(cls, serial: str | None = None) -> Spectrometer:
         """open the spectrometer matching the provided serial number
 
         Allows to open a specific spectrometer if multiple are connected.

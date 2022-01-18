@@ -8,8 +8,8 @@ else:
     from typing_extensions import Literal
 
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
-from seabreeze.pyseabreeze.protocol import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
+from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 
 
 class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):

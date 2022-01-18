@@ -86,6 +86,11 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
+          name: sdist
+          path: ./dist
+      - uses: actions/download-artifact@v2
+        with:
+          name: wheels
           path: ./dist
       # push all tagged versions to pypi.org
       - name: Publish package to PyPI

@@ -410,27 +410,22 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         """
         try:
             protocol = self._transport.protocol
-            if protocol is None:
-                raise AttributeError("transport not opened")
-
-            elif isinstance(protocol, OOIProtocol):
-                # The serial is stored in slot 0
-                # noinspection PyUnresolvedReferences
-                return self.f.eeprom.eeprom_read_slot(0)
-
-            elif isinstance(protocol, OBPProtocol):
-                serial_len = ord(protocol.query(0x00000101))
-                serial_str = protocol.query(0x00000100)[:serial_len]
-                return serial_str.decode("utf8")
-
-            else:
-                raise NotImplementedError(
-                    "No serial number for protocol class {}".format(
-                        protocol.__class__.__name__
-                    )
-                )
-        except AttributeError:
+        except RuntimeError:
             raise SeaBreezeError("device not open")
+
+        if isinstance(protocol, OOIProtocol):
+            # The serial is stored in slot 0
+            return self.f.eeprom.eeprom_read_slot(0)
+
+        elif isinstance(protocol, OBPProtocol):
+            serial_len = ord(protocol.query(0x00000101))
+            serial_str = protocol.query(0x00000100)[:serial_len]
+            return serial_str.decode("utf8")
+
+        else:
+            raise NotImplementedError(
+                f"No serial number for protocol class {type(protocol).__name__}"
+            )
 
     @property
     def features(self) -> dict[str, list[SeaBreezeFeature]]:
@@ -522,14 +517,15 @@ class USB2000PLUS(SeaBreezeDevice):
         cls: type[DT], transport: PySeaBreezeTransport[Any]
     ) -> type[DT]:
         """return the correct subclass of the usb2000plus like model"""
-        protocol = transport.protocol
-        if protocol is None:
+        try:
+            protocol = transport.protocol
+        except RuntimeError:
             raise AttributeError("transport not opened")
 
         # noinspection PyUnresolvedReferences,PyProtectedMember
         from seabreeze.pyseabreeze.features.fpga import _FPGARegisterFeatureOOI
 
-        fpga = _FPGARegisterFeatureOOI(transport.protocol)
+        fpga = _FPGARegisterFeatureOOI(protocol)
         if fpga.get_firmware_version()[0] >= 3:
             return FLAMES  # type: ignore
         else:

@@ -125,7 +125,6 @@ else:
     libseabreeze.cython_directives = {
         "binding": building_sphinx_documentation,  # fix class method parameters for sphinx
         "embedsignature": not building_sphinx_documentation,  # add function signature to docstring for ipython
-        "language_level": "3",  # prevent cython warning
     }
     extensions = [libseabreeze]
 

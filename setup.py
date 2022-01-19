@@ -158,7 +158,18 @@ class sb_build_ext(build_ext):
         except (AttributeError, ValueError):
             pass
 
-        super().build_extensions()
+        # see: https://github.com/matplotlib/matplotlib/pull/18322
+        if self.compiler.compiler_type == "msvc" and strtobool(
+            os.environ.get("SEABREEZE_DISABLE_FH4", "0")
+        ):
+            # Disable FH4 Exception Handling implementation so that we don't
+            # require VCRUNTIME140_1.dll. For more details, see:
+            # https://devblogs.microsoft.com/cppblog/making-cpp-exception-handling-smaller-x64/
+            # https://github.com/joerick/cibuildwheel/issues/423#issuecomment-677763904
+            for ext in self.extensions:
+                ext.extra_compile_args.append("/d2FH4-")
+
+        return super().build_extensions()
 
 
 if WARN_NO_CYTHON and extensions:

@@ -92,9 +92,9 @@ else:
         else:
             compile_opts = pkgconfig.parse("libusb")
 
-    if not strtobool(os.getenv("CSEABREEZE_DEBUG_INFO", "0")):
-        # strip debug symbols
-        compile_opts["extra_compile_args"] = ["-g0"]
+        if not strtobool(os.getenv("CSEABREEZE_DEBUG_INFO", "0")):
+            # strip debug symbols
+            compile_opts["extra_compile_args"] = ["-g0"]
 
     # Collect all source files for cseabreeze backend
     sources = ["src/seabreeze/cseabreeze/c_seabreeze_wrapper.pyx"]

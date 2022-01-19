@@ -74,14 +74,6 @@ jobs:
       - name: Build wheels
         env:
           SEABREEZE_DISABLE_FH4: "yes"
-          CIBW_SKIP: "*-musllinux_*"
-          CIBW_BUILD_VERBOSITY: 2
-          CIBW_TEST_EXTRAS: "pyseabreeze"
-          CIBW_TEST_COMMAND: >
-            python -c "import seabreeze"
-            python -c "import seabreeze.types"
-            python -c "import seabreeze.cseabreeze"
-            python -c "import seabreeze.pyseabreeze"
         run: python -m cibuildwheel --output-dir wheelhouse
       - uses: actions/upload-artifact@v2
         with:

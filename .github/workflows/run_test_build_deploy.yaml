@@ -75,7 +75,7 @@ jobs:
         env:
           SEABREEZE_DISABLE_FH4: "yes"
           CIBW_SKIP: "*-musllinux_*"
-          CIBW_BUILD_VERBOSITY: 1
+          CIBW_BUILD_VERBOSITY: 2
           CIBW_TEST_EXTRAS: "pyseabreeze"
           CIBW_TEST_COMMAND: >
             python -c "import seabreeze"

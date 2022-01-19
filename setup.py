@@ -135,17 +135,19 @@ class sb_build_ext(build_ext):
         # Deal with windows command line limit
         if os.name == "nt":
 
-            def win_spawn(_, cmd):
+            org_spawn = self.compiler.spawn
+
+            def win_spawn(_, cmd, *args, **kwargs):
                 # the windows shell can't handle all the object files provided to link.exe
                 from subprocess import list2cmdline
-                from subprocess import run
 
                 if cmd[0].endswith("link.exe"):
                     with open("ihatewindowssomuch.rsp", "w") as f:
                         f.write(list2cmdline(cmd[1:]) + "\n\r")
-                    return run(cmd[:1] + [f"@{os.path.abspath(f.name)}"])
+                    new_cmd = cmd[:1] + [f"@{os.path.abspath(f.name)}"]
+                    return org_spawn(new_cmd, *args, **kwargs)
                 else:
-                    return run(cmd)
+                    return org_spawn(cmd, *args, **kwargs)
 
             # noinspection PyArgumentList
             self.compiler.spawn = win_spawn.__get__(self.compiler)

@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
 
     from seabreeze.types import SeaBreezeDevice
-    from seabreeze.types import SeaBreezeError
 
 else:
     SeaBreezeDevice = _lib.SeaBreezeDevice

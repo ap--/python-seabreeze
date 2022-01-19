@@ -20,44 +20,40 @@ else:
     from typing_extensions import TypedDict
     from typing_extensions import runtime_checkable
 
+if TYPE_CHECKING:
+    import numpy as np
+    from numpy.typing import NDArray
+
 __all__ = [
     "SeaBreezeAPI",
     "SeaBreezeBackend",
+    "SeaBreezeDevice",
     "SeaBreezeFeatureAccessor",
     "SeaBreezeFeatureDict",
 ]
 
 
-if TYPE_CHECKING:
-    import numpy as np
-    from numpy.typing import NDArray
+@runtime_checkable
+class SeaBreezeDevice(Protocol):
+    serial_number: str
+    model: str  # fixme
+    is_open: bool
 
-    class SeaBreezeError(Exception):
+    features: SeaBreezeFeatureDict
+    f: SeaBreezeFeatureAccessor
+
+    def open(self) -> None:
         ...
 
-    class SeaBreezeNumFeaturesError(SeaBreezeError):
+    def close(self) -> None:
         ...
-
-    @runtime_checkable
-    class SeaBreezeDevice(Protocol):
-        f: SeaBreezeFeatureAccessor
-        is_open: bool
-        serial_number: str
-        model: str  # fixme
-        features: SeaBreezeFeatureDict
-
-        def open(self) -> None:
-            ...
-
-        def close(self) -> None:
-            ...
 
 
 class SeaBreezeAPI(Protocol):
     """SeaBreeze API interface"""
 
     def __init__(self, initialize: bool = True, **_kwargs: Any) -> None:
-        ...
+        raise TypeError(f"Type {type(self).__name__} cannot be instantiated")
 
     def initialize(self) -> None:
         ...
@@ -86,7 +82,7 @@ class SeaBreezeAPI(Protocol):
 FT = TypeVar("FT", bound="SeaBreezeFeature")
 
 
-class SeaBreezeFeature:
+class SeaBreezeFeature(Protocol):
     identifier: str
 
     def __repr__(self) -> str:
@@ -619,7 +615,7 @@ class SeaBreezeFeatureDict(TypedDict):
     wifi_configuration: list[SeaBreezeWifiConfigurationFeature]
 
 
-class SeaBreezeBackend:
+class SeaBreezeBackend(Protocol):
     """SeaBreeze Backend interface"""
 
     _backend_: str
@@ -627,7 +623,7 @@ class SeaBreezeBackend:
 
     SeaBreezeAPI: type[SeaBreezeAPI]
     SeaBreezeDevice: type[SeaBreezeDevice]
-    SeaBreezeError: type[SeaBreezeError]
+    SeaBreezeError: type[Exception]
     SeaBreezeFeature: type[SeaBreezeFeature]
 
     SeaBreezeAcquisitionDelayFeature: type[SeaBreezeAcquisitionDelayFeature]
@@ -648,7 +644,7 @@ class SeaBreezeBackend:
     SeaBreezeNonlinearityCoefficientsFeature: type[
         SeaBreezeNonlinearityCoefficientsFeature
     ]
-    SeaBreezeNumFeaturesError: type[SeaBreezeNumFeaturesError]
+    SeaBreezeNumFeaturesError: type[Exception]
     SeaBreezeOpticalBenchFeature: type[SeaBreezeOpticalBenchFeature]
     SeaBreezePixelBinningFeature: type[SeaBreezePixelBinningFeature]
     SeaBreezeRawUSBBusAccessFeature: type[SeaBreezeRawUSBBusAccessFeature]

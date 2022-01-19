@@ -30,7 +30,8 @@ def ls() -> None:
     connected = []
     for backend in ("cseabreeze", "pyseabreeze"):
         try:
-            sb_backend: SeaBreezeBackend = import_module(f"seabreeze.{backend}")  # type: ignore
+            # noinspection PyTypeChecker,PydanticTypeChecker
+            sb_backend: SeaBreezeBackend = import_module(f"seabreeze.{backend}")
         except ImportError:
             continue
 

@@ -35,10 +35,10 @@ build-verbosity = 2
 skip = ["*-musllinux_*", "pp38-*"]
 test-extras = ["pyseabreeze"]
 test-command = [
-    "python -c 'import seabreeze'",
-    "python -c 'import seabreeze.types'",
-    "python -c 'import seabreeze.cseabreeze'",
-    "python -c 'import seabreeze.pyseabreeze'",
+    "python -c \"import seabreeze\"",
+    "python -c \"import seabreeze.types\"",
+    "python -c \"import seabreeze.cseabreeze\"",
+    "python -c \"import seabreeze.pyseabreeze\"",
 ]
 
 [tool.cibuildwheel.linux]

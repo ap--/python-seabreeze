@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ...
 
+## [2.0.2] - 2021-01-21
+### Fixed
+- *psb* fix regression in seabreeze protocol
+
 ## [2.0.1] - 2021-01-20
 ### Changed
 - strip debug symbols only on linux
@@ -169,7 +173,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.0.2...HEAD
+[2.0.2]: https://github.com/ap--/python-seabreeze/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/ap--/python-seabreeze/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/ap--/python-seabreeze/compare/v1.3.0...v2.0.0
 [1.3.0]: https://github.com/ap--/python-seabreeze/compare/v1.2.0...v1.3.0

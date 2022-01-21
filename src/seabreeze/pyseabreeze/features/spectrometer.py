@@ -164,10 +164,12 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
             + self.protocol.transport.default_timeout_ms
         )
         # noinspection PyProtectedMember
-        tmp[:] = self.protocol.receive(
-            size=self._spectrum_raw_length,
-            timeout_ms=timeout,
-            mode=self.protocol.transport._default_read_spectrum_endpoint,
+        tmp[:] = bytearray(
+            self.protocol.receive(
+                size=self._spectrum_raw_length,
+                timeout_ms=timeout,
+                mode=self.protocol.transport._default_read_spectrum_endpoint,
+            )
         )
         return tmp
 
@@ -234,17 +236,23 @@ class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA)
         ), "current impl requires USBTransport"
         # noinspection PyProtectedMember
         if self.protocol.transport._default_read_spectrum_endpoint == "low_speed":
-            tmp[:] = self.protocol.receive(
-                size=self._spectrum_raw_length, timeout_ms=timeout
+            tmp[:] = bytearray(
+                self.protocol.receive(
+                    size=self._spectrum_raw_length, timeout_ms=timeout
+                )
             )
         else:  # high_speed
-            tmp[:2048] = self.protocol.receive(
-                size=2048, timeout_ms=timeout, mode="high_speed_alt"
+            tmp[:2048] = bytearray(
+                self.protocol.receive(
+                    size=2048, timeout_ms=timeout, mode="high_speed_alt"
+                )
             )
-            tmp[2048:] = self.protocol.receive(
-                size=self._spectrum_raw_length - 2048,
-                timeout_ms=timeout,
-                mode="high_speed",
+            tmp[2048:] = bytearray(
+                self.protocol.receive(
+                    size=self._spectrum_raw_length - 2048,
+                    timeout_ms=timeout,
+                    mode="high_speed",
+                )
             )
         return tmp
 
@@ -570,7 +578,7 @@ class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
             + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00100928, timeout_ms=timeout)
-        return numpy.fromstring(datastring, dtype=numpy.uint8)  # type: ignore
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
@@ -599,4 +607,4 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
         # the message type is different than the default defined in the protocol,
         # requires addition of a new message type in protocol to work
         datastring = self.protocol.query(0x00101000, timeout_ms=timeout)
-        return numpy.fromstring(datastring, dtype=numpy.uint8)  # type: ignore
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)

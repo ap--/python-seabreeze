@@ -93,7 +93,7 @@ class SeaBreezeContinuousStrobeFeatureOOI(SeaBreezeContinuousStrobeFeature):
 
         elif fpga_major_version == 3:
             counts = period_micros * 48
-            if not 0 < counts < 2 ** 32:
+            if not 0 < counts < 2**32:
                 raise ValueError("period_micros is too large")
             self._fpga.write_register(
                 self._fpga.Codes.V3_CONTINUOUS_STROBE_TIMER_MSB, (counts >> 16) & 0xFFFF

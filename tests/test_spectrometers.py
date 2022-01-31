@@ -300,7 +300,7 @@ class TestHardware:
         low, high = spec.integration_time_micros_limits
         assert isinstance(low, int)
         assert isinstance(high, int)
-        assert 0 < low < high < 2 ** 64
+        assert 0 < low < high < 2**64
 
     @skip_if_serial_unsupported_by_backend()
     def test_integration_time(self, serial_number):
@@ -315,11 +315,11 @@ class TestHardware:
 
         with pytest.raises(SeaBreezeError):
             # fail because too large
-            spec.integration_time_micros(2 ** 62)
+            spec.integration_time_micros(2**62)
 
         with pytest.raises(SeaBreezeError):
             # fail because too large long overflow
-            spec.integration_time_micros(2 ** 64)
+            spec.integration_time_micros(2**64)
 
         spec.integration_time_micros(10000)
         spec.intensities()

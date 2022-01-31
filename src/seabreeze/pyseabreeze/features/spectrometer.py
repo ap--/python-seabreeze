@@ -141,7 +141,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
                     SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)
                 )
             )
-        return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
@@ -421,7 +421,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
             coeffs.append(struct.unpack("<f", data)[0])
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
-        return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
@@ -492,7 +492,7 @@ class SeaBreezeSpectrometerFeatureQE65000(SeaBreezeSpectrometerFeatureOOIFPGA):
                     SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)
                 )
             )
-        return sum(wl * (indices ** i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()

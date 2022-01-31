@@ -1073,7 +1073,7 @@ class QEPRO(SeaBreezeDevice):
     integration_time_base = 1
     spectrum_num_pixel = 1044
     spectrum_raw_length = (1044 * 4) + 32  # XXX: Metadata
-    spectrum_max_value = (2 ** 18) - 1
+    spectrum_max_value = (2**18) - 1
     trigger_modes = TriggerMode.supported("NORMAL", "LEVEL", "SYNCHRONIZATION", "EDGE")
 
     # features

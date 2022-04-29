@@ -1127,7 +1127,7 @@ cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
         cdef int bytes_written
         cdef float[::1] out
         cdef int out_length
-        arr = np.asarray(calibration_array, dtype=np.float)
+        arr = np.asarray(calibration_array, dtype=np.float32)
         if not arr.ndim == 1:
             raise ValueError("calibration_array needs to be 1D")
         out = arr

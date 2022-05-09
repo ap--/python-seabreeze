@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ...
 
+## [2.0.3] - 2022-05-09
+### Fixed
+- *csb* fix array type in write calibration
+
 ## [2.0.2] - 2021-01-21
 ### Fixed
 - *psb* fix regression in seabreeze protocol

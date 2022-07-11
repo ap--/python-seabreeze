@@ -32,7 +32,7 @@ repos:
         additional_dependencies: [numpy, pyusb>=1.0]
         exclude: "^(build|docs|tests|setup.py)"
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.34.0
+    rev: v2.37.1
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]

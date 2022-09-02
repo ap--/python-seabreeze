@@ -10,7 +10,9 @@ import numpy
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.exceptions import SeaBreezeNotSupported
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureADC
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
+from seabreeze.pyseabreeze.protocol import ADCProtocol
 from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
@@ -78,6 +80,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
     )
 
     _normalization_value = 1.0
+    _eeprom_cls = SeaBreezeEEPromFeatureOOI
 
     # config
     _dark_pixel_indice: tuple[int, ...]
@@ -137,9 +140,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         for i in range(1, 5):
             # noinspection PyProtectedMember
             coeffs.append(
-                float(
-                    SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)
-                )
+                float(self._eeprom_cls._func_eeprom_read_slot(self.protocol, i))
             )
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
@@ -608,3 +609,16 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
         # requires addition of a new message type in protocol to work
         datastring = self.protocol.query(0x00101000, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
+
+
+class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
+    _required_protocol_cls = ADCProtocol
+    _eeprom_cls = SeaBreezeEEPromFeatureADC
+
+    def get_intensities(self) -> NDArray[np.float_]:
+        tmp = self._get_spectrum_raw()
+        ret = numpy.array(
+            struct.unpack("<" + "H" * self._spectrum_length, tmp),
+            dtype=numpy.double,
+        )
+        return ret * self._normalization_value

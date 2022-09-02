@@ -15,6 +15,7 @@ from typing import TypeVar
 from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature
+from seabreeze.pyseabreeze.protocol import ADCProtocol
 from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
@@ -413,7 +414,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         except RuntimeError:
             raise SeaBreezeError("device not open")
 
-        if isinstance(protocol, OOIProtocol):
+        if isinstance(protocol, OOIProtocol) or isinstance(protocol, ADCProtocol):
             # The serial is stored in slot 0
             return self.f.eeprom.eeprom_read_slot(0)
 
@@ -1168,4 +1169,34 @@ class HDX(SeaBreezeDevice):
         sbf.spectrometer.SeaBreezeSpectrometerFeatureHDX,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
         sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP,
+    )
+
+
+class ADC1000USB(SeaBreezeDevice):
+
+    model_name = "ADC1000-USB"
+
+    # communication config
+    transport = (USBTransport,)
+    usb_product_id = 0x1004
+    usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
+    usb_protocol = ADCProtocol
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
+    integration_time_min = 1000
+    integration_time_max = 655350000
+    integration_time_base = 1
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = 2048 * 2  # XXX: No Sync byte!
+    spectrum_max_value = 65535
+    trigger_modes = TriggerMode.supported(
+        "NORMAL", "SOFTWARE", "SYNCHRONIZATION", "HARDWARE"
+    )
+
+    # features
+    feature_classes = (
+        sbf.eeprom.SeaBreezeEEPromFeatureADC,
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureADC,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )

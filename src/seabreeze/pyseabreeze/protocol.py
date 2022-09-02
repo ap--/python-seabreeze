@@ -575,3 +575,134 @@ class OBPProtocol(PySeaBreezeProtocol):
             return payload
         else:
             return b""
+
+
+class ADCProtocol(PySeaBreezeProtocol):
+
+    msgs = {
+        code: functools.partial(struct.Struct(msg).pack, code)
+        for code, msg in {
+            0x01: "<B",  # Reset
+            0x02: "<BH",  # Set Integration Time
+            0x03: "<BH",  # Set Strobe Enable Status
+            0x05: "<BB",  # Query Information
+            0x06: "<B16s",  # Write Information
+            0x07: "<B16s",  # Write Serial Number
+            0x08: "<B",  # Get Serial Number
+            0x09: "<B",  # Request Spectra
+            0x0A: "<BH",  # Set Trigger Mode
+            0x0B: "<BH   ",  # Set Spectrometer Channel
+            0x0C: "<BH",  # Set Continuous Strobe Rate
+            0x0D: "<BH",  # Set Master Clock Rate
+        }.items()
+    }  # add more here if you implement new features
+
+    def __init__(self, transport: PySeaBreezeTransport[Any]) -> None:
+        super().__init__(transport)
+        # initialize the spectrometer
+        self.send(0x01)
+        time.sleep(0.1)  # wait shortly after init command
+
+    def send(
+        self,
+        msg_type: int,
+        payload: tuple[float | int | str, ...] | str | int | float = (),
+        timeout_ms: int | None = None,
+        **kwargs: str | int | None,
+    ) -> int:
+        """send a ooi message to the spectrometer
+
+        Parameters
+        ----------
+        msg_type : int
+            a message type as defined in `OOIProtocol.msgs`
+        payload : optional
+            dependent on `msg_type`. a singe value or a tuple of multiple values
+        timeout_ms : int, optional
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        **kwargs :
+            ignored and only present to provide compatible caller interfaces
+
+        Returns
+        -------
+        bytes_written : int
+            the number of bytes sent
+        """
+        if kwargs:
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
+        payload = payload if isinstance(payload, (tuple, list)) else (payload,)
+        data = self.msgs[msg_type](*payload)
+        return self.transport.write(data, timeout_ms=timeout_ms)
+
+    def receive(
+        self,
+        size: int | None = None,
+        timeout_ms: int | None = None,
+        mode: str | None = None,
+        **kwargs: Any,
+    ) -> bytes:
+        """receive data from the spectrometer
+
+        Parameters
+        ----------
+        size:
+            number of bytes to receive. if `None` (default) uses the
+            default size as specified in the transport layer.
+        timeout_ms:
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        mode:
+            transport layers can support different modes
+            (i.e. {'low_speed', 'high_speed', 'high_speed_alt'} in the usb case)
+        kwargs:
+            ignored and only present to provide compatible caller interfaces
+
+        Returns
+        -------
+        data:
+            data returned from the spectrometer
+        """
+        if kwargs:
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
+        return self.transport.read(
+            size=size, timeout_ms=timeout_ms, mode=mode, **kwargs
+        )
+
+    def query(
+        self,
+        msg_type: int,
+        payload: tuple[int | str | float, ...] | str | int | float = (),
+        timeout_ms: int | None = None,
+        size: int | None = None,
+        mode: str | None = None,
+        **kwargs: str | int | None,
+    ) -> bytes:
+        """convenience method combining send and receive
+
+        Parameters
+        ----------
+        msg_type:
+            a message type as defined in `ADCProtocol.msgs`
+        payload:
+            the payload to be sent. Can be a singe value or a tuple, dependent
+            `msg_type`.
+        size:
+            number of bytes to receive. if `None` (default) uses the
+            default size as specified in the transport layer.
+        timeout_ms:
+            the timeout after which the transport layer should error.
+            `None` means no timeout (default)
+        mode:
+            transport layers can support different modes
+            (i.e. {'low_speed', 'high_speed', 'high_speed_alt'} in the usb case)
+        kwargs:
+            ignored and only present to provide compatible caller interfaces
+
+        Returns
+        -------
+        data:
+            data returned from the spectrometer
+        """
+        self.send(msg_type, payload, timeout_ms=timeout_ms)
+        return self.receive(size=size, timeout_ms=timeout_ms, mode=mode, **kwargs)

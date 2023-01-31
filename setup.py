@@ -203,6 +203,7 @@ setup(
     install_requires=[
         "numpy>=1.21",
         "typing_extensions ; python_version<'3.8'",
+        "pyusb==1.2.1"
     ],
     extras_require={
         "cseabreeze": [],

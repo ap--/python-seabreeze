@@ -1180,7 +1180,7 @@ class STUV100(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
-    usb_product_id = 0x00CB  # TODO
+    usb_product_id = 0x1000  # TODO
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81  # TODO are these correct?
     )

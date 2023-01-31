@@ -475,6 +475,9 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         accessor: SeaBreezeFeatureAccessor = FeatureAccessHandler(self.features)  # type: ignore
         return accessor
 
+    def __str__(self) -> str:
+        return str((self._model_name, self._serial_number,))
+
 
 # SPECTROMETER DEFINITIONS
 # ========================
@@ -1168,4 +1171,38 @@ class HDX(SeaBreezeDevice):
         sbf.spectrometer.SeaBreezeSpectrometerFeatureHDX,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
         sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP,
+    )
+
+
+class STUV100(SeaBreezeDevice):
+
+    model_name = "ST-UV-100"
+
+    # communication config
+    transport = (USBTransport,)
+    usb_product_id = 0x00CB  # TODO
+    usb_endpoint_map = EndPointMap(
+        ep_out=0x01, lowspeed_in=0x81  # TODO are these correct?
+    )
+    usb_protocol = OBPProtocol  # TODO OBPProtocol, OOIProtocol, other?
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges()  # TODO
+    integration_time_min = 3800
+    integration_time_max = 6000000
+    integration_time_base = 1
+    spectrum_num_pixel = 1516
+    spectrum_raw_length = (1516 * 2)  # TODO
+    spectrum_max_value = 65535  # TODO
+    # Triggering (from Ocean ST Manual v10-5): Software, External Rising Edge
+    trigger_modes = TriggerMode.supported(
+        "NORMAL", "SOFTWARE", "EDGE"  # TODO
+    )
+
+    # features
+    # TODO SeaBreezeSpectrometerFeatureSTUV100
+    feature_classes = (
+        sbf.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureSTUV100,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )

@@ -608,3 +608,7 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
         # requires addition of a new message type in protocol to work
         datastring = self.protocol.query(0x00101000, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
+
+
+class SeaBreezeSpectrometerFeatureSTUV100(SeaBreezeSpectrometerFeatureOBP):
+    pass

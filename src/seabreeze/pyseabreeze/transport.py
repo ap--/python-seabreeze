@@ -95,7 +95,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
     """implementation of the usb transport interface for spectrometers"""
 
     _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")
-    vendor_id = 0x2457
+    vendor_id = [0x2457, 0x0999]
     product_ids: dict[int, str] = {}
 
     # add logging
@@ -227,7 +227,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
             pyusb_devices = usb.core.find(
                 find_all=True,
                 custom_match=lambda dev: (
-                    dev.idVendor == cls.vendor_id and dev.idProduct in cls.product_ids
+                    dev.idVendor in cls.vendor_id and dev.idProduct in cls.product_ids
                 ),
                 backend=get_pyusb_backend_from_name(name=_pyusb_backend),
             )

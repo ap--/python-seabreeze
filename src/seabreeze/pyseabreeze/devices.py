@@ -1184,7 +1184,7 @@ class ST(SeaBreezeDevice):
     usb_endpoint_map = EndPointMap(
         ep_out=0x01,
         lowspeed_in=0x81,
-        highspeed_in2=0x82
+        highspeed_in=0x82
     )
     usb_protocol = OOIProtocol
 

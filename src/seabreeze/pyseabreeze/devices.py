@@ -1174,21 +1174,20 @@ class HDX(SeaBreezeDevice):
     )
 
 
-class STUV100(SeaBreezeDevice):
+class ST(SeaBreezeDevice):
 
-    model_name = "ST-UV-100"
+    model_name = "ST"
 
     # communication config
     transport = (USBTransport,)
-    usb_product_id = 0x1000  # TODO
+    usb_product_id = 0x1000
     usb_endpoint_map = EndPointMap(
-        ep_out=0x01, lowspeed_in=0x81  # TODO are these correct?
+        ep_out=0x01,
+        lowspeed_in=0x81,
+        highspeed_in=0x02,
+        highspeed_in2=0x82
     )
-    usb_protocol = OOIProtocol  # TODO OBPProtocol, OOIProtocol, other?
-    # OBPProtocol threw the following error:
-    # SeaBreezeError: Invalid/unsupported protocol
-    # Followed by
-    # USBTimeoutError: [Errno 10] Operation timed out
+    usb_protocol = OOIProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()  # TODO
@@ -1204,9 +1203,8 @@ class STUV100(SeaBreezeDevice):
     )
 
     # features
-    # TODO SeaBreezeSpectrometerFeatureSTUV100
     feature_classes = (
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
-        sbf.spectrometer.SeaBreezeSpectrometerFeatureSTUV100,
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureST,  # TODO
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )

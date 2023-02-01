@@ -610,5 +610,5 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
 
 
-class SeaBreezeSpectrometerFeatureSTUV100(SeaBreezeSpectrometerFeatureOBP):
+class SeaBreezeSpectrometerFeatureST(SeaBreezeSpectrometerFeatureOBP):
     pass

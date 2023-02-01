@@ -1184,7 +1184,11 @@ class STUV100(SeaBreezeDevice):
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81  # TODO are these correct?
     )
-    usb_protocol = OBPProtocol  # TODO OBPProtocol, OOIProtocol, other?
+    usb_protocol = OOIProtocol  # TODO OBPProtocol, OOIProtocol, other?
+    # OBPProtocol threw the following error:
+    # SeaBreezeError: Invalid/unsupported protocol
+    # Followed by
+    # USBTimeoutError: [Errno 10] Operation timed out
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()  # TODO

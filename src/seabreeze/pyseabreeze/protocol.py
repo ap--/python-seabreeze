@@ -20,7 +20,6 @@ from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 
 
 class OOIProtocol(PySeaBreezeProtocol):
-
     msgs = {
         code: functools.partial(struct.Struct(msg).pack, code)
         for code, msg in {
@@ -151,7 +150,6 @@ class OOIProtocol(PySeaBreezeProtocol):
 
 
 class OBPProtocol(PySeaBreezeProtocol):
-
     msgs = {
         code: struct.Struct(msg).pack
         for code, msg in {

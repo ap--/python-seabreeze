@@ -134,7 +134,6 @@ class sb_build_ext(build_ext):
     def build_extensions(self):
         # Deal with windows command line limit
         if os.name == "nt":
-
             org_spawn = self.compiler.spawn
 
             def win_spawn(_, cmd, *args, **kwargs):

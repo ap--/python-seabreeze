@@ -42,6 +42,7 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     def get_electric_dark_pixel_indices(self) -> list[int]:
         raise NotImplementedError("implement in derived class")
 
+    @property
     def _spectrum_length(self) -> int:
         raise NotImplementedError("implement in derived class")
 

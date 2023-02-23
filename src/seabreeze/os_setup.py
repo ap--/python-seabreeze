@@ -89,7 +89,6 @@ def linux_install_udev_rules():
 
         # check if rules need to be overwritten
         if os.path.exists(_UDEV_RULES_PATH) and not args.overwrite_existing:
-
             rules_differ = _diff_files(_UDEV_RULES_PATH, udev_fn)
             if not rules_differ:
                 _log.info("udev rules already newest version")

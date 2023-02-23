@@ -106,7 +106,6 @@ def get_backend() -> SeaBreezeBackend:
 
     backend = _use_backend(requested)  # trying to import requested backend
     if backend is None and fallback:
-
         warnings.warn(
             f"seabreeze failed to load user requested {requested!r} backend but will try fallback backends",
             category=ImportWarning,

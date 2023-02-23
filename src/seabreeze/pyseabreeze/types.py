@@ -52,7 +52,6 @@ DT = TypeVar("DT")
 
 
 class PySeaBreezeTransport(ABC, Generic[DT]):
-
     _required_init_kwargs: tuple[str, ...] = ()
 
     @abstractmethod

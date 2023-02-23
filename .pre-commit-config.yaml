@@ -29,7 +29,7 @@ repos:
     rev: 'v1.0.1'
     hooks:
     -   id: mypy
-        additional_dependencies: [numpy, pyusb>=1.0]
+        additional_dependencies: [numpy<1.23, pyusb>=1.0]
         exclude: "^(build|docs|tests|setup.py)"
 -   repo: https://github.com/asottile/pyupgrade
     rev: v3.3.1

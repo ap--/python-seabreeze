@@ -1157,9 +1157,9 @@ class ADC1000USB(SeaBreezeDevice):
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges((2, 24))
-    integration_time_min = 1000
-    integration_time_max = 655350000
-    integration_time_base = 1
+    integration_time_min = 5000
+    integration_time_max = 65535000
+    integration_time_base = 1000
     spectrum_num_pixel = 2048
     spectrum_raw_length = 2048 * 2  # XXX: No Sync byte!
     spectrum_max_value = 65535

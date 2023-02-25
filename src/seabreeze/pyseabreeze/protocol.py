@@ -14,6 +14,7 @@ import time
 import warnings
 from typing import Any
 
+from seabreeze.pyseabreeze.config import config
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
@@ -473,9 +474,9 @@ class OBPProtocol(PySeaBreezeProtocol):
 
         data = struct.unpack(self.OBP.HEADER_FMT, header)
 
-        if data[0] != self.OBP.HEADER_START_BYTES:
+        if data[0] != self.OBP.HEADER_START_BYTES and config.obp_protocol_checks:
             raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
-        if data[1] != self.OBP.HEADER_PROTOCOL_VERSION:
+        if data[1] != self.OBP.HEADER_PROTOCOL_VERSION and config.obp_protocol_checks:
             raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
 
         flags = data[2]
@@ -489,21 +490,25 @@ class OBPProtocol(PySeaBreezeProtocol):
             pass  # TODO: only the host should be able to set this?
         if (flags & self.OBP.FLAG_NACK) or (flags & self.OBP.FLAG_HW_EXCEPTION):
             error = data[3]
-            if error != 0:  # != SUCCESS
+            if error != 0 and config.obp_protocol_checks:  # != SUCCESS
                 raise SeaBreezeError(self.OBP.ERROR_CODES[error])
             else:
                 pass  # TODO: should we do something here?
-        if flags & self.OBP.FLAG_PROTOCOL_DEPRECATED:
+        if flags & self.OBP.FLAG_PROTOCOL_DEPRECATED and config.obp_protocol_checks:
             raise SeaBreezeError("Protocol deprecated?!?")
 
         # msg_type = data[4]
         # regarding = data[5]
 
         checksum_type = data[7]  # TODO: implement checksums.
-        if checksum_type not in [
-            self.OBP.CHECKSUM_TYPE_NONE,
-            self.OBP.CHECKSUM_TYPE_MD5,
-        ]:
+        if (
+            checksum_type
+            not in [
+                self.OBP.CHECKSUM_TYPE_NONE,
+                self.OBP.CHECKSUM_TYPE_MD5,
+            ]
+            and config.obp_protocol_checks
+        ):
             raise SeaBreezeError('the checksum type is unknown: "%d"' % checksum_type)
 
         # immediate_length = data[8]

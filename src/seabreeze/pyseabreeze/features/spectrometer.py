@@ -435,7 +435,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
             + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00101100, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore
 
     def get_fast_buffer_spectrum(self) -> Any:
         raise SeaBreezeNotSupported(
@@ -579,7 +579,7 @@ class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
             + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00100928, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
@@ -608,4 +608,4 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
         # the message type is different than the default defined in the protocol,
         # requires addition of a new message type in protocol to work
         datastring = self.protocol.query(0x00101000, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore

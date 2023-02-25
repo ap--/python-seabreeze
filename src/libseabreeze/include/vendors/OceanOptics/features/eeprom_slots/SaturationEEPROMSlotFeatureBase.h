@@ -34,33 +34,33 @@
 #include "vendors/OceanOptics/features/eeprom_slots/EEPROMSlotFeatureBase.h"
 
 namespace seabreeze {
-    
+
     class SaturationEEPROMSlotFeatureBase
             : public EEPROMSlotFeatureBase, public ProgrammableSaturationFeatureBase {
     public:
         SaturationEEPROMSlotFeatureBase();
         virtual ~SaturationEEPROMSlotFeatureBase();
-        
+
         /* Inherited from ProgrammableSaturationFeature */
         virtual unsigned int getSaturation();
-        
+
         /* Inherited from Feature */
         virtual bool initialize(const Protocol &protocol, const Bus &bus);
-        
+
         virtual FeatureFamily getFeatureFamily();
-        
+
     protected:
         /* Derived classes must implement this in whatever way is appropriate
          * to get the saturation level for the device.
          */
         virtual unsigned int getSaturation(const Protocol &protocol,
                 const Bus &bus) = 0;
-        
+
     private:
         unsigned int saturation;
         bool valid;
     };
-    
+
 } /* end namespace seabreeze */
 
 #endif /* SATURATIONEEPROMSLOTFEATUREBASE_H */

@@ -148,6 +148,3 @@ void OBPFastBufferProtocol::setConsecutiveSampleCount(const Bus &bus,
 	exchange.setConsecutiveSampleCount(consecutiveSampleCount);
 	exchange.sendCommandToDevice(helper);
 }
-
-
-

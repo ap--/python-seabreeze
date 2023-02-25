@@ -44,4 +44,3 @@ OBPGetAllTemperaturesExchange::OBPGetAllTemperaturesExchange() {
 OBPGetAllTemperaturesExchange::~OBPGetAllTemperaturesExchange() {
 
 }
-

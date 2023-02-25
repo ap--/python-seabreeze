@@ -40,11 +40,11 @@ using namespace std;
 
 OBPStrobeLampProtocol::OBPStrobeLampProtocol()
             : StrobeLampProtocolInterface(new OceanBinaryProtocol()) {
-    
+
 }
 
 OBPStrobeLampProtocol::~OBPStrobeLampProtocol() {
-    
+
 }
 
 void OBPStrobeLampProtocol::setStrobeLampEnable(const Bus &bus, bool enable) {

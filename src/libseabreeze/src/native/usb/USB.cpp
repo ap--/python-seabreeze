@@ -109,7 +109,7 @@ int USB::write(int endpoint, void *data, unsigned int length_bytes) {
 
     if(true == this->verbose) {
         // set 'true' for hexdump of output bytes BEFORE actual USB transfer
-        this->describeTransfer(">>", length_bytes, data, endpoint, false); 
+        this->describeTransfer(">>", length_bytes, data, endpoint, false);
     }
 
     if(NULL == this->descriptor || false == this->opened) {

@@ -40,4 +40,3 @@ OOIIrradCalExchange::OOIIrradCalExchange(int numPixels) {
 OOIIrradCalExchange::~OOIIrradCalExchange() {
 
 }
-

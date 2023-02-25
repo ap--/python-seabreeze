@@ -1,11 +1,17 @@
 import logging
 import sys
 import warnings
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import cast
 
 if sys.version_info >= (3, 8):
     from typing import Literal
 else:
     from typing_extensions import Literal
+
+from seabreeze.types import SeaBreezeBackend
 
 __all__ = ["use", "get_backend"]
 
@@ -16,11 +22,11 @@ class BackendConfig:
     requested = "cseabreeze"  # default is cseabreeze
     available = ("cseabreeze", "pyseabreeze")
     allow_fallback = False
-    api_kwargs = {}  # for pytests
+    api_kwargs: Dict[str, Any] = {}  # for pytests
 
 
 def use(
-    backend: Literal["cseabreeze", "pyseabreeze"], force: bool = True, **kwargs
+    backend: Literal["cseabreeze", "pyseabreeze"], force: bool = True, **kwargs: Any
 ) -> None:
     """
     select the backend used for communicating with the spectrometer
@@ -65,7 +71,7 @@ def use(
         )
 
 
-def get_backend():
+def get_backend() -> SeaBreezeBackend:
     """
     return the requested backend or a fallback. configuration is done
     via ``seabreeze.use()``
@@ -76,13 +82,13 @@ def get_backend():
         a backend interface for communicating with the spectrometers
     """
 
-    def _use_backend(name):
+    def _use_backend(name: str) -> Optional[SeaBreezeBackend]:
         # internal: import the libseabreeze cython wrapper -> cseabreeze
         try:
             if name == "cseabreeze":
                 import seabreeze.cseabreeze as sbb
             elif name == "pyseabreeze":
-                import seabreeze.pyseabreeze as sbb
+                import seabreeze.pyseabreeze as sbb  # type: ignore
             else:
                 raise ValueError(f"unknown backend {name!r}")
         except ImportError as err:
@@ -92,7 +98,7 @@ def get_backend():
             )
             return None
         else:
-            return sbb
+            return cast(SeaBreezeBackend, sbb)
 
     requested = BackendConfig.requested
     fallback = BackendConfig.allow_fallback
@@ -100,7 +106,6 @@ def get_backend():
 
     backend = _use_backend(requested)  # trying to import requested backend
     if backend is None and fallback:
-
         warnings.warn(
             f"seabreeze failed to load user requested {requested!r} backend but will try fallback backends",
             category=ImportWarning,

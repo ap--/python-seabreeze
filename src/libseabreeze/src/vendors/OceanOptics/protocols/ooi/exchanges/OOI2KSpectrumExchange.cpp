@@ -52,8 +52,8 @@ Data *OOI2KSpectrumExchange::transfer(TransferHelper *helper) {
     Data *xfer;
     int lsbPacket;
     int msbPacket;
-    byte lsb;
-    byte msb;
+    unsigned char lsb;
+    unsigned char msb;
 
     /* Use the superclass to move the data into a local buffer. */
     xfer = Transfer::transfer(helper);

@@ -140,13 +140,13 @@ void OBPSpectrometerProtocol::Initialize(
 
 }
 
-vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
+vector<unsigned char> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
 {
     Data *result;
     TransferHelper *helper;
 
     helper = bus.getHelper(this->readUnformattedSpectrumExchange->getHints());
-    if (NULL == helper) 
+    if (NULL == helper)
 	{
         string error("Failed to find a helper to bridge given protocol and bus.");
         throw ProtocolBusMismatchException(error);
@@ -155,7 +155,7 @@ vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
     /* This transfer() may cause a ProtocolException to be thrown. */
     result = this->readUnformattedSpectrumExchange->transfer(helper);
 
-    if (NULL == result) 
+    if (NULL == result)
 	{
         string error("Got NULL when expecting spectral data which was unexpected.");
         throw ProtocolException(error);
@@ -163,7 +163,7 @@ vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
 
     ByteVector *bv = static_cast<ByteVector *>(result);
 
-    vector<byte> *retval = new vector<byte > (bv->getByteVector());
+    vector<unsigned char> *retval = new vector<unsigned char> (bv->getByteVector());
 
     delete result;
 
@@ -175,13 +175,13 @@ vector<byte> *OBPSpectrometerProtocol::readUnformattedSpectrum(const Bus &bus)
     return retval;
 }
 
-vector<byte> *OBPSpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
+vector<unsigned char> *OBPSpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve)
 {
 	Data *result;
 	TransferHelper *helper;
 
 	helper = bus.getHelper(this->readFastBufferSpectrumExchange->getHints());
-	if (NULL == helper) 
+	if (NULL == helper)
 	{
 		string error("Failed to find a helper to bridge given protocol and bus.");
 		throw ProtocolBusMismatchException(error);
@@ -201,7 +201,7 @@ vector<byte> *OBPSpectrometerProtocol::readFastBufferSpectrum(const Bus &bus, un
 
 	ByteVector *bv = static_cast<ByteVector *>(result);
 
-	vector<byte> *retval = new vector<byte >(bv->getByteVector());
+	vector<unsigned char> *retval = new vector<unsigned char>(bv->getByteVector());
 
 	delete result;
 
@@ -308,7 +308,7 @@ void OBPSpectrometerProtocol::requestFastBufferSpectrum(const Bus &bus, unsigned
 		string error("Failed to find a helper to bridge given protocol and bus.");
 		throw ProtocolBusMismatchException(error);
 	}
-	
+
 	// workaround for setting the number of samples to be taken by the buffered get spectrum in the Flame X
 	// See transfer.h for more details
 	this->requestFastBufferSpectrumExchange->setParametersFunction(this->requestFastBufferSpectrumExchange, numberOfSamplesToRetrieve);

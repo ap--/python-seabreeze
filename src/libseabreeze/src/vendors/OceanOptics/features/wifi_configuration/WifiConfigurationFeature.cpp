@@ -42,17 +42,17 @@ using namespace std;
 #pragma warning (disable: 4101) // unreferenced local variable
 #endif
 
-WifiConfigurationFeature::WifiConfigurationFeature(vector<ProtocolHelper *> helpers) 
+WifiConfigurationFeature::WifiConfigurationFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }
 }
 
-WifiConfigurationFeature::~WifiConfigurationFeature() 
+WifiConfigurationFeature::~WifiConfigurationFeature()
 {
 
 }
@@ -62,7 +62,7 @@ unsigned char WifiConfigurationFeature::getMode(const Protocol &protocol, const 
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
-	byte mode;
+	unsigned char mode;
 
     try {
         proto = lookupProtocolImpl(protocol);
@@ -116,7 +116,7 @@ unsigned char WifiConfigurationFeature::getSecurityType(const Protocol &protocol
 {
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
 	ProtocolHelper *proto;
-	byte securityType;
+	unsigned char securityType;
 
     try {
         proto = lookupProtocolImpl(protocol);
@@ -174,12 +174,12 @@ vector<unsigned char> WifiConfigurationFeature::getSSID(const Protocol &protocol
 	WifiConfigurationProtocolInterface *wifiConfigurationPI = NULL;
     ProtocolHelper *proto;
 
-    try 
+    try
     {
         proto = lookupProtocolImpl(protocol);
 		wifiConfigurationPI = static_cast<WifiConfigurationProtocolInterface *>(proto);
-    } 
-	catch (FeatureProtocolNotFoundException &e) 
+    }
+	catch (FeatureProtocolNotFoundException &e)
 	{
         string error(
         "Could not find matching protocol implementation to get wifi configuration");
@@ -187,11 +187,11 @@ vector<unsigned char> WifiConfigurationFeature::getSSID(const Protocol &protocol
         throw FeatureProtocolNotFoundException(error);
     }
 
-    try 
+    try
 	{
         data = wifiConfigurationPI->getSSID(bus, interfaceIndex);
-    } 
-	catch (ProtocolException &pe) 
+    }
+	catch (ProtocolException &pe)
 	{
         string error("Caught protocol exception: ");
         error += pe.what();

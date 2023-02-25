@@ -60,15 +60,15 @@ namespace seabreeze {
 		virtual void requestFormattedSpectrum(const Bus &bus);
         virtual std::vector<double> *readFormattedSpectrum(const Bus &bus);
 		virtual void requestUnformattedSpectrum(const Bus &bus);
-		virtual std::vector<byte> *readUnformattedSpectrum(const Bus &bus);
+		virtual std::vector<unsigned char> *readUnformattedSpectrum(const Bus &bus);
 		virtual void requestFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve);
-		virtual std::vector<byte> *readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve);
+		virtual std::vector<unsigned char> *readFastBufferSpectrum(const Bus &bus, unsigned int numberOfSamplesToRetrieve);
         virtual void setIntegrationTimeMicros(const Bus &bus, unsigned long time_usec);
         virtual void setTriggerMode(const Bus &bus,  SpectrometerTriggerMode &mode);
 
     private:
         IntegrationTimeExchange *integrationTimeExchange;
-		
+
         /* These are Transfers instead of Exchanges so that we can call getHints() on them.
          * if getHints is promoted up to the level of Exchange, then these can revert back.
          */
@@ -79,7 +79,7 @@ namespace seabreeze {
 		Transfer *requestFastBufferSpectrumExchange;
 		Transfer *readFastBufferSpectrumExchange;
         TriggerModeExchange *triggerModeExchange;
-		
+
     };
   }
 }

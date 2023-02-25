@@ -46,4 +46,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* OBPGETDATABUFFERMAXIMUMCAPACITYEXCHANGE_H */
-

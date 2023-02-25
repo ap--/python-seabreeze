@@ -8,8 +8,7 @@ requires = [
     ]
 
 [tool.black]
-line-length = 88
-target-version = ['py36']
+target-version = ['py37']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -28,6 +27,48 @@ exclude = '''
 
 [tool.isort]
 profile = "black"
+py_version = "37"
+force_single_line = true
+
+[tool.cibuildwheel]
+build-verbosity = 2
+skip = ["*-musllinux_*", "pp*"]
+test-extras = ["pyseabreeze"]
+test-command = [
+    "python -c \"import seabreeze\"",
+    "python -c \"import seabreeze.types\"",
+    "python -c \"import seabreeze.cseabreeze\"",
+    "python -c \"import seabreeze.pyseabreeze\"",
+]
 
 [tool.cibuildwheel.linux]
 before-build = "yum install -y libusb-devel"
+
+[tool.mypy]
+python_version = "3.7"
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unused_configs = true
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+files = "./src/**/*.py"
+exclude = """
+(?x)(
+   ^build|
+   ^docs|
+   ^tests|
+   setup.py
+)
+"""
+
+[[tool.mypy.overrides]]
+module = "seabreeze.cseabreeze._wrapper"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "usb.*"
+ignore_missing_imports = true

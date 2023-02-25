@@ -85,7 +85,7 @@ using namespace std;
 FlameX::FlameX() {
 
     this->name = "FlameX";
-        
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
@@ -102,7 +102,7 @@ FlameX::FlameX() {
     this->protocols.push_back(new OceanBinaryProtocol());
 
     /* Set up the features that comprise this device */
- 
+
 
 	/* Add introspection feature*/
 	vector<ProtocolHelper *> introspectionHelpers;
@@ -145,12 +145,12 @@ FlameX::FlameX() {
     temperatureHelpers.push_back(new OBPTemperatureProtocol());
     this->features.push_back(
         new TemperatureFeature(temperatureHelpers));
-        
+
     /* Add stray light coefficients feature */
     vector<ProtocolHelper *> strayHelpers;
     strayHelpers.push_back(new OBPStrayLightCoeffsProtocol());
     this->features.push_back(new StrayLightCoeffsFeature(strayHelpers));
-    
+
     /* Add lamp enable feature */
     vector<ProtocolHelper *> lampHelpers;
     lampHelpers.push_back(new OBPStrobeLampProtocol());

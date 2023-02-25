@@ -36,9 +36,9 @@
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
 #include "vendors/OceanOptics/features/gpio/gpioFeatureInterface.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace api 
+    namespace api
     {
 
         class gpioFeatureAdapter

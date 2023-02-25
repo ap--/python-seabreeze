@@ -103,4 +103,3 @@ void seabreeze::OOIRS232Interface::setLocation(const DeviceLocatorInterface &loc
     /* Delegate to the base class to copy the location instance */
     RS232Interface::setLocation(location);
 }
-

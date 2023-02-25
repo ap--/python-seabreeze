@@ -103,4 +103,3 @@ FeatureFamily WaveCalFeature::getFeatureFamily() {
 
     return families.WAVELENGTH_CAL;
 }
-

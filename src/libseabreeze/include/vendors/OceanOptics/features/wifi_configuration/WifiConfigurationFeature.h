@@ -36,10 +36,10 @@
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
-    class WifiConfigurationFeature : public FeatureImpl, public WifiConfigurationFeatureInterface 
+    class WifiConfigurationFeature : public FeatureImpl, public WifiConfigurationFeatureInterface
     {
     public:
         WifiConfigurationFeature(std::vector<ProtocolHelper *> helpers);
@@ -47,33 +47,33 @@ namespace seabreeze
 
 		virtual unsigned char getMode(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void setMode(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char mode);
 		virtual unsigned char getSecurityType(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void setSecurityType(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char securityType);
 		virtual std::vector<unsigned char> getSSID(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void setSSID(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> ssid);
 		virtual void setPassPhrase(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> passPhrase);
@@ -87,4 +87,3 @@ namespace seabreeze
 }
 
 #endif /* WIFICONFIGURATIONFEATURE_H */
-

@@ -40,7 +40,7 @@ namespace seabreeze {
         public:
             OBPFastBufferProtocol();
             virtual ~OBPFastBufferProtocol();
-                    
+
             virtual unsigned char getBufferingEnable(const Bus &bus,
 				unsigned char bufferIndex);
 

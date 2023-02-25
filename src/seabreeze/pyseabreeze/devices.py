@@ -2,24 +2,39 @@
 
 Author: Andreas Poehlmann
 """
+from __future__ import annotations
+
 import enum
 import itertools
 from collections import defaultdict
+from typing import Any
+from typing import Iterable
+from typing import Tuple
+from typing import TypeVar
 
 from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature
-from seabreeze.pyseabreeze.protocol import OBPProtocol, OOIProtocol
-from seabreeze.pyseabreeze.transport import TransportInterface, USBTransport
+from seabreeze.pyseabreeze.protocol import OBPProtocol
+from seabreeze.pyseabreeze.protocol import OOIProtocol
+from seabreeze.pyseabreeze.transport import USBTransport
+from seabreeze.pyseabreeze.types import PySeaBreezeTransport
+from seabreeze.types import SeaBreezeFeatureAccessor
 
 # class registry for all spectrometer models
-_model_class_registry = {}
+
+_model_class_registry: dict[str, type[SeaBreezeDevice]] = {}
 
 
 class _SeaBreezeDeviceMeta(type):
     """metaclass for pyseabreeze devices"""
 
-    def __new__(mcs, name, bases, attr_dict):
+    def __new__(
+        mcs: type[_SeaBreezeDeviceMeta],
+        name: str,
+        bases: tuple[Any],
+        attr_dict: dict[str, Any],
+    ) -> _SeaBreezeDeviceMeta:
         # This part of the metaclass magic is very opaque. It could be avoided by moving all
         # of this logic to custom __init__ methods of the Spectrometer classes, or to factory
         # functions. But I am using python-seabreeze as a playground to experiment with
@@ -48,7 +63,7 @@ class _SeaBreezeDeviceMeta(type):
             if not isinstance(model_name, str):
                 raise TypeError(f"{name}.model_name not a str")
 
-            new_attr_dict = {
+            new_attr_dict: dict[str, Any] = {
                 "_model_name": model_name,
             }
 
@@ -84,18 +99,19 @@ class _SeaBreezeDeviceMeta(type):
 
         return super().__new__(mcs, name, bases, attr_dict)
 
-    def __init__(cls, name, bases, attr_dict):
+    def __init__(cls, name: str, bases: tuple[Any], attr_dict: dict[str, Any]) -> None:
         if name != "SeaBreezeDevice":
             # > model name
             model_name = getattr(cls, "_model_name")
             assert isinstance(model_name, str), "model name not a str"
-            _model_class_registry[model_name] = cls
+            _model_class_registry[model_name] = cls  # type: ignore
 
         super().__init__(name, bases, attr_dict)
 
     @staticmethod
-    def _extract_transform_classes(model_name, class_name, attr_dict):
-
+    def _extract_transform_classes(
+        model_name: str, class_name: str, attr_dict: dict[str, Any]
+    ) -> tuple[type[PySeaBreezeTransport[Any]], ...]:
         visited_attrs = set()
         transport_classes = []
         try:
@@ -112,7 +128,7 @@ class _SeaBreezeDeviceMeta(type):
             # for each supported transport of the spectrometer, gather the configuration from
             # the spectrometer class and specialize the transport_cls with the provided settings.
             #
-            if not issubclass(transport_cls, TransportInterface):
+            if not issubclass(transport_cls, PySeaBreezeTransport):
                 raise TypeError(
                     "{}.transport[{:d}] '{}' does not derive from TransportInterface".format(
                         class_name, idx, transport_cls.__name__
@@ -142,10 +158,13 @@ class _SeaBreezeDeviceMeta(type):
         return tuple(transport_classes)
 
     @staticmethod
-    def _extract_feature_classes(model_name, class_name, attr_dict):
-
+    def _extract_feature_classes(
+        model_name: str, class_name: str, attr_dict: dict[str, Any]
+    ) -> dict[str, list[type[SeaBreezeFeature]]]:
         visited_attrs = set()
-        feature_classes = defaultdict(list)
+        feature_classes: defaultdict[str, list[type[SeaBreezeFeature]]] = defaultdict(
+            list
+        )
         try:
             supported_feature_classes = attr_dict.pop("feature_classes")
         except KeyError:
@@ -206,8 +225,12 @@ class EndPointMap:
     """internal endpoint map for spectrometer classes"""
 
     def __init__(
-        self, ep_out=None, lowspeed_in=None, highspeed_in=None, highspeed_in2=None
-    ):
+        self,
+        ep_out: int | None = None,
+        lowspeed_in: int | None = None,
+        highspeed_in: int | None = None,
+        highspeed_in2: int | None = None,
+    ) -> None:
         self.primary_out = self.ep_out = ep_out
         self.primary_in = self.lowspeed_in = lowspeed_in
         self.secondary_out = ep_out
@@ -215,10 +238,12 @@ class EndPointMap:
         self.secondary_in2 = self.highspeed_in2 = highspeed_in2
 
 
-class DarkPixelIndices(tuple):
+class DarkPixelIndices(Tuple[int, ...]):
     """internal dark pixel range class"""
 
-    def __new__(cls, indices):
+    def __new__(
+        cls: type[DarkPixelIndices], indices: Iterable[int]
+    ) -> DarkPixelIndices:
         """dark pixel indices
 
         Parameters
@@ -226,10 +251,10 @@ class DarkPixelIndices(tuple):
         indices : iterable
             index of electric dark pixel
         """
-        return super().__new__(DarkPixelIndices, sorted(set(indices)))
+        return super().__new__(DarkPixelIndices, sorted(set(indices)))  # type: ignore
 
     @classmethod
-    def from_ranges(cls, *ranges):
+    def from_ranges(cls, *ranges: tuple[int, int]) -> DarkPixelIndices:
         """return dark pixes indices from ranges
 
         Parameters
@@ -264,18 +289,22 @@ class TriggerMode(enum.IntEnum):
     OBP_LEVEL = 0x03
 
     @classmethod
-    def supported(cls, *mode_strings):
+    def supported(cls, *mode_strings: str) -> set[TriggerMode]:
         return {getattr(cls, mode_string) for mode_string in mode_strings}
 
 
-class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
+DT = TypeVar("DT", bound="SeaBreezeDevice")
 
+
+class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
     # internal attribute
     _model_name = None
     _serial_number = "?"
-    _cached_features = None
+    _cached_features: dict[str, list[SeaBreezeFeature]] | None = None
+    _transport_classes: tuple[type[PySeaBreezeTransport[Any]], ...]
+    _feature_classes: dict[str, list[type[SeaBreezeFeature]]]
 
-    def __new__(cls, raw_device=None):
+    def __new__(cls: type[DT], raw_device: Any = None) -> SeaBreezeDevice:
         if raw_device is None:
             raise SeaBreezeError(
                 "Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`."
@@ -289,7 +318,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         specialized_cls = _model_class_registry[supported_model]
         return super().__new__(specialized_cls)
 
-    def __init__(self, raw_device=None):
+    def __init__(self, raw_device: Any = None) -> None:
         if raw_device is None:
             raise SeaBreezeError(
                 "Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`."
@@ -297,7 +326,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         self._raw_device = raw_device
         for transport in self._transport_classes:
             if transport.supported_model(self._raw_device) is not None:
-                self._transport = transport()
+                self._transport: PySeaBreezeTransport[Any] = transport()
                 break
         else:
             raise TypeError("No transport supports device.")
@@ -314,21 +343,25 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
             pass
 
     @property
-    def model(self):
+    def model(self) -> str:
+        if self._model_name is None:
+            raise RuntimeError("model can't be None")
         return self._model_name
 
     @property
-    def serial_number(self):
+    def serial_number(self) -> str:
         return self._serial_number
 
     @classmethod
-    def _substitute_compatible_subclass(cls, transport):
+    def _substitute_compatible_subclass(
+        cls: type[DT], transport: PySeaBreezeTransport[Any]
+    ) -> type[DT]:
         return cls
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<SeaBreezeDevice {self.model}:{self.serial_number}>"
 
-    def open(self):
+    def open(self) -> None:
         """open the spectrometer usb connection
 
         Returns
@@ -339,12 +372,12 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         # substitute subclass if needed
         self.__class__ = self.__class__._substitute_compatible_subclass(self._transport)
         # cache features
-        self._cached_features = {}
+        self._cached_features = None
         _ = self.features
         # get serial
         self._serial_number = self.get_serial_number()
 
-    def close(self):
+    def close(self) -> None:
         """close the spectrometer usb connection
 
         Returns
@@ -355,7 +388,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
             self._transport.close_device()
 
     @property
-    def is_open(self):
+    def is_open(self) -> bool:
         """returns if the spectrometer device usb connection is opened
 
         Returns
@@ -364,7 +397,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         """
         return self._transport.is_open
 
-    def get_serial_number(self):
+    def get_serial_number(self) -> str:
         """return the serial number string of the spectrometer
 
         Returns
@@ -373,29 +406,25 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         """
         try:
             protocol = self._transport.protocol
-            if protocol is None:
-                raise AttributeError("transport not opened")
-
-            elif isinstance(protocol, OOIProtocol):
-                # The serial is stored in slot 0
-                # noinspection PyUnresolvedReferences
-                return self.f.eeprom.eeprom_read_slot(0)
-
-            elif isinstance(protocol, OBPProtocol):
-                serial_len = ord(protocol.query(0x00000101))
-                return protocol.query(0x00000100)[:serial_len].decode("utf8")
-
-            else:
-                raise NotImplementedError(
-                    "No serial number for protocol class {}".format(
-                        protocol.__class__.__name__
-                    )
-                )
-        except AttributeError:
+        except RuntimeError:
             raise SeaBreezeError("device not open")
 
+        if isinstance(protocol, OOIProtocol):
+            # The serial is stored in slot 0
+            return self.f.eeprom.eeprom_read_slot(0)
+
+        elif isinstance(protocol, OBPProtocol):
+            serial_len = ord(protocol.query(0x00000101))
+            serial_str = protocol.query(0x00000100)[:serial_len]
+            return serial_str.decode("utf8")
+
+        else:
+            raise NotImplementedError(
+                f"No serial number for protocol class {type(protocol).__name__}"
+            )
+
     @property
-    def features(self):
+    def features(self) -> dict[str, list[SeaBreezeFeature]]:
         """return a dictionary of all supported features
 
         this returns a dictionary with all supported Features of the spectrometer
@@ -420,7 +449,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         return self._cached_features
 
     @property
-    def f(self):
+    def f(self) -> SeaBreezeFeatureAccessor:
         """convenience access to features via attributes
 
         this allows you to access a feature like this::
@@ -433,20 +462,20 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         """
 
         class FeatureAccessHandler:
-            def __init__(self, feature_dict):
+            def __init__(self, feature_dict: dict[str, Any]) -> None:
                 for identifier, features in feature_dict.items():
                     setattr(
                         self, identifier, features[0] if features else None
                     )  # TODO: raise FeatureNotAvailable?
 
-        return FeatureAccessHandler(self.features)
+        accessor: SeaBreezeFeatureAccessor = FeatureAccessHandler(self.features)  # type: ignore
+        return accessor
 
 
 # SPECTROMETER DEFINITIONS
 # ========================
 #
 class USB2000PLUS(SeaBreezeDevice):
-
     model_name = "USB2000PLUS"
 
     # communication config
@@ -479,24 +508,26 @@ class USB2000PLUS(SeaBreezeDevice):
     )
 
     @classmethod
-    def _substitute_compatible_subclass(cls, transport):
+    def _substitute_compatible_subclass(
+        cls: type[DT], transport: PySeaBreezeTransport[Any]
+    ) -> type[DT]:
         """return the correct subclass of the usb2000plus like model"""
-        protocol = transport.protocol
-        if protocol is None:
+        try:
+            protocol = transport.protocol
+        except RuntimeError:
             raise AttributeError("transport not opened")
 
         # noinspection PyUnresolvedReferences,PyProtectedMember
         from seabreeze.pyseabreeze.features.fpga import _FPGARegisterFeatureOOI
 
-        fpga = _FPGARegisterFeatureOOI(transport.protocol)
+        fpga = _FPGARegisterFeatureOOI(protocol)
         if fpga.get_firmware_version()[0] >= 3:
-            return FLAMES
+            return FLAMES  # type: ignore
         else:
-            return USB2000PLUS
+            return USB2000PLUS  # type: ignore
 
 
 class FLAMES(USB2000PLUS):
-
     model_name = "FLAMES"
 
     # spectrometer config
@@ -522,7 +553,6 @@ class FLAMES(USB2000PLUS):
 
 
 class USB2000(SeaBreezeDevice):
-
     model_name = "USB2000"
 
     # communication config
@@ -550,7 +580,6 @@ class USB2000(SeaBreezeDevice):
 
 
 class HR2000(SeaBreezeDevice):
-
     model_name = "HR2000"
 
     # communication config
@@ -578,7 +607,6 @@ class HR2000(SeaBreezeDevice):
 
 
 class HR4000(SeaBreezeDevice):
-
     model_name = "HR4000"
 
     # communication config
@@ -610,7 +638,6 @@ class HR4000(SeaBreezeDevice):
 
 
 class HR2000PLUS(SeaBreezeDevice):
-
     model_name = "HR2000PLUS"
 
     # communication config
@@ -642,7 +669,6 @@ class HR2000PLUS(SeaBreezeDevice):
 
 
 class USB650(SeaBreezeDevice):
-
     model_name = "USB650"
 
     # communication config
@@ -671,7 +697,6 @@ class USB650(SeaBreezeDevice):
 
 
 class QE65000(SeaBreezeDevice):
-
     model_name = "QE65000"
 
     # communication config
@@ -703,7 +728,6 @@ class QE65000(SeaBreezeDevice):
 
 
 class USB4000(SeaBreezeDevice):
-
     model_name = "USB4000"
 
     # communication config
@@ -737,7 +761,6 @@ class USB4000(SeaBreezeDevice):
 
 
 class NIRQUEST512(SeaBreezeDevice):
-
     model_name = "NIRQUEST512"
 
     # communication config
@@ -769,7 +792,6 @@ class NIRQUEST512(SeaBreezeDevice):
 
 
 class NIRQUEST256(SeaBreezeDevice):
-
     model_name = "NIRQUEST256"
 
     # communication config
@@ -801,7 +823,6 @@ class NIRQUEST256(SeaBreezeDevice):
 
 
 class MAYA2000PRO(SeaBreezeDevice):
-
     model_name = "MAYA2000PRO"
 
     # communication config
@@ -833,7 +854,6 @@ class MAYA2000PRO(SeaBreezeDevice):
 
 
 class MAYA2000(SeaBreezeDevice):
-
     model_name = "MAYA2000"
 
     # communication config
@@ -863,7 +883,6 @@ class MAYA2000(SeaBreezeDevice):
 
 
 class TORUS(SeaBreezeDevice):
-
     model_name = "TORUS"
 
     # communication config
@@ -895,7 +914,6 @@ class TORUS(SeaBreezeDevice):
 
 
 class APEX(SeaBreezeDevice):
-
     model_name = "APEX"
 
     # communication config
@@ -927,7 +945,6 @@ class APEX(SeaBreezeDevice):
 
 
 class MAYALSL(SeaBreezeDevice):
-
     model_name = "MAYALSL"
 
     # communication config
@@ -959,7 +976,6 @@ class MAYALSL(SeaBreezeDevice):
 
 
 class JAZ(SeaBreezeDevice):
-
     model_name = "JAZ"
 
     # communication config
@@ -989,7 +1005,6 @@ class JAZ(SeaBreezeDevice):
 
 
 class STS(SeaBreezeDevice):
-
     model_name = "STS"
 
     # communication config
@@ -1018,7 +1033,6 @@ class STS(SeaBreezeDevice):
 
 
 class QEPRO(SeaBreezeDevice):
-
     model_name = "QEPRO"
 
     # communication config
@@ -1036,7 +1050,7 @@ class QEPRO(SeaBreezeDevice):
     integration_time_base = 1
     spectrum_num_pixel = 1044
     spectrum_raw_length = (1044 * 4) + 32  # XXX: Metadata
-    spectrum_max_value = (2 ** 18) - 1
+    spectrum_max_value = (2**18) - 1
     trigger_modes = TriggerMode.supported("NORMAL", "LEVEL", "SYNCHRONIZATION", "EDGE")
 
     # features
@@ -1047,7 +1061,6 @@ class QEPRO(SeaBreezeDevice):
 
 
 class VENTANA(SeaBreezeDevice):
-
     model_name = "VENTANA"
 
     # communication config
@@ -1074,7 +1087,6 @@ class VENTANA(SeaBreezeDevice):
 
 
 class SPARK(SeaBreezeDevice):
-
     model_name = "SPARK"
 
     # communication config
@@ -1103,7 +1115,6 @@ class SPARK(SeaBreezeDevice):
 
 
 class HDX(SeaBreezeDevice):
-
     model_name = "HDX"
 
     # communication config

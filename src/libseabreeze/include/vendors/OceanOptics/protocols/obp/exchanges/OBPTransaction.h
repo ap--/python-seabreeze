@@ -60,9 +60,9 @@ namespace seabreeze {
              * to the device.  The reply is formatted into a byte vector.  Any
              * errors will be indicated via an exception.
              */
-            virtual std::vector<byte> *queryDevice(TransferHelper *helper,
+            virtual std::vector<unsigned char> *queryDevice(TransferHelper *helper,
                     unsigned int messageType,
-                    std::vector<byte> &data);
+                    std::vector<unsigned char> &data);
 
             /* This creates a message of the given type and payload and sends it
              * to the device.  No response (other than an acknowledgment) is
@@ -74,7 +74,7 @@ namespace seabreeze {
              */
             virtual bool sendCommandToDevice(TransferHelper *helper,
                     unsigned int messageType,
-                    std::vector<byte> &data);
+                    std::vector<unsigned char> &data);
 
             std::vector<ProtocolHint *> *hints;
         };

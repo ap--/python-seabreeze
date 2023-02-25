@@ -47,4 +47,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* OBPSETACQUISITIONDELAYEXCHANGE_H */
-

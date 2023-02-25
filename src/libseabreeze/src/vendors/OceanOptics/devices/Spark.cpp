@@ -65,7 +65,7 @@ using namespace std;
 Spark::Spark() {
 
     this->name = "Spark";
-    
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out   = 0x01;
     this->usbEndpoint_primary_in    = 0x81;
@@ -119,7 +119,7 @@ Spark::Spark() {
     revisionHelpers.push_back(new OBPRevisionProtocol());
     this->features.push_back(
         new RevisionFeature(revisionHelpers));
-        
+
     /* Add optical bench feature */
     vector<ProtocolHelper *> opticalBenchHelpers;
     opticalBenchHelpers.push_back(new OBPOpticalBenchProtocol());
@@ -131,7 +131,7 @@ Spark::Spark() {
     spectrumProcessingHelpers.push_back(new OBPSpectrumProcessingProtocol());
     this->features.push_back(
         new SpectrumProcessingFeature(spectrumProcessingHelpers));
-                
+
     /* Add stray light coefficients feature */
     vector<ProtocolHelper *> strayHelpers;
     strayHelpers.push_back(new OBPStrayLightCoeffsProtocol());

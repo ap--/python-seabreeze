@@ -47,7 +47,7 @@ namespace seabreeze {
     public:
         IrradCalFeature(std::vector<ProtocolHelper *> helpers, int numPixels);
         virtual ~IrradCalFeature();
-        
+
         virtual std::vector<float> *readIrradCalibration(const Protocol &protocol,
             const Bus &bus);
         virtual int writeIrradCalibration(const Protocol &protocol,

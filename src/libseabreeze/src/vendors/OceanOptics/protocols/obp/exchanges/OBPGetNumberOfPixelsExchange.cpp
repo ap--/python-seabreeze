@@ -44,4 +44,3 @@ OBPGetNumberOfPixelsExchange::OBPGetNumberOfPixelsExchange() {
 OBPGetNumberOfPixelsExchange::~OBPGetNumberOfPixelsExchange() {
 
 }
-

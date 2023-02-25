@@ -36,13 +36,13 @@
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
 #include "vendors/OceanOptics/features/multicast/MulticastFeatureInterface.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace api 
+    namespace api
     {
 
         class MulticastFeatureAdapter
-                : public FeatureAdapterTemplate<MulticastFeatureInterface> 
+                : public FeatureAdapterTemplate<MulticastFeatureInterface>
 		{
         	public:
             	MulticastFeatureAdapter( MulticastFeatureInterface *intf, const FeatureFamily &f, Protocol *p, Bus *b, unsigned short instanceIndex);

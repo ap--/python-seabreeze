@@ -13,9 +13,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+...
+
+## [2.0.3] - 2022-05-09
+### Fixed
+- *csb* fix array type in write calibration
+
+## [2.0.2] - 2021-01-21
+### Fixed
+- *psb* fix regression in seabreeze protocol
+
+## [2.0.1] - 2021-01-20
 ### Changed
-- drop support for Python 2.7 to 3.5 (require py36+)
+- strip debug symbols only on linux
+- small seabreeze.types improvements
+
+### Fixed
+- *ci* don't build pypy wheels
+- *psb* fix regression in seabreeze transport
+- fix regression due to distutils deprecation fix on windows
+- *ci* fix deployment action
+
+## [2.0.0] - 2021-01-18
+### Added
+- added `seabreeze.types`
+- fully type annotated seabreeze (improved autocompletion in IDEs)
+- add pre-commit and pre-commit.ci
+
+### Changed
+- drop support for Python 2.7 to 3.6 (require py37+)
 - expose selecting `pyusb_backend` via `seabreeze.use` for `pyseabreeze`
+- *ci* switch to cibuildwheels
+- stop including debugging symbols for `cseabreeze` (reduces wheels size)
+- removed deprecated `seabreeze.compat` module
+
+### Fixed
+- compile correctly under newer g++
+- prevent deprecation warning due to distutils deprecation
 
 ## [1.3.0] - 2020-08-23
 ### Added
@@ -143,7 +177,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.0.3...HEAD
+[2.0.3]: https://github.com/ap--/python-seabreeze/compare/v2.0.2...v2.0.3
+[2.0.2]: https://github.com/ap--/python-seabreeze/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/ap--/python-seabreeze/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/ap--/python-seabreeze/compare/v1.3.0...v2.0.0
 [1.3.0]: https://github.com/ap--/python-seabreeze/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ap--/python-seabreeze/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ap--/python-seabreeze/compare/v1.0.2...v1.1.0

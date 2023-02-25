@@ -36,13 +36,13 @@
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
 #include "vendors/OceanOptics/features/wifi_configuration/WifiConfigurationFeatureInterface.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace api 
+    namespace api
     {
 
         class WifiConfigurationFeatureAdapter
-                : public FeatureAdapterTemplate<WifiConfigurationFeatureInterface> 
+                : public FeatureAdapterTemplate<WifiConfigurationFeatureInterface>
 		{
         	public:
             	WifiConfigurationFeatureAdapter( WifiConfigurationFeatureInterface *intf, const FeatureFamily &f, Protocol *p, Bus *b, unsigned short instanceIndex);

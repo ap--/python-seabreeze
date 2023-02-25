@@ -35,15 +35,15 @@
 #include "common/protocols/ProtocolHelper.h"
 
 namespace seabreeze {
-    
+
     class ProgrammableSaturationProtocolInterface : public ProtocolHelper {
     public:
         ProgrammableSaturationProtocolInterface(Protocol *protocol);
         virtual ~ProgrammableSaturationProtocolInterface();
-        
+
         virtual unsigned int getSaturation(const Bus &bus) = 0;
     };
-    
+
 } /* end namespace seabreeze */
 
 #endif /* PROGRAMMABLESATURATIONPROTOCOLINTERFACE_H */

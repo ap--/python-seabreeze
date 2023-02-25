@@ -3,10 +3,9 @@ from __future__ import annotations
 
 import os
 from contextlib import contextmanager
-from typing import Any
 from typing import Callable
+from typing import Iterator
 from typing import TypeVar
-
 
 __all__ = [
     "config",
@@ -40,6 +39,7 @@ class _Config:
     Or set via export SEABREEZE_OPB_PROTOCOL_CHECKS=False
 
     """
+
     obp_protocol_checks: bool
 
     def __init__(
@@ -66,7 +66,7 @@ class _Config:
     def context(
         self,
         obp_protocol_checks: bool | None = None,
-    ) -> None:
+    ) -> Iterator[None]:
         state = vars(self).copy()
         try:
             self.set(obp_protocol_checks=obp_protocol_checks)

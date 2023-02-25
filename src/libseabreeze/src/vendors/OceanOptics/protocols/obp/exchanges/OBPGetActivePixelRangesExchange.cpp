@@ -44,4 +44,3 @@ OBPGetActivePixelRangesExchange::OBPGetActivePixelRangesExchange() {
 OBPGetActivePixelRangesExchange::~OBPGetActivePixelRangesExchange() {
 
 }
-

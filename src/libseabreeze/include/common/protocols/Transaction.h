@@ -79,4 +79,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_TRANSACTION_H */
-

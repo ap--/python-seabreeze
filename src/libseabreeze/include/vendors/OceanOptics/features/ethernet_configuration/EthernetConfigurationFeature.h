@@ -36,10 +36,10 @@
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
-    class EthernetConfigurationFeature : public FeatureImpl, public EthernetConfigurationFeatureInterface 
+    class EthernetConfigurationFeature : public FeatureImpl, public EthernetConfigurationFeatureInterface
     {
     public:
         EthernetConfigurationFeature(std::vector<ProtocolHelper *> helpers);
@@ -47,22 +47,22 @@ namespace seabreeze
 
 		virtual unsigned char get_GbE_Enable_Status(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void set_GbE_Enable_Status(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState);
-		virtual std::vector<byte> get_MAC_Address(
+		virtual std::vector<unsigned char> get_MAC_Address(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void set_MAC_Address(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
-			const std::vector<byte> macAddress);
+			const std::vector<unsigned char> macAddress);
 
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();
@@ -72,4 +72,3 @@ namespace seabreeze
 }
 
 #endif /* ETHERNETCONFIGURATIONFEATURE_H */
-

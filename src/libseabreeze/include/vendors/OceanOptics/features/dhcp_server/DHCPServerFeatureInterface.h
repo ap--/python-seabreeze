@@ -42,21 +42,21 @@ namespace seabreeze {
 
 		virtual unsigned char getServerEnableState(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void setServerEnableState(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState) = 0;
 		virtual void getServerAddress(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex,
 			std::vector<unsigned char> *serverAddress,
 			unsigned char *netMask) = 0;
 		virtual void setServerAddress(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> serverAddress,
@@ -68,4 +68,3 @@ namespace seabreeze {
 }
 
 #endif /* DHCPSERVERFEATUREINTERFACE_H */
-

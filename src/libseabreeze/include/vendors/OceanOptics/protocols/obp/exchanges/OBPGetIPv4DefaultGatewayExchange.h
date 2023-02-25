@@ -40,7 +40,7 @@ namespace seabreeze {
             virtual ~OBPGetIPv4DefaultGatewayExchange();
 
             void setInterfaceIndex(unsigned char interfaceIndex);
-            
+
         };
     }
 }

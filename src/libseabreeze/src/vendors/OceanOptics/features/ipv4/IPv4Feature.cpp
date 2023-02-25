@@ -46,7 +46,7 @@ IPv4Feature::IPv4Feature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 
-    for(iter = helpers.begin(); iter != helpers.end(); iter++) 
+    for(iter = helpers.begin(); iter != helpers.end(); iter++)
     {
         this->protocols.push_back(*iter);
     }
@@ -61,7 +61,7 @@ unsigned char IPv4Feature::get_IPv4_DHCP_Enable_State(const Protocol &protocol, 
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
-	byte enableStatus;
+	unsigned char enableStatus;
 
 	try {
 		proto = lookupProtocolImpl(protocol);
@@ -119,7 +119,7 @@ unsigned char IPv4Feature::get_Number_Of_IPv4_Addresses(const Protocol &protocol
 {
 	IPv4ProtocolInterface *IPv4PI = NULL;
 	ProtocolHelper *proto;
-	byte numberOfAddresses;
+	unsigned char numberOfAddresses;
 
 	try {
 		proto = lookupProtocolImpl(protocol);
@@ -152,12 +152,12 @@ void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, uns
 	IPv4ProtocolInterface *IPv4PI = NULL;
     ProtocolHelper *proto;
 
-    try 
+    try
     {
         proto = lookupProtocolImpl(protocol);
 		IPv4PI = static_cast<IPv4ProtocolInterface *>(proto);
-    } 
-	catch (FeatureProtocolNotFoundException &e) 
+    }
+	catch (FeatureProtocolNotFoundException &e)
 	{
         string error(
         "Could not find matching protocol implementation to data.");
@@ -165,11 +165,11 @@ void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, uns
         throw FeatureProtocolNotFoundException(error);
     }
 
-    try 
+    try
 	{
         IPv4PI->get_IPv4_Address(bus, interfaceIndex, addressIndex, IPv4_Address, netMask);
-    } 
-	catch (ProtocolException &pe) 
+    }
+	catch (ProtocolException &pe)
 	{
         string error("Caught protocol exception: ");
         error += pe.what();
@@ -178,7 +178,7 @@ void IPv4Feature::get_IPv4_Address(const Protocol &protocol, const Bus &bus, uns
     }
 }
 
-vector<byte> IPv4Feature::get_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
+vector<unsigned char> IPv4Feature::get_IPv4_Default_Gateway(const Protocol &protocol, const Bus &bus, unsigned char interfaceIndex)
 {
 
 	vector<unsigned char> data;

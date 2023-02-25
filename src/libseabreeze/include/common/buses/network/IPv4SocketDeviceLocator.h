@@ -40,21 +40,21 @@ namespace seabreeze {
         IPv4SocketDeviceLocator(const IPv4NetworkProtocol &proto, std::string ip,
             int portNumber);
         virtual ~IPv4SocketDeviceLocator();
-        
+
         std::string getIPv4Address();
         int getPort();
         IPv4NetworkProtocol getIPv4NetworkProtocol();
-        
+
         /* Inherited from DeviceLocatorInterface */
         virtual unsigned long getUniqueLocation() const;
         virtual bool equals(DeviceLocatorInterface &that);
         virtual std::string getDescription();
         virtual BusFamily getBusFamily() const;
         virtual DeviceLocatorInterface *clone() const;
-        
+
     protected:
         unsigned long computeLocationHash();
-        
+
         IPv4NetworkProtocol protocol;
         std::string ipAddr;
         int port;
@@ -63,4 +63,3 @@ namespace seabreeze {
 }
 
 #endif /* SEABREEZE_IPV4SOCKETDEVICELOCATOR_H */
-

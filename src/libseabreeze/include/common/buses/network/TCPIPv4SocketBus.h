@@ -40,28 +40,28 @@ namespace seabreeze {
     public:
         TCPIPv4SocketBus();
         virtual ~TCPIPv4SocketBus();
-        
+
         virtual Socket *getSocketDescriptor();
-        
+
         virtual BusFamily getBusFamily() const;
-        
+
         virtual void setLocation(const DeviceLocatorInterface &location);
         virtual DeviceLocatorInterface *getLocation();
         virtual TransferHelper *getHelper(
                 const std::vector<ProtocolHint *> &hints) const;
-        
+
         /* Pure virtual methods */
         virtual bool open() = 0;
         virtual void close() = 0;
-        
-        
+
+
     protected:
         void addHelper(ProtocolHint *hint, TransferHelper *helper);
         void clearHelpers();
-        
+
         Socket *socket;
         DeviceLocatorInterface *deviceLocator;
-        
+
         /* These vectors should really be in a map, but that didn't want to
          * work easily.  Since there will likely be about 2 entries in here,
          * storing in a pair of vectors for now won't hurt anything.

@@ -39,14 +39,14 @@
 using namespace seabreeze;
 using namespace ooiProtocol;
 
-MayaLSLUSB::MayaLSLUSB() 
+MayaLSLUSB::MayaLSLUSB()
 {
     this->productID = MAYALSL_USB_PID;
 }
 
 MayaLSLUSB::~MayaLSLUSB() { }
 
-bool MayaLSLUSB::open() 
+bool MayaLSLUSB::open()
 {
     if (!OOIUSBInterface::open())
         return false;

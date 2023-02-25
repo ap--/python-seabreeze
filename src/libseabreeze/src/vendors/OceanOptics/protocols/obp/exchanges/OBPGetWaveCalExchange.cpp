@@ -49,4 +49,3 @@ OBPGetWaveCalExchange::~OBPGetWaveCalExchange() {
 void OBPGetWaveCalExchange::setCoefficientIndex(unsigned int index) {
     this->payload[0] = index & 0x00FF;
 }
-

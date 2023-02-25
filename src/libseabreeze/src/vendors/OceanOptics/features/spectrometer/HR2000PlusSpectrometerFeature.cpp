@@ -54,7 +54,7 @@ HR2000PlusSpectrometerFeature::HR2000PlusSpectrometerFeature() {
     this->integrationTimeMaximum = HR2000PlusSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = HR2000PlusSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = HR2000PlusSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
-    
+
     for(int i = 2; i < 24; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
@@ -71,7 +71,7 @@ HR2000PlusSpectrometerFeature::HR2000PlusSpectrometerFeature() {
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(ooiProtocol);
 

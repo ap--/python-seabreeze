@@ -59,8 +59,8 @@ namespace seabreeze {
         std::vector<Feature *> &getFeatures();
         std::vector<Protocol *> &getProtocols();
         std::string &getName();
-        
-        // get the usb endpoints, according to the endpointType enumerator, 
+
+        // get the usb endpoints, according to the endpointType enumerator,
         //  if the endpoint type is not used, a 0 is returned
         // TODO: this should be delegated down into a Bus instance
         // (e.g. found by getBusesByFamily()) for USB.  It is inappropriate here.
@@ -107,8 +107,8 @@ namespace seabreeze {
     	unsigned char usbEndpoint_primary_in;
     	unsigned char usbEndpoint_secondary_out;
     	unsigned char usbEndpoint_secondary_in;
-    	unsigned char usbEndpoint_secondary_in2; 
-    	
+    	unsigned char usbEndpoint_secondary_in2;
+
 
         DeviceLocatorInterface *location;
         Bus *openedBus;

@@ -52,10 +52,10 @@ using namespace seabreeze::ooiProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
-MayaLSL::MayaLSL() 
+MayaLSL::MayaLSL()
 {
     this->name = "MayaLSL";
-        
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
@@ -63,17 +63,17 @@ MayaLSL::MayaLSL()
     this->usbEndpoint_secondary_in = 0x82;
     this->usbEndpoint_secondary_in2 = 0x86;
 
-    // Set up the available buses on this device 
+    // Set up the available buses on this device
     this->buses.push_back(new MayaLSLUSB());
 
-    // Set up the available protocols understood by this device 
+    // Set up the available protocols understood by this device
     this->protocols.push_back(new OOIProtocol());
 
     // Set up the features that comprise this device
-    
+
     ProgrammableSaturationFeature *saturation =
             new SaturationEEPROMSlotFeature_MayaPro(0x0011);
-    
+
     this->features.push_back(new MayaLSLSpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(17));
@@ -96,12 +96,12 @@ MayaLSL::MayaLSL()
 
 MayaLSL::~MayaLSL() { }
 
-ProtocolFamily MayaLSL::getSupportedProtocol(FeatureFamily family, BusFamily bus) 
+ProtocolFamily MayaLSL::getSupportedProtocol(FeatureFamily family, BusFamily bus)
 {
     ProtocolFamilies protocols;
     BusFamilies busFamilies;
 
-    if(bus.equals(busFamilies.USB)) 
+    if(bus.equals(busFamilies.USB))
     {
         // This device only supports one protocol over USB
         return protocols.OOI_PROTOCOL;

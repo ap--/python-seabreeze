@@ -41,19 +41,19 @@ namespace seabreeze {
      */
     class ProgrammableSaturationFeature : public virtual Feature,
             public ProgrammableSaturationFeatureInterface {
-        
+
     public:
         ProgrammableSaturationFeature();
         virtual ~ProgrammableSaturationFeature();
-        
+
         virtual unsigned int getSaturation() = 0;
-        
+
         /* Overriding from Feature */
         virtual bool initialize(const Protocol &protocol, const Bus &bus) = 0;
-        
+
         virtual FeatureFamily getFeatureFamily() = 0;
     };
-    
+
 } /* end namespace seabreeze */
-    
+
 #endif /* PROGRAMMABLESATURATIONFEATURE_H */

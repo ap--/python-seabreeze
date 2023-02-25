@@ -54,4 +54,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /*  STSACQUISITIONDELAYFEATURE_H */
-

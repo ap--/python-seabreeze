@@ -45,8 +45,8 @@ namespace seabreeze {
     public:
         WifiConfigurationProtocolInterface(Protocol *protocol);
         virtual ~WifiConfigurationProtocolInterface();
-	
-	
+
+
 	    /**
          * Get the Wifi mode (0: client, 1: access point, from the device.
          */
@@ -56,8 +56,8 @@ namespace seabreeze {
          * Set the Wifi mode (0: client, 1: access point, for the device.
          */
         virtual void setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode) = 0;
-            
-            
+
+
           /**
          * Get the Wifi security type (0: open, 1: WPA2, from the device.
          */
@@ -67,7 +67,7 @@ namespace seabreeze {
          * Get the Wifi security type (0: open, 1: WPA2, from the device.
          */
         virtual void setSecurityType(const Bus &bus, unsigned char interfaceIndex, unsigned char securityType) = 0;
-                      
+
         /**
          * Get the 32 byte SSID  from the device.
          */

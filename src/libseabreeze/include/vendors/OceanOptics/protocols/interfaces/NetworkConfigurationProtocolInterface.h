@@ -45,7 +45,7 @@ namespace seabreeze {
     public:
         NetworkConfigurationProtocolInterface(Protocol *protocol);
         virtual ~NetworkConfigurationProtocolInterface();
-	
+
         /**
          * Get the number of network interfaces available
          */
@@ -65,12 +65,12 @@ namespace seabreeze {
          *  Enable or disable a network interface
          */
         virtual void setNetworkInterfaceEnableState(const Bus &bus, unsigned char interfaceIndex, unsigned char enableState) = 0;
-            
+
         /**
          *  Run a self test on the network interface of interest
          */
         virtual unsigned char runNetworkInterfaceSelfTest(const Bus &bus, unsigned char interfaceIndex) = 0;
-            
+
         /**
          *  Store all of the settings for the network interface of interest
          */

@@ -43,7 +43,7 @@ RS232TransferHelper::~RS232TransferHelper() {
 
 }
 
-int RS232TransferHelper::receive(vector<byte> &buffer, unsigned int length) {
+int RS232TransferHelper::receive(vector<unsigned char> &buffer, unsigned int length) {
     int retval = 0;
     unsigned int bytesRead = 0;
 
@@ -65,7 +65,7 @@ int RS232TransferHelper::receive(vector<byte> &buffer, unsigned int length) {
     return bytesRead;
 }
 
-int RS232TransferHelper::send(const vector<byte> &buffer, unsigned int length) const {
+int RS232TransferHelper::send(const vector<unsigned char> &buffer, unsigned int length) const {
     int retval = 0;
     unsigned int bytesWritten = 0;
 

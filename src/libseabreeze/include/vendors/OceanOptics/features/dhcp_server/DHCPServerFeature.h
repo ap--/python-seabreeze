@@ -36,10 +36,10 @@
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
-    class DHCPServerFeature : public FeatureImpl, public DHCPServerFeatureInterface 
+    class DHCPServerFeature : public FeatureImpl, public DHCPServerFeatureInterface
     {
     public:
         DHCPServerFeature(std::vector<ProtocolHelper *> helpers);
@@ -47,21 +47,21 @@ namespace seabreeze
 
 		virtual unsigned char getServerEnableState(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex);
 		virtual void setServerEnableState(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char enableState);
 		virtual void getServerAddress(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex,
 			std::vector<unsigned char> *serverAddress,
 			unsigned char *netMask);
 		virtual void setServerAddress(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> serverAddress,
@@ -75,4 +75,3 @@ namespace seabreeze
 }
 
 #endif /* DHCPSERVERFEATURE_H */
-

@@ -46,10 +46,10 @@ RawUSBBusAccessFeature::~RawUSBBusAccessFeature() {
 
 }
 
-vector<byte> RawUSBBusAccessFeature::readUSB(const USBInterface *bus, int endpoint,
+vector<unsigned char> RawUSBBusAccessFeature::readUSB(const USBInterface *bus, int endpoint,
         unsigned int length) {
 
-    vector<byte> retval(length);
+    vector<unsigned char> retval(length);
     USB* descriptor = bus->getUSBDescriptor();
 
     try {
@@ -65,7 +65,7 @@ vector<byte> RawUSBBusAccessFeature::readUSB(const USBInterface *bus, int endpoi
 }
 
 int RawUSBBusAccessFeature::writeUSB(const USBInterface *bus, int endpoint,
-        const vector<byte> &data) {
+        const vector<unsigned char> &data) {
 
     int bytesWritten = 0;
 

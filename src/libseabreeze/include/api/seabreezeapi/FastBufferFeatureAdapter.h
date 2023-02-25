@@ -58,4 +58,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* SEABREEZE_FAST_BUFFER_FEATURE_ADAPTER_H */
-

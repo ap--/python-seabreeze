@@ -126,4 +126,3 @@ unsigned long AcquisitionDelayFeature_FPGA::countsToMicroseconds(unsigned long c
 unsigned long AcquisitionDelayFeature_FPGA::microsecondsToCounts(unsigned long microseconds) {
     return (microseconds * this->countsPerMicrosecond);
 }
-

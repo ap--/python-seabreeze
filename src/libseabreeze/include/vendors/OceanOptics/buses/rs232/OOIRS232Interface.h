@@ -56,4 +56,3 @@ namespace seabreeze {
 }
 
 #endif /* OOIRS232INTERFACE_H */
-

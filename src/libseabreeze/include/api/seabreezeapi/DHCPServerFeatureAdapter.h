@@ -36,13 +36,13 @@
 #include "api/seabreezeapi/FeatureAdapterTemplate.h"
 #include "vendors/OceanOptics/features/dhcp_server/DHCPServerFeatureInterface.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace api 
+    namespace api
     {
 
         class DHCPServerFeatureAdapter
-                : public FeatureAdapterTemplate<DHCPServerFeatureInterface> 
+                : public FeatureAdapterTemplate<DHCPServerFeatureInterface>
 		{
         	public:
             	DHCPServerFeatureAdapter(DHCPServerFeatureInterface *intf, const FeatureFamily &f, Protocol *p, Bus *b, unsigned short instanceIndex);

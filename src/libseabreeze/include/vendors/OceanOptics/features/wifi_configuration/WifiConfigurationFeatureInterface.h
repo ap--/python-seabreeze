@@ -42,33 +42,33 @@ namespace seabreeze {
 
 		virtual unsigned char getMode(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void setMode(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char mode) = 0;
 		virtual unsigned char getSecurityType(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void setSecurityType(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			unsigned char securityType) = 0;
 		virtual std::vector<unsigned char> getSSID(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			unsigned char interfaceIndex) = 0;
 		virtual void setSSID(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> ssid) = 0;
 		virtual void setPassPhrase(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			unsigned char interfaceIndex,
 			const std::vector<unsigned char> passPhrase) = 0;
@@ -79,4 +79,3 @@ namespace seabreeze {
 }
 
 #endif /* WIFICONFIGURATIONFEATUREINTERFACE_H */
-

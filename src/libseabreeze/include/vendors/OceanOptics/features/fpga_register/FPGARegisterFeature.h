@@ -42,8 +42,8 @@ namespace seabreeze {
     public:
         FPGARegisterFeature();
         virtual ~FPGARegisterFeature();
-        virtual unsigned int readRegister(const Bus &bus, byte address);
-        virtual void writeRegister(const Bus &bus, byte address, unsigned int value);
+        virtual unsigned int readRegister(const Bus &bus, unsigned char address);
+        virtual void writeRegister(const Bus &bus, unsigned char address, unsigned int value);
         virtual unsigned char getMajorVersion(const Bus &bus);
 
         virtual FeatureFamily getFeatureFamily();

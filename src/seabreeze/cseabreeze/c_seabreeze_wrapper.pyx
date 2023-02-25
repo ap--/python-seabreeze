@@ -5,7 +5,8 @@ Author: Andreas Poehlmann
 """
 cimport c_seabreeze as csb
 cimport cython
-from cpython.mem cimport PyMem_Free, PyMem_Malloc
+from cpython.mem cimport PyMem_Free
+from cpython.mem cimport PyMem_Malloc
 from libcpp cimport bool as bool_t
 
 import weakref
@@ -1126,7 +1127,7 @@ cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
         cdef int bytes_written
         cdef float[::1] out
         cdef int out_length
-        arr = np.asarray(calibration_array, dtype=np.float)
+        arr = np.asarray(calibration_array, dtype=np.float32)
         if not arr.ndim == 1:
             raise ValueError("calibration_array needs to be 1D")
         out = arr

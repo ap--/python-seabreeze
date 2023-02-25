@@ -61,4 +61,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* ACQUISITION_DELAY_PROTOCOL_INTERFACE_H */
-

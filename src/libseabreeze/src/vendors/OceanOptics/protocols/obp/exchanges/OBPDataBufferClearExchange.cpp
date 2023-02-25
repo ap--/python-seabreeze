@@ -49,4 +49,3 @@ OBPDataBufferClearExchange::OBPDataBufferClearExchange() {
 OBPDataBufferClearExchange::~OBPDataBufferClearExchange() {
 
 }
-

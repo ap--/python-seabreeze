@@ -62,7 +62,7 @@ unsigned char OBPPixelBinningProtocol::readPixelBinningFactor(const Bus &bus) {
         throw ProtocolBusMismatchException(error);
     }
 
-    vector<byte> *result = xchange.queryDevice(helper);
+    vector<unsigned char> *result = xchange.queryDevice(helper);
     if(NULL == result || result->size() == 0) {
         string error("Expected queryDevice to produce a non-empty result "
             "containing a pixel binning factor.  Without this data, it is not possible to "
@@ -110,7 +110,7 @@ unsigned char OBPPixelBinningProtocol::readDefaultPixelBinningFactor(const Bus &
         throw ProtocolBusMismatchException(error);
     }
 
-    vector<byte> *result = xchange.queryDevice(helper);
+    vector<unsigned char> *result = xchange.queryDevice(helper);
     if(NULL == result || result->size() == 0) {
         string error("Expected queryDevice to produce a non-empty result "
             "containing a pixel binning factor.  Without this data, it is not possible to "
@@ -178,7 +178,7 @@ unsigned char OBPPixelBinningProtocol::readMaxPixelBinningFactor(const Bus &bus)
         throw ProtocolBusMismatchException(error);
     }
 
-    vector<byte> *result = xchange.queryDevice(helper);
+    vector<unsigned char> *result = xchange.queryDevice(helper);
     if(NULL == result || result->size() == 0) {
         string error("Expected queryDevice to produce a non-empty result "
             "containing a pixel binning factor.  Without this data, it is not possible to "

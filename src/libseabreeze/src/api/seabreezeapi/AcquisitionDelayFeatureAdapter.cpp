@@ -123,4 +123,3 @@ void AcquisitionDelayFeatureAdapter::setAcquisitionDelayMicroseconds(int *errorC
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
     }
 }
-

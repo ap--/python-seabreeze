@@ -18,41 +18,43 @@ class SeaBreezeGPIOFeature(SeaBreezeFeature):
         ADC_INPUT=0x82,
     )
 
-    def get_number_of_gpio_pins(self):
+    def get_number_of_gpio_pins(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_gpio_output_enable_vector(self):
+    def get_gpio_output_enable_vector(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def set_gpio_output_enable_vector(self, output_enable_vector, bit_mask):
+    def set_gpio_output_enable_vector(
+        self, output_enable_vector: int, bit_mask: int
+    ) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_gpio_value_vector(self):
+    def get_gpio_value_vector(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def set_gpio_value_vector(self, value_vector, bit_mask):
+    def set_gpio_value_vector(self, value_vector: int, bit_mask: int) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_number_of_egpio_pins(self):
+    def get_number_of_egpio_pins(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_egpio_available_modes(self, pin_number):
+    def get_egpio_available_modes(self, pin_number: int) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_egpio_current_mode(self, pin_number):
+    def get_egpio_current_mode(self, pin_number: int) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def set_egpio_mode(self, pin_number, mode, value=0.0):
+    def set_egpio_mode(self, pin_number: int, mode: int, value: float = 0.0) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_egpio_output_vector_vector(self):
+    def get_egpio_output_vector_vector(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def set_egpio_output_vector(self, output_vector, bit_mask):
+    def set_egpio_output_vector(self, output_vector: int, bit_mask: int) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_egpio_value(self, pin_number):
+    def get_egpio_value(self, pin_number: int) -> float:
         raise NotImplementedError("implement in derived class")
 
-    def set_egpio_value(self, pin_number, value):
+    def set_egpio_value(self, pin_number: int, value: float) -> None:
         raise NotImplementedError("implement in derived class")

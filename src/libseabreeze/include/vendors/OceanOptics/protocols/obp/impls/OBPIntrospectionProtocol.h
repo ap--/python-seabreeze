@@ -35,11 +35,11 @@
 #include "vendors/OceanOptics/protocols/interfaces/IntrospectionProtocolInterface.h"
 #include <vector>
 
-namespace seabreeze 
+namespace seabreeze
 {
-    namespace oceanBinaryProtocol 
+    namespace oceanBinaryProtocol
 	{
-        class OBPIntrospectionProtocol : public IntrospectionProtocolInterface 
+        class OBPIntrospectionProtocol : public IntrospectionProtocolInterface
 		{
 			public:
 				OBPIntrospectionProtocol();
@@ -57,4 +57,3 @@ namespace seabreeze
 } /* end namespace seabreeze */
 
 #endif /* OBPINTROSPECTIONPROTOCOL_H */
-

@@ -40,7 +40,7 @@ namespace seabreeze {
     public:
         ByteVector();
         /* Constructor that makes a copy of the given vector for internal use */
-        ByteVector(const std::vector<byte> &that);
+        ByteVector(const std::vector<unsigned char> &that);
         virtual ~ByteVector();
         /* Dimensionality of data.  0 for scalar, 1 for vector,
          * 2 for a pair of related vectors (e.g. [X, Y] or matrix),
@@ -52,10 +52,10 @@ namespace seabreeze {
         virtual std::vector<UnitDescriptor *> *getUnits();
 
         /* Get the data associated with this instance */
-        std::vector<byte> &getByteVector();
+        std::vector<unsigned char> &getByteVector();
 
     private:
-        std::vector<byte> *data;
+        std::vector<unsigned char> *data;
     };
 
 }

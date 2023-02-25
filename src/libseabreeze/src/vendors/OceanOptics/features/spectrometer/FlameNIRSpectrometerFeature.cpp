@@ -60,7 +60,7 @@ FlameNIRSpectrometerFeature::FlameNIRSpectrometerFeature(
     // NB: Flame-NIR has no electrical dark pixels
 
     IntegrationTimeExchange *intTime = new IntegrationTimeExchange(INTEGRATION_TIME_BASE);
-    Transfer *requestFormattedSpectrum = new RequestSpectrumExchange(); 
+    Transfer *requestFormattedSpectrum = new RequestSpectrumExchange();
 	Transfer *readFormattedSpectrum = new FlameNIRSpectrumExchange(numberOfPixels * 2, numberOfPixels, this);
 	Transfer *requestUnformattedSpectrum = new RequestSpectrumExchange();
 	Transfer *readUnformattedSpectrum = new ReadSpectrumExchange(numberOfPixels * 2, numberOfPixels);
@@ -69,7 +69,7 @@ FlameNIRSpectrometerFeature::FlameNIRSpectrometerFeature(
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     protocols.push_back(ooiProtocol);
 

@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 
@@ -9,14 +11,14 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
     identifier = "introspection"
 
-    def number_of_pixels(self):
+    def number_of_pixels(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_active_pixel_ranges(self):
+    def get_active_pixel_ranges(self) -> Tuple[Tuple[int, int], ...]:
         raise NotImplementedError("implement in derived class")
 
-    def get_optical_dark_pixel_ranges(self):
+    def get_optical_dark_pixel_ranges(self) -> Tuple[Tuple[int, int], ...]:
         raise NotImplementedError("implement in derived class")
 
-    def get_electric_dark_pixel_ranges(self):
+    def get_electric_dark_pixel_ranges(self) -> Tuple[Tuple[int, int], ...]:
         raise NotImplementedError("implement in derived class")

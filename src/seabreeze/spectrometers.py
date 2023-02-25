@@ -6,20 +6,38 @@ Author: Andreas Poehlmann
 Email: andreas@poehlmann.io
 
 """
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import numpy
 
 import seabreeze.backends
-from seabreeze.compat import DeprecatedSpectrometerMixin as _DeprecatedSpectrometerMixin
+from seabreeze.types import SeaBreezeAPI
+from seabreeze.types import SeaBreezeBackend
+from seabreeze.types import SeaBreezeFeatureAccessor
+from seabreeze.types import SeaBreezeFeatureDict
 
 # get the backend and add some functions/classes to this module
-_lib = seabreeze.backends.get_backend()
+_lib: SeaBreezeBackend = seabreeze.backends.get_backend()
 
-SeaBreezeError = _lib.SeaBreezeError
-SeaBreezeDevice = _lib.SeaBreezeDevice
-SeaBreezeFeature = _lib.SeaBreezeFeature
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
+    from seabreeze.types import SeaBreezeDevice
+
+else:
+    SeaBreezeDevice = _lib.SeaBreezeDevice
+    SeaBreezeError = _lib.SeaBreezeError
+
+__all__ = [
+    "list_devices",
+    "SeaBreezeError",
+    "Spectrometer",
+]
 
 
-def list_devices():
+def list_devices() -> list[SeaBreezeDevice]:
     """returns available SeaBreezeDevices
 
     list all connected Ocean Optics devices supported
@@ -29,19 +47,22 @@ def list_devices():
     devices: `list[SeaBreezeDevice]`
         connected Spectrometer instances
     """
-    if not hasattr(list_devices, "_api"):
-        # noinspection PyProtectedMember
-        list_devices._api = _lib.SeaBreezeAPI(**_lib._api_kwargs)
-    # noinspection PyProtectedMember
-    return list_devices._api.list_devices()
+    api: SeaBreezeAPI
+    try:
+        api = list_devices._api  # type: ignore
+    except AttributeError:
+        _kw = _lib._api_kwargs
+        api = list_devices._api = _lib.SeaBreezeAPI(**_kw)  # type: ignore
+    return api.list_devices()
 
 
-class Spectrometer(_DeprecatedSpectrometerMixin):
+class Spectrometer:
     """Spectrometer class for all supported spectrometers"""
 
-    _backend = _lib  # store reference to backend to allow backend switching in tests
+    # store reference to backend to allow backend switching in tests
+    _backend: SeaBreezeBackend = _lib
 
-    def __init__(self, device):
+    def __init__(self, device: SeaBreezeDevice) -> None:
         """create a Spectrometer instance for the provided device
 
         The Spectrometer class provides a thin abstraction layer for the
@@ -76,7 +97,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         self._wavelengths = self._dev.f.spectrometer.get_wavelengths()
 
     @classmethod
-    def from_first_available(cls):
+    def from_first_available(cls) -> Spectrometer:
         """open first available spectrometer
 
         Returns
@@ -91,7 +112,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
             raise cls._backend.SeaBreezeError("No unopened device found.")
 
     @classmethod
-    def from_serial_number(cls, serial=None):
+    def from_serial_number(cls, serial: str | None = None) -> Spectrometer:
         """open the spectrometer matching the provided serial number
 
         Allows to open a specific spectrometer if multiple are connected.
@@ -123,7 +144,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 "No device attached with serial number '%s'." % serial
             )
 
-    def wavelengths(self):
+    def wavelengths(self) -> NDArray[numpy.float_]:
         """wavelength array of the spectrometer
 
         wavelengths in (nm) corresponding to each pixel of the spectrometer
@@ -135,7 +156,9 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         return self._wavelengths
 
-    def intensities(self, correct_dark_counts=False, correct_nonlinearity=False):
+    def intensities(
+        self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False
+    ) -> NDArray[numpy.float_]:
         """measured intensity array in (a.u.)
 
         Measured intensities as numpy array returned by the spectrometer.
@@ -191,7 +214,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         if correct_nonlinearity or correct_dark_counts:
             dark_offset = numpy.mean(out[self._dp]) if self._dp else 0.0
             out -= dark_offset
-        if correct_nonlinearity:
+        if correct_nonlinearity and self._nc:
             out = out / numpy.polyval(self._nc, out)
         if correct_nonlinearity and (not correct_dark_counts):
             # noinspection PyUnboundLocalVariable
@@ -199,7 +222,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         return out
 
     @property
-    def max_intensity(self):
+    def max_intensity(self) -> float:
         """return the maximum intensity of the spectrometer
 
         Returns
@@ -210,7 +233,9 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         return self._dev.f.spectrometer.get_maximum_intensity()
 
-    def spectrum(self, correct_dark_counts=False, correct_nonlinearity=False):
+    def spectrum(
+        self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False
+    ) -> NDArray[numpy.float_]:
         """returns wavelengths and intensities as single array
 
         Convenience method to allow:
@@ -237,7 +262,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
             )
         )
 
-    def integration_time_micros(self, integration_time_micros):
+    def integration_time_micros(self, integration_time_micros: int) -> None:
         """set the integration time in microseconds
 
         Parameters
@@ -266,7 +291,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
                 raise e
 
     @property
-    def integration_time_micros_limits(self):
+    def integration_time_micros_limits(self) -> tuple[int, int]:
         """return the hardcoded minimum and maximum integration time
 
         Returns
@@ -276,7 +301,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         return self._dev.f.spectrometer.get_integration_time_micros_limits()
 
-    def trigger_mode(self, mode):
+    def trigger_mode(self, mode: int) -> None:
         """set the trigger mode of the device
 
         Parameters
@@ -288,23 +313,23 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         self._dev.f.spectrometer.set_trigger_mode(mode)
 
     @property
-    def serial_number(self):
+    def serial_number(self) -> str:
         """the spectrometer's serial number"""
         return self._dev.serial_number
 
     @property
-    def model(self):
+    def model(self) -> str:
         """the spectrometer's model type"""
         return self._dev.model
 
     @property
-    def pixels(self):
+    def pixels(self) -> int:
         """the spectrometer's number of pixels"""
         # noinspection PyProtectedMember
         return self._dev.f.spectrometer._spectrum_length
 
     @property
-    def features(self):
+    def features(self) -> SeaBreezeFeatureDict:
         """return a dictionary of all supported features
 
         this returns a dictionary with all supported Features of the spectrometer
@@ -312,12 +337,14 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
 
         Returns
         -------
-        features : `dict` [`str`, `seabreeze.SeaBreezeFeature`]
+        features :
+            a dictionary mapping feature names to lists of feature instances.
+            An empty list means the feature is not available.
         """
         return self._dev.features
 
     @property
-    def f(self):
+    def f(self) -> SeaBreezeFeatureAccessor:
         """convenience assess to features via attributes
 
         this allows you to access a feature like this::
@@ -331,7 +358,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         return self._dev.f
 
-    def open(self):
+    def open(self) -> None:
         """open the connection to the SeaBreezeDevice
 
         Notes
@@ -343,7 +370,7 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         self._dev.open()
 
-    def close(self):
+    def close(self) -> None:
         """close the connection to the SeaBreezeDevice
 
         Notes
@@ -355,5 +382,5 @@ class Spectrometer(_DeprecatedSpectrometerMixin):
         """
         self._dev.close()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Spectrometer {self.model}:{self.serial_number}>"

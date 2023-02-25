@@ -66,4 +66,3 @@ Acquire a spectrum:
     >>> intensities = spec.intensities()
     >>> intensities
     array([1485., 1493., 1487., ..., 1496., 1497., 1493.])
-

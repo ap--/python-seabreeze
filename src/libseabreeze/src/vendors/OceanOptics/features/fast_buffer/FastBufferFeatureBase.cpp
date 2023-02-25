@@ -182,4 +182,3 @@ FeatureFamily FastBufferFeatureBase::getFeatureFamily() {
 
     return families.FAST_BUFFER;
 }
-

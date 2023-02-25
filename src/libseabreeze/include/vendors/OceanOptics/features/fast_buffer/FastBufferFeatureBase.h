@@ -46,16 +46,16 @@ namespace seabreeze {
 			const Protocol &protocol,
 			const Bus &bus, const FastBufferIndex_t bufferIndex);
 		virtual void setBufferingEnable(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			const FastBufferIndex_t bufferIndex,
 			const FastBufferIndex_t bufferSize);
 		virtual FastBufferSampleCount_t getConsecutiveSampleCount(
 			const Protocol &protocol,
-			const Bus &bus, 
+			const Bus &bus,
 			const FastBufferIndex_t bufferIndex);
 		virtual void setConsecutiveSampleCount(
-			const Protocol &protocol, 
+			const Protocol &protocol,
 			const Bus &bus,
 			const FastBufferIndex_t bufferIndex,
 			const FastBufferSampleCount_t consecutiveSampleCount);
@@ -67,4 +67,3 @@ namespace seabreeze {
 } /* end namespace */
 
 #endif /* FASTBUFFERFEATUREBASE_H */
-

@@ -39,21 +39,21 @@
 
 
 namespace seabreeze {
-    
+
     class ProgrammableSaturationFeatureInterface {
     public:
         virtual ~ProgrammableSaturationFeatureInterface() = 0;
-        
+
         /*
          * Get the detector saturation level from the device.
          */
         virtual unsigned int getSaturation() = 0;
     };
-    
+
 
     /* Default implementation for (otherwise) pure virtual destructor */
     inline ProgrammableSaturationFeatureInterface::~ProgrammableSaturationFeatureInterface() {}
-    
+
 } /* end namespace seabreeze */
 
 #endif /* PROGRAMMABLESATURATIONFEATUREINTERFACE_H */

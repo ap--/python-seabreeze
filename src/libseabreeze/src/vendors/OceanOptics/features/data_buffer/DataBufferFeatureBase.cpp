@@ -144,7 +144,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacity(
         const Protocol &protocol, const Bus &bus,
         const DataBufferIndex_t bufferIndex) {
 
-    DataBufferProtocolInterface *buffer = NULL;   
+    DataBufferProtocolInterface *buffer = NULL;
     ProtocolHelper *proto = NULL;
 
     try {
@@ -156,7 +156,7 @@ DataBufferElementCount_t DataBufferFeatureBase::getBufferCapacity(
         /* FIXME: previous exception should probably be bundled up into the new exception */
         throw FeatureProtocolNotFoundException(error);
     }
-        
+
     DataBufferElementCount_t retval = 0;
 
     try {
@@ -263,4 +263,3 @@ FeatureFamily DataBufferFeatureBase::getFeatureFamily() {
 
     return families.DATA_BUFFER;
 }
-

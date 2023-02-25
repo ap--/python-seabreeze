@@ -42,14 +42,14 @@ OBPLampEnableCommand::OBPLampEnableCommand() {
 }
 
 OBPLampEnableCommand::~OBPLampEnableCommand() {
-    
+
 }
 
 void OBPLampEnableCommand::setEnable(TransferHelper *helper, bool enable) {
-    
+
     this->payload.resize(1);
-    
+
     this->payload[0] = (true == enable) ? 1 : 0;
-    
+
     sendCommandToDevice(helper);
 }

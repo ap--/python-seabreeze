@@ -54,7 +54,7 @@ bool ProgrammableSaturationFeatureBase::initialize(const Protocol &protocol,
     } catch (const FeatureException &fe) {
         this->valid = false;
     }
-    
+
     return true;
 }
 
@@ -62,7 +62,7 @@ unsigned int ProgrammableSaturationFeatureBase::getSaturation() {
     if(false == this->valid) {
         throw FeatureException("Saturation level not properly initialized");
     }
-    
+
     return this->saturation;
 }
 

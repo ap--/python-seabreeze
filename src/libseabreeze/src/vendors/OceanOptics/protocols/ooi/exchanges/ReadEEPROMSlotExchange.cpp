@@ -43,10 +43,10 @@ ReadEEPROMSlotExchange::ReadEEPROMSlotExchange(int slot) {
 
     requestHints->push_back(new ControlHint());
 
-    vector<byte> *requestBuffer = new vector<byte>;
+    vector<unsigned char> *requestBuffer = new vector<unsigned char>;
     requestBuffer->resize(2);
     (*(requestBuffer))[0] = OpCodes::OP_GETINFO;
-    (*(requestBuffer))[1] = (byte)slot;
+    (*(requestBuffer))[1] = (unsigned char)slot;
 
     Transfer *request = new Transfer(requestHints, requestBuffer, Transfer::TO_DEVICE, 2);
 
@@ -60,7 +60,7 @@ ReadEEPROMSlotExchange::ReadEEPROMSlotExchange(int slot) {
     // response size will be 2 + MAX_EEPROM_SLOT_DATA_LENGTH because
     // the 2-byte request is echoed back
 
-    vector<byte> *responseBuffer = new vector<byte>;
+    vector<unsigned char> *responseBuffer = new vector<unsigned char>;
     responseBuffer->resize(2 + MAX_EEPROM_SLOT_DATA_LENGTH);
 
     Transfer *response = new Transfer(responseHints, responseBuffer, Transfer::FROM_DEVICE,

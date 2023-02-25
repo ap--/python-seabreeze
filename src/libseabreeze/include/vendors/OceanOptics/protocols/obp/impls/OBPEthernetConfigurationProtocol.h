@@ -43,8 +43,8 @@ namespace seabreeze {
         virtual ~OBPEthernetConfigurationProtocol();
 
         /* Inherited from OBPEthernetConfigurationProtocolInterface */
-        virtual std::vector<byte> get_MAC_Address(const Bus &bus, unsigned char interfaceIndex);
-        virtual void set_MAC_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> macAddress);
+        virtual std::vector<unsigned char> get_MAC_Address(const Bus &bus, unsigned char interfaceIndex);
+        virtual void set_MAC_Address(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> macAddress);
         virtual unsigned char get_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex);
         virtual void set_GbE_Enable_Status(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatue);
 

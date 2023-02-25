@@ -56,25 +56,25 @@ NativeSocketPOSIX::NativeSocketPOSIX() {
     this->bound = false;
     this->closed = true;
 }
-        
+
 NativeSocketPOSIX::~NativeSocketPOSIX() {
     close();
 }
-        
+
 void NativeSocketPOSIX::connect(Inet4Address &addr, int port) {
     struct in_addr in;
     struct sockaddr_in sockaddr;
     socklen_t addrlen;
     int server;
-    
+
     in = addr.getAddress();
-    
+
     memset((void *)&sockaddr, (int)0, sizeof(struct sockaddr));
     memcpy((char *)&sockaddr.sin_addr.s_addr, &in, sizeof(struct in_addr));
     sockaddr.sin_family = AF_INET;
     sockaddr.sin_port = htons(port);
     server = socket(PF_INET, SOCK_STREAM, 0);
-    
+
     addrlen = sizeof(sockaddr);
     if(::connect(server, (struct sockaddr *)&sockaddr, addrlen) < 0) {
         this->sock = -1;
@@ -83,7 +83,7 @@ void NativeSocketPOSIX::connect(Inet4Address &addr, int port) {
         error += strerror(errno);
         throw BusConnectException(error);
     }
-    
+
     this->bound = true;
     this->closed = false;
     this->sock = server;
@@ -91,34 +91,34 @@ void NativeSocketPOSIX::connect(Inet4Address &addr, int port) {
 }
 
 void NativeSocketPOSIX::connect(const string hostname, int port) {
-    
+
     struct hostent *host_info;
     struct in_addr in;
-    
+
     host_info = gethostbyname(hostname.c_str());
     if(0 == host_info) {
         string error("Failed to resolve hostname [");
         error += hostname + "]: " + strerror(errno);
         throw BusConnectException(error);
     }
-    
+
     memcpy(&in, host_info->h_addr_list[0], host_info->h_length);
-    
+
     Inet4Address inet4addr(&in);
-    
+
     connect(inet4addr, port);
 }
 
 void NativeSocketPOSIX::close() {
     int result;
-    
+
     if(this->sock >= 0 && false == this->closed) {
         shutdown(this->sock, SHUT_RDWR);
         result = ::close(this->sock);
         this->sock = -1;
         this->bound = false;
         this->closed = true;
-        
+
         if(result < 0) {
             string error("Got error when trying to close socket: ");
             error += strerror(errno);
@@ -139,44 +139,44 @@ int NativeSocketPOSIX::getSOLinger() {
     struct linger so_linger;
     socklen_t length;
     int result;
-    
+
     if(this->sock < 0) {
         string error("Attempted to get socket options on invalid socket.");
         throw SocketException(error);
     }
-    
+
     length = sizeof(so_linger);
     result = getsockopt(this->sock, SOL_SOCKET, SO_LINGER, (char *)&so_linger,
             &length);
-    
+
     if(result < 0 || length != sizeof(so_linger)) {
         string error("Failed to get socket options: ");
         error += strerror(errno);
         throw SocketException(error);
     }
-    
+
     if(0 == so_linger.l_onoff) {
         return 0;
     }
-    
+
     return so_linger.l_linger;
 }
 
 void NativeSocketPOSIX::setSOLinger(bool enable, int linger) {
     struct linger so_linger;
     int result;
-    
+
     if(this->sock < 0) {
         string error("Attempted to set socket options on invalid socket.");
         throw SocketException(error);
     }
-    
+
     so_linger.l_onoff = (true == enable ? 1 : 0);
     so_linger.l_linger = linger;
-    
+
     result = setsockopt(this->sock, SOL_SOCKET, SO_LINGER, (char *)&so_linger,
             sizeof(so_linger));
-    
+
     if(result < 0) {
         string error("Failed to set socket options: ");
         error += strerror(errno);
@@ -188,40 +188,40 @@ unsigned long NativeSocketPOSIX::getReadTimeoutMillis() {
     struct timeval timeout;
     int result;
     socklen_t length;
-    
+
     if(this->sock < 0) {
         string error("Attempted to get socket options on invalid socket.");
         throw SocketException(error);
     }
-    
+
     length = sizeof(timeout);
     result = getsockopt(this->sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
             &length);
-    
+
     if(result < 0 || length != sizeof(timeout)) {
         string error("Failed to get socket options: ");
         error += strerror(errno);
         throw SocketException(error);
     }
-    
+
     return (timeout.tv_sec * 1000) + (timeout.tv_usec / 1000);
 }
 
 void NativeSocketPOSIX::setReadTimeoutMillis(unsigned long timeoutMillis) {
     struct timeval timeout;
     int result;
-    
+
     if(this->sock < 0) {
         string error("Attempted to get socket options on invalid socket.");
         throw SocketException(error);
     }
-    
+
     timeout.tv_sec = timeoutMillis / 1000;
     timeout.tv_usec = (timeoutMillis % 1000) * 1000; /* Isolate millis then convert to micros */
-    
+
     result = setsockopt(this->sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
             sizeof(timeout));
-    
+
     if(result < 0) {
         string error("Failed to set socket options: ");
         error += strerror(errno);
@@ -231,7 +231,7 @@ void NativeSocketPOSIX::setReadTimeoutMillis(unsigned long timeoutMillis) {
 
 int NativeSocketPOSIX::read(unsigned char *buf, unsigned long count) {
     int result = ::read(this->sock, buf, count);
-    
+
     if(result < 0) {
         if(EAGAIN == errno) {
             string error("No data available on non-blocking socket.");
@@ -242,18 +242,18 @@ int NativeSocketPOSIX::read(unsigned char *buf, unsigned long count) {
             throw SocketException(error);
         }
     }
-    
+
     return result;
 }
 
 int NativeSocketPOSIX::write(const unsigned char *buf, unsigned long count) {
     int result = ::write(this->sock, buf, count);
-    
+
     if(result < 0) {
         string error("Socket error on write: ");
         error += strerror(errno);
         throw BusTransferException(error);
     }
-    
+
     return result;
 }

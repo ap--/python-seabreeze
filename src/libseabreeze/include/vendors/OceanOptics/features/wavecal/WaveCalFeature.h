@@ -56,4 +56,3 @@ namespace seabreeze {
 }
 
 #endif /* WAVECALFEATURE_H */
-

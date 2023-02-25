@@ -58,4 +58,3 @@ namespace seabreeze {
 }
 
 #endif /* WAVECALPROTOCOLINTERFACE_H */
-

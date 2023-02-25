@@ -49,7 +49,7 @@ namespace seabreeze {
                 const Bus &bus);
 		virtual unsigned short int readFirmwareRevision(const Protocol &protocol,
                 const Bus &bus);
-                
+
         /* Overriding from Feature */
         virtual FeatureFamily getFeatureFamily();
     };

@@ -56,4 +56,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* INTROSPECTION_PROTOCOL_INTERFACE_H */
-

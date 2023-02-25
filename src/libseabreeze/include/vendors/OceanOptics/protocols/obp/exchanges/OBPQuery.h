@@ -41,11 +41,11 @@ namespace seabreeze {
             virtual ~OBPQuery();
 
             using OBPTransaction::queryDevice;
-            virtual std::vector<byte> *queryDevice(TransferHelper *helper) ;
+            virtual std::vector<unsigned char> *queryDevice(TransferHelper *helper) ;
 
         protected:
             int messageType;
-            std::vector<byte> payload;
+            std::vector<unsigned char> payload;
         };
     }
 }

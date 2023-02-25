@@ -51,10 +51,10 @@ void OBPLightSourceIntensityCommand::setLightSourceIntensity(int moduleIndex,
             int source, float intensity) {
 
     unsigned int i;
-    byte *cptr = (byte *)&intensity;
+    unsigned char *cptr = (unsigned char *)&intensity;
 
-    this->payload[0] = (byte)moduleIndex;
-    this->payload[1] = (byte)source;
+    this->payload[0] = (unsigned char)moduleIndex;
+    this->payload[1] = (unsigned char)source;
     for(i = 0; i < sizeof(float); i++) {
         payload[i + 2] = cptr[i];
     }

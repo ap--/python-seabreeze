@@ -60,7 +60,7 @@ void TCPIPv4SocketBus::setLocation(
     if(NULL != this->deviceLocator) {
         delete this->deviceLocator;
     }
-    
+
     this->deviceLocator = location.clone();
 }
 

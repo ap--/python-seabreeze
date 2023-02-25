@@ -36,7 +36,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPSetIPv4DHCPEnableStateExchange::OBPSetIPv4DHCPEnableStateExchange() 
+OBPSetIPv4DHCPEnableStateExchange::OBPSetIPv4DHCPEnableStateExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
@@ -56,7 +56,7 @@ void OBPSetIPv4DHCPEnableStateExchange::setInterfaceIndex(unsigned char interfac
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPSetIPv4DHCPEnableStateExchange::setEnable(unsigned char enableState) 
+void OBPSetIPv4DHCPEnableStateExchange::setEnable(unsigned char enableState)
 {
 	this->payload[1] = enableState;
 }

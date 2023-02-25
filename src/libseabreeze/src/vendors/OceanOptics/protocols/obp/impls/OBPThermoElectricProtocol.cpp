@@ -52,10 +52,10 @@ OBPThermoElectricProtocol::~OBPThermoElectricProtocol() {
 double OBPThermoElectricProtocol::readThermoElectricTemperatureCelsius(
             const Bus &bus) {
 
-    vector<byte> *result;
+    vector<unsigned char> *result;
     float temp = 0;
     unsigned int i;
-    byte *cptr;
+    unsigned char *cptr;
 
     OBPGetThermoElectricTemperatureExchange xchange;
 
@@ -73,8 +73,8 @@ double OBPThermoElectricProtocol::readThermoElectricTemperatureCelsius(
         throw ProtocolException(error);
     }
 
-    vector<byte>::iterator iter;
-    cptr = (byte *)&temp;
+    vector<unsigned char>::iterator iter;
+    cptr = (unsigned char *)&temp;
     for(iter = result->begin(), i = 0;
                 iter != result->end() && i < sizeof(float); iter++, i++) {
         /* FIXME: this assumes the host is little-endian.  Is this safe? */

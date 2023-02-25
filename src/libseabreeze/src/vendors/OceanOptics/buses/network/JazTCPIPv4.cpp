@@ -55,7 +55,7 @@ bool JazTCPIPv4::open() {
     if(NULL == this->deviceLocator || NULL == this->socket) {
         return false;
     }
-    
+
     IPv4SocketDeviceLocator *loc = dynamic_cast<IPv4SocketDeviceLocator *>(this->deviceLocator);
     if(NULL == loc) {
         /* Must have been passed an invalid location */
@@ -76,10 +76,10 @@ bool JazTCPIPv4::open() {
     } catch (const SocketException &se) {
         return false;
     }
-    
+
     addHelper(new SpectrumHint(), new TCPIPv4SocketTransferHelper(this->socket));
     addHelper(new ControlHint(), new TCPIPv4SocketTransferHelper(this->socket));
-    
+
     return true;
 }
 

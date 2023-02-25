@@ -73,4 +73,3 @@ namespace seabreeze {
 } /* end namespace */
 
 #endif /* DATABUFFERFEATUREBASE_H */
-

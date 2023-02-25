@@ -58,7 +58,7 @@ using namespace std;
 NIRQuest256::NIRQuest256() {
 
     this->name = "NIRQuest256";
-        
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
@@ -73,10 +73,10 @@ NIRQuest256::NIRQuest256() {
     this->protocols.push_back(new OOIProtocol());
 
     /* Set up the features that comprise this device */
-    
+
     ProgrammableSaturationFeature *saturation =
             new SaturationEEPROMSlotFeature_NIRQuest(0x0011);
-    
+
     this->features.push_back(new NIRQuest256SpectrometerFeature(saturation));
     this->features.push_back(new SerialNumberEEPROMSlotFeature());
     this->features.push_back(new EEPROMSlotFeature(20));

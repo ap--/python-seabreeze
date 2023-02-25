@@ -71,9 +71,9 @@ void SeaBreezeAPI::shutdown() {
 }
 
 SeaBreezeAPI::SeaBreezeAPI() {
-    
+
 }
 
 SeaBreezeAPI::~SeaBreezeAPI() {
-    
+
 }

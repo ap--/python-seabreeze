@@ -3,7 +3,7 @@
  * @date    May 2017
  * @author  Ocean Optics, Inc.
  *
- * This is a generic interface into the I2C Master 
+ * This is a generic interface into the I2C Master
  * functionality at the protocol level, agnostic to
  * any particular protocol.  Each Protocol offering this
  * functionality should implement this interface.
@@ -45,13 +45,13 @@ namespace seabreeze {
     public:
 		I2CMasterProtocolInterface(Protocol *protocol);
         virtual ~I2CMasterProtocolInterface();
-	
-	
+
+
 	    /**
          * Get the number of I2C busses.
          */
         virtual unsigned char i2cMasterGetNumberOfBuses(const Bus &bus) = 0;
-                    
+
         /**
          * Read data from the I2C bus
          */

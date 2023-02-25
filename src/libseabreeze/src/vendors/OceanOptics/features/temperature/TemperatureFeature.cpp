@@ -40,7 +40,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
-TemperatureFeature::TemperatureFeature(vector<ProtocolHelper *> helpers) 
+TemperatureFeature::TemperatureFeature(vector<ProtocolHelper *> helpers)
 {
     vector<ProtocolHelper *>::iterator iter;
 

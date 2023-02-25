@@ -43,13 +43,13 @@ using namespace std;
 DHCPServerFeatureAdapter::DHCPServerFeatureAdapter(
         DHCPServerFeatureInterface *intf, const FeatureFamily &f,
                     Protocol *p, Bus *b, unsigned short instanceIndex)
-        : FeatureAdapterTemplate<DHCPServerFeatureInterface>(intf, f, p, b, instanceIndex) 
+        : FeatureAdapterTemplate<DHCPServerFeatureInterface>(intf, f, p, b, instanceIndex)
 {
 
     /* Nothing else to do here, the initialization list takes care of it */
 }
 
-DHCPServerFeatureAdapter::~DHCPServerFeatureAdapter() 
+DHCPServerFeatureAdapter::~DHCPServerFeatureAdapter()
 {
     /* This is just a wrapper around existing instances -- nothing to delete */
 }
@@ -61,16 +61,16 @@ DHCPServerFeatureAdapter::~DHCPServerFeatureAdapter()
 void DHCPServerFeatureAdapter::getServerAddress(int *errorCode, unsigned char interfaceIndex, unsigned char (*serverAddress)[4], unsigned char *netMask)
 {
 
-    vector<byte> serverAddressVector;
+    vector<unsigned char> serverAddressVector;
 
-    try 
+    try
 	{
 		this->feature->getServerAddress(*this->protocol, *this->bus, interfaceIndex, &serverAddressVector, netMask);
 
         memcpy(serverAddress, &(serverAddressVector[0]), 4);
 
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (const FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);
@@ -80,7 +80,7 @@ void DHCPServerFeatureAdapter::getServerAddress(int *errorCode, unsigned char in
 void DHCPServerFeatureAdapter::setServerAddress(int *errorCode, unsigned char interfaceIndex, const unsigned char serverAddress[4], unsigned char netMask)
 {
 
-    vector<byte> *serverAddressVector = new vector<byte>(4);
+    vector<unsigned char> *serverAddressVector = new vector<unsigned char>(4);
     memcpy(&((*serverAddressVector)[0]), serverAddress, 4);
 
     try {
@@ -95,7 +95,7 @@ void DHCPServerFeatureAdapter::setServerAddress(int *errorCode, unsigned char in
 }
 
 
-unsigned char DHCPServerFeatureAdapter::getServerEnableState(int *errorCode, unsigned char interfaceIndex) 
+unsigned char DHCPServerFeatureAdapter::getServerEnableState(int *errorCode, unsigned char interfaceIndex)
 {
 	unsigned char enableState = 0;
     try {
@@ -107,13 +107,13 @@ unsigned char DHCPServerFeatureAdapter::getServerEnableState(int *errorCode, uns
     return enableState;
 }
 
-void DHCPServerFeatureAdapter::setServerEnableState(int *errorCode, unsigned char interfaceIndex, unsigned char enableState) 
+void DHCPServerFeatureAdapter::setServerEnableState(int *errorCode, unsigned char interfaceIndex, unsigned char enableState)
 {
-    try 
+    try
 	{
         this->feature->setServerEnableState(*this->protocol, *this->bus, interfaceIndex, enableState);
         SET_ERROR_CODE(ERROR_SUCCESS);
-    } 
+    }
 	catch (const FeatureException &fe)
 	{
         SET_ERROR_CODE(ERROR_TRANSFER_ERROR);

@@ -54,8 +54,8 @@ Data *QESpectrumExchange::transfer(TransferHelper *helper) {
 
     unsigned int i;
     Data *xfer;
-    byte lsb;
-    byte msb;
+    unsigned char lsb;
+    unsigned char msb;
 
     /* Use the superclass to move the data into a local buffer. */
     /* This transfer() may cause a ProtocolException to be thrown. */

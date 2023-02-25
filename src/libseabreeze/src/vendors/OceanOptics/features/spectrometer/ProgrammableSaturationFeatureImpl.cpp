@@ -41,7 +41,7 @@ using namespace std;
 
 ProgrammableSaturationFeatureImpl::ProgrammableSaturationFeatureImpl(
         vector<ProtocolHelper *> helpers) {
-    
+
     /* TODO: Can these be delegated up to Feature */
     vector<ProtocolHelper *>::iterator iter;
     for(iter = helpers.begin(); iter != helpers.end(); iter++) {
@@ -50,7 +50,7 @@ ProgrammableSaturationFeatureImpl::ProgrammableSaturationFeatureImpl(
 }
 
 ProgrammableSaturationFeatureImpl::~ProgrammableSaturationFeatureImpl() {
-    
+
 }
 
 
@@ -61,7 +61,7 @@ bool ProgrammableSaturationFeatureImpl::initialize(const Protocol &protocol, con
 
 unsigned int ProgrammableSaturationFeatureImpl::getSaturation(const Protocol &protocol,
         const Bus &bus) {
-    
+
     ProgrammableSaturationProtocolInterface *saturation = NULL;
     unsigned int saturationValue;
     ProtocolHelper *proto = NULL;

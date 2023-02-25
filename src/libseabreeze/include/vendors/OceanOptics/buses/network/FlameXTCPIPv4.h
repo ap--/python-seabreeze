@@ -37,7 +37,7 @@ namespace seabreeze {
     public:
         FlameXTCPIPv4();
         virtual ~FlameXTCPIPv4();
-        
+
         virtual bool open();
         virtual void close();
     };

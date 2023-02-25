@@ -3,7 +3,7 @@
  * @date    February 2017
  * @author  Ocean Optics, Inc.
  *
- * This feature provides an interface to the fast spectral 
+ * This feature provides an interface to the fast spectral
  * data buffer in the Flame X. It is used in conjunction with the data buffer feature
  *
  * LICENSE:
@@ -48,4 +48,3 @@ namespace seabreeze {
 } /* end namespace */
 
 #endif /* FLAMEXFASTBUFFERFEATURE_H */
-

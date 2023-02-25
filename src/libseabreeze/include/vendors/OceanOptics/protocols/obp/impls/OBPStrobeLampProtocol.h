@@ -47,4 +47,3 @@ namespace seabreeze {
 }
 
 #endif /* OBPSTROBELAMPPROTOCOL_H */
-

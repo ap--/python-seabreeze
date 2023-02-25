@@ -72,4 +72,3 @@ namespace seabreeze {
 } /* end namespace seabreeze */
 
 #endif /* ACQUISITION_DELAY_FEATURE_FPGA_H */
-

@@ -65,7 +65,7 @@ using namespace std;
 QEPro::QEPro() {
 
     this->name = "QE-PRO";
-        
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
@@ -116,7 +116,7 @@ QEPro::QEPro() {
     vector<ProtocolHelper *> contStrobeHelpers;
     contStrobeHelpers.push_back(new OBPContinuousStrobeProtocol());
     this->features.push_back(new ContinuousStrobeFeature(contStrobeHelpers));
-    
+
     /* Add lamp enable feature */
     vector<ProtocolHelper *> lampHelpers;
     lampHelpers.push_back(new OBPStrobeLampProtocol());

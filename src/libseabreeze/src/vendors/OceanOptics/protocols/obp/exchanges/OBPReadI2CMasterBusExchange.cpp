@@ -41,7 +41,7 @@ OBPReadI2CMasterBusExchange::OBPReadI2CMasterBusExchange() {
 
     this->hints->push_back(new OBPControlHint());
 	this->payload.resize(sizeof(unsigned char));
-	this->payload[sizeof(unsigned char) + sizeof(unsigned char) + sizeof(unsigned short)];  
+	this->payload[sizeof(unsigned char) + sizeof(unsigned char) + sizeof(unsigned short)];
 }
 
 void OBPReadI2CMasterBusExchange::setBusIndex(unsigned char busIndex)

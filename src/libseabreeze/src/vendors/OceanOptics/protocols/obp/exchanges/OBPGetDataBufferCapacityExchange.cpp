@@ -51,7 +51,7 @@ unsigned long OBPGetDataBufferCapacityExchange::queryBufferCapacity(
         TransferHelper *helper) {
 
     unsigned long capacity;
-    vector<byte> *result;
+    vector<unsigned char> *result;
 
     result = this->queryDevice(helper);
     if(NULL == result || result->size() < 4) {
@@ -67,4 +67,3 @@ unsigned long OBPGetDataBufferCapacityExchange::queryBufferCapacity(
 
     return capacity;
 }
-

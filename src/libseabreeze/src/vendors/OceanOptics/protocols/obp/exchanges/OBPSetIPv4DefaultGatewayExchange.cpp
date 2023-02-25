@@ -36,17 +36,17 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPSetIPv4DefaultGatewayExchange::OBPSetIPv4DefaultGatewayExchange() 
+OBPSetIPv4DefaultGatewayExchange::OBPSetIPv4DefaultGatewayExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
 
     this->messageType = OBPMessageTypes::OBP_SET_IPV4_DEFAULT_GATEWAY;
 
-    this->payload.resize(sizeof(unsigned char)+ 4); 
+    this->payload.resize(sizeof(unsigned char)+ 4);
 }
 
-OBPSetIPv4DefaultGatewayExchange::~OBPSetIPv4DefaultGatewayExchange() 
+OBPSetIPv4DefaultGatewayExchange::~OBPSetIPv4DefaultGatewayExchange()
 {
 
 }

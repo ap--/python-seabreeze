@@ -36,7 +36,7 @@
 #include "common/buses/Bus.h"
 #include "common/exceptions/FeatureException.h"
 
-namespace seabreeze 
+namespace seabreeze
 {
 
     class GPIOFeature : public FeatureImpl, public gpioFeatureInterface
@@ -107,4 +107,3 @@ namespace seabreeze
 }
 
 #endif /* GPIOFEATURE_H */
-

@@ -47,8 +47,8 @@ namespace seabreeze {
     public:
         TransferHelper();
         virtual ~TransferHelper();
-        virtual int receive(std::vector<byte> &buffer, unsigned int length) = 0;
-        virtual int send(const std::vector<byte> &buffer, unsigned int length) const = 0;
+        virtual int receive(std::vector<unsigned char> &buffer, unsigned int length) = 0;
+        virtual int send(const std::vector<unsigned char> &buffer, unsigned int length) const = 0;
     };
 
 }

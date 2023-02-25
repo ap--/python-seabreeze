@@ -54,7 +54,7 @@ HR4000SpectrometerFeature::HR4000SpectrometerFeature() {
     this->integrationTimeMaximum = HR4000SpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = HR4000SpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = HR4000SpectrometerFeature::INTEGRATION_TIME_INCREMENT;
-    
+
     for(int i = 5; i <= 17; i++) {
         this->electricDarkPixelIndices.push_back(i);
     }
@@ -70,7 +70,7 @@ HR4000SpectrometerFeature::HR4000SpectrometerFeature() {
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(ooiProtocol);
 

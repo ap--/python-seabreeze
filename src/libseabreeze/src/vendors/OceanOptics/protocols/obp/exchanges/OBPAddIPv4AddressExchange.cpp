@@ -36,7 +36,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPAddIPv4AddressExchange::OBPAddIPv4AddressExchange() 
+OBPAddIPv4AddressExchange::OBPAddIPv4AddressExchange()
 {
 
     this->hints->push_back(new OBPControlHint());
@@ -46,7 +46,7 @@ OBPAddIPv4AddressExchange::OBPAddIPv4AddressExchange()
     this->payload.resize(sizeof(unsigned char)+ sizeof(unsigned int) + sizeof(unsigned char)); // six bytes in immediate data
 }
 
-OBPAddIPv4AddressExchange::~OBPAddIPv4AddressExchange() 
+OBPAddIPv4AddressExchange::~OBPAddIPv4AddressExchange()
 {
 
 }
@@ -56,7 +56,7 @@ void OBPAddIPv4AddressExchange::setInterfaceIndex(unsigned char interfaceIndex)
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPAddIPv4AddressExchange::setAddress(std::vector<unsigned char> IPv4_Address) 
+void OBPAddIPv4AddressExchange::setAddress(std::vector<unsigned char> IPv4_Address)
 {
 
 	for (int i = 0; i < 4; i++)

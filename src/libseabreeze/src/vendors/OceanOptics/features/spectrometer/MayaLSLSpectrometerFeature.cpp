@@ -60,10 +60,10 @@ MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature(
     this->integrationTimeBase      = MayaLSLSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = MayaLSLSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
 
-    for(int i = 0; i < 4; i++) 
+    for(int i = 0; i < 4; i++)
         this->electricDarkPixelIndices.push_back(i);
-    
-    for(int i = 2064; i < 2068; i++) 
+
+    for(int i = 2064; i < 2068; i++)
         this->electricDarkPixelIndices.push_back(i);
 
     IntegrationTimeExchange *intTime = new IntegrationTimeExchange(MayaLSLSpectrometerFeature::INTEGRATION_TIME_BASE);
@@ -77,7 +77,7 @@ MayaLSLSpectrometerFeature::MayaLSLSpectrometerFeature(
 
     TriggerModeExchange *triggerMode = new TriggerModeExchange();
 
-    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OOISpectrometerProtocol *ooiProtocol = new OOISpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(ooiProtocol);
 

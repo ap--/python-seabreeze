@@ -34,7 +34,7 @@
 
 namespace seabreeze {
     namespace oceanBinaryProtocol {
-        class OBPRequestNumberOfBufferedSpectraWithMetadataExchange : public Transfer 
+        class OBPRequestNumberOfBufferedSpectraWithMetadataExchange : public Transfer
 		{
         public:
             OBPRequestNumberOfBufferedSpectraWithMetadataExchange();

@@ -43,13 +43,12 @@ using namespace seabreeze::oceanBinaryProtocol;
 using namespace seabreeze::api;
 using namespace std;
 
-FlameXFastBufferFeature::FlameXFastBufferFeature() 
+FlameXFastBufferFeature::FlameXFastBufferFeature()
 {
-   
+
     this->protocols.push_back(new OBPFastBufferProtocol());
 }
 
 FlameXFastBufferFeature::~FlameXFastBufferFeature() {
 
 }
-

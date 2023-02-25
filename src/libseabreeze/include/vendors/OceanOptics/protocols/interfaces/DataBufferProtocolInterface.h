@@ -47,9 +47,9 @@ namespace seabreeze {
         virtual ~DataBufferProtocolInterface();
 
         virtual void clearBuffer(const Bus &bus, unsigned char bufferIndex) = 0;
-                
+
         virtual void removeOldestSpectraFromBuffer(const Bus &bus, unsigned char bufferIndex, unsigned int numberOfSpectra) = 0;
-                
+
         virtual unsigned long getNumberOfElements(const Bus &bus,
                 unsigned char bufferIndex) = 0;
 
@@ -65,10 +65,9 @@ namespace seabreeze {
         virtual void setBufferCapacity(const Bus &bus,
                 unsigned char bufferIndex,
                 const unsigned long capacity) = 0;
-                
+
     };
 
 } /* end namespace */
 
 #endif /*  DATABUFFERPROTOCOLINTERFACE_H */
-

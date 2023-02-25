@@ -59,7 +59,7 @@ SparkSpectrometerFeature::SparkSpectrometerFeature() {
     this->integrationTimeMaximum = SparkSpectrometerFeature::INTEGRATION_TIME_MAXIMUM;
     this->integrationTimeBase = SparkSpectrometerFeature::INTEGRATION_TIME_BASE;
     this->integrationTimeIncrement = SparkSpectrometerFeature::INTEGRATION_TIME_INCREMENT;
-    
+
     OBPIntegrationTimeExchange *intTime = new OBPIntegrationTimeExchange(
             SparkSpectrometerFeature::INTEGRATION_TIME_BASE);
 
@@ -72,7 +72,7 @@ SparkSpectrometerFeature::SparkSpectrometerFeature() {
 
     OBPTriggerModeExchange *triggerMode = new OBPTriggerModeExchange();
 
-    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum, 
+    OBPSpectrometerProtocol *obpProtocol = new OBPSpectrometerProtocol(intTime, requestFormattedSpectrum, readFormattedSpectrum,
 		requestUnformattedSpectrum, readUnformattedSpectrum, requestFastBufferSpectrum, readFastBufferSpectrum, triggerMode);
     this->protocols.push_back(obpProtocol);
 
@@ -103,4 +103,3 @@ vector<double> *SparkSpectrometerFeature::getWavelengths(const Protocol &protoco
 
     return WaveCal.readWavelengths(protocol, bus);
 }
-

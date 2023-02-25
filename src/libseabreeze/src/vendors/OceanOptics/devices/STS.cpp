@@ -71,7 +71,7 @@ using namespace std;
 STS::STS() {
 
     this->name = "STS";
-    
+
     // 0 is the control address, since it is not valid in this context, means not used
     this->usbEndpoint_primary_out = 0x01;
     this->usbEndpoint_primary_in = 0x81;
@@ -133,7 +133,7 @@ STS::STS() {
     revisionHelpers.push_back(new OBPRevisionProtocol());
     this->features.push_back(
         new RevisionFeature(revisionHelpers));
-        
+
     /* Add optical bench feature */
     vector<ProtocolHelper *> opticalBenchHelpers;
     opticalBenchHelpers.push_back(new OBPOpticalBenchProtocol());
@@ -145,7 +145,7 @@ STS::STS() {
     spectrumProcessingHelpers.push_back(new OBPSpectrumProcessingProtocol());
     this->features.push_back(
         new SpectrumProcessingFeature(spectrumProcessingHelpers));
-                
+
     /* Add stray light coefficients feature */
     vector<ProtocolHelper *> strayHelpers;
     strayHelpers.push_back(new OBPStrayLightCoeffsProtocol());
@@ -160,7 +160,7 @@ STS::STS() {
     vector<ProtocolHelper *> acqDelayHelpers;
     acqDelayHelpers.push_back(new OBPAcquisitionDelayProtocol());
     this->features.push_back(new STSAcquisitionDelayFeature(acqDelayHelpers));
-    
+
     /* Add lamp enable feature */
     vector<ProtocolHelper *> lampHelpers;
     lampHelpers.push_back(new OBPStrobeLampProtocol());

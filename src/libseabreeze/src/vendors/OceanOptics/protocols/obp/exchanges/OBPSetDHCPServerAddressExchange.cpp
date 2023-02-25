@@ -45,7 +45,7 @@ OBPSetDHCPServerAddressExchange::OBPSetDHCPServerAddressExchange() {
     this->payload.resize(1 + 4 + 1); // interface Index and 4 bytes for the IPv4 server address and 1 byte for the net mask
 }
 
-OBPSetDHCPServerAddressExchange::~OBPSetDHCPServerAddressExchange() 
+OBPSetDHCPServerAddressExchange::~OBPSetDHCPServerAddressExchange()
 {
 
 }
@@ -56,7 +56,7 @@ void OBPSetDHCPServerAddressExchange::setInterfaceIndex(unsigned char interfaceI
 	this->payload[0] = interfaceIndex;
 }
 
-void OBPSetDHCPServerAddressExchange::setServerAddress(vector<unsigned char> serverAddress) 
+void OBPSetDHCPServerAddressExchange::setServerAddress(vector<unsigned char> serverAddress)
 {
 // IPv4 address...
 

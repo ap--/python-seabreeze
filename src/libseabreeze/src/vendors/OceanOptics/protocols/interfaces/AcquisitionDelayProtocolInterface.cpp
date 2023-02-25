@@ -40,4 +40,3 @@ AcquisitionDelayProtocolInterface::AcquisitionDelayProtocolInterface(Protocol *p
 AcquisitionDelayProtocolInterface::~AcquisitionDelayProtocolInterface() {
 
 }
-

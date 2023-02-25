@@ -43,7 +43,7 @@ namespace seabreeze {
         virtual ~OBPWifiConfigurationProtocol();
 
         /* Inherited from OBPWifiConfigurationProtocolInterface */
-        
+
         virtual unsigned char getMode(const Bus &bus, unsigned char interfaceIndex);
         virtual void setMode(const Bus &bus, unsigned char interfaceIndex, unsigned char mode);
         virtual unsigned char getSecurityType(const Bus &bus, unsigned char interfaceIndex);

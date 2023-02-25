@@ -63,4 +63,3 @@ unsigned long STSAcquisitionDelayFeature::getAcquisitionDelayMinimumMicroseconds
             const Protocol &protocol, const Bus &bus) {
     return STS_ACQUISITION_DELAY_MINIMUM_USEC;
 }
-

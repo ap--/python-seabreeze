@@ -44,17 +44,17 @@ namespace seabreeze {
     public:
         ProgrammableSaturationFeatureImpl(std::vector<ProtocolHelper *> helpers);
         virtual ~ProgrammableSaturationFeatureImpl();
-        
+
         virtual bool initialize(const Protocol &protocol, const Bus &bus);
-        
+
         virtual FeatureFamily getFeatureFamily();
-        
+
     protected:
         /* Inherited from ProgrammableSaturationFeatureBase */
         virtual unsigned int getSaturation(const Protocol &protocol,
                 const Bus &bus);
     };
-    
+
 } /* end namespace seabreeze */
 
 #endif /* PROGRAMMABLESATURATIONFEATUREIMPL_H */

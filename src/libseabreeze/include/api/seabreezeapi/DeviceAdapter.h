@@ -84,7 +84,7 @@ namespace seabreeze {
 
             /* Get a string that describes the type of device */
             int getDeviceType(int *errorCode, char *buffer, unsigned int maxLength);
-            
+
             /* Get a usb endpoint for the device according to the enumerator */
             /*  endpointType. A 0 is returned if the endpoint requested is not in use. */
             unsigned char getDeviceEndpoint(int *errorCode, usbEndpointType anEndpointType);
@@ -96,7 +96,7 @@ namespace seabreeze {
                     int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
             int rawUSBBusAccessWrite(long featureID,
                     int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint);
-                    
+
             /* Get one or more serial number features */
             int getNumberOfSerialNumberFeatures();
             int getSerialNumberFeatures(long *buffer, int maxFeatures);
@@ -131,7 +131,7 @@ namespace seabreeze {
             void binningSetDefaultPixelBinningFactor(long spectrometerFeatureID, int *errorCode);
             unsigned char binningGetDefaultPixelBinningFactor(long spectrometerFeatureID, int *errorCode);
             unsigned char binningGetMaxPixelBinningFactor(long spectrometerFeatureID, int *errorCode);
-            
+
             /* Get one or more TEC features */
             int getNumberOfThermoElectricFeatures();
             int getThermoElectricFeatures(long *buffer, int maxFeatures);
@@ -151,7 +151,7 @@ namespace seabreeze {
             float irradCalibrationReadCollectionArea(long featureID, int *errorCode);
             void irradCalibrationWriteCollectionArea(long featureID,
                     int *errorCode, float area);
-                    
+
             /* Get one or more ethernet configuration features */
             int getNumberOfEthernetConfigurationFeatures();
             int getEthernetConfigurationFeatures(long *buffer, int maxFeatures);
@@ -159,7 +159,7 @@ namespace seabreeze {
             void ethernetConfiguration_Set_MAC_Address(long featureID, int *errorCode, unsigned char interfaceIndex, const unsigned char macAddress[6]);
             unsigned char ethernetConfiguration_Get_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex);
             void ethernetConfiguration_Set_GbE_Enable_Status(long featureID, int *errorCode, unsigned char interfaceIndex, unsigned char enableStatus);
-             
+
 			/* Get one or more multicast features */
 			int getNumberOfMulticastFeatures();
 			int getMulticastFeatures(long *buffer, int maxFeatures);
@@ -270,7 +270,7 @@ namespace seabreeze {
             int getNonlinearityCoeffsFeatures(long *buffer, int maxFeatures);
             int nonlinearityCoeffsGet(long featureID, int *errorCode,
                     double *buffer, int bufferLength);
-                    
+
             /* Get one or more temperature features */
             int getNumberOfTemperatureFeatures();
             int getTemperatureFeatures(long *buffer, int maxFeatures);
@@ -299,7 +299,7 @@ namespace seabreeze {
             unsigned char spectrumProcessingBoxcarWidthGet(long spectrumProcessingFeatureID, int *errorCode);
             void spectrumProcessingBoxcarWidthSet(long featureID, int *errorCode, unsigned char boxcarWidth);
             void spectrumProcessingScansToAverageSet(long featureID, int *errorCode, unsigned short int scansToAverage);
-                                                   
+
             /* Get one or more optical bench features */
             int getNumberOfOpticalBenchFeatures();
             int getOpticalBenchFeatures(long *buffer, int maxFeatures);
@@ -311,7 +311,7 @@ namespace seabreeze {
             int opticalBenchGetFilter(long opticalBenchFeatureID, int *errorCode, char *buffer, int bufferLength);
             int opticalBenchGetGrating(long opticalBenchFeatureID, int *errorCode, char *buffer, int bufferLength);
 
-            
+
             /* Get one or more stray light coefficients features */
             int getNumberOfStrayLightCoeffsFeatures();
             int getStrayLightCoeffsFeatures(long *buffer, int maxFeatures);
@@ -336,7 +336,7 @@ namespace seabreeze {
 			void fastBufferSetBufferingEnable(long featureID, int *errorCode, unsigned char isEnabled);
 			unsigned int fastBufferGetConsecutiveSampleCount(long featureID, int *errorCode);
 			void fastBufferSetConsecutiveSampleCount(long featureID, int *errorCode, unsigned int consecutiveSampleCount);
-			
+
             /* Get one or more acquisition delay features */
             int getNumberOfAcquisitionDelayFeatures();
             int getAcquisitionDelayFeatures(long *buffer, int maxFeatures);
@@ -387,7 +387,7 @@ namespace seabreeze {
             std::vector<AcquisitionDelayFeatureAdapter *> acquisitionDelayFeatures;
 			std::vector<gpioFeatureAdapter *> gpioFeatures;
 			std::vector<I2CMasterFeatureAdapter *> i2cMasterFeatures;
-            
+
             RawUSBBusAccessFeatureAdapter *getRawUSBBusAccessFeatureByID(long featureID);
             SerialNumberFeatureAdapter *getSerialNumberFeatureByID(long featureID);
             SpectrometerFeatureAdapter *getSpectrometerFeatureByID(long featureID);
@@ -422,4 +422,3 @@ namespace seabreeze {
 }
 
 #endif
-

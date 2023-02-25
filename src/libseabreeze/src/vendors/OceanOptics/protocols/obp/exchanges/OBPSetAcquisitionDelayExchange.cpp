@@ -61,4 +61,3 @@ void OBPSetAcquisitionDelayExchange::setAcquisitionDelayMicros(
         this->payload[i] = cptr[i];
     }
 }
-

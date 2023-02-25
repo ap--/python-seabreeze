@@ -44,4 +44,3 @@ OBPGetOpticalDarkPixelRangesExchange::OBPGetOpticalDarkPixelRangesExchange() {
 OBPGetOpticalDarkPixelRangesExchange::~OBPGetOpticalDarkPixelRangesExchange() {
 
 }
-

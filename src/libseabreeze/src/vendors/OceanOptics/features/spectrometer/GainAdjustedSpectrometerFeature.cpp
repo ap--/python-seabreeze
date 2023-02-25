@@ -65,11 +65,11 @@ unsigned int GainAdjustedSpectrometerFeature::getSaturationLevel() {
 bool GainAdjustedSpectrometerFeature::initialize(const Protocol &proto, const Bus &bus) {
 
     bool result = this->saturation->initialize(proto, bus);
-	
-    
+
+
     if(false == result) {
         return false;
     }
-    
+
     return OOISpectrometerFeature::initialize(proto, bus);
 }

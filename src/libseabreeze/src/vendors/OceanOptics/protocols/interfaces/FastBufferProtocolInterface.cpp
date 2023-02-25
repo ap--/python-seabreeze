@@ -40,4 +40,3 @@ FastBufferProtocolInterface::FastBufferProtocolInterface(Protocol *protocol)
 FastBufferProtocolInterface::~FastBufferProtocolInterface() {
 
 }
-

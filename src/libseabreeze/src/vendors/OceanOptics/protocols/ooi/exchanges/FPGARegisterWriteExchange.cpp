@@ -35,15 +35,15 @@
 using namespace seabreeze;
 using namespace seabreeze::ooiProtocol;
 
-FPGARegisterWriteExchange::FPGARegisterWriteExchange(byte address, unsigned short value) {
+FPGARegisterWriteExchange::FPGARegisterWriteExchange(unsigned char address, unsigned short value) {
     this->hints->push_back(new ControlHint());
     this->buffer->resize(4);
     this->length = 4;
     this->direction = Transfer::TO_DEVICE;
     buffer->at(0) = OpCodes::OP_WRITE_REGISTER;
     buffer->at(1) = address;
-    buffer->at(2) = (byte) ( value       & 0xff); // lsb
-    buffer->at(3) = (byte) ((value >> 8) & 0xff); // msb
+    buffer->at(2) = (unsigned char) ( value       & 0xff); // lsb
+    buffer->at(3) = (unsigned char) ((value >> 8) & 0xff); // msb
 
     // TODO: future devices may have 32-bit registers, requiring larger buffers
 }

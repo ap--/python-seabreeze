@@ -56,7 +56,7 @@ SerialNumberEEPROMSlotFeature::~SerialNumberEEPROMSlotFeature() {
 string *SerialNumberEEPROMSlotFeature::readSerialNumber(const Protocol &protocol,
         const Bus &bus) {
 
-    vector<byte> *data;
+    vector<unsigned char> *data;
 
     /* Slot zero has the serial number as an ASCII string. */
     try {
@@ -67,7 +67,7 @@ string *SerialNumberEEPROMSlotFeature::readSerialNumber(const Protocol &protocol
     }
 
     string *retval = new string();
-    vector<byte>::iterator iter;
+    vector<unsigned char>::iterator iter;
     /* This is probably not the most efficient way to copy
      * from a vector of bytes into a string, but at least
      * this way issues of string encoding should be

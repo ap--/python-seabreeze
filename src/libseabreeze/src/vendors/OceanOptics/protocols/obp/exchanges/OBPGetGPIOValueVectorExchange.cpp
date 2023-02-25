@@ -38,7 +38,7 @@ using namespace seabreeze::oceanBinaryProtocol;
 OBPGetGPIOValueVectorExchange::OBPGetGPIOValueVectorExchange() {
 	this->messageType = OBPMessageTypes::OBP_GET_GPIO_VALUE_VECTOR;
     this->hints->push_back(new OBPControlHint());
-	this->payload.resize(0); 
+	this->payload.resize(0);
 }
 
 

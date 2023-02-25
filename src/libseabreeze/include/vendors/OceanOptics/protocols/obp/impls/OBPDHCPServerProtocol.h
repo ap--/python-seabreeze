@@ -44,7 +44,7 @@ namespace seabreeze {
 
         /* Inherited from OBPDHCPServerProtocolInterface */
         virtual void getServerAddress(const Bus &bus, unsigned char interfaceIndex, std::vector<unsigned char> *serverAddress, unsigned char *netMask);
-        virtual void setServerAddress(const Bus &bus, unsigned char interfaceIndex, const std::vector<byte> macAddress, unsigned char netMask);
+        virtual void setServerAddress(const Bus &bus, unsigned char interfaceIndex, const std::vector<unsigned char> macAddress, unsigned char netMask);
         virtual unsigned char getServerEnableStatus(const Bus &bus, unsigned char interfaceIndex);
         virtual void setServerEnableStatus(const Bus &bus, unsigned char interfaceIndex, unsigned char enableStatue);
 

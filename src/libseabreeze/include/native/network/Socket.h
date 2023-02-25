@@ -40,32 +40,32 @@
 #include <string>
 
 namespace seabreeze {
-    
+
     class Socket {
     public:
         static Socket *create();
-        
+
         virtual ~Socket();
-        
+
         virtual void connect(Inet4Address &addr, int port) = 0;
         virtual void connect(const std::string host, int port) = 0;
-        
+
         virtual void close() = 0;
         virtual bool isClosed() = 0;
         virtual bool isBound() = 0;
-        
+
         /* Socket options */
         virtual int getSOLinger() = 0;
         virtual void setSOLinger(bool enable, int linger) = 0;
         virtual unsigned long getReadTimeoutMillis() = 0;
         virtual void setReadTimeoutMillis(unsigned long timeout) = 0;
-        
+
         /* Data transfer */
         virtual int read(unsigned char *buffer, unsigned long length) = 0;
         virtual int write(const unsigned char *buffer, unsigned long length) = 0;
-        
+
     };
-    
+
     /* Default implementation for (otherwise) pure virtual destructor */
     inline Socket::~Socket() {}
 }

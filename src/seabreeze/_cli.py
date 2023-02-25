@@ -18,31 +18,31 @@ Request implementing the functionality.
 
 author: Andreas Poehlmann
 """
-import importlib
 import itertools
 import operator
+from importlib import import_module
+
+from seabreeze.types import SeaBreezeBackend
 
 
-def ls():
+def ls() -> None:
     """INTERNAL ONLY: print connected spectrometers"""
     connected = []
     for backend in ("cseabreeze", "pyseabreeze"):
-        # noinspection PyBroadException
         try:
-            sb_backend = importlib.import_module(f"seabreeze.{backend}")
-            api = sb_backend.SeaBreezeAPI()
-            try:
-                devices = api.list_devices()
-                for d in devices:
-                    # noinspection PyProtectedMember
-                    connected.append((d.model, d.serial_number, sb_backend._backend_))
-            finally:
-                api.shutdown()
-        except Exception:
-            pass
+            # noinspection PyTypeChecker,PydanticTypeChecker
+            sb_backend: SeaBreezeBackend = import_module(f"seabreeze.{backend}")
+        except ImportError:
+            continue
+
+        api = sb_backend.SeaBreezeAPI()
+        try:
+            devices = api.list_devices()
+            for d in devices:
+                connected.append((d.model, d.serial_number, sb_backend._backend_))
         finally:
-            # noinspection PyUnusedLocal
-            sb_backend = None
+            api.shutdown()
+            del sb_backend
 
     key_func = operator.itemgetter(0, 1)  # sort by (model, serial)
     connected = sorted(connected, key=key_func)

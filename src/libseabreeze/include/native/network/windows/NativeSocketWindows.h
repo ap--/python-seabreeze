@@ -42,22 +42,22 @@ namespace seabreeze {
     public:
         NativeSocketWindows();
         virtual ~NativeSocketWindows();
-        
+
         virtual void connect(Inet4Address &addr, int port);
         virtual void connect(const std::string hostname, int port);
-        
+
         virtual void close();
         virtual bool isClosed();
         virtual bool isBound();
-        
+
         virtual int getSOLinger();
         virtual void setSOLinger(bool enable, int linger);
         virtual unsigned long getReadTimeoutMillis();
         virtual void setReadTimeoutMillis(unsigned long timeout);
-        
+
         virtual int read(unsigned char *buffer, unsigned long length);
         virtual int write(const unsigned char *buffer, unsigned long length);
-        
+
     private:
         SOCKET sock;
         bool bound;

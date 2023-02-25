@@ -33,7 +33,7 @@
 #define USBENDPOINTTYPES_H
 
 // usb endpoints are associated with a particular device.
-typedef enum usbEndpointType { 
+typedef enum usbEndpointType {
     kEndpointTypePrimaryOut, // slow speed
     kEndpointTypePrimaryIn,  // slow speed
     kEndpointTypeSecondaryOut, // could be high speed

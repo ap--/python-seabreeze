@@ -35,11 +35,11 @@ using namespace api;
 using namespace std;
 
 ProgrammableSaturationFeature::ProgrammableSaturationFeature() {
-    
+
 }
 
 ProgrammableSaturationFeature::~ProgrammableSaturationFeature() {
-    
+
 }
 
 FeatureFamily ProgrammableSaturationFeature::getFeatureFamily() {

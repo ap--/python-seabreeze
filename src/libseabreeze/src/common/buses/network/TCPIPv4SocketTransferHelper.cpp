@@ -42,12 +42,12 @@ TCPIPv4SocketTransferHelper::~TCPIPv4SocketTransferHelper() {
      */
 }
 
-int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
+int TCPIPv4SocketTransferHelper::receive(vector<unsigned char> &buffer,
         unsigned int length) {
-    
+
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];
     unsigned int bytesRead = 0;
-    
+
     /* TODO: There should be a couple alternatives for this.  One should
      * poll more or less indefinitely.  The other should do a single read
      * attempt and return, which allows the Protocol layer to decide what
@@ -74,12 +74,12 @@ int TCPIPv4SocketTransferHelper::receive(vector<byte> &buffer,
     return bytesRead;
 }
 
-int TCPIPv4SocketTransferHelper::send(const vector<byte> &buffer,
+int TCPIPv4SocketTransferHelper::send(const vector<unsigned char> &buffer,
         unsigned int length) const {
-    
+
     unsigned char *rawBuffer = (unsigned char *)&buffer[0];
     unsigned int written = 0;
-    
+
     while(written < length) {
         /* This may throw a BusTransferException.  This needs to be dealt with
          * by the caller.

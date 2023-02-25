@@ -35,7 +35,7 @@
 using namespace seabreeze;
 using namespace seabreeze::oceanBinaryProtocol;
 
-OBPGetNetworkInterfaceConnectionTypeExchange::OBPGetNetworkInterfaceConnectionTypeExchange() 
+OBPGetNetworkInterfaceConnectionTypeExchange::OBPGetNetworkInterfaceConnectionTypeExchange()
 {
     this->messageType = OBPMessageTypes::OBP_GET_INTERFACE_CONNECTION_INFO;
 
@@ -49,7 +49,7 @@ void OBPGetNetworkInterfaceConnectionTypeExchange::setInterfaceIndex(unsigned ch
 	this->payload[0] = interfaceIndex;
 }
 
-OBPGetNetworkInterfaceConnectionTypeExchange::~OBPGetNetworkInterfaceConnectionTypeExchange() 
+OBPGetNetworkInterfaceConnectionTypeExchange::~OBPGetNetworkInterfaceConnectionTypeExchange()
 {
 
 }

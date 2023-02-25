@@ -101,7 +101,6 @@ class _SeaBreezeDeviceMeta(type):
         return super().__new__(mcs, name, bases, attr_dict)
 
     def __init__(cls, name: str, bases: tuple[Any], attr_dict: dict[str, Any]) -> None:
-
         if name != "SeaBreezeDevice":
             # > model name
             model_name = getattr(cls, "_model_name")
@@ -114,7 +113,6 @@ class _SeaBreezeDeviceMeta(type):
     def _extract_transform_classes(
         model_name: str, class_name: str, attr_dict: dict[str, Any]
     ) -> tuple[type[PySeaBreezeTransport[Any]], ...]:
-
         visited_attrs = set()
         transport_classes = []
         try:
@@ -164,7 +162,6 @@ class _SeaBreezeDeviceMeta(type):
     def _extract_feature_classes(
         model_name: str, class_name: str, attr_dict: dict[str, Any]
     ) -> dict[str, list[type[SeaBreezeFeature]]]:
-
         visited_attrs = set()
         feature_classes: defaultdict[str, list[type[SeaBreezeFeature]]] = defaultdict(
             list
@@ -301,7 +298,6 @@ DT = TypeVar("DT", bound="SeaBreezeDevice")
 
 
 class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
-
     # internal attribute
     _model_name = None
     _serial_number = "?"
@@ -481,7 +477,6 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
 # ========================
 #
 class USB2000PLUS(SeaBreezeDevice):
-
     model_name = "USB2000PLUS"
 
     # communication config
@@ -534,7 +529,6 @@ class USB2000PLUS(SeaBreezeDevice):
 
 
 class FLAMES(USB2000PLUS):
-
     model_name = "FLAMES"
 
     # spectrometer config
@@ -560,7 +554,6 @@ class FLAMES(USB2000PLUS):
 
 
 class USB2000(SeaBreezeDevice):
-
     model_name = "USB2000"
 
     # communication config
@@ -588,7 +581,6 @@ class USB2000(SeaBreezeDevice):
 
 
 class HR2000(SeaBreezeDevice):
-
     model_name = "HR2000"
 
     # communication config
@@ -616,7 +608,6 @@ class HR2000(SeaBreezeDevice):
 
 
 class HR4000(SeaBreezeDevice):
-
     model_name = "HR4000"
 
     # communication config
@@ -648,7 +639,6 @@ class HR4000(SeaBreezeDevice):
 
 
 class HR2000PLUS(SeaBreezeDevice):
-
     model_name = "HR2000PLUS"
 
     # communication config
@@ -680,7 +670,6 @@ class HR2000PLUS(SeaBreezeDevice):
 
 
 class USB650(SeaBreezeDevice):
-
     model_name = "USB650"
 
     # communication config
@@ -709,7 +698,6 @@ class USB650(SeaBreezeDevice):
 
 
 class QE65000(SeaBreezeDevice):
-
     model_name = "QE65000"
 
     # communication config
@@ -741,7 +729,6 @@ class QE65000(SeaBreezeDevice):
 
 
 class USB4000(SeaBreezeDevice):
-
     model_name = "USB4000"
 
     # communication config
@@ -775,7 +762,6 @@ class USB4000(SeaBreezeDevice):
 
 
 class NIRQUEST512(SeaBreezeDevice):
-
     model_name = "NIRQUEST512"
 
     # communication config
@@ -807,7 +793,6 @@ class NIRQUEST512(SeaBreezeDevice):
 
 
 class NIRQUEST256(SeaBreezeDevice):
-
     model_name = "NIRQUEST256"
 
     # communication config
@@ -839,7 +824,6 @@ class NIRQUEST256(SeaBreezeDevice):
 
 
 class MAYA2000PRO(SeaBreezeDevice):
-
     model_name = "MAYA2000PRO"
 
     # communication config
@@ -871,7 +855,6 @@ class MAYA2000PRO(SeaBreezeDevice):
 
 
 class MAYA2000(SeaBreezeDevice):
-
     model_name = "MAYA2000"
 
     # communication config
@@ -901,7 +884,6 @@ class MAYA2000(SeaBreezeDevice):
 
 
 class TORUS(SeaBreezeDevice):
-
     model_name = "TORUS"
 
     # communication config
@@ -933,7 +915,6 @@ class TORUS(SeaBreezeDevice):
 
 
 class APEX(SeaBreezeDevice):
-
     model_name = "APEX"
 
     # communication config
@@ -965,7 +946,6 @@ class APEX(SeaBreezeDevice):
 
 
 class MAYALSL(SeaBreezeDevice):
-
     model_name = "MAYALSL"
 
     # communication config
@@ -997,7 +977,6 @@ class MAYALSL(SeaBreezeDevice):
 
 
 class JAZ(SeaBreezeDevice):
-
     model_name = "JAZ"
 
     # communication config
@@ -1027,7 +1006,6 @@ class JAZ(SeaBreezeDevice):
 
 
 class STS(SeaBreezeDevice):
-
     model_name = "STS"
 
     # communication config
@@ -1056,7 +1034,6 @@ class STS(SeaBreezeDevice):
 
 
 class QEPRO(SeaBreezeDevice):
-
     model_name = "QEPRO"
 
     # communication config
@@ -1085,7 +1062,6 @@ class QEPRO(SeaBreezeDevice):
 
 
 class VENTANA(SeaBreezeDevice):
-
     model_name = "VENTANA"
 
     # communication config
@@ -1112,7 +1088,6 @@ class VENTANA(SeaBreezeDevice):
 
 
 class SPARK(SeaBreezeDevice):
-
     model_name = "SPARK"
 
     # communication config
@@ -1141,7 +1116,6 @@ class SPARK(SeaBreezeDevice):
 
 
 class HDX(SeaBreezeDevice):
-
     model_name = "HDX"
 
     # communication config
@@ -1173,7 +1147,6 @@ class HDX(SeaBreezeDevice):
 
 
 class ADC1000USB(SeaBreezeDevice):
-
     model_name = "ADC1000-USB"
 
     # communication config

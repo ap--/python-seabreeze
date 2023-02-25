@@ -1,20 +1,26 @@
 name: test build deploy
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.*
+  pull_request: {}
 
 jobs:
   tests:
     name: Run py ${{ matrix.python-version }} tests
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 5
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup libusb-dev
@@ -33,11 +39,11 @@ jobs:
     needs: [tests]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
       - name: Setup libusb-dev
@@ -50,7 +56,7 @@ jobs:
         run: python -m pip install build --user
       - name: Build the source tarball
         run: python -m build --sdist .
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: sdist
           path: ./dist
@@ -62,20 +68,22 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os: [ubuntu-20.04, windows-2019, macOS-10.15]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       - name: Install cibuildwheel
-        run: python -m pip install "cibuildwheel==2.3.*"
+        run: python -m pip install cibuildwheel
       - name: Build wheels
         env:
           SEABREEZE_DISABLE_FH4: "yes"
         run: python -m cibuildwheel --output-dir wheelhouse
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: ./wheelhouse/*.whl
@@ -86,17 +94,17 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: sdist
           path: ./dist
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: wheels
           path: ./dist
       # push all tagged versions to pypi.org
       - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}

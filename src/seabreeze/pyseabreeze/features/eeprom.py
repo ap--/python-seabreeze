@@ -16,6 +16,16 @@ class SeaBreezeEEPROMFeature(SeaBreezeFeature):
     def eeprom_read_slot(self, slot_number: int, strip_zero_bytes: bool = False) -> str:
         raise NotImplementedError("implement in derived class")
 
+    @classmethod
+    def _func_eeprom_read_slot(
+        cls,
+        protocol: PySeaBreezeProtocol,
+        slot_number: int,
+        *,
+        strip_zero_bytes: bool = False,
+    ) -> str:
+        raise NotImplementedError("implement in derived class")
+
 
 # OOI spectrometer implementation
 # ===============================

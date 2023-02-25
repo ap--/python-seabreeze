@@ -103,7 +103,7 @@ class SeaBreezeFeature(Protocol):
         ...
 
 
-class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
+class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature, Protocol):
     def set_delay_microseconds(self, delay_usec: int) -> None:
         ...
 
@@ -122,7 +122,7 @@ class SeaBreezeAcquisitionDelayFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
+class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature, Protocol):
     def set_enable(self, strobe_enable: bool) -> None:
         ...
 
@@ -130,7 +130,7 @@ class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeDataBufferFeature(SeaBreezeFeature):
+class SeaBreezeDataBufferFeature(SeaBreezeFeature, Protocol):
     def clear(self) -> None:
         ...
 
@@ -153,7 +153,7 @@ class SeaBreezeDataBufferFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
+class SeaBreezeDHCPServerFeature(SeaBreezeFeature, Protocol):
     def get_address(self, interface_index: int) -> str:
         ...
 
@@ -167,12 +167,12 @@ class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeEEPROMFeature(SeaBreezeFeature):
+class SeaBreezeEEPROMFeature(SeaBreezeFeature, Protocol):
     def eeprom_read_slot(self, slot_number: int, strip_zero_bytes: bool = False) -> str:
         ...
 
 
-class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
+class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature, Protocol):
     def get_mac_address(self, interface_index: int) -> str:
         ...
 
@@ -186,7 +186,7 @@ class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeFastBufferFeature(SeaBreezeFeature):
+class SeaBreezeFastBufferFeature(SeaBreezeFeature, Protocol):
     def get_buffering_enable(self) -> bool:
         ...
 
@@ -200,7 +200,7 @@ class SeaBreezeFastBufferFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeGPIOFeature(SeaBreezeFeature):
+class SeaBreezeGPIOFeature(SeaBreezeFeature, Protocol):
     modes: dict[str, int]
 
     def get_number_of_gpio_pins(self) -> int:
@@ -245,7 +245,7 @@ class SeaBreezeGPIOFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
+class SeaBreezeI2CMasterFeature(SeaBreezeFeature, Protocol):
     def get_number_of_buses(self) -> int:
         ...
 
@@ -258,7 +258,7 @@ class SeaBreezeI2CMasterFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
+class SeaBreezeIntrospectionFeature(SeaBreezeFeature, Protocol):
     def number_of_pixels(self) -> int:
         ...
 
@@ -272,7 +272,7 @@ class SeaBreezeIntrospectionFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeIPv4Feature(SeaBreezeFeature):
+class SeaBreezeIPv4Feature(SeaBreezeFeature, Protocol):
     def get_dhcp_enable_state(self, interface_index: int) -> bool:
         ...
 
@@ -300,7 +300,7 @@ class SeaBreezeIPv4Feature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeIrradCalFeature(SeaBreezeFeature):
+class SeaBreezeIrradCalFeature(SeaBreezeFeature, Protocol):
     def has_collection_area(self) -> bool:
         ...
 
@@ -317,7 +317,7 @@ class SeaBreezeIrradCalFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeLightSourceFeature(SeaBreezeFeature):
+class SeaBreezeLightSourceFeature(SeaBreezeFeature, Protocol):
     def get_count(self) -> int:
         ...
 
@@ -340,7 +340,7 @@ class SeaBreezeLightSourceFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeMulticastFeature(SeaBreezeFeature):
+class SeaBreezeMulticastFeature(SeaBreezeFeature, Protocol):
     def get_multicast_enable_state(self, interface_index: int) -> bool:
         ...
 
@@ -350,7 +350,7 @@ class SeaBreezeMulticastFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
+class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature, Protocol):
     def get_number_of_network_interfaces(self) -> int:
         ...
 
@@ -372,12 +372,12 @@ class SeaBreezeNetworkConfigurationFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
+class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature, Protocol):
     def get_nonlinearity_coefficients(self) -> list[float]:
         ...
 
 
-class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
+class SeaBreezeOpticalBenchFeature(SeaBreezeFeature, Protocol):
     def get_fiber_diameter_microns(self) -> int:
         ...
 
@@ -400,7 +400,7 @@ class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezePixelBinningFeature(SeaBreezeFeature):
+class SeaBreezePixelBinningFeature(SeaBreezeFeature, Protocol):
     def set_binning_factor(self, factor: int) -> None:
         ...
 
@@ -422,7 +422,7 @@ class SeaBreezePixelBinningFeature(SeaBreezeFeature):
     default_binning_factor: int
 
 
-class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
+class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature, Protocol):
     def raw_usb_write(
         self, data: bytes, endpoint: Literal["primary_out", "secondary_out"]
     ) -> None:
@@ -436,7 +436,7 @@ class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeRevisionFeature(SeaBreezeFeature):
+class SeaBreezeRevisionFeature(SeaBreezeFeature, Protocol):
     def hardware_revision(self) -> str:
         ...
 
@@ -444,12 +444,12 @@ class SeaBreezeRevisionFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeShutterFeature(SeaBreezeFeature):
+class SeaBreezeShutterFeature(SeaBreezeFeature, Protocol):
     def set_shutter_open(self, state: bool) -> None:
         ...
 
 
-class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
+class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature, Protocol):
     def get_boxcar_width(self) -> int:
         ...
 
@@ -467,17 +467,17 @@ class SeaBreezeSpectrumProcessingFeature(SeaBreezeFeature):
     scans_to_average: int
 
 
-class SeaBreezeStrayLightCoefficientsFeature(SeaBreezeFeature):
+class SeaBreezeStrayLightCoefficientsFeature(SeaBreezeFeature, Protocol):
     def get_stray_light_coefficients(self) -> list[float]:
         ...
 
 
-class SeaBreezeStrobeLampFeature(SeaBreezeFeature):
+class SeaBreezeStrobeLampFeature(SeaBreezeFeature, Protocol):
     def enable_lamp(self, state: bool) -> None:
         ...
 
 
-class SeaBreezeTemperatureFeature(SeaBreezeFeature):
+class SeaBreezeTemperatureFeature(SeaBreezeFeature, Protocol):
     def count_temperatures(self) -> int:
         ...
 
@@ -488,7 +488,7 @@ class SeaBreezeTemperatureFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
+class SeaBreezeThermoElectricFeature(SeaBreezeFeature, Protocol):
     def read_temperature_degrees_celsius(self) -> float:
         ...
 
@@ -499,7 +499,7 @@ class SeaBreezeThermoElectricFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
+class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature, Protocol):
     def get_wifi_mode(self, interface_index: int) -> int:
         ...
 
@@ -522,7 +522,7 @@ class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         ...
 
 
-class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
+class SeaBreezeSpectrometerFeature(SeaBreezeFeature, Protocol):
     def set_trigger_mode(self, mode: int) -> None:
         ...
 

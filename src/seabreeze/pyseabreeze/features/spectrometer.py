@@ -10,6 +10,7 @@ import numpy
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.exceptions import SeaBreezeNotSupported
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPROMFeature
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureADC
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
 from seabreeze.pyseabreeze.protocol import ADCProtocol
@@ -44,6 +45,7 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     def get_electric_dark_pixel_indices(self) -> list[int]:
         raise NotImplementedError("implement in derived class")
 
+    @property
     def _spectrum_length(self) -> int:
         raise NotImplementedError("implement in derived class")
 
@@ -66,7 +68,7 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 # =========================================
 #
 class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
-    _required_protocol_cls = OOIProtocol
+    _required_protocol_cls: type[PySeaBreezeProtocol] = OOIProtocol
     _required_features = ("eeprom",)
     _required_kwargs = (
         "dark_pixel_indices",
@@ -80,7 +82,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
     )
 
     _normalization_value = 1.0
-    _eeprom_cls = SeaBreezeEEPromFeatureOOI
+    _eeprom_cls: type[SeaBreezeEEPROMFeature] = SeaBreezeEEPromFeatureOOI
 
     # config
     _dark_pixel_indice: tuple[int, ...]
@@ -435,7 +437,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
             + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00101100, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore
 
     def get_fast_buffer_spectrum(self) -> Any:
         raise SeaBreezeNotSupported(
@@ -579,7 +581,7 @@ class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
             + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00100928, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
@@ -608,7 +610,7 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
         # the message type is different than the default defined in the protocol,
         # requires addition of a new message type in protocol to work
         datastring = self.protocol.query(0x00101000, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)
+        return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore
 
 
 class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
@@ -618,7 +620,7 @@ class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
         ret = numpy.array(
-            struct.unpack("<" + "H" * self._spectrum_length, tmp),
+            struct.unpack("<" + "H" * self._spectrum_length, tmp[:]),
             dtype=numpy.double,
         )
         return ret * self._normalization_value

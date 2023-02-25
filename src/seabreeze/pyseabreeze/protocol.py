@@ -13,6 +13,7 @@ import warnings
 import weakref
 from collections.abc import Callable
 
+from seabreeze.pyseabreeze.config import config
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 
 class ProtocolInterface:
@@ -449,10 +450,10 @@ class OBPProtocol(ProtocolInterface):
 
         data = struct.unpack(self.OBP.HEADER_FMT, header)
 
-        #if data[0] != self.OBP.HEADER_START_BYTES:
-         #   raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
-        #if data[1] != self.OBP.HEADER_PROTOCOL_VERSION:
-         #   raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
+        if data[0] != self.OBP.HEADER_START_BYTES and config.obp_protocol_checks:
+            raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
+        if data[1] != self.OBP.HEADER_PROTOCOL_VERSION and config.obp_protocol_checks:
+            raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
 
         flags = data[2]
         if flags == 0:
@@ -465,14 +466,12 @@ class OBPProtocol(ProtocolInterface):
             pass  # TODO: only the host should be able to set this?
         if (flags & self.OBP.FLAG_NACK) or (flags & self.OBP.FLAG_HW_EXCEPTION):
             error = data[3]
-            if error != 0:  # != SUCCESS
-                pass
-                #raise SeaBreezeError(self.OBP.ERROR_CODES[error])
+            if error != 0 and config.obp_protocol_checks:  # != SUCCESS
+                raise SeaBreezeError(self.OBP.ERROR_CODES[error])
             else:
                 pass  # TODO: should we do something here?
-        if flags & self.OBP.FLAG_PROTOCOL_DEPRECATED:
-            pass
-            #raise SeaBreezeError("Protocol deprecated?!?")
+        if flags & self.OBP.FLAG_PROTOCOL_DEPRECATED and config.obp_protocol_checks:
+            raise SeaBreezeError("Protocol deprecated?!?")
 
         # msg_type = data[4]
         # regarding = data[5]
@@ -481,9 +480,8 @@ class OBPProtocol(ProtocolInterface):
         if checksum_type not in [
             self.OBP.CHECKSUM_TYPE_NONE,
             self.OBP.CHECKSUM_TYPE_MD5,
-        ]:
-            pass
-            #raise SeaBreezeError('the checksum type is unknown: "%d"' % checksum_type)
+        ] and config.obp_protocol_checks:
+            raise SeaBreezeError('the checksum type is unknown: "%d"' % checksum_type)
 
         # immediate_length = data[8]
         # immediate_data = data[9]

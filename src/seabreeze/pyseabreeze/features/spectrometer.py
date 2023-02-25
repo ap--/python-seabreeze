@@ -10,7 +10,10 @@ import numpy
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.exceptions import SeaBreezeNotSupported
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
+from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPROMFeature
+from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureADC
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
+from seabreeze.pyseabreeze.protocol import ADCProtocol
 from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
@@ -65,7 +68,7 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 # =========================================
 #
 class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
-    _required_protocol_cls = OOIProtocol
+    _required_protocol_cls: type[PySeaBreezeProtocol] = OOIProtocol
     _required_features = ("eeprom",)
     _required_kwargs = (
         "dark_pixel_indices",
@@ -79,6 +82,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
     )
 
     _normalization_value = 1.0
+    _eeprom_cls: type[SeaBreezeEEPROMFeature] = SeaBreezeEEPromFeatureOOI
 
     # config
     _dark_pixel_indice: tuple[int, ...]
@@ -138,9 +142,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         for i in range(1, 5):
             # noinspection PyProtectedMember
             coeffs.append(
-                float(
-                    SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)
-                )
+                float(self._eeprom_cls._func_eeprom_read_slot(self.protocol, i))
             )
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
@@ -609,3 +611,19 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
         # requires addition of a new message type in protocol to work
         datastring = self.protocol.query(0x00101000, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)  # type: ignore
+
+
+class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
+    _required_protocol_cls = ADCProtocol
+    _eeprom_cls = SeaBreezeEEPromFeatureADC
+
+    def get_intensities(self) -> NDArray[np.float_]:
+        tmp = self._get_spectrum_raw()
+        # The byte order is different for some models
+        N_raw = self._spectrum_raw_length - 1
+        N_pix = self._spectrum_length
+        idx = [(i // 2) % 64 + (i % 2) * 64 + (i // 128) * 128 for i in range(N_raw)]
+        tsorted = tmp[idx]
+        ret = numpy.array(struct.unpack("<" + "H" * N_pix, tsorted), dtype=numpy.double)
+        # sorted and parsed
+        return ret * self._normalization_value

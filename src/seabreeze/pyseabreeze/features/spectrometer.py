@@ -619,8 +619,11 @@ class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
-        ret = numpy.array(
-            struct.unpack("<" + "H" * self._spectrum_length, tmp[:]),
-            dtype=numpy.double,
-        )
+        # The byte order is different for some models
+        N_raw = self._spectrum_raw_length - 1
+        N_pix = self._spectrum_length
+        idx = [(i // 2) % 64 + (i % 2) * 64 + (i // 128) * 128 for i in range(N_raw)]
+        tsorted = tmp[idx]
+        ret = numpy.array(struct.unpack("<" + "H" * N_pix, tsorted), dtype=numpy.double)
+        # sorted and parsed
         return ret * self._normalization_value

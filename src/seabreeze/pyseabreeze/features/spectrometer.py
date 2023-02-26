@@ -183,6 +183,38 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
 
 
 class SeaBreezeSpectrometerFeatureOOI2K(SeaBreezeSpectrometerFeatureOOI):
+    def _get_spectrum_raw(self) -> NDArray[np.uint8]:
+        tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
+        self.protocol.send(0x09)
+
+        assert isinstance(
+            self.protocol.transport, USBTransport
+        ), "current impl requires USBTransport"
+
+        timeout = int(
+            self._integration_time_max * 1e-3
+            + self.protocol.transport.default_timeout_ms
+        )
+        packet_size = 64
+        for offset in range(0, self._spectrum_raw_length - 1, packet_size):
+            tmp[offset : offset + packet_size] = bytearray(
+                self.protocol.receive(
+                    size=packet_size,
+                    timeout_ms=timeout,
+                    mode=self.protocol.transport._default_read_spectrum_endpoint,
+                )
+            )
+
+        # noinspection PyProtectedMember
+        tmp[self._spectrum_raw_length - 1 :] = bytearray(
+            self.protocol.receive(
+                size=1,
+                timeout_ms=timeout,
+                mode=self.protocol.transport._default_read_spectrum_endpoint,
+            )
+        )
+        return tmp
+
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()
         # The byte order is different for some models
@@ -616,6 +648,38 @@ class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
     _required_protocol_cls = ADCProtocol
     _eeprom_cls = SeaBreezeEEPromFeatureADC
+
+    def _get_spectrum_raw(self) -> NDArray[np.uint8]:
+        tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
+        self.protocol.send(0x09)
+
+        assert isinstance(
+            self.protocol.transport, USBTransport
+        ), "current impl requires USBTransport"
+
+        timeout = int(
+            self._integration_time_max * 1e-3
+            + self.protocol.transport.default_timeout_ms
+        )
+        packet_size = 64
+        for offset in range(0, self._spectrum_raw_length - 1, packet_size):
+            tmp[offset : offset + packet_size] = bytearray(
+                self.protocol.receive(
+                    size=packet_size,
+                    timeout_ms=timeout,
+                    mode=self.protocol.transport._default_read_spectrum_endpoint,
+                )
+            )
+
+        # noinspection PyProtectedMember
+        tmp[self._spectrum_raw_length - 1 :] = bytearray(
+            self.protocol.receive(
+                size=1,
+                timeout_ms=timeout,
+                mode=self.protocol.transport._default_read_spectrum_endpoint,
+            )
+        )
+        return tmp
 
     def get_intensities(self) -> NDArray[np.float_]:
         tmp = self._get_spectrum_raw()

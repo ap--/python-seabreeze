@@ -15,6 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ...
 
+## [2.1.0] - 2023-03-28
+### Added
+- *psb* allow configuration of OBP protocol version checks
+- *psb* EXPERIMENTAL support for ADC1000-USB
+
+### Fixed
+- *repo* multiple pre-commit updates
+- *psb* fixed minor static typing issues
+- *repo* reduce CI runs on pull_requests
+
+### Changed
+- *repo* rename `master` branch to `main`
+
 ## [2.0.3] - 2022-05-09
 ### Fixed
 - *csb* fix array type in write calibration

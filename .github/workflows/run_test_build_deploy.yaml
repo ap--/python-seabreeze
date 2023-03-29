@@ -74,15 +74,20 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v4
+
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v2
         with:
-          python-version: '3.10'
-      - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel
+          platforms: all
+
       - name: Build wheels
+        uses: pypa/cibuildwheel@v2.12.1
         env:
+          CIBW_ARCHS_LINUX: x86_64 aarch64
+          CIBW_ARCHS_MACOS: x86_64 arm64
           SEABREEZE_DISABLE_FH4: "yes"
-        run: python -m cibuildwheel --output-dir wheelhouse
+
       - uses: actions/upload-artifact@v3
         with:
           name: wheels

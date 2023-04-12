@@ -482,6 +482,7 @@ class USB2000PLUS(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x101E
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -559,6 +560,7 @@ class USB2000(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1002
     usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
     usb_protocol = OOIProtocol
@@ -586,6 +588,7 @@ class HR2000(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x100A
     usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
     usb_protocol = OOIProtocol
@@ -613,6 +616,7 @@ class HR4000(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1012
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -644,6 +648,7 @@ class HR2000PLUS(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1016
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -675,6 +680,7 @@ class USB650(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1014
     usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
     usb_protocol = OOIProtocol
@@ -703,6 +709,7 @@ class QE65000(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1018
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -734,6 +741,7 @@ class USB4000(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1022
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -767,6 +775,7 @@ class NIRQUEST512(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1026
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -798,6 +807,7 @@ class NIRQUEST256(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1028
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -829,6 +839,7 @@ class MAYA2000PRO(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x102A
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -860,6 +871,7 @@ class MAYA2000(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x102C
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -889,6 +901,7 @@ class TORUS(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1040
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -920,6 +933,7 @@ class APEX(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1044
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -951,6 +965,7 @@ class MAYALSL(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1046
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -982,6 +997,7 @@ class JAZ(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x2000
     usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82)
     usb_protocol = OOIProtocol
@@ -1011,6 +1027,7 @@ class STS(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x4000
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81
@@ -1039,6 +1056,7 @@ class QEPRO(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x4004
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81
@@ -1067,6 +1085,7 @@ class VENTANA(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x5000
     usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x82)
     usb_protocol = OBPProtocol
@@ -1093,6 +1112,7 @@ class SPARK(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x4200
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81
@@ -1121,6 +1141,7 @@ class HDX(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x2003
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
@@ -1152,6 +1173,7 @@ class ADC1000USB(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x2457
     usb_product_id = 0x1004
     usb_endpoint_map = EndPointMap(ep_out=0x02, lowspeed_in=0x87, highspeed_in=0x82)
     usb_protocol = ADCProtocol
@@ -1181,6 +1203,7 @@ class SR4(SeaBreezeDevice):
 
     # communication config
     transport = (USBTransport,)
+    usb_vendor_id = 0x0999
     usb_product_id = 0x1002
     usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)
     usb_protocol = OBP2Protocol

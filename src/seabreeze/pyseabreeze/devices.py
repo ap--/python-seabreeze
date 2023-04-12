@@ -16,6 +16,7 @@ from seabreeze.pyseabreeze import features as sbf
 from seabreeze.pyseabreeze.exceptions import SeaBreezeError
 from seabreeze.pyseabreeze.features import SeaBreezeFeature
 from seabreeze.pyseabreeze.protocol import ADCProtocol
+from seabreeze.pyseabreeze.protocol import OBP2Protocol
 from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
@@ -1173,3 +1174,26 @@ class ADC1000USB(SeaBreezeDevice):
         sbf.spectrometer.SeaBreezeSpectrometerFeatureADC,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
     )
+
+
+class SR4(SeaBreezeDevice):
+    model_name = "SR4"
+
+    # communication config
+    transport = (USBTransport,)
+    usb_product_id = 0x1002
+    usb_endpoint_map = EndPointMap(ep_out=0x01, lowspeed_in=0x81)
+    usb_protocol = OBP2Protocol
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
+    integration_time_min = 6000  # ???
+    integration_time_max = 10000000  # ???
+    integration_time_base = 1
+    spectrum_num_pixel = 3648
+    spectrum_raw_length = (3648 * 2) + 32  # XXX: Metadata
+    spectrum_max_value = 65535
+    trigger_modes = TriggerMode.supported("OBP_NORMAL")
+
+    # features
+    feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureSR4,)

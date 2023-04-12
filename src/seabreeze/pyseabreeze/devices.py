@@ -415,6 +415,10 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
             # The serial is stored in slot 0
             return self.f.eeprom.eeprom_read_slot(0)
 
+        elif isinstance(protocol, OBP2Protocol):
+            serial_str = protocol.query(0x00000100).strip()
+            return serial_str.decode("utf8")
+
         elif isinstance(protocol, OBPProtocol):
             serial_len = ord(protocol.query(0x00000101))
             serial_str = protocol.query(0x00000100)[:serial_len]

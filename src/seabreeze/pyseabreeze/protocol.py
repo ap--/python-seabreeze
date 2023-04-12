@@ -592,7 +592,7 @@ class OBP2Protocol(OBPProtocol):
         code: struct.Struct(msg).pack
         for code, msg in {
             0x000_001_00: "",  # GET_SERIAL
-            0x000_001_01: "",  # GET_SERIAL_LENGTH
+            0x000_001_01: "",  # GET_SERIAL_LENGTH  ??? not sure if this works
             0x000_01C_00: "",  # GET_SPECTRUM ???
             0x000_00C_01: "<L",  # SET_ITIME_USEC
             0x000_00D_01: "<B",  # SET_TRIG_MODE

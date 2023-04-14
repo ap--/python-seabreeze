@@ -128,7 +128,10 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
             "high_speed": "highspeed_in",
             "high_speed_alt": "highspeed_in2",
         }
-        self._default_read_endpoint = "low_speed"
+        if self._endpoint_map.lowspeed_in is not None:
+            self._default_read_endpoint = "low_speed"
+        else:
+            self._default_read_endpoint = "high_speed"
         self._default_read_spectrum_endpoint = "high_speed"
         # internal state
         self._device: USBTransportHandle | None = None

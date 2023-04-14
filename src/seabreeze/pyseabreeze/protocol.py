@@ -322,7 +322,7 @@ class OBPProtocol(PySeaBreezeProtocol):
         data : str
             data returned from the spectrometer
         """
-        response = self.transport.read(size=64, timeout_ms=timeout_ms)
+        response = self.transport.read(size=None, timeout_ms=timeout_ms)
         try:
             remaining_bytes, checksum_type = self._check_incoming_message_header(
                 response[:44]

@@ -456,7 +456,12 @@ class OBPProtocol(PySeaBreezeProtocol):
         )
         return msg
 
-    def _check_incoming_message_header(self, header: bytes) -> tuple[int, int]:
+    def _check_incoming_message_header(
+        self,
+        header: bytes,
+        *,
+        _raw: bool = False,
+    ) -> tuple[int, int]:
         """check the incoming message header
 
         Parameters
@@ -478,9 +483,15 @@ class OBPProtocol(PySeaBreezeProtocol):
         data = struct.unpack(self.OBP.HEADER_FMT, header)
 
         if data[0] != self.OBP.HEADER_START_BYTES and config.obp_protocol_checks:
-            raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
+            if _raw:
+                warnings.warn(f"Header start_bytes wrong: 0x{data[0]:04x}")
+            else:
+                raise SeaBreezeError('Header start_bytes wrong: "%d"' % data[0])
         if data[1] != self.OBP.HEADER_PROTOCOL_VERSION and config.obp_protocol_checks:
-            raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
+            if _raw:
+                warnings.warn(f"Header protocol version wrong: 0x{data[1]:04x}")
+            else:
+                raise SeaBreezeError("Header protocol version wrong: %d" % data[1])
 
         flags = data[2]
         if flags == 0:
@@ -517,6 +528,9 @@ class OBPProtocol(PySeaBreezeProtocol):
         # immediate_length = data[8]
         # immediate_data = data[9]
         bytes_remaining = data[10]
+
+        if _raw:
+            return data  # type: ignore
 
         return bytes_remaining, checksum_type
 

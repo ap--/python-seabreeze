@@ -32,7 +32,7 @@ repos:
     hooks:
     -   id: mypy
         additional_dependencies: [numpy<1.22, pyusb>=1.0]
-        exclude: "^(build|docs|tests|setup.py)"
+        exclude: "^(build|docs|tests|dev|setup.py)"
 -   repo: https://github.com/asottile/pyupgrade
     rev: v3.3.1
     hooks:

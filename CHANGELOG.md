@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - *repo* build aarch64 and osx arm64 wheels
+- *psb* basic support for SR4 spectrometers
 
 ## [2.1.0] - 2023-03-28
 ### Added

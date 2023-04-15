@@ -1,8 +1,8 @@
 # udev rules file for Ocean Optics, Inc. spectrometers
 # ====================================================
 #
-# version: 2.3
-# updated: 2020-08-09
+# version: 2.4
+# updated: 2023-04-15
 # maintainer: Andreas Poehlmann <andreas@poehlmann.io>
 #
 # [info] Previous versions are missing this header.
@@ -14,6 +14,7 @@
 #   $ seabreeze_os_setup
 #
 # Changes:
+# - [2.4] added support for SR4 spectrometer
 # - added support for HDX spectrometer
 # - added support for QE-PRO class of OceanOptics spectrometers
 # - set MODE instead of group (Fedora doesn't use `plugdev`)
@@ -84,5 +85,7 @@ ATTR{idVendor}=="0547", ATTR{idProduct}=="2235", SYMLINK+="ezUSB-FX-%n", MODE:="
 ATTR{idVendor}=="04b4", ATTR{idProduct}=="8613", SYMLINK+="ezUSB-FX2-%n", MODE:="0666"
 # Ocean Insight Inc. HDX spectrometer
 ATTR{idVendor}=="2457", ATTR{idProduct}=="2003", SYMLINK+="oceanhdx-%n", MODE:="0666"
+# Ocean Insight Inc. SR4 spectrometer
+ATTR{idVendor}=="0999", ATTR{idProduct}=="1002", SYMLINK+="sr4-%n", MODE:="0666"
 
 LABEL="oceanoptics_rules_end"

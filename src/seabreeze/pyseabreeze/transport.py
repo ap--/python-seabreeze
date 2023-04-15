@@ -94,20 +94,26 @@ class USBTransportHandle:
 class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
     """implementation of the usb transport interface for spectrometers"""
 
-    _required_init_kwargs = ("usb_product_id", "usb_endpoint_map", "usb_protocol")
-    vendor_id = 0x2457
-    product_ids: dict[int, str] = {}
+    _required_init_kwargs = (
+        "usb_vendor_id",
+        "usb_product_id",
+        "usb_endpoint_map",
+        "usb_protocol",
+    )
+    vendor_product_ids: dict[tuple[int, int], str] = {}
 
     # add logging
     _log = logging.getLogger(__name__)
 
     def __init__(
         self,
+        usb_vendor_id: int,
         usb_product_id: int,
         usb_endpoint_map: EndPointMap,
         usb_protocol: type[PySeaBreezeProtocol],
     ) -> None:
         super().__init__()
+        self._vendor_id = usb_vendor_id
         self._product_id = usb_product_id
         self._endpoint_map = usb_endpoint_map
         self._protocol_cls = usb_protocol
@@ -122,7 +128,10 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
             "high_speed": "highspeed_in",
             "high_speed_alt": "highspeed_in2",
         }
-        self._default_read_endpoint = "low_speed"
+        if self._endpoint_map.lowspeed_in is not None:
+            self._default_read_endpoint = "low_speed"
+        else:
+            self._default_read_endpoint = "high_speed"
         self._default_read_spectrum_endpoint = "high_speed"
         # internal state
         self._device: USBTransportHandle | None = None
@@ -227,7 +236,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
             pyusb_devices = usb.core.find(
                 find_all=True,
                 custom_match=lambda dev: (
-                    dev.idVendor == cls.vendor_id and dev.idProduct in cls.product_ids
+                    (dev.idVendor, dev.idProduct) in cls.vendor_product_ids
                 ),
                 backend=get_pyusb_backend_from_name(name=_pyusb_backend),
             )
@@ -239,12 +248,17 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
 
     @classmethod
     def register_model(cls, model_name: str, **kwargs: Any) -> None:
+        vendor_id = kwargs.get("usb_vendor_id")
+        if not isinstance(vendor_id, int):
+            raise TypeError(f"vendor_id {vendor_id:r} not an integer")
         product_id = kwargs.get("usb_product_id")
         if not isinstance(product_id, int):
             raise TypeError(f"product_id {product_id:r} not an integer")
-        if product_id in cls.product_ids:
-            raise ValueError(f"product_id 0x{product_id:04x} already in registry")
-        cls.product_ids[product_id] = model_name
+        if (vendor_id, product_id) in cls.vendor_product_ids:
+            raise ValueError(
+                f"vendor_id:product_id {vendor_id:04x}:{product_id:04x} already in registry"
+            )
+        cls.vendor_product_ids[(vendor_id, product_id)] = model_name
 
     @classmethod
     def supported_model(cls, device: USBTransportHandle) -> str | None:
@@ -257,7 +271,9 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
         if not isinstance(device, USBTransportHandle):
             return None
         # noinspection PyUnresolvedReferences
-        return cls.product_ids[device.pyusb_device.idProduct]
+        return cls.vendor_product_ids[
+            (device.pyusb_device.idVendor, device.pyusb_device.idProduct)
+        ]
 
     @classmethod
     def specialize(cls, model_name: str, **kwargs: Any) -> type[USBTransport]:

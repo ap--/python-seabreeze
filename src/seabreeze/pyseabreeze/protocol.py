@@ -150,6 +150,66 @@ class OOIProtocol(PySeaBreezeProtocol):
         return self.receive(size=size, timeout_ms=timeout_ms, mode=mode, **kwargs)
 
 
+class _OBP:
+    """All relevant constants are stored here"""
+
+    HEADER_START_BYTES = 0xC0C1
+    HEADER_PROTOCOL_VERSION = 0x1100  # XXX: seems to be the newest protocol version
+
+    FLAG_RESPONSE_TO_REQUEST = 0x0001
+    FLAG_ACK = 0x0002
+    FLAG_REQUEST_ACK = 0x0004
+    FLAG_NACK = 0x0008
+    FLAG_HW_EXCEPTION = 0x0010
+    FLAG_PROTOCOL_DEPRECATED = 0x0020
+
+    ERROR_CODES = {
+        0: "Success (no detectable errors)",
+        1: "Invalid/unsupported protocol",
+        2: "Unknown message type",
+        3: "Bad checksum",
+        4: "Message too large",
+        5: "Payload length does not match message type",
+        6: "Payload data invalid",
+        7: "Device not ready for given message type",
+        8: "Unknown checksum type",
+        9: "Device reset unexpectedly",
+        10: "Too many buses (Commands have come from too many bus interfaces)",
+        11: "Out of memory. Failed to allocate enough space to complete request.",
+        12: "Command is valid, but desired information does not exist.",
+        13: "Int Device Error. May be unrecoverable.",
+        100: "Could not decrypt properly",
+        101: "Firmware layout invalid",
+        102: "Data packet was wrong size",
+        103: "hardware revision not compatible with firmware",
+        104: "Existing flash map not compatible with firmware",
+        255: "Operation/Response Deferred. Will take some time. Do not ACK or NACK yet.",
+    }
+
+    NO_ERROR = 0x0000
+    RESERVED = b""
+    CHECKSUM_TYPE_NONE = 0x00
+    CHECKSUM_TYPE_MD5 = 0x01
+    NO_CHECKSUM = b""
+    FOOTER = 0xC2C3C4C5  # the datasheet specifies it in this order...
+
+    HEADER_FMT = (
+        "<H"  # start_bytes
+        "H"  # protocol_version
+        "H"  # flags
+        "H"  # error number
+        "L"  # message type
+        "L"  # regarding
+        "6s"  # reserved
+        "B"  # checksum type
+        "B"  # immediate length
+        "16s"  # immediate data
+        "L"  # bytes remaining
+    )
+
+    FOOTER_FMT = "16s" "L"  # checksum  # footer
+
+
 class OBPProtocol(PySeaBreezeProtocol):
     msgs = {
         code: struct.Struct(msg).pack
@@ -171,64 +231,7 @@ class OBPProtocol(PySeaBreezeProtocol):
         }.items()
     }  # add more here if you implement new features
 
-    class OBP:
-        """All relevant constants are stored here"""
-
-        HEADER_START_BYTES = 0xC0C1
-        HEADER_PROTOCOL_VERSION = 0x1100  # XXX: seems to be the newest protocol version
-
-        FLAG_RESPONSE_TO_REQUEST = 0x0001
-        FLAG_ACK = 0x0002
-        FLAG_REQUEST_ACK = 0x0004
-        FLAG_NACK = 0x0008
-        FLAG_HW_EXCEPTION = 0x0010
-        FLAG_PROTOCOL_DEPRECATED = 0x0020
-
-        ERROR_CODES = {
-            0: "Success (no detectable errors)",
-            1: "Invalid/unsupported protocol",
-            2: "Unknown message type",
-            3: "Bad checksum",
-            4: "Message too large",
-            5: "Payload length does not match message type",
-            6: "Payload data invalid",
-            7: "Device not ready for given message type",
-            8: "Unknown checksum type",
-            9: "Device reset unexpectedly",
-            10: "Too many buses (Commands have come from too many bus interfaces)",
-            11: "Out of memory. Failed to allocate enough space to complete request.",
-            12: "Command is valid, but desired information does not exist.",
-            13: "Int Device Error. May be unrecoverable.",
-            100: "Could not decrypt properly",
-            101: "Firmware layout invalid",
-            102: "Data packet was wrong size",
-            103: "hardware revision not compatible with firmware",
-            104: "Existing flash map not compatible with firmware",
-            255: "Operation/Response Deferred. Will take some time. Do not ACK or NACK yet.",
-        }
-
-        NO_ERROR = 0x0000
-        RESERVED = b""
-        CHECKSUM_TYPE_NONE = 0x00
-        CHECKSUM_TYPE_MD5 = 0x01
-        NO_CHECKSUM = b""
-        FOOTER = 0xC2C3C4C5  # the datasheet specifies it in this order...
-
-        HEADER_FMT = (
-            "<H"  # start_bytes
-            "H"  # protocol_version
-            "H"  # flags
-            "H"  # error number
-            "L"  # message type
-            "L"  # regarding
-            "6s"  # reserved
-            "B"  # checksum type
-            "B"  # immediate length
-            "16s"  # immediate data
-            "L"  # bytes remaining
-        )
-
-        FOOTER_FMT = "16s" "L"  # checksum  # footer
+    OBP = _OBP
 
     # noinspection DuplicatedCode
     def send(
@@ -319,7 +322,7 @@ class OBPProtocol(PySeaBreezeProtocol):
         data : str
             data returned from the spectrometer
         """
-        response = self.transport.read(size=64, timeout_ms=timeout_ms)
+        response = self.transport.read(size=None, timeout_ms=timeout_ms)
         try:
             remaining_bytes, checksum_type = self._check_incoming_message_header(
                 response[:44]
@@ -578,6 +581,26 @@ class OBPProtocol(PySeaBreezeProtocol):
             return payload
         else:
             return b""
+
+
+class _OBP2(_OBP):
+    HEADER_PROTOCOL_VERSION = 0x2000
+
+
+class OBP2Protocol(OBPProtocol):
+    msgs = {
+        code: struct.Struct(msg).pack
+        for code, msg in {
+            0x000_001_00: "",  # GET_SERIAL
+            0x000_001_01: "",  # GET_SERIAL_LENGTH  ??? not sure if this works
+            0x000_01C_00: "",  # GET_SPECTRUM ???
+            0x000_00C_01: "<L",  # SET_ITIME_USEC
+            0x000_00D_01: "<B",  # SET_TRIG_MODE
+            0x000_011_00: "",  # GET_WL_COEFFS
+        }.items()
+    }  # add more here if you implement new features
+
+    OBP = _OBP2
 
 
 class ADCProtocol(PySeaBreezeProtocol):

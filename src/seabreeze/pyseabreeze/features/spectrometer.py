@@ -671,3 +671,7 @@ class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP):
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
+
+
+class SeaBreezeSpectrometerFeatureST(SeaBreezeSpectrometerFeatureSR4):
+    pass

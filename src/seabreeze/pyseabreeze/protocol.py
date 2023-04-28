@@ -611,6 +611,7 @@ class OBP2Protocol(OBPProtocol):
             0x000_00C_01: "<L",  # SET_ITIME_USEC
             0x000_00D_01: "<B",  # SET_TRIG_MODE
             0x000_011_00: "",  # GET_WL_COEFFS
+            0x000_012_00: "",  # GET_NL_COEFFS
         }.items()
     }  # add more here if you implement new features
 

@@ -1236,8 +1236,8 @@ class ST(SeaBreezeDevice):
     usb_product_id = 0x1000
     usb_endpoint_map = EndPointMap(
         ep_out=0x01,
-        lowspeed_in=0x81,
-        highspeed_in=0x82
+        highspeed_in=0x81,
+        highspeed_in2=0x82
     )
     usb_protocol = OBP2Protocol
 
@@ -1259,5 +1259,5 @@ class ST(SeaBreezeDevice):
         # sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureST,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
-        # sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP
+        sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP2
     )

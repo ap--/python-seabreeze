@@ -8,6 +8,7 @@
 build/*
 dist/*
 venv/*
+.venv/*
 venv*/*
 docs/build/*
 pip-wheel-metadata/*

@@ -87,5 +87,7 @@ ATTR{idVendor}=="04b4", ATTR{idProduct}=="8613", SYMLINK+="ezUSB-FX2-%n", MODE:=
 ATTR{idVendor}=="2457", ATTR{idProduct}=="2003", SYMLINK+="oceanhdx-%n", MODE:="0666"
 # Ocean Insight Inc. SR4 spectrometer
 ATTR{idVendor}=="0999", ATTR{idProduct}=="1002", SYMLINK+="sr4-%n", MODE:="0666"
+# Ocean Insight Inc. ST spectrometer
+ATTR{idVendor}=="0999", ATTR{idProduct}=="1000", SYMLINK+="st-%n", MODE:="0666"
 
 LABEL="oceanoptics_rules_end"

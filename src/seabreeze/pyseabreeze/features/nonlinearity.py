@@ -3,7 +3,8 @@ from typing import List
 
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
-from seabreeze.pyseabreeze.protocol import OBPProtocol, OBP2Protocol
+from seabreeze.pyseabreeze.protocol import OBP2Protocol
+from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 
 
@@ -59,15 +60,16 @@ class NonlinearityCoefficientsFeatureOBP(SeaBreezeNonlinearityCoefficientsFeatur
             data = self.protocol.query(0x00181101, i)
             coeffs.append(struct.unpack("<f", data)[0])
         return coeffs
-    
+
+
 class NonlinearityCoefficientsFeatureOBP2(SeaBreezeNonlinearityCoefficientsFeature):
     _required_protocol_cls = OBP2Protocol
-    
+
     def get_nonlinearity_coefficients(self) -> List[float]:
         # get nonlinearity coefficients
         data = self.protocol.query(0x000_012_00)
         num_coeffs = len(data) // 4
-        assert len(data) % 4 == 0  
-        assert num_coeffs > 1  
+        assert len(data) % 4 == 0
+        assert num_coeffs > 1
         coeffs = list(struct.unpack("<" + "f" * num_coeffs, data)[1:])
         return coeffs

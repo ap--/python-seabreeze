@@ -90,6 +90,7 @@ To use the pyseabreeze backend (requires `pyusb`) simply run this before importi
 | SPARK        |     x      |            x             |
 | ADC1000      |            |            x             |
 | SR4          |            |            x             |
+| ST-VIS       |            |            x             |
 
 
 ## Known Issues

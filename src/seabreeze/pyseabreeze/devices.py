@@ -1224,3 +1224,33 @@ class SR4(SeaBreezeDevice):
 
     # features
     feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureSR4,)
+
+
+class ST(SeaBreezeDevice):
+    model_name = "ST"
+
+    # communication config
+    transport = (USBTransport,)
+    usb_vendor_id = 0x0999
+    usb_product_id = 0x1000
+    usb_endpoint_map = EndPointMap(ep_out=0x01, highspeed_in=0x81, highspeed_in2=0x82)
+    usb_protocol = OBP2Protocol
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
+    integration_time_min = 1560
+    integration_time_max = 6000000
+    integration_time_base = 10
+    spectrum_num_pixel = 1516
+    spectrum_raw_length = 1516 * 2  # ??
+    spectrum_max_value = 16383
+    # Triggering (from Ocean ST Manual v10-5): Software, External Rising Edge
+    trigger_modes = TriggerMode.supported("NORMAL", "SOFTWARE", "EDGE")
+
+    # features
+    feature_classes = (
+        # sbf.eeprom.SeaBreezeEEPromFeatureOOI,
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureST,
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
+        sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP2,
+    )

@@ -1237,7 +1237,7 @@ class ST(SeaBreezeDevice):
     usb_protocol = OBP2Protocol
 
     # spectrometer config
-    dark_pixel_indices = DarkPixelIndices.from_ranges()
+    dark_pixel_indices = DarkPixelIndices.from_ranges((1503, 1516))
     integration_time_min = 1560
     integration_time_max = 6000000
     integration_time_base = 10

@@ -607,11 +607,15 @@ class OBP2Protocol(OBPProtocol):
         for code, msg in {
             0x000_001_00: "",  # GET_SERIAL
             0x000_001_01: "",  # GET_SERIAL_LENGTH  ??? not sure if this works
-            0x000_01C_00: "",  # GET_SPECTRUM ???
+            0x000_00E_00: "",  # GET_OPTICAL_DARK_PIXELS
+            0x000_01C_00: "",  # GET_SPECTRUM
             0x000_00C_01: "<L",  # SET_ITIME_USEC
             0x000_00D_01: "<B",  # SET_TRIG_MODE
             0x000_011_00: "",  # GET_WL_COEFFS
             0x000_012_00: "",  # GET_NL_COEFFS
+            0x000_01D_00: "",  # GET_AUTONULL_MAXIMUM_ADC_COUNT
+            0x000_11D_00: "",  # GET_AUTONULL_SATURATION_LEVEL
+            0x000_31D_00: "",  # GET_AUTONULL_BASELINE_LEVEL
         }.items()
     }  # add more here if you implement new features
 

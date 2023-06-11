@@ -161,6 +161,24 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
             raise USBTransportError.from_usberror(err)
         else:
             self._opened = True
+
+        # configure the default_read_size according to pyusb info
+        ep_max_packet_size = {}
+        for intf in pyusb_device.get_active_configuration():
+            for ep in intf.endpoints():
+                ep_max_packet_size[ep.bEndpointAddress] = ep.wMaxPacketSize
+
+        for mode_name, endpoint_map_name in self._read_endpoints.items():
+            ep_int = getattr(self._endpoint_map, endpoint_map_name, None)
+            if ep_int is None:
+                continue
+            try:
+                max_size = ep_max_packet_size[ep_int]
+            except KeyError:
+                continue
+            cur_size = self._default_read_size[mode_name]
+            self._default_read_size[mode_name] = min(cur_size, max_size)
+
         # This will initialize the communication protocol
         if self._opened:
             self._protocol = self._protocol_cls(self)

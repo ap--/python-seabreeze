@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ...
 
+## [2.4.0] - 2023-06-11
+### Added
+- *psb* add dark pixel indices for ST spectrometer
+
+### Fixed
+- *psb* attempt to fix overflow error for some pyseabreeze devices
+
 ## [2.3.0] - 2023-05-04
 ### Added
 - *psb* basic support for ST spectrometers
@@ -199,7 +206,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/ap--/python-seabreeze/compare/v2.3.0...v2.4.0
+[2.3.0]: https://github.com/ap--/python-seabreeze/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/ap--/python-seabreeze/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/ap--/python-seabreeze/compare/v2.0.3...v2.1.0
 [2.0.3]: https://github.com/ap--/python-seabreeze/compare/v2.0.2...v2.0.3

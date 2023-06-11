@@ -71,12 +71,13 @@ def _aquire_connected_usb_spectrometers(timeout=10.0):
     return params, ids, len(ids), supports
 
 
+_timeout = int(os.environ.get("SEABREEZE_SPECTROMETER_TEST_CONNECTED_TIMEOUT", "10"))
 (
     _SPEC_PARAMS,
     _SPEC_IDS,
     _SPEC_NUM,
     _SPEC_SUPPORTS,
-) = _aquire_connected_usb_spectrometers()
+) = _aquire_connected_usb_spectrometers(_timeout)
 
 
 @pytest.fixture(scope="function", params=_SPEC_PARAMS, ids=_SPEC_IDS)

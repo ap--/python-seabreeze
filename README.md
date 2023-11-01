@@ -90,6 +90,7 @@ To use the pyseabreeze backend (requires `pyusb`) simply run this before importi
 | USB650       |            | ap--/python-seabreeze#47 |
 | SPARK        |     x      |            x             |
 | ADC1000      |            |            x             |
+| SR2          |            |            x             |
 | SR4          |            |            x             |
 | ST-VIS       |            |            x             |
 

@@ -194,15 +194,14 @@ setup(
         "version_scheme": "post-release",
     },
     setup_requires=[
-        "setuptools>=18.0",
-        "cython>=0.18",
-        "wheel>=0.31.0",
-        "setuptools_scm",
+        "setuptools>=64",
+        "setuptools_scm>=8",
+        "cython>=3",
+        "wheel>=0.38",
         "pkgconfig",
     ],
     install_requires=[
         "numpy>=1.21",
-        "typing_extensions ; python_version<'3.8'",
     ],
     extras_require={
         "cseabreeze": [],

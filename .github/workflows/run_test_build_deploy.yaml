@@ -62,22 +62,30 @@ jobs:
           path: ./dist
 
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }} - ${{ matrix.arch }}
     needs: [tests]
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     runs-on: ${{ matrix.os }}
     strategy:
-      max-parallel: 3
+      max-parallel: 5
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-
+        arch: ['x86_64']
+        os:
+          - 'ubuntu-latest'
+          - 'windows-latest'
+          - 'macOS-latest'
+        include:
+          - os: 'ubuntu-latest'
+            arch: 'aarch64'
+          - os: 'macOS-latest'
+            arch: 'arm64'
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Set up QEMU
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && ${{ matrix.arch }} != 'x86_64'
         uses: docker/setup-qemu-action@v2
         with:
           platforms: all
@@ -85,8 +93,8 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.12.1
         env:
-          CIBW_ARCHS_LINUX: x86_64 aarch64
-          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_LINUX: ${{ matrix.arch }}
+          CIBW_ARCHS_MACOS: ${{ matrix.arch }}
           SEABREEZE_DISABLE_FH4: "yes"
 
       - uses: actions/upload-artifact@v3

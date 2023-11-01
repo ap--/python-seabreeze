@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ...
 
+## [2.5.0] - 2023-11-01
+### Added
+- *psb* add support for SR2 spectrometers (thanks @avedillopy)
+- added zenodo batch for citing seabreeze
+
+### Fixed
+- fixed issue with cython>=3 when installing from source
+
+### Changed
+- dropped support for Python 3.7
+
 ## [2.4.0] - 2023-06-11
 ### Added
 - *psb* add dark pixel indices for ST spectrometer
@@ -206,7 +217,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/ap--/python-seabreeze/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/ap--/python-seabreeze/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/ap--/python-seabreeze/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/ap--/python-seabreeze/compare/v2.1.0...v2.2.0

@@ -1,14 +1,14 @@
 [build-system]
 requires = [
-    "setuptools>=18.0",
-    "cython>=0.18",
-    "wheel>=0.31.0",
-    "setuptools_scm",
-    "pkgconfig"  # this should be Linux only, but PEP508 is not supported yet in pyproject.toml
+    "setuptools>=64",
+    "setuptools_scm>=8",
+    "cython>=3",
+    "wheel>=0.38",
+    "pkgconfig",  # this should be Linux only, but PEP508 is not supported yet in pyproject.toml
     ]
 
 [tool.black]
-target-version = ['py37']
+target-version = ['py38']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -27,7 +27,7 @@ exclude = '''
 
 [tool.isort]
 profile = "black"
-py_version = "37"
+py_version = "38"
 force_single_line = true
 
 [tool.cibuildwheel]
@@ -45,7 +45,7 @@ test-command = [
 before-build = "yum install -y libusb-devel"
 
 [tool.mypy]
-python_version = "3.7"
+python_version = "3.8"
 no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true

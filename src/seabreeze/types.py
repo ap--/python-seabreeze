@@ -4,21 +4,13 @@ common types used to teach mypy about seabreeze
 """
 from __future__ import annotations
 
-import sys
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Literal
+from typing import Protocol
+from typing import TypedDict
 from typing import TypeVar
-
-if sys.version_info >= (3, 8):
-    from typing import Literal
-    from typing import Protocol
-    from typing import TypedDict
-    from typing import runtime_checkable
-else:
-    from typing_extensions import Literal
-    from typing_extensions import Protocol
-    from typing_extensions import TypedDict
-    from typing_extensions import runtime_checkable
+from typing import runtime_checkable
 
 if TYPE_CHECKING:
     import numpy as np

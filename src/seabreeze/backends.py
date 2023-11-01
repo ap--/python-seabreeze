@@ -3,13 +3,9 @@ import sys
 import warnings
 from typing import Any
 from typing import Dict
+from typing import Literal
 from typing import Optional
 from typing import cast
-
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
 
 from seabreeze.types import SeaBreezeBackend
 

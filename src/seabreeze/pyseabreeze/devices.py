@@ -803,6 +803,7 @@ class NIRQUEST512(SeaBreezeDevice):
         sbf.eeprom.SeaBreezeEEPromFeatureOOI,
         sbf.spectrometer.SeaBreezeSpectrometerFeatureNIRQUEST512,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
+        sbf.thermoelectric.ThermoElectricFeatureOOI,
     )
 
 

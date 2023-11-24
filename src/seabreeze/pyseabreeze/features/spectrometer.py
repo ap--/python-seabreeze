@@ -163,8 +163,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         ), "current impl requires USBTransport"
 
         timeout = int(
-            self._integration_time * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         # noinspection PyProtectedMember
         tmp[:] = bytearray(
@@ -230,8 +229,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA)
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
         timeout = int(
-            self._integration_time * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         self.protocol.send(0x09)
         assert isinstance(
@@ -436,8 +434,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
 
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00101100, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -563,8 +560,7 @@ class SeaBreezeSpectrometerFeatureSTS(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00100928, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -587,8 +583,7 @@ class SeaBreezeSpectrometerFeatureSPARK(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         # the message type is different than the default defined in the protocol,
         # requires addition of a new message type in protocol to work
@@ -613,8 +608,7 @@ class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
 class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -655,8 +649,7 @@ class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -696,6 +689,7 @@ class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
 
 class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP2):
     pass
+
 
 class SeaBreezeSpectrometerFeatureST(SeaBreezeSpectrometerFeatureOBP2):
     pass

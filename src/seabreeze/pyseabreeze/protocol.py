@@ -530,7 +530,7 @@ class OBPProtocol(PySeaBreezeProtocol):
         bytes_remaining = data[10]
 
         if _raw:
-            return data  # type: ignore
+            return data  # in raw mode returns the full data tuple...
 
         return bytes_remaining, checksum_type
 

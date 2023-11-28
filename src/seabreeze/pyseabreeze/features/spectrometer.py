@@ -107,6 +107,8 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         self._spectrum_max_value = kwargs["spectrum_max_value"]
         self._trigger_modes = kwargs["trigger_modes"]
 
+        self._integration_time = self._integration_time_max
+
     def set_trigger_mode(self, mode: int) -> None:
         if mode in self._trigger_modes:
             self.protocol.send(0x0A, mode)
@@ -117,6 +119,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         t_min = self._integration_time_min
         t_max = self._integration_time_max
         if t_min <= integration_time_micros < t_max:
+            self._integration_time = integration_time_micros
             i_time = int(integration_time_micros / self._integration_time_base)
             self.protocol.send(0x02, i_time)
         else:
@@ -160,8 +163,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
         ), "current impl requires USBTransport"
 
         timeout = int(
-            self._integration_time_max * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         # noinspection PyProtectedMember
         tmp[:] = bytearray(
@@ -227,8 +229,7 @@ class SeaBreezeSpectrometerFeatureOOIFPGA4K(SeaBreezeSpectrometerFeatureOOIFPGA)
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         tmp = numpy.empty((self._spectrum_raw_length,), dtype=numpy.uint8)
         timeout = int(
-            self._integration_time_max * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         self.protocol.send(0x09)
         assert isinstance(
@@ -382,6 +383,8 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
         self._spectrum_max_value = kwargs["spectrum_max_value"]
         self._trigger_modes = kwargs["trigger_modes"]
 
+        self._integration_time = self._integration_time_max
+
     def set_trigger_mode(self, mode: int) -> None:
         if mode in self._trigger_modes:
             self.protocol.send(0x00110110, mode, request_ack=True)
@@ -392,6 +395,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
         t_min = self._integration_time_min
         t_max = self._integration_time_max
         if t_min <= integration_time_micros < t_max:
+            self._integration_time = integration_time_micros
             i_time = int(integration_time_micros / self._integration_time_base)
             self.protocol.send(0x00110010, i_time)
         else:
@@ -430,8 +434,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
 
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time_max * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00101100, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -557,8 +560,7 @@ class SeaBreezeSpectrometerFeatureSTS(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time_max * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x00100928, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -581,8 +583,7 @@ class SeaBreezeSpectrometerFeatureSPARK(SeaBreezeSpectrometerFeatureOBP):
 class SeaBreezeSpectrometerFeatureHDX(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time_max * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         # the message type is different than the default defined in the protocol,
         # requires addition of a new message type in protocol to work
@@ -607,8 +608,7 @@ class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
 class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time_max * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -629,6 +629,7 @@ class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
         t_min = self._integration_time_min
         t_max = self._integration_time_max
         if t_min <= integration_time_micros < t_max:
+            self._integration_time = integration_time_micros
             i_time = int(integration_time_micros / self._integration_time_base)
             self.protocol.send(0x000_00C_01, i_time)
         else:
@@ -645,11 +646,10 @@ class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
 
-class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP):
+class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
-            self._integration_time_max * 1e-3
-            + self.protocol.transport.default_timeout_ms
+            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
         )
         datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
@@ -670,6 +670,7 @@ class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP):
         t_min = self._integration_time_min
         t_max = self._integration_time_max
         if t_min <= integration_time_micros < t_max:
+            self._integration_time = integration_time_micros
             i_time = int(integration_time_micros / self._integration_time_base)
             self.protocol.send(0x000_00C_01, i_time)
         else:
@@ -686,5 +687,9 @@ class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP):
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
 
-class SeaBreezeSpectrometerFeatureST(SeaBreezeSpectrometerFeatureSR4):
+class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP2):
+    pass
+
+
+class SeaBreezeSpectrometerFeatureST(SeaBreezeSpectrometerFeatureOBP2):
     pass

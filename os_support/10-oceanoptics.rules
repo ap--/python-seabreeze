@@ -92,5 +92,7 @@ ATTR{idVendor}=="0999", ATTR{idProduct}=="1000", SYMLINK+="st-%n", MODE:="0666"
 ATTR{idVendor}=="0999", ATTR{idProduct}=="1001", SYMLINK+="sr2-%n", MODE:="0666"
 # Ocean Insight Inc. SR4 spectrometer
 ATTR{idVendor}=="0999", ATTR{idProduct}=="1002", SYMLINK+="sr4-%n", MODE:="0666"
+# Ocean Insight Inc. SR6 Spectrometer
+ATTR{idVendor}=="0999", ATTR{idProduct}=="1005", SYMLINK+="sr6-%n", MODE:="0666"
 
 LABEL="oceanoptics_rules_end"

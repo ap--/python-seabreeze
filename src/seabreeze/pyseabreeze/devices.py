@@ -1270,7 +1270,7 @@ class SR6(SeaBreezeDevice):
     trigger_modes = TriggerMode.supported("OBP_NORMAL")
 
     # features
-    feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureSR4,)
+    feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureSR6,)
 
 class ST(SeaBreezeDevice):
     model_name = "ST"

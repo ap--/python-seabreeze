@@ -644,46 +644,6 @@ class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
-    
-class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP):
-    def _get_spectrum_raw(self) -> NDArray[np.uint8]:
-        timeout = int(
-            self._integration_time * 1e-3 + self.protocol.transport.default_timeout_ms
-        )
-        datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
-        return numpy.frombuffer(datastring, dtype=numpy.uint8)
-
-    def get_intensities(self) -> NDArray[np.float_]:
-        tmp = self._get_spectrum_raw()
-        # 32byte metadata block at beginning
-        ret = tmp[32:].view(numpy.dtype("<H")).astype(numpy.double)
-        return ret * self._normalization_value
-
-    def set_trigger_mode(self, mode: int) -> None:
-        if mode in self._trigger_modes:
-            self.protocol.send(0x000_00D_01, mode, request_ack=True)
-        else:
-            raise SeaBreezeError("Only supports: %s" % str(self._trigger_modes))
-
-    def set_integration_time_micros(self, integration_time_micros: int) -> None:
-        t_min = self._integration_time_min
-        t_max = self._integration_time_max
-        if t_min <= integration_time_micros < t_max:
-            self._integration_time = integration_time_micros
-            i_time = int(integration_time_micros / self._integration_time_base)
-            self.protocol.send(0x000_00C_01, i_time)
-        else:
-            raise SeaBreezeError(f"Integration not in [{t_min:d}, {t_max:d}]")
-
-    def get_wavelengths(self) -> NDArray[np.float_]:
-        data = self.protocol.query(0x000_011_00)
-        num_coeffs = len(data) // 4
-        assert len(data) % 4 == 0  # ???
-        assert num_coeffs > 1  # ???
-        coeffs = struct.unpack("<" + "f" * num_coeffs, data)[1:]
-        # and generate the wavelength array
-        indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
 
 class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
@@ -728,6 +688,9 @@ class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
 
 
 class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP2):
+    pass
+
+class SeaBreezeSpectrometerFeatureSR6(SeaBreezeSpectrometerFeatureOBP2):
     pass
 
 

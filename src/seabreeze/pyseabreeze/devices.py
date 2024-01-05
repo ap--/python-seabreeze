@@ -1239,8 +1239,8 @@ class SR4(SeaBreezeDevice):
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()
-    integration_time_min = 6000  # ???
-    integration_time_max = 10000000  # ???
+    integration_time_min = 3800 #3.8ms
+    integration_time_max = 10000000 #10s
     integration_time_base = 1
     spectrum_num_pixel = 3648
     spectrum_raw_length = (3648 * 2) + 32  # XXX: Metadata
@@ -1261,11 +1261,11 @@ class SR6(SeaBreezeDevice):
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()
-    integration_time_min = 7200  # 7.2ms ?
-    integration_time_max = 5000000  # 5s ? per website
+    integration_time_min = 7200  # 7.2ms 
+    integration_time_max = 5000000  # 5s 
     integration_time_base = 1
-    spectrum_num_pixel = 3648
-    spectrum_raw_length = (3648 * 2) + 32  # XXX: Metadata
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 32  # XXX: Metadata
     spectrum_max_value = 65535
     trigger_modes = TriggerMode.supported("OBP_NORMAL")
 

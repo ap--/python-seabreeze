@@ -92,6 +92,7 @@ To use the pyseabreeze backend (requires `pyusb`) simply run this before importi
 | ADC1000      |            |            x             |
 | SR2          |            |            x             |
 | SR4          |            |            x             |
+| SR6          |            |            x             |
 | ST-VIS       |            |            x             |
 
 

@@ -691,5 +691,9 @@ class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP2):
     pass
 
 
+class SeaBreezeSpectrometerFeatureSR6(SeaBreezeSpectrometerFeatureOBP2):
+    pass
+
+
 class SeaBreezeSpectrometerFeatureST(SeaBreezeSpectrometerFeatureOBP2):
     pass

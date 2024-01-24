@@ -1,8 +1,8 @@
 # udev rules file for Ocean Optics, Inc. spectrometers
 # ====================================================
 #
-# version: 2.5
-# updated: 2023-04-15
+# version: 2.6
+# updated: 2024-01-24
 # maintainer: Andreas Poehlmann <andreas@poehlmann.io>
 #
 # [info] Previous versions are missing this header.
@@ -14,6 +14,7 @@
 #   $ seabreeze_os_setup
 #
 # Changes:
+# - [2.6] added support for SR6 spectrometer
 # - [2.5] added support for SR2 spectrometer
 # - [2.4] added support for SR4 spectrometer
 # - added support for HDX spectrometer
@@ -92,5 +93,7 @@ ATTR{idVendor}=="0999", ATTR{idProduct}=="1000", SYMLINK+="st-%n", MODE:="0666"
 ATTR{idVendor}=="0999", ATTR{idProduct}=="1001", SYMLINK+="sr2-%n", MODE:="0666"
 # Ocean Insight Inc. SR4 spectrometer
 ATTR{idVendor}=="0999", ATTR{idProduct}=="1002", SYMLINK+="sr4-%n", MODE:="0666"
+# Ocean Insight Inc. SR6 Spectrometer
+ATTR{idVendor}=="0999", ATTR{idProduct}=="1005", SYMLINK+="sr6-%n", MODE:="0666"
 
 LABEL="oceanoptics_rules_end"

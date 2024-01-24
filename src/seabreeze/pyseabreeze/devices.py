@@ -1239,8 +1239,8 @@ class SR4(SeaBreezeDevice):
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()
-    integration_time_min = 6000  # ???
-    integration_time_max = 10000000  # ???
+    integration_time_min = 3800  # 3.8ms
+    integration_time_max = 10000000  # 10s
     integration_time_base = 1
     spectrum_num_pixel = 3648
     spectrum_raw_length = (3648 * 2) + 32  # XXX: Metadata
@@ -1249,6 +1249,30 @@ class SR4(SeaBreezeDevice):
 
     # features
     feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureSR4,)
+
+
+class SR6(SeaBreezeDevice):
+    model_name = "SR6"
+
+    # communication config
+    transport = (USBTransport,)
+    usb_vendor_id = 0x0999
+    usb_product_id = 0x1005
+    usb_endpoint_map = EndPointMap(ep_out=0x01, highspeed_in=0x81)
+    usb_protocol = OBP2Protocol
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
+    integration_time_min = 7200  # 7.2ms
+    integration_time_max = 5000000  # 5s
+    integration_time_base = 1
+    spectrum_num_pixel = 2048
+    spectrum_raw_length = (2048 * 2) + 32  # XXX: Metadata
+    spectrum_max_value = 65535
+    trigger_modes = TriggerMode.supported("OBP_NORMAL")
+
+    # features
+    feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureSR6,)
 
 
 class ST(SeaBreezeDevice):

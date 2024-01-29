@@ -25,8 +25,7 @@ class PySeaBreezeProtocol(ABC):
         payload: tuple[int | str | float, ...] | str | int | float = (),
         timeout_ms: int | None = None,
         **kwargs: Any,
-    ) -> int:
-        ...
+    ) -> int: ...
 
     @abstractmethod
     def receive(
@@ -34,8 +33,7 @@ class PySeaBreezeProtocol(ABC):
         size: int | None = None,
         timeout_ms: int | None = None,
         **kwargs: Any,
-    ) -> bytes:
-        ...
+    ) -> bytes: ...
 
     @abstractmethod
     def query(
@@ -44,8 +42,7 @@ class PySeaBreezeProtocol(ABC):
         payload: tuple[int | str | float, ...] | str | int | float = (),
         timeout_ms: int | None = None,
         **kwargs: Any,
-    ) -> bytes:
-        ...
+    ) -> bytes: ...
 
 
 DT = TypeVar("DT")
@@ -102,23 +99,19 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
 
     @property
     @abstractmethod
-    def default_timeout_ms(self) -> int:
-        ...
+    def default_timeout_ms(self) -> int: ...
 
     @property
     @abstractmethod
-    def protocol(self) -> PySeaBreezeProtocol:
-        ...
+    def protocol(self) -> PySeaBreezeProtocol: ...
 
     @classmethod
     @abstractmethod
-    def list_devices(cls) -> Iterable[DT]:
-        ...
+    def list_devices(cls) -> Iterable[DT]: ...
 
     @classmethod
     @abstractmethod
-    def register_model(cls, model_name: str, **kwargs: str) -> None:
-        ...
+    def register_model(cls, model_name: str, **kwargs: str) -> None: ...
 
     @classmethod
     @abstractmethod
@@ -135,5 +128,4 @@ class PySeaBreezeTransport(ABC, Generic[DT]):
     @abstractmethod
     def specialize(
         cls, model_name: str, **kwargs: str
-    ) -> type[PySeaBreezeTransport[Any]]:
-        ...
+    ) -> type[PySeaBreezeTransport[Any]]: ...

@@ -15,9 +15,9 @@ class _FPGARegisterFeatureOOI:
 
     class Codes(enum.IntEnum):
         FIRMWARE_VERSION = 0x04
-        V1_CONTINUOUS_STROBE_TIMER_INTERVAL_DIVISOR = (
-            V3_CONTINUOUS_STROBE_TIMER_MSB
-        ) = 0x08
+        V1_CONTINUOUS_STROBE_TIMER_INTERVAL_DIVISOR = V3_CONTINUOUS_STROBE_TIMER_MSB = (
+            0x08
+        )
         V1_CONTINUOUS_STROBE_BASE_CLOCK_DIVISOR = V3_CONTINUOUS_STROBE_TIMER_LSB = 0x0C
 
     def __init__(self, protocol: PySeaBreezeProtocol) -> None:

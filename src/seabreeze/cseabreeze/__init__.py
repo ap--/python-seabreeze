@@ -1,6 +1,7 @@
 """This is a wrapper for the c-implementation of the seabreeze-library
 
 """
+
 # noinspection PyProtectedMember
 from seabreeze.cseabreeze._wrapper import SeaBreezeAcquisitionDelayFeature
 from seabreeze.cseabreeze._wrapper import SeaBreezeAPI

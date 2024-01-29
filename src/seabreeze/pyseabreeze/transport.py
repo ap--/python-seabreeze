@@ -3,6 +3,7 @@
 Some spectrometers can support different transports (usb, network, rs232, etc.)
 
 """
+
 from __future__ import annotations
 
 import importlib

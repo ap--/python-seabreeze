@@ -6,6 +6,7 @@ most of this code is based on implementations from
     http://github.com/ap--/python-oceanoptics
 
 """
+
 from __future__ import annotations
 
 import logging

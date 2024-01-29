@@ -6,6 +6,7 @@ Author: Andreas Poehlmann
 Email: andreas@poehlmann.io
 
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

@@ -1,4 +1,5 @@
 """custom seabreeze exceptions"""
+
 # DO NOT DIRECTLY IMPORT EXCEPTIONS FROM HERE!
 # ALWAYS IMPORT FROM `seabreeze.spectrometers`
 

@@ -48,6 +48,7 @@ Windows
     requires installing the drivers
 
 """
+
 from seabreeze._version import __version__ as _version
 from seabreeze.backends import use
 

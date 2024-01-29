@@ -1,4 +1,5 @@
 """pretty print pcapng files"""
+
 from __future__ import annotations
 
 import enum

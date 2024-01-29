@@ -32,6 +32,7 @@ class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
      # extract by providing the data format from the developer datasheet and `output` to struct.unpack
 
     """
+
     identifier = "raw_usb_bus_access"
     _required_protocol_cls = PySeaBreezeProtocol
 

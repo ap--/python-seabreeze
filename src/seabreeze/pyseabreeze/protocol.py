@@ -5,6 +5,7 @@ ocean optics spectrometers use two different communication protocols:
 - the other one 'OOI protocol'  # ??? OceanOpticsInterface ??? maybe
 
 """
+
 from __future__ import annotations
 
 import functools

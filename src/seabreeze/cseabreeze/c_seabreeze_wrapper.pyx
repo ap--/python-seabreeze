@@ -14,6 +14,8 @@ import weakref
 
 import numpy as np
 
+from collections import namedtuple
+
 
 # from libseabreeze api/SeaBreezeConstants.h
 class _ErrorCode(object):
@@ -902,8 +904,8 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         cdef int out_length
         cdef int sample_number
         sample_number = int(number_of_samples)
-        if sample_number > 15:
-            sample_number = 15
+        #if sample_number > 15:
+        #    sample_number = 15
 
         out_length = (self._raw_spectrum_length + 68) * number_of_samples
 
@@ -919,12 +921,60 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         finally:
             PyMem_Free(c_buffer)
         #return data
+
+        Dataset = namedtuple("Dataset", [
+                                        "metadata_protocol_version",
+                                        "metadata_length",
+                                        "pixel_data_length",
+                                        "microsecond_counter",
+                                        "integration_time_micros",
+                                        "pixel_data_format",
+                                        "spectrum_count",
+                                        "last_spectrum_count",
+                                        "last_microsecond_count",
+                                        "scans_to_average",
+                                        "intensities"
+                                        ])
         result = []
+        offset = 0
         for i in range(sample_number):
-            result.append({
-                "header": data[(self._raw_spectrum_length+68)*i:(self._raw_spectrum_length+68)*i+64],
-                "intensities": data[(self._raw_spectrum_length+68)*i+64:(self._raw_spectrum_length+68)*i+self._raw_spectrum_length+64]
-                })
+            protocol_version = np.frombuffer(data[offset+0:offset+2], dtype=np.uint16)[0]
+            metadata_length = np.frombuffer(data[offset+2:offset+4], dtype=np.uint16)[0]
+            pixel_data_length = np.frombuffer(data[offset+4:offset+8], dtype=np.uint32)[0]
+            microsecond_counter = np.frombuffer(data[offset+8:offset+16], dtype=np.uint64)[0]
+            integration_time_micros = np.frombuffer(data[offset+16:offset+20], dtype=np.uint32)[0]
+            pixel_data_format = np.frombuffer(data[offset+20:offset+24], dtype=np.uint32)[0]
+            spectrum_count = np.frombuffer(data[offset+24:offset+28], dtype=np.uint32)[0]
+            last_spectrum_count = np.frombuffer(data[offset+28:offset+32], dtype=np.uint32)[0]
+            last_microsecond_count = np.frombuffer(data[offset+32:offset+40], dtype=np.uint64)[0]
+            scans_to_average = np.frombuffer(data[offset+40:offset+42], dtype=np.uint16)[0]
+
+            print(protocol_version)
+            if pixel_data_format == 1:
+                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.uint16)
+            elif pixel_data_format == 2:
+                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.uint24)
+            elif pixel_data_format == 3:
+                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.uint32)
+            elif pixel_data_format == 4:
+                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.single)
+            else:
+                print('error') #!
+                intensities = [0.1]
+
+            result.append(Dataset(
+                protocol_version,
+                metadata_length,
+                pixel_data_length,
+                microsecond_counter,
+                integration_time_micros,
+                pixel_data_format,
+                spectrum_count,
+                last_spectrum_count,
+                last_microsecond_count,
+                scans_to_average,
+                intensities))
+            offset += metadata_length + pixel_data_length + 4 #???
         return result
 
         # TODO: requires wrapping of OBP command GetRawSpectrumWithMetadata

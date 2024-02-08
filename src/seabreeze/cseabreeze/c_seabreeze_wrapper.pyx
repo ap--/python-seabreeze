@@ -856,7 +856,6 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         assert bytes_written == self._spectrum_length
         return intensities
 
-    @cython.boundscheck(False)
     def _get_spectrum_raw(self):
         # int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
         # int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,

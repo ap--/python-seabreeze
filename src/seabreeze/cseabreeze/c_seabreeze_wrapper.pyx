@@ -11,10 +11,9 @@ from libcpp cimport bool as bool_t
 cimport seabreeze.cseabreeze.c_seabreeze as csb
 
 import weakref
+from collections import namedtuple
 
 import numpy as np
-
-from collections import namedtuple
 
 
 # from libseabreeze api/SeaBreezeConstants.h
@@ -788,11 +787,11 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
                 raise SeaBreezeError(error_code=error_code)
             self._cached_spectrum_length = int(spec_length)
         return self._cached_spectrum_length
-    
+
     @property
     def _raw_spectrum_length(self):
         """cached spectrum length
-    
+
         Returns
         -------
         spectrum_length: int
@@ -871,7 +870,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         number_of_samples : int
             the number of samples to be retrieved from the spectrometer buffer.
             the maximum allowed number depends on the spectrometer (e.g. OceanFX: max. 15).
-        
+
         Returns
         -------
         buffer_data: `[Dataset]`
@@ -962,11 +961,11 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
                 last_microsecond_count,
                 scans_to_average,
                 intensities))
-            
+
             # depending on the individual Dataset length, add offset to next Dataset.
             # There is 4 bytes of unused data after every spectrum for some reason. So add that as well.
             offset += metadata_length + pixel_data_length + 4
-        
+
         return buffer_data
 
 cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):

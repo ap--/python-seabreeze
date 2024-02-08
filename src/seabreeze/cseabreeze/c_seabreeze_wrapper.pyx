@@ -788,11 +788,11 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
                 raise SeaBreezeError(error_code=error_code)
             self._cached_spectrum_length = int(spec_length)
         return self._cached_spectrum_length
-
+    
     @property
     def _raw_spectrum_length(self):
         """cached spectrum length
-
+    
         Returns
         -------
         spectrum_length: int
@@ -804,7 +804,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             self._cached_raw_spectrum_length = int(spec_length)
-        return self._cached_raw_spectrum_length
+        return self._cached_raw_spectrum_lengt
 
     @cython.boundscheck(False)
     def get_wavelengths(self):
@@ -858,45 +858,35 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 
     @cython.boundscheck(False)
     def _get_spectrum_raw(self):
-        """acquires a raw spectrum and returns the measured intensities including dark pixels
-
-        In this mode, auto-nulling should be automatically performed
-        for devices that support it.
-
-        Returns
-        -------
-        intensities: `np.ndarray`
-        """
-        cdef int error_code
-        cdef int bytes_written
-        cdef unsigned char* c_buffer = NULL
-        cdef int out_length
-
-        out_length = self._raw_spectrum_length
-
-        c_buffer = <unsigned char*> PyMem_Malloc(self._raw_spectrum_length * sizeof(unsigned char))
-        if not c_buffer:
-            raise MemoryError("could not allocate memory for buffer")
-        try:
-            bytes_written = self.sbapi.spectrometerGetUnformattedSpectrum(self.device_id, self.feature_id, &error_code,
-                                                                        &c_buffer[0], out_length)
-            if error_code != 0:
-                raise SeaBreezeError(error_code=error_code)
-            data = c_buffer[:bytes_written]
-        finally:
-            PyMem_Free(c_buffer)
-        return data
+        # int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
+        # int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
+        #                                        unsigned char *buffer, int bufferLength)
+        raise NotImplementedError("unformatted spectrum")
 
     @cython.boundscheck(False)
     def get_fast_buffer_spectrum(self, int number_of_samples):
-        """acquires a raw spectrum and returns the measured intensities including dark pixels
+        """acquires raw spectra with metadata from the buffer and returns the spectra with metadata as a list of namedtuples.
 
-        In this mode, auto-nulling should be automatically performed
-        for devices that support it.
-
+        Parameters
+        ----------
+        number_of_samples : int
+            the number of samples to be retrieved from the spectrometer buffer.
+            the maximum allowed number depends on the spectrometer (e.g. OceanFX: max. 15).
+        
         Returns
         -------
-        intensities: `np.ndarray`
+        buffer_data: `[Dataset]`
+            the namedtuple Dataset has the following fields:
+                metadata_protocol_version
+                metadata_length
+                microsecond_counter
+                integration_time_micros
+                pixel_data_format
+                spectrum_count
+                last_spectrum_count
+                last_microsecond_count
+                scans_to_average
+                intensities
         """
         cdef int error_code
         cdef int bytes_written
@@ -904,10 +894,8 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         cdef int out_length
         cdef int sample_number
         sample_number = int(number_of_samples)
-        #if sample_number > 15:
-        #    sample_number = 15
 
-        out_length = (self._raw_spectrum_length + 68) * number_of_samples
+        out_length = (self._spectrum_length*2 + 68) * number_of_samples
 
         c_buffer = <unsigned char*> PyMem_Malloc(out_length * sizeof(unsigned char))
         if not c_buffer:
@@ -920,8 +908,8 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
             data = c_buffer[:bytes_written]
         finally:
             PyMem_Free(c_buffer)
-        #return data
 
+        # Define Dataset structure for individual measurements.
         Dataset = namedtuple("Dataset", [
                                         "metadata_protocol_version",
                                         "metadata_length",
@@ -935,9 +923,10 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
                                         "scans_to_average",
                                         "intensities"
                                         ])
-        result = []
+        buffer_data = []
         offset = 0
         for i in range(sample_number):
+            # decode metadata
             protocol_version = np.frombuffer(data[offset+0:offset+2], dtype=np.uint16)[0]
             metadata_length = np.frombuffer(data[offset+2:offset+4], dtype=np.uint16)[0]
             pixel_data_length = np.frombuffer(data[offset+4:offset+8], dtype=np.uint32)[0]
@@ -949,7 +938,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
             last_microsecond_count = np.frombuffer(data[offset+32:offset+40], dtype=np.uint64)[0]
             scans_to_average = np.frombuffer(data[offset+40:offset+42], dtype=np.uint16)[0]
 
-            print(protocol_version)
+            # determine pixel data format from metadata and decode spectrum
             if pixel_data_format == 1:
                 intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.uint16)
             elif pixel_data_format == 2:
@@ -959,10 +948,10 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
             elif pixel_data_format == 4:
                 intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.single)
             else:
-                print('error') #!
-                intensities = [0.1]
+                SeaBreezeError("Unknown Pixel Data Format")
 
-            result.append(Dataset(
+            # add Dataset to returned list
+            buffer_data.append(Dataset(
                 protocol_version,
                 metadata_length,
                 pixel_data_length,
@@ -974,16 +963,12 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
                 last_microsecond_count,
                 scans_to_average,
                 intensities))
-            offset += metadata_length + pixel_data_length + 4 #???
-        return result
-
-        # TODO: requires wrapping of OBP command GetRawSpectrumWithMetadata
-        #       which returns N raw spectra each with a 64 byte metadata prefix
-        # int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode,
-        #                                       unsigned char *dataBuffer, int dataMaxLength,
-        #                                       unsigned int numberOfSampleToRetrieve) # currently 15 max
-        #raise NotImplementedError("Not yet supported via cseabreeze. Requires changes to libseabreeze.")
-
+            
+            # depending on the individual Dataset length, add offset to next Dataset.
+            # There is 4 bytes of unused data after every spectrum for some reason. So add that as well.
+            offset += metadata_length + pixel_data_length + 4
+        
+        return buffer_data
 
 cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):
 

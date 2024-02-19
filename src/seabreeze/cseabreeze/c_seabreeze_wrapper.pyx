@@ -38,6 +38,20 @@ class _ErrorCode(object):
 DEF _MAXBUFLEN = 32
 DEF _MAXDBUFLEN = 256
 
+# Define Metadata Dataset structure for individual buffered measurements.
+MetadataDataset = namedtuple("MetadataDataset", [
+                                "metadata_protocol_version",
+                                "metadata_length",
+                                "pixel_data_length",
+                                "microsecond_counter",
+                                "integration_time_micros",
+                                "pixel_data_format",
+                                "spectrum_count",
+                                "last_spectrum_count",
+                                "last_microsecond_count",
+                                "scans_to_average"
+                                ])
+
 
 # DO NOT DIRECTLY IMPORT EXCEPTIONS FROM HERE!
 # ALWAYS IMPORT FROM `seabreeze.spectrometers`
@@ -641,20 +655,6 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     cdef readonly int _cached_spectrum_length
     cdef readonly int _cached_raw_spectrum_length
 
-    # Define Metadata Dataset structure for individual buffered measurements.
-    MetadataDataset = namedtuple("MetadataDataset", [
-                                    "metadata_protocol_version",
-                                    "metadata_length",
-                                    "pixel_data_length",
-                                    "microsecond_counter",
-                                    "integration_time_micros",
-                                    "pixel_data_format",
-                                    "spectrum_count",
-                                    "last_spectrum_count",
-                                    "last_microsecond_count",
-                                    "scans_to_average"
-                                    ])
-
     def __cinit__(self, SeaBreezeDevice device, int feature_id):
         self._cached_spectrum_length = -1
         self._cached_raw_spectrum_length = -1
@@ -916,7 +916,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         for i in range(sample_number):
             # decode metadata
             metadata = struct.unpack('HHIQIIIIQH',data[offset:offset+42])
-            metdata_dataset = self.MetadataDataset(*metadata)
+            metdata_dataset = MetadataDataset(*metadata)
 
             # determine pixel data format from metadata and decode spectrum
             intensities_raw = data[offset+metdata_dataset.metadata_length:offset+metdata_dataset.metadata_length+metdata_dataset.pixel_data_length]

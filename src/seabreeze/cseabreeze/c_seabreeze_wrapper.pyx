@@ -803,11 +803,11 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
                 raise SeaBreezeError(error_code=error_code)
             self._cached_spectrum_length = int(spec_length)
         return self._cached_spectrum_length
-    
+
     @property
     def _raw_spectrum_length(self):
         """cached spectrum length
-    
+
         Returns
         -------
         spectrum_length: int
@@ -886,7 +886,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         number_of_samples : int
             the number of samples to be retrieved from the spectrometer buffer.
             the maximum allowed number depends on the spectrometer (e.g. OceanFX: max. 15).
-        
+
         Returns
         -------
         list[tuple[MetadataDataset, np.ndarray]]
@@ -932,12 +932,24 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
             else:
                 SeaBreezeError("Unknown Pixel Data Format")
 
-            # add data to return list
-            buffer_data.append((metdata_dataset,intensities))
-            
+            # add Dataset to returned list
+            buffer_data.append(Dataset(
+                protocol_version,
+                metadata_length,
+                pixel_data_length,
+                microsecond_counter,
+                integration_time_micros,
+                pixel_data_format,
+                spectrum_count,
+                last_spectrum_count,
+                last_microsecond_count,
+                scans_to_average,
+                intensities))
+
             # depending on the individual Dataset length, add offset to next Dataset.
             # There is 4 bytes of unused data after every spectrum for some reason. So add that as well.
-            offset += metdata_dataset.metadata_length + metdata_dataset.pixel_data_length + 4
+            offset += metadata_length + pixel_data_length + 4
+
         return buffer_data
 
 cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):

@@ -10,12 +10,11 @@ from libcpp cimport bool as bool_t
 
 cimport seabreeze.cseabreeze.c_seabreeze as csb
 
+import struct
 import weakref
+from collections import namedtuple
 
 import numpy as np
-
-from collections import namedtuple
-import struct
 
 
 # from libseabreeze api/SeaBreezeConstants.h

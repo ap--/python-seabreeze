@@ -15,6 +15,7 @@ import weakref
 import numpy as np
 
 from collections import namedtuple
+import struct
 
 
 # from libseabreeze api/SeaBreezeConstants.h
@@ -641,6 +642,20 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     cdef readonly int _cached_spectrum_length
     cdef readonly int _cached_raw_spectrum_length
 
+    # Define Metadata Dataset structure for individual buffered measurements.
+    MetadataDataset = namedtuple("MetadataDataset", [
+                                    "metadata_protocol_version",
+                                    "metadata_length",
+                                    "pixel_data_length",
+                                    "microsecond_counter",
+                                    "integration_time_micros",
+                                    "pixel_data_format",
+                                    "spectrum_count",
+                                    "last_spectrum_count",
+                                    "last_microsecond_count",
+                                    "scans_to_average"
+                                    ])
+
     def __cinit__(self, SeaBreezeDevice device, int feature_id):
         self._cached_spectrum_length = -1
         self._cached_raw_spectrum_length = -1
@@ -804,7 +819,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             self._cached_raw_spectrum_length = int(spec_length)
-        return self._cached_raw_spectrum_lengt
+        return self._cached_raw_spectrum_length
 
     @cython.boundscheck(False)
     def get_wavelengths(self):
@@ -874,18 +889,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         
         Returns
         -------
-        buffer_data: `[Dataset]`
-            the namedtuple Dataset has the following fields:
-                metadata_protocol_version
-                metadata_length
-                microsecond_counter
-                integration_time_micros
-                pixel_data_format
-                spectrum_count
-                last_spectrum_count
-                last_microsecond_count
-                scans_to_average
-                intensities
+        list[tuple[MetadataDataset, np.ndarray]]
         """
         cdef int error_code
         cdef int bytes_written
@@ -894,7 +898,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         cdef int sample_number
         sample_number = int(number_of_samples)
 
-        out_length = (self._spectrum_length*2 + 68) * number_of_samples
+        out_length = (64 + self._raw_spectrum_length + 4) * number_of_samples
 
         c_buffer = <unsigned char*> PyMem_Malloc(out_length * sizeof(unsigned char))
         if not c_buffer:
@@ -908,65 +912,32 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         finally:
             PyMem_Free(c_buffer)
 
-        # Define Dataset structure for individual measurements.
-        Dataset = namedtuple("Dataset", [
-                                        "metadata_protocol_version",
-                                        "metadata_length",
-                                        "pixel_data_length",
-                                        "microsecond_counter",
-                                        "integration_time_micros",
-                                        "pixel_data_format",
-                                        "spectrum_count",
-                                        "last_spectrum_count",
-                                        "last_microsecond_count",
-                                        "scans_to_average",
-                                        "intensities"
-                                        ])
         buffer_data = []
         offset = 0
         for i in range(sample_number):
             # decode metadata
-            protocol_version = np.frombuffer(data[offset+0:offset+2], dtype=np.uint16)[0]
-            metadata_length = np.frombuffer(data[offset+2:offset+4], dtype=np.uint16)[0]
-            pixel_data_length = np.frombuffer(data[offset+4:offset+8], dtype=np.uint32)[0]
-            microsecond_counter = np.frombuffer(data[offset+8:offset+16], dtype=np.uint64)[0]
-            integration_time_micros = np.frombuffer(data[offset+16:offset+20], dtype=np.uint32)[0]
-            pixel_data_format = np.frombuffer(data[offset+20:offset+24], dtype=np.uint32)[0]
-            spectrum_count = np.frombuffer(data[offset+24:offset+28], dtype=np.uint32)[0]
-            last_spectrum_count = np.frombuffer(data[offset+28:offset+32], dtype=np.uint32)[0]
-            last_microsecond_count = np.frombuffer(data[offset+32:offset+40], dtype=np.uint64)[0]
-            scans_to_average = np.frombuffer(data[offset+40:offset+42], dtype=np.uint16)[0]
+            metadata = struct.unpack('HHIQIIIIQH',data[offset:offset+42])
+            metdata_dataset = self.MetadataDataset(*metadata)
 
             # determine pixel data format from metadata and decode spectrum
-            if pixel_data_format == 1:
-                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.uint16)
-            elif pixel_data_format == 2:
-                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.uint24)
-            elif pixel_data_format == 3:
-                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.uint32)
-            elif pixel_data_format == 4:
-                intensities = np.frombuffer(data[offset+metadata_length:offset+metadata_length+pixel_data_length], dtype=np.single)
+            intensities_raw = data[offset+metdata_dataset.metadata_length:offset+metdata_dataset.metadata_length+metdata_dataset.pixel_data_length]
+            if metdata_dataset.pixel_data_format == 1:
+                intensities = np.frombuffer(intensities_raw, dtype=np.uint16)
+            elif metdata_dataset.pixel_data_format == 2:
+                intensities = np.frombuffer(intensities_raw, dtype=np.uint24)
+            elif metdata_dataset.pixel_data_format == 3:
+                intensities = np.frombuffer(intensities_raw, dtype=np.uint32)
+            elif metdata_dataset.pixel_data_format == 4:
+                intensities = np.frombuffer(intensities_raw, dtype=np.single)
             else:
                 SeaBreezeError("Unknown Pixel Data Format")
 
-            # add Dataset to returned list
-            buffer_data.append(Dataset(
-                protocol_version,
-                metadata_length,
-                pixel_data_length,
-                microsecond_counter,
-                integration_time_micros,
-                pixel_data_format,
-                spectrum_count,
-                last_spectrum_count,
-                last_microsecond_count,
-                scans_to_average,
-                intensities))
+            # add data to return list
+            buffer_data.append((metdata_dataset,intensities))
             
             # depending on the individual Dataset length, add offset to next Dataset.
             # There is 4 bytes of unused data after every spectrum for some reason. So add that as well.
-            offset += metadata_length + pixel_data_length + 4
-        
+            offset += metdata_dataset.metadata_length + metdata_dataset.pixel_data_length + 4
         return buffer_data
 
 cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):

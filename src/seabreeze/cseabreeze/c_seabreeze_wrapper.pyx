@@ -931,24 +931,12 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
             else:
                 SeaBreezeError("Unknown Pixel Data Format")
 
-            # add Dataset to returned list
-            buffer_data.append(Dataset(
-                protocol_version,
-                metadata_length,
-                pixel_data_length,
-                microsecond_counter,
-                integration_time_micros,
-                pixel_data_format,
-                spectrum_count,
-                last_spectrum_count,
-                last_microsecond_count,
-                scans_to_average,
-                intensities))
-
+            # add data to return list
+            buffer_data.append((metdata_dataset,intensities))
+            
             # depending on the individual Dataset length, add offset to next Dataset.
             # There is 4 bytes of unused data after every spectrum for some reason. So add that as well.
-            offset += metadata_length + pixel_data_length + 4
-
+            offset += metdata_dataset.metadata_length + metdata_dataset.pixel_data_length + 4
         return buffer_data
 
 cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):

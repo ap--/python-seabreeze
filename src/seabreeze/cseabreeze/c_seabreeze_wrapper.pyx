@@ -933,7 +933,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 
             # add data to return list
             buffer_data.append((metdata_dataset,intensities))
-            
+
             # depending on the individual Dataset length, add offset to next Dataset.
             # There is 4 bytes of unused data after every spectrum for some reason. So add that as well.
             offset += metdata_dataset.metadata_length + metdata_dataset.pixel_data_length + 4

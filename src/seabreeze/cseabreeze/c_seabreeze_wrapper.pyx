@@ -190,7 +190,6 @@ cdef class SeaBreezeAPI(object):
         """
         cdef int output
         cdef bytes c_devtype
-        cdef bytes c_buspath
         cdef int c_port
         c_devtype = bytes(device_type)
         c_ipaddr = bytes(ip_address)
@@ -258,8 +257,8 @@ cdef class SeaBreezeAPI(object):
                     if err.error_code == _ErrorCode.NO_DEVICE:
                         # device used by another thread?
                         continue
-            model = dev.model
-            serial = dev.serial_number
+            _ = dev.model
+            _ = dev.serial_number
             if not was_open_before:
                 dev.close()
             devices.append(dev)
@@ -275,7 +274,6 @@ cdef class SeaBreezeAPI(object):
         devices: list of str
             list of model names that are supported by this backend
         """
-        cdef int num_models
         cdef int error_code
         cdef char c_buffer[_MAXBUFLEN]
         cdef int bytes_written
@@ -290,7 +288,7 @@ cdef class SeaBreezeAPI(object):
                 raise SeaBreezeError(error_code=error_code)
 
             serial = c_buffer[:bytes_written]
-            output.append(serial.decode("utf-8").rstrip('\x00'))
+            output.append(serial.decode("utf-8").rstrip("\x00"))
         return output
 
 
@@ -436,7 +434,7 @@ cdef class SeaBreezeDevice(object):
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         serial = c_buffer[:bytes_written]
-        return serial.decode("utf-8").rstrip('\x00')
+        return serial.decode("utf-8").rstrip("\x00")
 
     def get_model(self):
         """return the model string of the spectrometer
@@ -494,6 +492,8 @@ cdef class SeaBreezeDevice(object):
 
 # create only one SeaBreezeDevice instance per handle
 _seabreeze_device_instance_registry = weakref.WeakValueDictionary()
+
+
 def _seabreeze_device_factory(handle):
     """return existing instances instead of creating temporary ones"""
     try:
@@ -575,11 +575,11 @@ cdef class SeaBreezeRawUSBBusAccessFeature(SeaBreezeFeature):
         cdef int error_code
         cdef unsigned char out
         ep_map = {
-            'primary_out': csb.kEndpointTypePrimaryOut, # slow speed
-            'primary_in': csb.kEndpointTypePrimaryIn,  # slow speed
-            'secondary_out': csb.kEndpointTypeSecondaryOut, # could be high speed
-            'secondary_in': csb.kEndpointTypeSecondaryIn,  # could be high speed
-            'secondary_in2': csb.kEndpointTypeSecondaryIn2  # generally high speed
+            "primary_out": csb.kEndpointTypePrimaryOut,  # slow speed
+            "primary_in": csb.kEndpointTypePrimaryIn,  # slow speed
+            "secondary_out": csb.kEndpointTypeSecondaryOut,  # could be high speed
+            "secondary_in": csb.kEndpointTypeSecondaryIn,  # could be high speed
+            "secondary_in2": csb.kEndpointTypeSecondaryIn2  # generally high speed
         }
         if endpoint not in ep_map.keys():
             raise ValueError("endpoint not in %s" % str(ep_map.keys()))
@@ -697,7 +697,6 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         cdef int error_code
         cdef int cmode
         cmode = int(mode)
-        cdef unsigned long device_id, feature_id
         with nogil:
             self.sbapi.spectrometerSetTriggerMode(self.device_id, self.feature_id, &error_code, cmode)
         if error_code != 0:
@@ -832,7 +831,6 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         wavelengths: `np.ndarray`
         """
         cdef int error_code
-        cdef int bytes_written
         cdef double[::1] out
         cdef int out_length
 
@@ -840,8 +838,8 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         out = wavelengths
         out_length = wavelengths.size
         with nogil:
-            bytes_written = self.sbapi.spectrometerGetWavelengths(self.device_id, self.feature_id, &error_code,
-                                                                  &out[0], out_length)
+            _ = self.sbapi.spectrometerGetWavelengths(self.device_id, self.feature_id, &error_code,
+                                                      &out[0], out_length)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         return wavelengths
@@ -925,7 +923,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         for _ in range(sample_number):
             # decode metadata
             sm = SpectrumMetadata(
-                *struct.unpack('HHIQIIIIQH', data[offset : offset + 42])
+                *struct.unpack("HHIQIIIIQH", data[offset : offset + 42])
             )
 
             # determine pixel data format from metadata and decode spectrum
@@ -1215,7 +1213,7 @@ cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
         bytes_written = self.sbapi.irradCalibrationRead(self.device_id, self.feature_id, &error_code,
                                                         &out[0], out_length)
         if error_code != 0:
-             raise SeaBreezeError(error_code=error_code)
+            raise SeaBreezeError(error_code=error_code)
         return irrad_calibration[:bytes_written]
 
     def write_calibration(self, calibration_array):
@@ -1230,7 +1228,6 @@ cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
         None
         """
         cdef int error_code
-        cdef int bytes_written
         cdef float[::1] out
         cdef int out_length
         arr = np.asarray(calibration_array, dtype=np.float32)
@@ -1238,10 +1235,10 @@ cdef class SeaBreezeIrradCalFeature(SeaBreezeFeature):
             raise ValueError("calibration_array needs to be 1D")
         out = arr
         out_length = arr.size
-        bytes_written = self.sbapi.irradCalibrationWrite(self.device_id, self.feature_id, &error_code,
-                                                         &out[0], out_length)
+        _ = self.sbapi.irradCalibrationWrite(self.device_id, self.feature_id, &error_code,
+                                             &out[0], out_length)
         if error_code != 0:
-             raise SeaBreezeError(error_code=error_code)
+            raise SeaBreezeError(error_code=error_code)
 
 
 cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
@@ -1318,7 +1315,7 @@ cdef class SeaBreezeEthernetConfigurationFeature(SeaBreezeFeature):
         cdef unsigned char c_interface_index
         c_interface_index = int(interface_index)
         # convert mac address
-        mbytes = map(lambda x: chr(int(x, 16)), mac_address.split(':'))
+        mbytes = map(lambda x: chr(int(x, 16)), mac_address.split(":"))
         assert len(mbytes) == 6
         cbytes = bytes("".join(mbytes))[:6]
         cdef unsigned char macAddress[6]
@@ -1561,7 +1558,6 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         cdef unsigned char c_interface_index
         cdef unsigned char addressIndex
         cdef unsigned char(*ipv4_address)[4]
-        cdef unsigned char* netMask
         cdef unsigned char* view_addr
         c_interface_index = int(interface_index)
         addressIndex = int(address_index)
@@ -1636,7 +1632,7 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         cdef unsigned char c_interface_index
         cdef unsigned char address[4]
         c_interface_index = int(interface_index)
-        mbytes = map(int, default_gateway_address.split('.'))
+        mbytes = map(int, default_gateway_address.split("."))
         assert len(mbytes) == 4
         cbytes = bytes("".join(mbytes))[:4]
         address = <const unsigned char*> PyMem_Malloc(4 * sizeof(unsigned char))
@@ -1669,13 +1665,13 @@ cdef class SeaBreezeIPv4Feature(SeaBreezeFeature):
         cdef  unsigned char netMask
         c_interface_index = int(interface_index)
 
-        addr_nm = ipv4_address.split('/')
+        addr_nm = ipv4_address.split("/")
         if len(addr_nm) == 1:
             nm = 24  # default netmask
         else:
             nm = int(addr_nm[1])
         netMask = nm
-        mbytes = map(int, addr_nm[0].split('.'))
+        mbytes = map(int, addr_nm[0].split("."))
         assert len(mbytes) == 4
         cbytes = bytes("".join(mbytes))[:4]
         address = <const unsigned char*> PyMem_Malloc(4 * sizeof(unsigned char))
@@ -1794,13 +1790,13 @@ cdef class SeaBreezeDHCPServerFeature(SeaBreezeFeature):
         cdef unsigned char netMask
         c_interface_index = int(interface_index)
 
-        addr_nm = server_address.split('/')
+        addr_nm = server_address.split("/")
         if len(addr_nm) == 1:
             nm = 24  # default netmask
         else:
             nm = int(addr_nm[1])
         netMask = nm
-        mbytes = map(int, addr_nm[0].split('.'))
+        mbytes = map(int, addr_nm[0].split("."))
         assert len(mbytes) == 4
         cbytes = bytes("".join(mbytes))[:4]
         address = <const unsigned char*> PyMem_Malloc(4 * sizeof(unsigned char))
@@ -2034,7 +2030,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         Returns
         -------
         wifi_mode : int
-	        mode `{0: 'client', 1: 'access point'}`
+            mode `{0: 'client', 1: 'access point'}`
         """
         cdef int error_code
         cdef unsigned char output
@@ -2053,7 +2049,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         ----------
         interface_index : int
         wifi_mode : int
-	        mode `{0: 'client', 1: 'access point'}`
+            mode `{0: 'client', 1: 'access point'}`
 
         Returns
         -------
@@ -2079,7 +2075,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         Returns
         -------
         security_type : int
-	        security_type `{0: 'open', 1: 'WPA2'}`
+            security_type `{0: 'open', 1: 'WPA2'}`
         """
         cdef int error_code
         cdef unsigned char output
@@ -2098,7 +2094,7 @@ cdef class SeaBreezeWifiConfigurationFeature(SeaBreezeFeature):
         ----------
         interface_index : int
         security_type : int
-	        security_type `{0: 'open', 1: 'WPA2'}`
+            security_type `{0: 'open', 1: 'WPA2'}`
 
         Returns
         -------
@@ -2290,7 +2286,6 @@ cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
-
     # unsigned int getGPIO_ValueVector(long deviceID, long featureID, int *errorCode)
     def get_gpio_value_vector(self):
         """get gpio value vector
@@ -2434,7 +2429,7 @@ cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
         pinNumber = int(pin_number)
         c_mode = int(mode)
         c_value = int(value)
-        self.sbapi.setEGPIO_Mode(self.device_id, self.feature_id, &error_code, pinNumber, c_mode, value)
+        self.sbapi.setEGPIO_Mode(self.device_id, self.feature_id, &error_code, pinNumber, c_mode, c_value)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
 
@@ -2476,7 +2471,6 @@ cdef class SeaBreezeGPIOFeature(SeaBreezeFeature):
         self.sbapi.setEGPIO_OutputVector(self.device_id, self.feature_id, &error_code, outputVector, bitMask)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-
 
     # float getEGPIO_Value(long deviceID, long featureID, int *errorCode, unsigned char pinNumber)
     def get_egpio_value(self, pin_number):
@@ -2573,7 +2567,7 @@ cdef class SeaBreezeEEPROMFeature(SeaBreezeFeature):
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         if strip_zero_bytes:
-            return c_buffer[:bytes_written].strip('\x00')
+            return c_buffer[:bytes_written].strip("\x00")
         return c_buffer[:bytes_written]
 
 
@@ -2653,7 +2647,6 @@ cdef class SeaBreezeLightSourceFeature(SeaBreezeFeature):
         is_enabled: bool
         """
         cdef int error_code
-        cdef bool_t is_enable
         is_enabled = self.sbapi.lightSourceIsEnabled(self.device_id, self.feature_id, &error_code, light_source_index)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
@@ -2778,7 +2771,6 @@ cdef class SeaBreezeStrobeLampFeature(SeaBreezeFeature):
         self.sbapi.lampSetLampEnable(self.device_id, self.feature_id, &error_code, bool(state))
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
-
 
 
 cdef class SeaBreezeContinuousStrobeFeature(SeaBreezeFeature):
@@ -3404,7 +3396,7 @@ cdef class SeaBreezeOpticalBenchFeature(SeaBreezeFeature):
         cdef int bytes_written
         cdef char buffer[_MAXBUFLEN]
         bytes_written = self.sbapi.opticalBenchGetGrating(self.device_id, self.feature_id, &error_code,
-                                                   &buffer[0], _MAXBUFLEN)
+                                                          &buffer[0], _MAXBUFLEN)
         if error_code != 0:
             raise SeaBreezeError(error_code=error_code)
         assert bytes_written < _MAXBUFLEN, "BUG: should increase hardcoded buffer size"

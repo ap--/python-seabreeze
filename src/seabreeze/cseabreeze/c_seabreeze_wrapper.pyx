@@ -38,19 +38,22 @@ class _ErrorCode(object):
 DEF _MAXBUFLEN = 32
 DEF _MAXDBUFLEN = 256
 
-# Define Metadata Dataset structure for individual buffered measurements.
-MetadataDataset = namedtuple("MetadataDataset", [
-                                "metadata_protocol_version",
-                                "metadata_length",
-                                "pixel_data_length",
-                                "microsecond_counter",
-                                "integration_time_micros",
-                                "pixel_data_format",
-                                "spectrum_count",
-                                "last_spectrum_count",
-                                "last_microsecond_count",
-                                "scans_to_average"
-                                ])
+# Define SpectrumMetadata structure for individual buffered measurements.
+SpectrumMetadata = namedtuple(
+    "SpectrumMetadata",
+    [
+        "metadata_protocol_version",
+        "metadata_length",
+        "pixel_data_length",
+        "microsecond_counter",
+        "integration_time_micros",
+        "pixel_data_format",
+        "spectrum_count",
+        "last_spectrum_count",
+        "last_microsecond_count",
+        "scans_to_average"
+    ],
+)
 
 
 # DO NOT DIRECTLY IMPORT EXCEPTIONS FROM HERE!
@@ -888,7 +891,7 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 
         Returns
         -------
-        list[tuple[MetadataDataset, np.ndarray]]
+        list[tuple[SpectrumMetadata, np.ndarray]]
         """
         cdef int error_code
         cdef int bytes_written
@@ -903,8 +906,14 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
         if not c_buffer:
             raise MemoryError("could not allocate memory for buffer")
         try:
-            bytes_written = self.sbapi.spectrometerGetFastBufferSpectrum(self.device_id, self.feature_id, &error_code,
-                                                                        &c_buffer[0], out_length, sample_number)
+            bytes_written = self.sbapi.spectrometerGetFastBufferSpectrum(
+                self.device_id,
+                self.feature_id,
+                &error_code,
+                &c_buffer[0],
+                out_length,
+                sample_number,
+            )
             if error_code != 0:
                 raise SeaBreezeError(error_code=error_code)
             data = c_buffer[:bytes_written]
@@ -913,30 +922,37 @@ cdef class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
 
         buffer_data = []
         offset = 0
-        for i in range(sample_number):
+        for _ in range(sample_number):
             # decode metadata
-            metadata = struct.unpack('HHIQIIIIQH',data[offset:offset+42])
-            metdata_dataset = MetadataDataset(*metadata)
+            sm = SpectrumMetadata(
+                *struct.unpack('HHIQIIIIQH', data[offset : offset + 42])
+            )
 
             # determine pixel data format from metadata and decode spectrum
-            intensities_raw = data[offset+metdata_dataset.metadata_length:offset+metdata_dataset.metadata_length+metdata_dataset.pixel_data_length]
-            if metdata_dataset.pixel_data_format == 1:
+            intensities_raw = data[
+                offset + sm.metadata_length
+                : offset + sm.metadata_length + sm.pixel_data_length
+            ]
+            if sm.pixel_data_format == 1:
                 intensities = np.frombuffer(intensities_raw, dtype=np.uint16)
-            elif metdata_dataset.pixel_data_format == 2:
-                intensities = np.frombuffer(intensities_raw, dtype=np.uint24)
-            elif metdata_dataset.pixel_data_format == 3:
+            elif sm.pixel_data_format == 2:
+                # note:
+                #   we could create a 32bit view and use stride tricks and
+                #   bit-masking 0x00ffffff to get 24bit data into a 32bit array...
+                raise NotImplementedError("Numpy lacks support for 24bit unsigned integers")
+            elif sm.pixel_data_format == 3:
                 intensities = np.frombuffer(intensities_raw, dtype=np.uint32)
-            elif metdata_dataset.pixel_data_format == 4:
+            elif sm.pixel_data_format == 4:
                 intensities = np.frombuffer(intensities_raw, dtype=np.single)
             else:
-                SeaBreezeError("Unknown Pixel Data Format")
+                raise SeaBreezeError(f"Unknown Pixel Data Format {sm.pixel_data_format!r}")
 
             # add data to return list
-            buffer_data.append((metdata_dataset,intensities))
+            buffer_data.append((sm, intensities))
 
             # depending on the individual Dataset length, add offset to next Dataset.
             # There is 4 bytes of unused data after every spectrum for some reason. So add that as well.
-            offset += metdata_dataset.metadata_length + metdata_dataset.pixel_data_length + 4
+            offset += sm.metadata_length + sm.pixel_data_length + 4
         return buffer_data
 
 cdef class SeaBreezePixelBinningFeature(SeaBreezeFeature):

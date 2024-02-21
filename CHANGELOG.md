@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ...
 
+## [2.7.0] - 2024-02-21
+### Added
+- *csb* added support for get_fast_buffer_spectrum() (cseabreeze backend) (thanks @padalev)
+
 ## [2.6.0] - 2024-01-24
 ### Changed
 - *psb* Use currently set integration time for timeout instead of the maximum integration time.
@@ -225,7 +229,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.6.0...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.7.0...HEAD
+[2.7.0]: https://github.com/ap--/python-seabreeze/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/ap--/python-seabreeze/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/ap--/python-seabreeze/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/ap--/python-seabreeze/compare/v2.3.0...v2.4.0

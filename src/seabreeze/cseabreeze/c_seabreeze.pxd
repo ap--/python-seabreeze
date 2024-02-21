@@ -13,9 +13,9 @@ from libcpp cimport bool
 
 cdef extern from "api/USBEndpointTypes.h":
     cpdef enum usbEndpointType:
-        kEndpointTypePrimaryOut, # slow speed
+        kEndpointTypePrimaryOut,  # slow speed
         kEndpointTypePrimaryIn,  # slow speed
-        kEndpointTypeSecondaryOut, # could be high speed
+        kEndpointTypeSecondaryOut,  # could be high speed
         kEndpointTypeSecondaryIn,  # could be high speed
         kEndpointTypeSecondaryIn2  # generally high speed
 
@@ -26,6 +26,7 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
 
         @staticmethod
         SeaBreezeAPI* getInstance() except +
+
         @staticmethod
         void shutdown() except +
 
@@ -55,7 +56,6 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         int rawUSBBusAccessRead(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
         int rawUSBBusAccessWrite(long deviceID, long featureID, int *errorCode, unsigned char *buffer, unsigned int bufferLength, unsigned char endpoint)
 
-
         # Spectrometer capabilities
         int getNumberOfSpectrometerFeatures(long id, int *errorCode)
         int getSpectrometerFeatures(long deviceID, int *errorCode, long *buffer, unsigned int maxLength)
@@ -66,7 +66,7 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         double spectrometerGetMaximumIntensity(long deviceID, long spectrometerFeatureID, int *errorCode)
         int spectrometerGetUnformattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
         # int spectrometerGetUnformattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *buffer, int bufferLength)
-        int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *dataBuffer, int dataMaxLength, unsigned int numberOfSampleToRetrieve) # currently 15 max
+        int spectrometerGetFastBufferSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, unsigned char *dataBuffer, int dataMaxLength, unsigned int numberOfSampleToRetrieve)  # currently 15 max
         int spectrometerGetFormattedSpectrumLength(long deviceID, long spectrometerFeatureID, int *errorCode)
         int spectrometerGetFormattedSpectrum(long deviceID, long spectrometerFeatureID, int *errorCode, double *buffer, int bufferLength) nogil
         int spectrometerGetWavelengths(long deviceID, long spectrometerFeatureID, int *errorCode, double *wavelengths, int length) nogil
@@ -224,7 +224,6 @@ cdef extern from "api/seabreezeapi/SeaBreezeAPI.h":
         int introspectionActivePixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
         int introspectionOpticalDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
         int introspectionElectricDarkPixelRangesGet(long deviceID, long featureID, int *errorCode, unsigned int *pixelIndexPairs, int maxLength)
-
 
         # Spectrum processing capabilities
         int getNumberOfSpectrumProcessingFeatures(long deviceID, int *errorCode)

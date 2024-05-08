@@ -254,7 +254,7 @@ class DarkPixelIndices(Tuple[int, ...]):
         indices : iterable
             index of electric dark pixel
         """
-        return super().__new__(DarkPixelIndices, sorted(set(indices)))  # type: ignore
+        return super().__new__(DarkPixelIndices, sorted(set(indices)))
 
     @classmethod
     def from_ranges(cls, *ranges: tuple[int, int]) -> DarkPixelIndices:

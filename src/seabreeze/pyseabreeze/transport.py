@@ -9,6 +9,7 @@ from __future__ import annotations
 import importlib
 import inspect
 import logging
+import socket
 import warnings
 from functools import partialmethod
 from typing import TYPE_CHECKING
@@ -19,8 +20,6 @@ from typing import Tuple
 import usb.backend
 import usb.core
 import usb.util
-
-import socket
 
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
@@ -367,6 +366,7 @@ def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
         return None
     return module.__name__.split(".")[-1]
 
+
 #  ___ ____        _  _
 # |_ _|  _ \__   _| || |
 #  | || |_) \ \ / / || |_
@@ -376,7 +376,9 @@ def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
 
 # this can and should be opaque to pyseabreeze
 class IPv4TransportHandle:
-    def __init__(self, socket: socket.socket, address: str = None, port: int = None) -> None:
+    def __init__(
+        self, socket: socket.socket, address: str = None, port: int = None
+    ) -> None:
         """encapsulation for IPv4 socket classes
 
         Parameters
@@ -486,7 +488,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         timeout = self._device.socket.gettimeout()
         if not timeout:
             return 10000
-        return int(timeout * 1000) # type: ignore
+        return int(timeout * 1000)  # type: ignore
 
     @property
     def protocol(self) -> PySeaBreezeProtocol:
@@ -509,7 +511,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         # TODO use multicast to discover potential spectrometers
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # FIXME this uses the default address only
-        sock.connect(('192.168.254.254', 57357))
+        sock.connect(("192.168.254.254", 57357))
         for dev in range(1):
             yield IPv4TransportHandle(sock)
 

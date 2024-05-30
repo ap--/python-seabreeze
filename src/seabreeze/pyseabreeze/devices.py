@@ -21,6 +21,7 @@ from seabreeze.pyseabreeze.protocol import OBP2Protocol
 from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
 from seabreeze.pyseabreeze.transport import USBTransport
+from seabreeze.pyseabreeze.transport import IPv4Transport
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 from seabreeze.types import SeaBreezeFeatureAccessor
 
@@ -312,7 +313,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
             raise SeaBreezeError(
                 "Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`."
             )
-        for transport in {USBTransport}:
+        for transport in {USBTransport, IPv4Transport}:
             supported_model = transport.supported_model(raw_device)
             if supported_model is not None:
                 break
@@ -365,7 +366,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         return f"<SeaBreezeDevice {self.model}:{self.serial_number}>"
 
     def open(self) -> None:
-        """open the spectrometer usb connection
+        """open the spectrometer connection
 
         Returns
         -------

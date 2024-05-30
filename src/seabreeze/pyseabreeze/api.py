@@ -21,6 +21,8 @@ from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.transport import USBTransportDeviceInUse
 from seabreeze.pyseabreeze.transport import USBTransportError
 from seabreeze.pyseabreeze.transport import USBTransportHandle
+from seabreeze.pyseabreeze.transport import IPv4Transport
+from seabreeze.pyseabreeze.transport import IPv4TransportHandle
 from seabreeze.types import SeaBreezeAPI as _SeaBreezeAPIProtocol
 
 if TYPE_CHECKING:
@@ -35,20 +37,20 @@ _seabreeze_device_instance_registry: weakref.WeakValueDictionary[
 ] = weakref.WeakValueDictionary()
 
 
-def _seabreeze_device_factory(device: USBTransportHandle) -> SeaBreezeDevice:
+def _seabreeze_device_factory(device: USBTransportHandle | IPv4TransportHandle) -> SeaBreezeDevice:
     """return existing instances instead of creating temporary ones
 
     Parameters
     ----------
-    device : USBTransportHandle
+    device : USBTransportHandle | IPv4TransportHandle
 
     Returns
     -------
     dev : SeaBreezeDevice
     """
     global _seabreeze_device_instance_registry
-    if not isinstance(device, USBTransportHandle):
-        raise TypeError("needs to be instance of USBTransportHandle")
+    if not isinstance(device, USBTransportHandle) and not isinstance(device, IPv4TransportHandle):
+        raise TypeError(f"needs to be instance of USBTransportHandle or IPv4TransportHandle and not '{type(device)}'")
     ident = device.identity
     try:
         return _seabreeze_device_instance_registry[ident]
@@ -126,6 +128,19 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
                     raise
                 else:
                     dev.close()
+            devices.append(dev)  # type: ignore
+        for ipv4_dev in IPv4Transport.list_devices(**self._kwargs):
+            # get the correct communication interface
+            dev = _seabreeze_device_factory(ipv4_dev)
+            if not dev.is_open:
+                # opening the device will populate its serial number
+                try:
+                    dev.open()
+                except Exception:
+                    # TODO specify expected exception
+                    raise
+                #else:
+                #    dev.close()
             devices.append(dev)  # type: ignore
         return devices
 

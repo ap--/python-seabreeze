@@ -1299,6 +1299,7 @@ class HR2(SeaBreezeDevice):
     # features
     feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureHR2,)
 
+
 class HR4(SeaBreezeDevice):
     model_name = "HR4"
 

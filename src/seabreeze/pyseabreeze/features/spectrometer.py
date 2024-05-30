@@ -739,5 +739,6 @@ class SeaBreezeSpectrometerFeatureHR2(SeaBreezeSpectrometerFeatureOBP):
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
+
 class SeaBreezeSpectrometerFeatureHR4(SeaBreezeSpectrometerFeatureOBP2):
     pass

@@ -21,6 +21,7 @@ import usb.core
 import usb.util
 
 import socket
+import ipaddress
 
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
@@ -400,23 +401,19 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
     """implementation of the IPv4 socket transport interface for spectrometers"""
 
     _required_init_kwargs = (
-        "ipv4_address",
-        "ipv4_port",
         "ipv4_protocol",
     )
+
+    devices_ip_port: dict[tuple[str, int], str] = {}
 
     # add logging
     _log = logging.getLogger(__name__)
 
     def __init__(
         self,
-        ipv4_address: str,
-        ipv4_port: int,
         ipv4_protocol: type[PySeaBreezeProtocol],
     ) -> None:
         super().__init__()
-        self._address = ipv4_address
-        self._port = ipv4_port
         self._protocol_cls = ipv4_protocol
         # internal state
         self._device: IPv4TransportHandle | None = None
@@ -515,9 +512,21 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
 
     @classmethod
     def register_model(cls, model_name: str, **kwargs: Any) -> None:
-        # TODO implement e.g. IP to model mapping?
-        print(f"Trying to register {model_name} with {kwargs}")
-        pass
+        ip = kwargs.get("ipv4_address")
+        if not isinstance(ip, str):
+            raise TypeError(f"ip address {ip} not a string")
+        try:
+            ipaddress.ip_address(ip)
+        except ValueError:
+            raise ValueError(f"ip address {ip} does not represent a valid IPv4 address")
+        port = kwargs.get("ipv4_port")
+        if not isinstance(port, int):
+            raise TypeError(f"port {port} not an integer")
+        if (ip, port) in cls.devices_ip_port:
+            raise ValueError(
+                f"ip address:port {ip}:{port} already in registry"
+            )
+        cls.devices_ip_port[(ip, port)] = model_name
 
     @classmethod
     def supported_model(cls, device: IPv4TransportHandle) -> str | None:
@@ -539,7 +548,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         # TODO check that this makes sense for the ipv4 transport
         assert set(kwargs) == set(cls._required_init_kwargs)
         # ipv4 transport register automatically on registration
-        cls.register_model(model_name, **kwargs)
+        # cls.register_model(model_name, **kwargs)
         specialized_class = type(
             f"IPv4Transport{model_name}",
             (cls,),

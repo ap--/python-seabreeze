@@ -1,6 +1,8 @@
 import struct
+
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.protocol import OBPProtocol
+
 
 # Definition
 # ==========
@@ -18,7 +20,9 @@ class SeaBreezeMulticastFeature(SeaBreezeFeature):
     ) -> None:
         raise NotImplementedError("implement in derived class")
 
-    def get_multicast_group_address(self, interface_index: int) -> tuple[int, int , int, int]:
+    def get_multicast_group_address(
+        self, interface_index: int
+    ) -> tuple[int, int, int, int]:
         raise NotImplementedError("implement in derived class")
 
     def get_multicast_group_port(self, interface_index: int) -> int:
@@ -43,7 +47,9 @@ class SeaBreezeMulticastFeatureOBP(SeaBreezeMulticastFeature):
     ) -> None:
         raise NotImplementedError("missing from HDX FW documentation")
 
-    def get_multicast_group_address(self, interface_index: int) -> tuple[int, int, int, int]:
+    def get_multicast_group_address(
+        self, interface_index: int
+    ) -> tuple[int, int, int, int]:
         ret = self.protocol.query(0x00000A81, int(interface_index))
         ip = struct.unpack("<BBBB", ret)
         return ip

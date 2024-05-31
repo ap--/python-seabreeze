@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import ipaddress
 import logging
 import socket
 import warnings
@@ -20,9 +21,6 @@ from typing import Tuple
 import usb.backend
 import usb.core
 import usb.util
-
-import socket
-import ipaddress
 
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
@@ -404,9 +402,7 @@ class IPv4TransportHandle:
 class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
     """implementation of the IPv4 socket transport interface for spectrometers"""
 
-    _required_init_kwargs = (
-        "ipv4_protocol",
-    )
+    _required_init_kwargs = ("ipv4_protocol",)
 
     devices_ip_port: dict[tuple[str, int], str] = {}
 
@@ -533,9 +529,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         if not isinstance(port, int):
             raise TypeError(f"port {port} not an integer")
         if (ip, port) in cls.devices_ip_port:
-            raise ValueError(
-                f"ip address:port {ip}:{port} already in registry"
-            )
+            raise ValueError(f"ip address:port {ip}:{port} already in registry")
         cls.devices_ip_port[(ip, port)] = model_name
 
     @classmethod

@@ -593,12 +593,9 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         ----------
         device : IPv4TransportHandle
         """
-        # TODO implement this method
         if not isinstance(device, IPv4TransportHandle):
             return None
-        # noinspection PyUnresolvedReferences
-        # FIXME return something other then a hard-coded string
-        return "HDX"
+        return cls.devices_ip_port[device.identity]
 
     @classmethod
     def specialize(cls, model_name: str, **kwargs: Any) -> type[IPv4Transport]:
@@ -615,7 +612,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
 
     @classmethod
     def initialize(cls, **_kwargs: Any) -> None:
-        # TODO implement socket resent (close/open?)
+        # TODO implement socket reset? (close/open?)
         pass
 
     @classmethod

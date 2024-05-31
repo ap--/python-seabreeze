@@ -527,8 +527,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
             # indefinitely when trying to receive data.
             sock.settimeout(kwargs.get("multicast_timeout", 2))
             sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(network_adapter))
-            handle = IPv4TransportHandle(sock)
-            transport = IPv4Transport(handle)
+            transport = IPv4Transport(OBPProtocol)
             protocol = OBPProtocol(transport)
             msg_type = 0x00000100  # GET_SERIAL
             data = protocol.msgs[msg_type](*())

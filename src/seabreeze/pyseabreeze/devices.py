@@ -1174,6 +1174,7 @@ class HDX(SeaBreezeDevice):
         sbf.spectrometer.SeaBreezeSpectrometerFeatureHDX,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
         sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP,
+        sbf.multicast.SeaBreezeMulticastFeatureOBP,
     )
 
 

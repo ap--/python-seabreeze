@@ -103,7 +103,9 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
         self, device_type: str, ip_address: str, port: int
     ) -> None:
         """add ipv4 device location"""
-        IPv4Transport.register_model(device_type, ipv4_address=ip_address, ipv4_port=port)
+        IPv4Transport.register_model(
+            device_type, ipv4_address=ip_address, ipv4_port=port
+        )
 
     def list_devices(self) -> list[_SeaBreezeDevice]:
         """returns available SeaBreezeDevices

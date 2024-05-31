@@ -8,7 +8,9 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import ipaddress
 import logging
+import socket
 import warnings
 from functools import partialmethod
 from typing import TYPE_CHECKING
@@ -16,16 +18,13 @@ from typing import Any
 from typing import Iterable
 from typing import Tuple
 
-import socket
-import ipaddress
-
 import usb.backend
 import usb.core
 import usb.util
 
+from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
-from seabreeze.pyseabreeze.protocol import OBPProtocol
 
 if TYPE_CHECKING:
     from seabreeze.pyseabreeze.devices import EndPointMap
@@ -379,9 +378,7 @@ def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
 
 # this can and should be opaque to pyseabreeze
 class IPv4TransportHandle:
-    def __init__(
-        self, sock: socket.socket
-    ) -> None:
+    def __init__(self, sock: socket.socket) -> None:
         """encapsulation for IPv4 socket classes
 
         Parameters
@@ -402,15 +399,12 @@ class IPv4TransportHandle:
 
     def __del__(self) -> None:
         self.close()
-        self.socket = None
 
 
 class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
     """implementation of the IPv4 socket transport interface for spectrometers"""
 
-    _required_init_kwargs = (
-        "ipv4_protocol",
-    )
+    _required_init_kwargs = ("ipv4_protocol",)
 
     devices_ip_port: dict[tuple[str, int], str] = {}
 
@@ -491,7 +485,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         timeout = self._device.socket.gettimeout()
         if not timeout:
             return 10000
-        return int(timeout * 1000)  # type: ignore
+        return int(timeout * 1000)
 
     @property
     def protocol(self) -> PySeaBreezeProtocol:
@@ -518,7 +512,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         network_adapter = kwargs.get("network_adapter", None)
         if network_adapter:
             multicast_group = (
-                kwargs.get("multicast_group", '239.239.239.239'),
+                kwargs.get("multicast_group", "239.239.239.239"),
                 kwargs.get("multicast_port", 57357),
             )  # default values for HDX devices
             # Create the datagram (UDP) socket
@@ -526,16 +520,22 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
             # Set a timeout so the socket does not block
             # indefinitely when trying to receive data.
             sock.settimeout(kwargs.get("multicast_timeout", 2))
-            sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(network_adapter))
+            sock.setsockopt(
+                socket.IPPROTO_IP,
+                socket.IP_MULTICAST_IF,
+                socket.inet_aton(network_adapter),
+            )
             transport = IPv4Transport(OBPProtocol)
             protocol = OBPProtocol(transport)
             msg_type = 0x00000100  # GET_SERIAL
             data = protocol.msgs[msg_type](*())
             message = protocol._construct_outgoing_message(
-                msg_type, data, request_ack=True,
+                msg_type,
+                data,
+                request_ack=True,
             )
             sock.sendto(message, multicast_group)
-            print('Waiting to receive multicast response(s)')
+            print("Waiting to receive multicast response(s)")
             while True:
                 try:
                     data = bytearray(90)
@@ -544,7 +544,11 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
                     break
                 else:
                     serial = protocol._extract_message_data(data[:nbytes])
-                    cls.register_model(model_name=serial, ipv4_address=server[0], ipv4_port=server[1])
+                    cls.register_model(
+                        model_name=serial.decode(),
+                        ipv4_address=server[0],
+                        ipv4_port=server[1],
+                    )
 
         # connect to discovered and registered devices
         for address in cls.devices_ip_port:
@@ -571,9 +575,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         if not isinstance(port, int):
             raise TypeError(f"port {port} not an integer")
         if (ip, port) in cls.devices_ip_port:
-            raise ValueError(
-                f"ip address:port {ip}:{port} already in registry"
-            )
+            raise ValueError(f"ip address:port {ip}:{port} already in registry")
         cls.devices_ip_port[(ip, port)] = model_name
 
     @classmethod

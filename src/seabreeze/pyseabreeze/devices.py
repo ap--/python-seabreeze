@@ -1147,7 +1147,10 @@ class HDX(SeaBreezeDevice):
     model_name = "HDX"
 
     # communication config
-    transport = (IPv4Transport, USBTransport, )
+    transport = (
+        IPv4Transport,
+        USBTransport,
+    )
     usb_vendor_id = 0x2457
     usb_product_id = 0x2003
     usb_endpoint_map = EndPointMap(

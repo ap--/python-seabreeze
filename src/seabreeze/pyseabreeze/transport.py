@@ -380,7 +380,7 @@ def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
 # this can and should be opaque to pyseabreeze
 class IPv4TransportHandle:
     def __init__(
-        self, socket: socket.socket, address: str = None, port: int = None
+        self, sock: socket.socket
     ) -> None:
         """encapsulation for IPv4 socket classes
 
@@ -388,8 +388,12 @@ class IPv4TransportHandle:
         ----------
 
         """
-        self.socket: socket.socket = socket
+        self.socket: socket.socket = sock
         # TODO check if socket is connected and get address via socket (socket.getpeername())
+        try:
+            address, port = sock.getpeername()
+        except OSError:
+            address, port = None, None
         self.identity: tuple[str, int] = (address, port)
 
     def close(self) -> None:

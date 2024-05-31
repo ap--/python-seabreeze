@@ -9,7 +9,6 @@ from __future__ import annotations
 import importlib
 import inspect
 import logging
-import socket
 import warnings
 from functools import partialmethod
 from typing import TYPE_CHECKING
@@ -17,15 +16,16 @@ from typing import Any
 from typing import Iterable
 from typing import Tuple
 
+import socket
+import ipaddress
+
 import usb.backend
 import usb.core
 import usb.util
 
-import socket
-import ipaddress
-
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
+from seabreeze.pyseabreeze.protocol import OBPProtocol
 
 if TYPE_CHECKING:
     from seabreeze.pyseabreeze.devices import EndPointMap
@@ -507,9 +507,44 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         devices : IPv4TransportHandle
             unique socket devices for each available spectrometer
         """
-        # TODO use multicast to discover potential spectrometers
         dev_sockets = []
-        for address, model in cls.devices_ip_port.items():
+
+        # Use multicast to discover potential spectrometers. Requires a network
+        # adapter to be specified.
+        network_adapter = kwargs.get("network_adapter", None)
+        if network_adapter:
+            multicast_group = (
+                kwargs.get("multicast_group", '239.239.239.239'),
+                kwargs.get("multicast_port", 57357),
+            )  # default values for HDX devices
+            # Create the datagram (UDP) socket
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # Set a timeout so the socket does not block
+            # indefinitely when trying to receive data.
+            sock.settimeout(kwargs.get("multicast_timeout", 2))
+            sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(network_adapter))
+            handle = IPv4TransportHandle(sock)
+            transport = IPv4Transport(handle)
+            protocol = OBPProtocol(transport)
+            msg_type = 0x00000100  # GET_SERIAL
+            data = protocol.msgs[msg_type](*())
+            message = protocol._construct_outgoing_message(
+                msg_type, data, request_ack=True,
+            )
+            sock.sendto(message, multicast_group)
+            print('Waiting to receive multicast response(s)')
+            while True:
+                try:
+                    data = bytearray(90)
+                    nbytes, server = sock.recvfrom_into(data)
+                except socket.timeout:
+                    break
+                else:
+                    serial = protocol._extract_message_data(data[:nbytes])
+                    cls.register_model(model_name=serial, ipv4_address=server[0], ipv4_port=server[1])
+
+        # connect to discovered and registered devices
+        for address in cls.devices_ip_port:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 sock.connect(address)
@@ -517,8 +552,8 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
                 raise RuntimeError(f"Could not connect to {address}: {e}")
             else:
                 dev_sockets.append(sock)
-        for dev in dev_sockets:
-            yield IPv4TransportHandle(dev)
+        for sock in dev_sockets:
+            yield IPv4TransportHandle(sock)
 
     @classmethod
     def register_model(cls, model_name: str, **kwargs: Any) -> None:

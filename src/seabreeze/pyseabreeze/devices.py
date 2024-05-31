@@ -20,8 +20,8 @@ from seabreeze.pyseabreeze.protocol import ADCProtocol
 from seabreeze.pyseabreeze.protocol import OBP2Protocol
 from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
-from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.transport import IPv4Transport
+from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 from seabreeze.types import SeaBreezeFeatureAccessor
 
@@ -1154,7 +1154,6 @@ class HDX(SeaBreezeDevice):
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
     )
     usb_protocol = OBPProtocol
-
     ipv4_protocol = OBPProtocol
 
     # spectrometer config

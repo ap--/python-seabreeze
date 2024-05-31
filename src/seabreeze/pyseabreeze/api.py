@@ -17,12 +17,12 @@ from typing import Any
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice
 from seabreeze.pyseabreeze.devices import _model_class_registry
 from seabreeze.pyseabreeze.transport import DeviceIdentity
+from seabreeze.pyseabreeze.transport import IPv4Transport
+from seabreeze.pyseabreeze.transport import IPv4TransportHandle
 from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.transport import USBTransportDeviceInUse
 from seabreeze.pyseabreeze.transport import USBTransportError
 from seabreeze.pyseabreeze.transport import USBTransportHandle
-from seabreeze.pyseabreeze.transport import IPv4Transport
-from seabreeze.pyseabreeze.transport import IPv4TransportHandle
 from seabreeze.types import SeaBreezeAPI as _SeaBreezeAPIProtocol
 
 if TYPE_CHECKING:
@@ -37,7 +37,9 @@ _seabreeze_device_instance_registry: weakref.WeakValueDictionary[
 ] = weakref.WeakValueDictionary()
 
 
-def _seabreeze_device_factory(device: USBTransportHandle | IPv4TransportHandle) -> SeaBreezeDevice:
+def _seabreeze_device_factory(
+    device: USBTransportHandle | IPv4TransportHandle,
+) -> SeaBreezeDevice:
     """return existing instances instead of creating temporary ones
 
     Parameters
@@ -49,8 +51,12 @@ def _seabreeze_device_factory(device: USBTransportHandle | IPv4TransportHandle) 
     dev : SeaBreezeDevice
     """
     global _seabreeze_device_instance_registry
-    if not isinstance(device, USBTransportHandle) and not isinstance(device, IPv4TransportHandle):
-        raise TypeError(f"needs to be instance of USBTransportHandle or IPv4TransportHandle and not '{type(device)}'")
+    if not isinstance(device, USBTransportHandle) and not isinstance(
+        device, IPv4TransportHandle
+    ):
+        raise TypeError(
+            f"needs to be instance of USBTransportHandle or IPv4TransportHandle and not '{type(device)}'"
+        )
     ident = device.identity
     try:
         return _seabreeze_device_instance_registry[ident]
@@ -138,7 +144,7 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
                 except Exception:
                     # TODO specify expected exception
                     raise
-                #else:
+                # else:
                 #    dev.close()
             devices.append(dev)  # type: ignore
         return devices

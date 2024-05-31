@@ -11,6 +11,7 @@ import inspect
 import ipaddress
 import logging
 import socket
+import struct
 import warnings
 from functools import partialmethod
 from typing import TYPE_CHECKING
@@ -525,9 +526,11 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
                 socket.IP_MULTICAST_IF,
                 socket.inet_aton(network_adapter),
             )
+            # prepare a message requesting all devices in the multicast group
+            # to send their (USB) product id
             transport = IPv4Transport(OBPProtocol)
             protocol = OBPProtocol(transport)
-            msg_type = 0x00000100  # GET_SERIAL
+            msg_type = 0xE01  # Product ID
             data = protocol.msgs[msg_type](*())
             message = protocol._construct_outgoing_message(
                 msg_type,
@@ -543,9 +546,13 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
                 except socket.timeout:
                     break
                 else:
-                    serial = protocol._extract_message_data(data[:nbytes])
+                    pid_raw = protocol._extract_message_data(data[:nbytes])
+                    pid = int(struct.unpack("<H", pid_raw)[0])
+                    # use known product ids of the USB transport to look up the model name
+                    vid = 0x2457  # Ocean vendor ID
+                    model = USBTransport.vendor_product_ids[(vid, pid)]
                     cls.register_model(
-                        model_name=serial.decode(),
+                        model_name=model,
                         ipv4_address=server[0],
                         ipv4_port=server[1],
                     )

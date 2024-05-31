@@ -1147,16 +1147,14 @@ class HDX(SeaBreezeDevice):
     model_name = "HDX"
 
     # communication config
-    transport = (IPv4Transport, )
-    #usb_vendor_id = 0x2457
-    #usb_product_id = 0x2003
-    #usb_endpoint_map = EndPointMap(
-    #    ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
-    #)
-    #usb_protocol = OBPProtocol
+    transport = (IPv4Transport, USBTransport, )
+    usb_vendor_id = 0x2457
+    usb_product_id = 0x2003
+    usb_endpoint_map = EndPointMap(
+        ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
+    )
+    usb_protocol = OBPProtocol
 
-    ipv4_address = '192.168.254.254'
-    ipv4_port = 57357
     ipv4_protocol = OBPProtocol
 
     # spectrometer config

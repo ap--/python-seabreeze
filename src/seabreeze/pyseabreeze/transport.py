@@ -504,11 +504,17 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
             unique socket devices for each available spectrometer
         """
         # TODO use multicast to discover potential spectrometers
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # FIXME this uses the default address only
-        sock.connect(('192.168.254.254', 57357))
-        for dev in range(1):
-            yield IPv4TransportHandle(sock)
+        dev_sockets = []
+        for address, model in cls.devices_ip_port.items():
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                sock.connect(address)
+            except OSError as e:
+                raise RuntimeError(f"Could not connect to {address}: {e}")
+            else:
+                dev_sockets.append(sock)
+        for dev in dev_sockets:
+            yield IPv4TransportHandle(dev)
 
     @classmethod
     def register_model(cls, model_name: str, **kwargs: Any) -> None:

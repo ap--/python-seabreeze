@@ -42,13 +42,13 @@ seabreeze_os_setup
 ```
 
 ### Using the backend pyseabreeze in Windows
+
 The backend pyseabreeze requires the libraries pyusb and libusb
 ```bash
 # via pypi
-pip install pyusb
-pip install libusb
+pip install seabreeze[pyseabreeze]  # this ensures installation of pyusb
 ```
-Additionally, you might need to manually add a libusb-1.0.dll library to the system. Go here https://libusb.info/, Downloads -> Latest Windows Binaries. In the zip file, enter either the folder MinGW64/dll or MinGW32/dll (depending on your OS). Copy the file  libusb-1.0.dll into C:\Windows\System32.
+Additionally, you might need to manually install libusb1. Go here https://libusb.info/, Downloads -> Latest Windows Binaries. In the zip file, enter either the folder MinGW64/dll or MinGW32/dll (depending on your OS). Copy the file `libusb-1.0.dll` into `C:\Windows\System32`.
 
 
 ## Usage

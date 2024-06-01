@@ -41,6 +41,16 @@ conda install -c conda-forge seabreeze
 seabreeze_os_setup
 ```
 
+### Using the backend pyseabreeze in Windows
+
+The backend pyseabreeze requires the libraries pyusb and libusb
+```bash
+# via pypi
+pip install seabreeze[pyseabreeze]  # this ensures installation of pyusb
+```
+Additionally, you might need to manually install libusb1. Go here https://libusb.info/, Downloads -> Latest Windows Binaries. In the zip file, enter either the folder MinGW64/dll or MinGW32/dll (depending on your OS). Copy the file `libusb-1.0.dll` into `C:\Windows\System32`.
+
+
 ## Usage
 
 The following example shows how simple it is to acquire a spectrum with

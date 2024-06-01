@@ -1300,6 +1300,30 @@ class HR2(SeaBreezeDevice):
     feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureHR2,)
 
 
+class HR4(SeaBreezeDevice):
+    model_name = "HR4"
+
+    # communication config
+    transport = (USBTransport,)
+    usb_vendor_id = 0x0999
+    usb_product_id = 0x1004
+    usb_endpoint_map = EndPointMap(ep_out=0x01, highspeed_in=0x81)
+    usb_protocol = OBP2Protocol
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
+    integration_time_min = 3800  # 3.8ms
+    integration_time_max = 10000000  # 10s
+    integration_time_base = 1
+    spectrum_num_pixel = 3648
+    spectrum_raw_length = (3648 * 2) + 32  # XXX: Metadata
+    spectrum_max_value = 65535
+    trigger_modes = TriggerMode.supported("OBP_NORMAL")
+
+    # features
+    feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureHR4,)
+
+
 class ST(SeaBreezeDevice):
     model_name = "ST"
 

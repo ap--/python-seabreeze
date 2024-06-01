@@ -103,6 +103,8 @@ To use the pyseabreeze backend (requires `pyusb`) simply run this before importi
 | SR2          |            |            x             |
 | SR4          |            |            x             |
 | SR6          |            |            x             |
+| HR2          |            |            x             |
+| HR4          |            |            x             |
 | ST-VIS       |            |            x             |
 
 

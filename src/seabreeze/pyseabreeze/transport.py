@@ -523,7 +523,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         # Set a timeout so the socket does not block
         # indefinitely when trying to receive data.
-        sock.settimeout(kwargs.get("multicast_timeout", 2))
+        sock.settimeout(kwargs.get("multicast_timeout", 1))
         sock.setsockopt(
             socket.IPPROTO_IP,
             socket.IP_MULTICAST_IF,

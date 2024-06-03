@@ -508,54 +508,66 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         """
         dev_sockets = []
 
-        # Use multicast to discover potential spectrometers. Requires a network
-        # adapter to be specified.
+        # Use multicast to discover potential spectrometers. If no network
+        # adapter was specified use INADDR_ANY: an appropriate interface is
+        # chosen by the system (see ip(7)). This is usually the interface with
+        # the highest metric.
         network_adapter = kwargs.get("network_adapter", None)
-        if network_adapter:
-            multicast_group = (
-                kwargs.get("multicast_group", "239.239.239.239"),
-                kwargs.get("multicast_port", 57357),
-            )  # default values for HDX devices
-            # Create the datagram (UDP) socket
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            # Set a timeout so the socket does not block
-            # indefinitely when trying to receive data.
-            sock.settimeout(kwargs.get("multicast_timeout", 2))
-            sock.setsockopt(
-                socket.IPPROTO_IP,
-                socket.IP_MULTICAST_IF,
-                socket.inet_aton(network_adapter),
-            )
-            # prepare a message requesting all devices in the multicast group
-            # to send their (USB) product id
-            transport = IPv4Transport(OBPProtocol)
-            protocol = OBPProtocol(transport)
-            msg_type = 0xE01  # Product ID
-            data = protocol.msgs[msg_type](*())
-            message = protocol._construct_outgoing_message(
-                msg_type,
-                data,
-                request_ack=True,
-            )
-            sock.sendto(message, multicast_group)
-            print("Waiting to receive multicast response(s)")
-            while True:
-                try:
-                    data = bytearray(90)
-                    nbytes, server = sock.recvfrom_into(data)
-                except socket.timeout:
-                    break
-                else:
-                    pid_raw = protocol._extract_message_data(data[:nbytes])
-                    pid = int(struct.unpack("<H", pid_raw)[0])
-                    # use known product ids of the USB transport to look up the model name
-                    vid = 0x2457  # Ocean vendor ID
-                    model = USBTransport.vendor_product_ids[(vid, pid)]
-                    cls.register_model(
-                        model_name=model,
-                        ipv4_address=server[0],
-                        ipv4_port=server[1],
-                    )
+        # default values for multicast on HDX devices
+        multicast_group = kwargs.get("multicast_group", "239.239.239.239")
+        multicast_port = kwargs.get("multicast_port", 57357)
+        # Create the datagram (UDP) socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # allow other sockets to bind this port too
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Set a timeout so the socket does not block
+        # indefinitely when trying to receive data.
+        sock.settimeout(kwargs.get("multicast_timeout", 2))
+        sock.setsockopt(
+            socket.IPPROTO_IP,
+            socket.IP_MULTICAST_IF,
+            socket.inet_aton(network_adapter) if network_adapter else socket.INADDR_ANY,
+        )
+        mreq = struct.pack(
+            "4sl" if not network_adapter else "4s4s",
+            socket.inet_aton(multicast_group),
+            (
+                socket.INADDR_ANY
+                if not network_adapter
+                else socket.inet_aton(network_adapter)
+            ),
+        )
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        # prepare a message requesting all devices in the multicast group
+        # to send their (USB) product id
+        transport = IPv4Transport(OBPProtocol)
+        protocol = OBPProtocol(transport)
+        msg_type = 0xE01  # Product ID
+        data = protocol.msgs[msg_type](*())
+        message = protocol._construct_outgoing_message(
+            msg_type,
+            data,
+            request_ack=True,
+        )
+        sock.sendto(message, (multicast_group, multicast_port))
+        print("Waiting to receive multicast response(s)")
+        while True:
+            try:
+                data = bytearray(90)
+                nbytes, server = sock.recvfrom_into(data)
+            except socket.timeout:
+                break
+            else:
+                pid_raw = protocol._extract_message_data(data[:nbytes])
+                pid = int(struct.unpack("<H", pid_raw)[0])
+                # use known product ids of the USB transport to look up the model name
+                vid = 0x2457  # Ocean vendor ID
+                model = USBTransport.vendor_product_ids[(vid, pid)]
+                cls.register_model(
+                    model_name=model,
+                    ipv4_address=server[0],
+                    ipv4_port=server[1],
+                )
 
         # connect to discovered and registered devices
         for address in cls.devices_ip_port:

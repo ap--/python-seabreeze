@@ -548,7 +548,6 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
             request_ack=True,
         )
         sock.sendto(message, (multicast_group, multicast_port))
-        print("Waiting to receive multicast response(s)")
         while True:
             try:
                 data = bytearray(90)

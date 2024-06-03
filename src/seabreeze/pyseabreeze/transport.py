@@ -568,11 +568,15 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
                 # use known product ids of the USB transport to look up the model name
                 vid = 0x2457  # Ocean vendor ID
                 model = USBTransport.vendor_product_ids[(vid, pid)]
-                cls.register_model(
-                    model_name=model,
-                    ipv4_address=server[0],
-                    ipv4_port=server[1],
-                )
+                try:
+                    cls.register_model(
+                        model_name=model,
+                        ipv4_address=server[0],
+                        ipv4_port=server[1],
+                    )
+                except ValueError:
+                    # device already known
+                    pass
 
         # connect to discovered and registered devices
         dev_sockets = []

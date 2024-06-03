@@ -13,6 +13,7 @@ import logging
 import socket
 import struct
 import warnings
+import weakref
 from functools import partialmethod
 from typing import TYPE_CHECKING
 from typing import Any
@@ -393,13 +394,15 @@ class IPv4TransportHandle:
         except OSError:
             address, port = None, None
         self.identity: tuple[str, int] = (address, port)
+        # register callback to close socket on garbage collection
+        self._finalizer = weakref.finalize(self, self.socket.close)
 
     def close(self) -> None:
-        # TODO check for exceptions that close() might throw
-        self.socket.close()
+        self._finalizer()
 
-    def __del__(self) -> None:
-        self.close()
+    @property
+    def closed(self) -> bool:
+        return not self._finalizer.alive
 
 
 class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):

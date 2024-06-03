@@ -622,10 +622,8 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
 
     @classmethod
     def initialize(cls, **_kwargs: Any) -> None:
-        # TODO implement socket reset? (close/open?)
         pass
 
     @classmethod
     def shutdown(cls, **_kwargs: Any) -> None:
-        # TODO implement
         pass

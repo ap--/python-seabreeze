@@ -541,7 +541,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         transport = IPv4Transport(OBPProtocol)
         protocol = OBPProtocol(transport)
         msg_type = 0xE01  # Product ID
-        data = protocol.msgs[msg_type](*())
+        data = protocol.msgs[msg_type]()
         message = protocol._construct_outgoing_message(
             msg_type,
             data,

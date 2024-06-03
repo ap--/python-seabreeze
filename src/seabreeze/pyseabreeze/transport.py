@@ -393,7 +393,12 @@ class IPv4TransportHandle:
             address, port = sock.getpeername()
         except OSError:
             address, port = None, None
-        self.identity: tuple[str, int] = (address, port)
+        self.identity: DeviceIdentity = (
+            int(ipaddress.IPv4Address(address)),
+            port,
+            0,
+            0,
+        )
         # register callback to close socket on garbage collection
         self._finalizer = weakref.finalize(self, self.socket.close)
 
@@ -608,7 +613,12 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         """
         if not isinstance(device, IPv4TransportHandle):
             return None
-        return cls.devices_ip_port[device.identity]
+        return cls.devices_ip_port[
+            # IP address
+            (str(ipaddress.IPv4Address(device.identity[0]))),
+            # port
+            device.identity[1],
+        ]
 
     @classmethod
     def specialize(cls, model_name: str, **kwargs: Any) -> type[IPv4Transport]:

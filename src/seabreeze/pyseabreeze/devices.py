@@ -313,7 +313,11 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
             raise SeaBreezeError(
                 "Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`."
             )
-        for transport in {USBTransport, IPv4Transport}:
+        transports: list[type[PySeaBreezeTransport[Any]]] = [
+            IPv4Transport,
+            USBTransport,
+        ]
+        for transport in transports:
             supported_model = transport.supported_model(raw_device)
             if supported_model is not None:
                 break

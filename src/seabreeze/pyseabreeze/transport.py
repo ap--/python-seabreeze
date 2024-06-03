@@ -506,8 +506,6 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         devices : IPv4TransportHandle
             unique socket devices for each available spectrometer
         """
-        dev_sockets = []
-
         # Use multicast to discover potential spectrometers. If no network
         # adapter was specified use INADDR_ANY: an appropriate interface is
         # chosen by the system (see ip(7)). This is usually the interface with
@@ -570,6 +568,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
                 )
 
         # connect to discovered and registered devices
+        dev_sockets = []
         for address in cls.devices_ip_port:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:

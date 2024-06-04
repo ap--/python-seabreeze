@@ -141,11 +141,10 @@ class SeaBreezeAPI(_SeaBreezeAPIProtocol):
                 # opening the device will populate its serial number
                 try:
                     dev.open()
-                except Exception:
-                    # TODO specify expected exception
+                except RuntimeError:
                     raise
-                # else:
-                #    dev.close()
+                else:
+                    dev.close()
             devices.append(dev)  # type: ignore
         return devices
 

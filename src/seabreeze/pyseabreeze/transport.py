@@ -380,19 +380,14 @@ def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
 
 # this can and should be opaque to pyseabreeze
 class IPv4TransportHandle:
-    def __init__(self, sock: socket.socket) -> None:
+    def __init__(self, address: str, port: int) -> None:
         """encapsulation for IPv4 socket classes
 
         Parameters
         ----------
 
         """
-        self.socket: socket.socket = sock
-        # TODO check if socket is connected and get address via socket (socket.getpeername())
-        try:
-            address, port = sock.getpeername()
-        except OSError:
-            address, port = None, None
+        self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.identity: DeviceIdentity = (
             int(ipaddress.IPv4Address(address)),
             port,
@@ -402,12 +397,29 @@ class IPv4TransportHandle:
         # register callback to close socket on garbage collection
         self._finalizer = weakref.finalize(self, self.socket.close)
 
+    def open(self) -> None:
+        # create a new socket; if we closed it, it will have lost its file descriptor
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            self.socket.connect(self.get_address())
+        except OSError as e:
+            raise RuntimeError(f"Could not connect to {self.get_address()}: {e}")
+
     def close(self) -> None:
         self._finalizer()
 
     @property
     def closed(self) -> bool:
         return not self._finalizer.alive
+
+    def get_address(self) -> tuple[str, int]:
+        """Return a touple consisting of the ip address and the port."""
+        return (
+            # IP address
+            (str(ipaddress.IPv4Address(self.identity[0]))),
+            # port
+            self.identity[1],
+        )
 
 
 class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
@@ -434,8 +446,8 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
     def open_device(self, device: IPv4TransportHandle) -> None:
         if not isinstance(device, IPv4TransportHandle):
             raise TypeError("device needs to be an IPv4TransportHandle")
-        # TODO handle possible exceptions
         self._device = device
+        self._device.open()
         self._opened = True
 
         # This will initialize the communication protocol
@@ -579,17 +591,8 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
                     pass
 
         # connect to discovered and registered devices
-        dev_sockets = []
         for address in cls.devices_ip_port:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            try:
-                sock.connect(address)
-            except OSError as e:
-                raise RuntimeError(f"Could not connect to {address}: {e}")
-            else:
-                dev_sockets.append(sock)
-        for sock in dev_sockets:
-            yield IPv4TransportHandle(sock)
+            yield IPv4TransportHandle(*address)
 
     @classmethod
     def register_model(cls, model_name: str, **kwargs: Any) -> None:
@@ -617,12 +620,7 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         """
         if not isinstance(device, IPv4TransportHandle):
             return None
-        return cls.devices_ip_port[
-            # IP address
-            (str(ipaddress.IPv4Address(device.identity[0]))),
-            # port
-            device.identity[1],
-        ]
+        return cls.devices_ip_port[device.get_address()]
 
     @classmethod
     def specialize(cls, model_name: str, **kwargs: Any) -> type[IPv4Transport]:

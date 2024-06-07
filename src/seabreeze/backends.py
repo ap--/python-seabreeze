@@ -41,6 +41,8 @@ def use(
     ----------------
     pyusb_backend: str
         either libusb1, libusb0 or openusb
+    network_adapter: str
+        IP address of the network adapter to use for the ethernet connection
 
     """
     if backend not in BackendConfig.available:
@@ -48,10 +50,15 @@ def use(
             "backend not in: {}".format(", ".join(BackendConfig.available))
         )
     if "seabreeze.spectrometers" in sys.modules:
-        warnings.warn(
-            "seabreeze.use has to be called before importing seabreeze.spectrometers",
-            stacklevel=2,
-        )
+        mod = sys.modules["seabreeze.spectrometers"]
+        if (
+            mod.Spectrometer.__dict__["_backend"]._backend is not None
+            or "SeaBreezeDevice" in mod.__dict__
+        ):
+            warnings.warn(
+                "seabreeze.use has to be called before instantiating a spectrometer",
+                stacklevel=2,
+            )
 
     BackendConfig.requested = backend
     BackendConfig.allow_fallback = not force

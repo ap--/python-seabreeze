@@ -108,6 +108,22 @@ To use the pyseabreeze backend (requires `pyusb`) simply run this before importi
 | SR6          |            |             x             |                        |
 | ST-VIS       |            |             x             |                        |
 
+## Reading spectra via ethernet
+
+This functionality is currently implemented for the HDX with the pyseabreeze backend.
+The following example shows how to read a spectrum via ethernet:
+
+```pycon
+>>> import seabreeze
+... from seabreeze.spectrometers import Spectrometer
+...
+... seabreeze.use("pyseabreeze", network_adapter="192.168.254.200")
+>>>
+>>> spec = Spectrometer.from_serial_number("HDX12345")
+>>> spec.intensities()
+array([1967.07287765, 1325.69702018, 1418.40732539, ..., 1398.4680335 ,
+       1406.44364585, 1397.47109175])
+```
 
 ## Known Issues
 

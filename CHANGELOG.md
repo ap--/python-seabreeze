@@ -13,7 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-...
+### Added
+- *psb* ethernet support for HDX (thanks @hperrey)
+
+## [2.8.0] - 2024-06-01
+### Added
+- *psb* HR2 support (thanks @gabrielbenedikt)
+- *psb* Support for HR4 (thanks @MicheleCotrufo)
 
 ## [2.7.0] - 2024-02-21
 ### Added
@@ -229,7 +235,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.7.0...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.8.0...HEAD
+[2.8.0]: https://github.com/ap--/python-seabreeze/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/ap--/python-seabreeze/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/ap--/python-seabreeze/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/ap--/python-seabreeze/compare/v2.4.0...v2.5.0

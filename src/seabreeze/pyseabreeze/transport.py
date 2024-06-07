@@ -8,8 +8,12 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import ipaddress
 import logging
+import socket
+import struct
 import warnings
+import weakref
 from functools import partialmethod
 from typing import TYPE_CHECKING
 from typing import Any
@@ -20,6 +24,7 @@ import usb.backend
 import usb.core
 import usb.util
 
+from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeProtocol
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 
@@ -364,3 +369,276 @@ def get_name_from_pyusb_backend(backend: usb.backend.IBackend) -> str | None:
     if not module:
         return None
     return module.__name__.split(".")[-1]
+
+
+#  ___ ____        _  _
+# |_ _|  _ \__   _| || |
+#  | || |_) \ \ / / || |_
+#  | ||  __/ \ V /|__   _|
+# |___|_|     \_/    |_|
+
+
+# this can and should be opaque to pyseabreeze
+class IPv4TransportHandle:
+    def __init__(self, address: str, port: int) -> None:
+        """encapsulation for IPv4 socket classes
+
+        Parameters
+        ----------
+
+        """
+        self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.identity: DeviceIdentity = (
+            int(ipaddress.IPv4Address(address)),
+            port,
+            0,
+            0,
+        )
+        # register callback to close socket on garbage collection
+        self._finalizer = weakref.finalize(self, self.socket.close)
+
+    def open(self) -> None:
+        # create a new socket; if we closed it, it will have lost its file descriptor
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            self.socket.connect(self.get_address())
+        except OSError as e:
+            raise RuntimeError(f"Could not connect to {self.get_address()}: {e}")
+
+    def close(self) -> None:
+        self._finalizer()
+
+    @property
+    def closed(self) -> bool:
+        return not self._finalizer.alive
+
+    def get_address(self) -> tuple[str, int]:
+        """Return a touple consisting of the ip address and the port."""
+        return (
+            # IP address
+            (str(ipaddress.IPv4Address(self.identity[0]))),
+            # port
+            self.identity[1],
+        )
+
+
+class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
+    """implementation of the IPv4 socket transport interface for spectrometers"""
+
+    _required_init_kwargs = ("ipv4_protocol",)
+
+    devices_ip_port: dict[tuple[str, int], str] = {}
+
+    # add logging
+    _log = logging.getLogger(__name__)
+
+    def __init__(
+        self,
+        ipv4_protocol: type[PySeaBreezeProtocol],
+    ) -> None:
+        super().__init__()
+        self._protocol_cls = ipv4_protocol
+        # internal state
+        self._device: IPv4TransportHandle | None = None
+        self._opened: bool | None = None
+        self._protocol: PySeaBreezeProtocol | None = None
+
+    def open_device(self, device: IPv4TransportHandle) -> None:
+        if not isinstance(device, IPv4TransportHandle):
+            raise TypeError("device needs to be an IPv4TransportHandle")
+        self._device = device
+        self._device.open()
+        self._opened = True
+
+        # This will initialize the communication protocol
+        if self._opened:
+            self._protocol = self._protocol_cls(self)
+
+    @property
+    def is_open(self) -> bool:
+        return self._opened or False
+
+    def close_device(self) -> None:
+        if self._device is not None:
+            self._device.close()
+            self._device = None
+        self._opened = False
+        self._protocol = None
+
+    def write(self, data: bytes, timeout_ms: int | None = None, **kwargs: Any) -> int:
+        if self._device is None:
+            raise RuntimeError("device not opened")
+        if kwargs:
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
+        if timeout_ms:
+            self._device.socket.settimeout(timeout_ms / 1000.0)
+        return self._device.socket.send(data)
+
+    def read(
+        self,
+        size: int | None = None,
+        timeout_ms: int | None = None,
+        mode: str | None = None,
+        **kwargs: Any,
+    ) -> bytes:
+        if self._device is None:
+            raise RuntimeError("device not opened")
+        if size is None:
+            # use minimum packet size (no payload)
+            size = 64
+        if kwargs:
+            warnings.warn(f"kwargs provided but ignored: {kwargs}")
+        if timeout_ms:
+            self._device.socket.settimeout(timeout_ms / 1000.0)
+        data = bytearray(size)
+        toread = size
+        view = memoryview(data)
+        while toread:
+            nbytes = self._device.socket.recv_into(view, toread)
+            view = view[nbytes:]
+            toread -= nbytes
+        return bytes(data)
+
+    @property
+    def default_timeout_ms(self) -> int:
+        if not self._device:
+            raise RuntimeError("no protocol instance available")
+        timeout = self._device.socket.gettimeout()
+        if not timeout:
+            return 10000
+        return int(timeout * 1000)
+
+    @property
+    def protocol(self) -> PySeaBreezeProtocol:
+        if self._protocol is None:
+            raise RuntimeError("no protocol instance available")
+        return self._protocol
+
+    @classmethod
+    def list_devices(cls, **kwargs: Any) -> Iterable[IPv4TransportHandle]:
+        """list IPv4 devices for all available spectrometers
+
+        Note: this includes spectrometers that are currently opened in other
+        processes on the machine.
+
+        Yields
+        ------
+        devices : IPv4TransportHandle
+            unique socket devices for each available spectrometer
+        """
+        # Use multicast to discover potential spectrometers. If no network
+        # adapter was specified use INADDR_ANY: an appropriate interface is
+        # chosen by the system (see ip(7)). This is usually the interface with
+        # the highest metric.
+        network_adapter = kwargs.get("network_adapter", None)
+        # default values for multicast on HDX devices
+        multicast_group = kwargs.get("multicast_group", "239.239.239.239")
+        multicast_port = kwargs.get("multicast_port", 57357)
+        # Create the datagram (UDP) socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # allow other sockets to bind this port too
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Set a timeout so the socket does not block
+        # indefinitely when trying to receive data.
+        sock.settimeout(kwargs.get("multicast_timeout", 1))
+        sock.setsockopt(
+            socket.IPPROTO_IP,
+            socket.IP_MULTICAST_IF,
+            socket.inet_aton(network_adapter) if network_adapter else socket.INADDR_ANY,
+        )
+        mreq = struct.pack(
+            "4sl" if not network_adapter else "4s4s",
+            socket.inet_aton(multicast_group),
+            (
+                socket.INADDR_ANY
+                if not network_adapter
+                else socket.inet_aton(network_adapter)
+            ),
+        )
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        # prepare a message requesting all devices in the multicast group
+        # to send their (USB) product id
+        transport = IPv4Transport(OBPProtocol)
+        protocol = OBPProtocol(transport)
+        msg_type = 0xE01  # Product ID
+        data = protocol.msgs[msg_type]()
+        message = protocol._construct_outgoing_message(
+            msg_type,
+            data,
+            request_ack=True,
+        )
+        sock.sendto(message, (multicast_group, multicast_port))
+        while True:
+            try:
+                data = bytearray(90)
+                nbytes, server = sock.recvfrom_into(data)
+            except socket.timeout:
+                break
+            else:
+                pid_raw = protocol._extract_message_data(data[:nbytes])
+                pid = int(struct.unpack("<H", pid_raw)[0])
+                # use known product ids of the USB transport to look up the model name
+                vid = 0x2457  # Ocean vendor ID
+                model = USBTransport.vendor_product_ids[(vid, pid)]
+                try:
+                    cls.register_model(
+                        model_name=model,
+                        ipv4_address=server[0],
+                        ipv4_port=server[1],
+                    )
+                except ValueError:
+                    # device already known
+                    pass
+
+        # connect to discovered and registered devices
+        for address in cls.devices_ip_port:
+            yield IPv4TransportHandle(*address)
+
+    @classmethod
+    def register_model(cls, model_name: str, **kwargs: Any) -> None:
+        ip = kwargs.get("ipv4_address")
+        if not isinstance(ip, str):
+            raise TypeError(f"ip address {ip} not a string")
+        try:
+            ipaddress.ip_address(ip)
+        except ValueError:
+            raise ValueError(f"ip address {ip} does not represent a valid IPv4 address")
+        port = kwargs.get("ipv4_port")
+        if not isinstance(port, int):
+            raise TypeError(f"port {port} not an integer")
+        if (ip, port) in cls.devices_ip_port:
+            raise ValueError(f"ip address:port {ip}:{port} already in registry")
+        cls.devices_ip_port[(ip, port)] = model_name
+
+    @classmethod
+    def supported_model(cls, device: IPv4TransportHandle) -> str | None:
+        """return supported model
+
+        Parameters
+        ----------
+        device : IPv4TransportHandle
+        """
+        if not isinstance(device, IPv4TransportHandle):
+            return None
+        return cls.devices_ip_port[device.get_address()]
+
+    @classmethod
+    def specialize(cls, model_name: str, **kwargs: Any) -> type[IPv4Transport]:
+        # TODO check that this makes sense for the ipv4 transport
+        assert set(kwargs) == set(cls._required_init_kwargs)
+        # ipv4 transport register automatically on registration
+        # cls.register_model(model_name, **kwargs)
+        specialized_class = type(
+            f"IPv4Transport{model_name}",
+            (cls,),
+            {"__init__": partialmethod(cls.__init__, **kwargs)},
+        )
+        return specialized_class
+
+    @classmethod
+    def initialize(cls, **_kwargs: Any) -> None:
+        pass
+
+    @classmethod
+    def shutdown(cls, **_kwargs: Any) -> None:
+        pass

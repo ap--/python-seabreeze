@@ -13,7 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-...
+### Added
+- *psb* ethernet support for HDX (thanks @hperrey)
+
+## [2.8.0] - 2024-06-01
+### Added
+- *psb* HR2 support (thanks @gabrielbenedikt)
+- *psb* Support for HR4 (thanks @MicheleCotrufo)
 
 ## [2.8.0] - 2024-06-01
 ### Added

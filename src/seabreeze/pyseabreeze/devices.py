@@ -20,6 +20,7 @@ from seabreeze.pyseabreeze.protocol import ADCProtocol
 from seabreeze.pyseabreeze.protocol import OBP2Protocol
 from seabreeze.pyseabreeze.protocol import OBPProtocol
 from seabreeze.pyseabreeze.protocol import OOIProtocol
+from seabreeze.pyseabreeze.transport import IPv4Transport
 from seabreeze.pyseabreeze.transport import USBTransport
 from seabreeze.pyseabreeze.types import PySeaBreezeTransport
 from seabreeze.types import SeaBreezeFeatureAccessor
@@ -312,7 +313,11 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
             raise SeaBreezeError(
                 "Don't instantiate SeaBreezeDevice directly. Use `SeabreezeAPI.list_devices()`."
             )
-        for transport in {USBTransport}:
+        transports: list[type[PySeaBreezeTransport[Any]]] = [
+            IPv4Transport,
+            USBTransport,
+        ]
+        for transport in transports:
             supported_model = transport.supported_model(raw_device)
             if supported_model is not None:
                 break
@@ -365,7 +370,7 @@ class SeaBreezeDevice(metaclass=_SeaBreezeDeviceMeta):
         return f"<SeaBreezeDevice {self.model}:{self.serial_number}>"
 
     def open(self) -> None:
-        """open the spectrometer usb connection
+        """open the spectrometer connection
 
         Returns
         -------
@@ -1146,13 +1151,17 @@ class HDX(SeaBreezeDevice):
     model_name = "HDX"
 
     # communication config
-    transport = (USBTransport,)
+    transport = (
+        IPv4Transport,
+        USBTransport,
+    )
     usb_vendor_id = 0x2457
     usb_product_id = 0x2003
     usb_endpoint_map = EndPointMap(
         ep_out=0x01, lowspeed_in=0x81, highspeed_in=0x82, highspeed_in2=0x86
     )
     usb_protocol = OBPProtocol
+    ipv4_protocol = OBPProtocol
 
     # spectrometer config
     dark_pixel_indices = DarkPixelIndices.from_ranges()
@@ -1171,6 +1180,7 @@ class HDX(SeaBreezeDevice):
         sbf.spectrometer.SeaBreezeSpectrometerFeatureHDX,
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
         sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP,
+        sbf.multicast.SeaBreezeMulticastFeatureOBP,
     )
 
 

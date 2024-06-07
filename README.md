@@ -79,33 +79,34 @@ To use the pyseabreeze backend (requires `pyusb`) simply run this before importi
 
 ## Supported Devices
 
-| Spectrometer | cseabreeze |       pyseabreeze        |
-|:-------------|:----------:|:------------------------:|
-| HR2000       |     x      |            x             |
-| HR2000PLUS   |     x      |            x             |
-| HR4000       |     x      |            x             |
-| JAZ          |     x      |            x             |
-| MAYA2000     |     x      |            x             |
-| MAYA2000PRO  |     x      |            x             |
-| MAYALSL      |     x      |            x             |
-| NIRQUEST256  |     x      |            x             |
-| NIRQUEST512  |     x      |            x             |
-| QE65000      |     x      |            x             |
-| QE-PRO       |     x      |            x             |
-| STS          |     x      |            x             |
-| TORUS        |     x      |            x             |
-| USB2000      |     x      |            x             |
-| USB2000PLUS  |     x      |            x             |
-| USB4000      |     x      |            x             |
-| USB650       |            | ap--/python-seabreeze#47 |
-| SPARK        |     x      |            x             |
-| ADC1000      |            |            x             |
-| SR2          |            |            x             |
-| SR4          |            |            x             |
-| SR6          |            |            x             |
-| HR2          |            |            x             |
-| HR4          |            |            x             |
-| ST-VIS       |            |            x             |
+| Spectrometer | cseabreeze |     pyseabreeze (usb)     | pyseabreeze (ethernet) |
+|:-------------|:----------:|:-------------------------:|:----------------------:|
+| HR2000       |     x      |             x             |                        |
+| HR2000PLUS   |     x      |             x             |                        |
+| HR4000       |     x      |             x             |                        |
+| JAZ          |     x      |             x             |                        |
+| MAYA2000     |     x      |             x             |                        |
+| MAYA2000PRO  |     x      |             x             |                        |
+| MAYALSL      |     x      |             x             |                        |
+| NIRQUEST256  |     x      |             x             |                        |
+| NIRQUEST512  |     x      |             x             |                        |
+| QE65000      |     x      |             x             |                        |
+| QE-PRO       |     x      |             x             |                        |
+| STS          |     x      |             x             |                        |
+| TORUS        |     x      |             x             |                        |
+| USB2000      |     x      |             x             |                        |
+| USB2000PLUS  |     x      |             x             |                        |
+| USB4000      |     x      |             x             |                        |
+| USB650       |            | ap--/python-seabreeze#47  |                        |
+| SPARK        |     x      |             x             |                        |
+| ADC1000      |            |             x             |                        |
+| HDX          |            | ap--/python-seabreeze#133 |           x            |
+| HR2          |            |             x             |                        |
+| HR4          |            |             x             |                        |
+| SR2          |            |             x             |                        |
+| SR4          |            |             x             |                        |
+| SR6          |            |             x             |                        |
+| ST-VIS       |            |             x             |                        |
 
 
 ## Known Issues

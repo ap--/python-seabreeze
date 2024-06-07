@@ -229,6 +229,13 @@ class OBPProtocol(PySeaBreezeProtocol):
             0x00420004: "",  # GET_TE_TEMPERATURE
             0x00420010: "<B",  # SET_TE_ENABLE
             0x00420011: "<f",  # SET_TE_SETPOINT
+            0x00000A80: "<B",  # GET_MC_ENABLED
+            0x00000A81: "<B",  # GET_MC_GROUP_ADDR
+            0x00000A82: "<B",  # GET_MC_GROUP_PORT
+            0x00000A83: "<B",  # GET_MC_TTL
+            0xE11: "",  # GET_DEV_STR
+            0xE00: "",  # GET_VID
+            0xE01: "",  # GET_PID
         }.items()
     }  # add more here if you implement new features
 

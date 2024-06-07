@@ -61,6 +61,9 @@ def use(
         if "pyusb_backend" in kwargs:
             pyusb_backend = kwargs.pop("pyusb_backend")
             BackendConfig.api_kwargs["pyusb_backend"] = pyusb_backend
+        if "network_adapter" in kwargs:
+            network_adapter = kwargs.pop("network_adapter")
+            BackendConfig.api_kwargs["network_adapter"] = network_adapter
     if kwargs:
         raise TypeError(
             f"unknown keyword arguments {set(kwargs)!r} for backend {backend!r}"

@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - *psb* ethernet support for HDX (thanks @hperrey)
 
+### Changed
+- allow `seabreeze.use` to be called after importing `seabreeze.spectrometers`
+
 ## [2.8.0] - 2024-06-01
 ### Added
 - *psb* HR2 support (thanks @gabrielbenedikt)

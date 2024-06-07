@@ -19,23 +19,42 @@ from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
 from seabreeze.types import SeaBreezeFeatureDict
 
-# get the backend and add some functions/classes to this module
-_lib: SeaBreezeBackend = seabreeze.backends.get_backend()
-
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
     from seabreeze.types import SeaBreezeDevice
 
-else:
-    SeaBreezeDevice = _lib.SeaBreezeDevice
-    SeaBreezeError = _lib.SeaBreezeError
 
 __all__ = [
     "list_devices",
     "SeaBreezeError",
     "Spectrometer",
 ]
+
+# get the backend and add some functions/classes to this module
+_lib: SeaBreezeBackend
+SeaBreezeError: type[Exception]
+
+
+def __dir__() -> list[str]:
+    return __all__
+
+
+def __getattr__(name: str) -> object:
+    """lazy import of the backend"""
+    if name in {"_lib", "SeaBreezeError", "SeaBreezeDevice"}:
+        g = globals()
+        lib = seabreeze.backends.get_backend()
+        g.update(
+            {
+                "_lib": lib,
+                "SeaBreezeError": lib.SeaBreezeError,
+                "SeaBreezeDevice": lib.SeaBreezeDevice,
+            }
+        )
+        return g[name]
+    else:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def list_devices() -> list[SeaBreezeDevice]:
@@ -52,16 +71,34 @@ def list_devices() -> list[SeaBreezeDevice]:
     try:
         api = list_devices._api  # type: ignore
     except AttributeError:
-        _kw = _lib._api_kwargs
+        _lib = __getattr__("_lib")
+        _kw = _lib._api_kwargs  # type: ignore
         api = list_devices._api = _lib.SeaBreezeAPI(**_kw)  # type: ignore
     return api.list_devices()
+
+
+class _SeabreezeBackendDescriptor:
+    """helper descriptor to lazily store the backend instance in the Spectrometer class"""
+
+    def __init__(self) -> None:
+        self._backend: SeaBreezeBackend | None = None
+
+    def __get__(
+        self, instance: Spectrometer | None, owner: type[Spectrometer]
+    ) -> SeaBreezeBackend:
+        if self._backend is None:
+            self._backend = seabreeze.backends.get_backend()
+        return self._backend
+
+    def __set__(self, instance: Spectrometer | None, value: SeaBreezeBackend) -> None:
+        self._backend = value
 
 
 class Spectrometer:
     """Spectrometer class for all supported spectrometers"""
 
     # store reference to backend to allow backend switching in tests
-    _backend: SeaBreezeBackend = _lib
+    _backend = _SeabreezeBackendDescriptor()
 
     def __init__(self, device: SeaBreezeDevice) -> None:
         """create a Spectrometer instance for the provided device

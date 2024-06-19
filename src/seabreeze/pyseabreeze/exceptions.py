@@ -2,10 +2,13 @@
 
 # DO NOT DIRECTLY IMPORT EXCEPTIONS FROM HERE!
 # ALWAYS IMPORT FROM `seabreeze.spectrometers`
+from seabreeze._exc import SeaBreezeError as SeaBreezeError
 
-
-class SeaBreezeError(Exception):
-    """SeaBreezeError base class"""
+__all__ = [
+    "SeaBreezeError",
+    "SeaBreezeNumFeaturesError",
+    "SeaBreezeNotSupported",
+]
 
 
 class SeaBreezeNumFeaturesError(SeaBreezeError):

@@ -9,13 +9,12 @@ Email: andreas@poehlmann.io
 
 from __future__ import annotations
 
-import operator
-import sys
 from typing import TYPE_CHECKING
 
 import numpy
 
 import seabreeze.backends
+from seabreeze._exc import SeaBreezeError
 from seabreeze.types import SeaBreezeAPI
 from seabreeze.types import SeaBreezeBackend
 from seabreeze.types import SeaBreezeFeatureAccessor
@@ -36,26 +35,6 @@ __all__ = [
 
 def __dir__() -> list[str]:
     return __all__
-
-
-def _load_seabreeze_error_cls() -> type[SeaBreezeError]:
-    # lazy load the SeaBreezeException
-    cls = operator.attrgetter("_lib.SeaBreezeError")(sys.modules[__name__])
-    globals()["SeaBreezeError"] = cls
-    return cls  # type: ignore[no-any-return]
-
-
-class _LazyMeta(type):
-    def __instancecheck__(cls, instance: object) -> bool:
-        return isinstance(instance, _load_seabreeze_error_cls())
-
-    def __subclasscheck__(cls, __subclass: type) -> bool:
-        return issubclass(__subclass, _load_seabreeze_error_cls())
-
-
-class SeaBreezeError(Exception, metaclass=_LazyMeta):
-    def __new__(cls, *args: str) -> SeaBreezeError:
-        return _load_seabreeze_error_cls()(*args)
 
 
 # get the backend and add some functions/classes to this module

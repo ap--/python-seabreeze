@@ -16,6 +16,8 @@ from collections import namedtuple
 
 import numpy as np
 
+from seabreeze._exc import SeaBreezeError as _SeaBreezeError
+
 
 # from libseabreeze api/SeaBreezeConstants.h
 class _ErrorCode(object):
@@ -58,7 +60,7 @@ SpectrumMetadata = namedtuple(
 
 # DO NOT DIRECTLY IMPORT EXCEPTIONS FROM HERE!
 # ALWAYS IMPORT FROM `seabreeze.spectrometers`
-class SeaBreezeError(Exception):
+class SeaBreezeError(_SeaBreezeError):
 
     _error_msgs = (
         "Success",

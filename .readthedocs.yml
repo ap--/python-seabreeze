@@ -1,7 +1,11 @@
 version: 2
-# use conda to install, because we need libusb
-conda:
-  environment: docs/environment.yml
+
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+  apt_packages:
+    - libusb-dev
 sphinx:
   configuration: docs/source/conf.py
 python:

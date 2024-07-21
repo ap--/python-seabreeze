@@ -50,7 +50,7 @@ Space Station on the SpaceX CRS-14 resupply mission. *(space proof software*\ :s
 - python-seabreeze-feedstock_ - anaconda feedstock for automated package deployment.
 - yaqd-seabreeze_ - A seabreeze interface for the `yaq instrument control framework`_
 - SpectraSorter_ - Software for droplet sorting based on the analysis of high-speed spectrophotometer (OceanFX) measurements (written in C#, not using python-seabreeze)
-- HTTP-bindings_ - customizable HTTP interface in python along with Web of Things compatibility and ZMQ transport. Based on hololinked_. 
+- HTTP-bindings_ - customizable HTTP interface in python along with Web of Things compatibility and ZMQ transport. Based on hololinked_.
 
 .. _`python-seatease by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seatease
 .. _`python-seabreeze-server by @jonathanvanschenck`: https://github.com/jonathanvanschenck/python-seabreeze-server

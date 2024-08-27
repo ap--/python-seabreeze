@@ -1362,3 +1362,31 @@ class ST(SeaBreezeDevice):
         sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
         sbf.nonlinearity.NonlinearityCoefficientsFeatureOBP2,
     )
+
+
+class FX(SeaBreezeDevice):
+
+    model_name = "FX"
+
+    # communication config
+    transport = (IPv4Transport,)
+
+    ipv4_protocol = OBPProtocol
+
+    # spectrometer config
+    dark_pixel_indices = DarkPixelIndices.from_ranges()
+    integration_time_min = 6000
+    integration_time_max = 10000000
+    integration_time_base = 1
+    spectrum_num_pixel = 2136
+    spectrum_raw_length = (2136 * 2) + 64  # XXX: Metadata
+    spectrum_max_value = 65535
+    trigger_modes = TriggerMode.supported(
+        "OBP_NORMAL", "OBP_LEVEL", "OBP_EDGE", "DISABLED"
+    )
+
+    # features
+    feature_classes = (
+        sbf.spectrometer.SeaBreezeSpectrometerFeatureFX,  # need to implement this
+        sbf.rawusb.SeaBreezeRawUSBBusAccessFeature,
+    )

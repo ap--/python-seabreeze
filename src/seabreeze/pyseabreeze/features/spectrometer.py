@@ -744,6 +744,10 @@ class SeaBreezeSpectrometerFeatureHR4(SeaBreezeSpectrometerFeatureOBP2):
     pass
 
 
+class SeaBreezeSpectrometerFeatureHR6(SeaBreezeSpectrometerFeatureOBP2):
+    pass
+
+
 class SeaBreezeSpectrometerFeatureFX(SeaBreezeSpectrometerFeatureOBP):
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(

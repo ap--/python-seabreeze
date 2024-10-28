@@ -103,6 +103,7 @@ To use the pyseabreeze backend (requires `pyusb`) simply run this before importi
 | HDX          |            | [Issue #133][issue133] |           x            |
 | HR2          |            |             x          |                        |
 | HR4          |            |             x          |                        |
+| HR6          |            |             x          |                        |
 | SR2          |            |             x          |                        |
 | SR4          |            |             x          |                        |
 | SR6          |            |             x          |                        |

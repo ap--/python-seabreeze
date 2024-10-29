@@ -99,7 +99,7 @@ jobs:
           CIBW_ARCHS_MACOS: ${{ matrix.arch }}
           SEABREEZE_DISABLE_FH4: "yes"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: ./wheelhouse/*.whl

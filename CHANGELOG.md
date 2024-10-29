@@ -4,22 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-| label  | description                         |
+|  label | description                         |
 |-------:|:------------------------------------|
 | *docs* | module documentation related        |
-| *csb*  | refers to `seabreeze.cseabreeze`    |
-| *psb*  | refers to `seabreeze.pyseabreeze`   |
+|  *csb* | refers to `seabreeze.cseabreeze`    |
+|  *psb* | refers to `seabreeze.pyseabreeze`   |
 | *spec* | refers to `seabreeze.spectrometers` |
 
 
 ## [Unreleased]
 ...
 
+## [2.10.0] - 2024-10-29
+### Added
+- *psb* OceanFX support via IPV4
+- *psb* HR6 support
+
 ## [2.9.2] - 2024-06-19
 ### Fixed
 - *spec* lazy SeaBreezeError import did not work in try/except block
 
-## [2.9.1] - 2024-06-19
+## [2.9.1] - 2024-06-19 - **YANKED**
 ### Fixed
 - *spec* importing SeaBreezeError does not trigger a backend warning anymore
 
@@ -254,7 +259,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't require numpy during build of cseabreeze cython extension
 
-[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.9.2...HEAD
+[Unreleased]: https://github.com/ap--/python-seabreeze/compare/v2.10.0...HEAD
+[2.10.0]: https://github.com/ap--/python-seabreeze/compare/v2.9.2...v2.10.0
 [2.9.2]: https://github.com/ap--/python-seabreeze/compare/v2.9.1...v2.9.2
 [2.9.1]: https://github.com/ap--/python-seabreeze/compare/v2.9.0...v2.9.1
 [2.9.0]: https://github.com/ap--/python-seabreeze/compare/v2.8.0...v2.9.0

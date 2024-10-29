@@ -14,11 +14,10 @@ import socket
 import struct
 import warnings
 import weakref
+from collections.abc import Iterable
 from functools import partialmethod
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Iterable
-from typing import Tuple
 
 import usb.backend
 import usb.core
@@ -50,7 +49,7 @@ class USBTransportDeviceInUse(Exception):
     pass
 
 
-DeviceIdentity = Tuple[int, int, int, int]
+DeviceIdentity = tuple[int, int, int, int]
 
 
 # this can and should be opaque to pyseabreeze

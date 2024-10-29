@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import enum
 import struct
+from collections.abc import Iterable
 from typing import Any
-from typing import Iterable
 
 try:
     from pcapng import FileScanner

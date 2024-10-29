@@ -1,5 +1,3 @@
-from typing import List
-
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 
 
@@ -11,5 +9,5 @@ from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 class SeaBreezeStrayLightCoefficientsFeature(SeaBreezeFeature):
     identifier = "stray_light_coefficients"
 
-    def get_stray_light_coefficients(self) -> List[float]:
+    def get_stray_light_coefficients(self) -> list[float]:
         raise NotImplementedError("implement in derived class")

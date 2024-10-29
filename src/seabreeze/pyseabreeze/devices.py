@@ -8,9 +8,8 @@ from __future__ import annotations
 import enum
 import itertools
 from collections import defaultdict
+from collections.abc import Iterable
 from typing import Any
-from typing import Iterable
-from typing import Tuple
 from typing import TypeVar
 
 from seabreeze.pyseabreeze import features as sbf
@@ -242,7 +241,7 @@ class EndPointMap:
         self.secondary_in2 = self.highspeed_in2 = highspeed_in2
 
 
-class DarkPixelIndices(Tuple[int, ...]):
+class DarkPixelIndices(tuple[int, ...]):
     """internal dark pixel range class"""
 
     def __new__(

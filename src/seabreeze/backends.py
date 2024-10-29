@@ -2,7 +2,6 @@ import logging
 import sys
 import warnings
 from typing import Any
-from typing import Dict
 from typing import Literal
 from typing import Optional
 from typing import cast
@@ -18,7 +17,7 @@ class BackendConfig:
     requested = "cseabreeze"  # default is cseabreeze
     available = ("cseabreeze", "pyseabreeze")
     allow_fallback = False
-    api_kwargs: Dict[str, Any] = {}  # for pytests
+    api_kwargs: dict[str, Any] = {}  # for pytests
 
 
 def use(

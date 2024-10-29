@@ -1,5 +1,4 @@
 import struct
-from typing import List
 
 from seabreeze.pyseabreeze.features._base import SeaBreezeFeature
 from seabreeze.pyseabreeze.features.eeprom import SeaBreezeEEPromFeatureOOI
@@ -14,7 +13,7 @@ from seabreeze.pyseabreeze.protocol import OOIProtocol
 class SeaBreezeNonlinearityCoefficientsFeature(SeaBreezeFeature):
     identifier = "nonlinearity_coefficients"
 
-    def get_nonlinearity_coefficients(self) -> List[float]:
+    def get_nonlinearity_coefficients(self) -> list[float]:
         raise NotImplementedError("implement in derived class")
 
 
@@ -27,7 +26,7 @@ class NonlinearityCoefficientsEEPromFeatureOOI(
     _required_protocol_cls = OOIProtocol
     _required_features = ("eeprom",)
 
-    def get_nonlinearity_coefficients(self) -> List[float]:
+    def get_nonlinearity_coefficients(self) -> list[float]:
         # The spectrometers store the wavelength calibration in slots 6..13
         coeffs = []
         # noinspection PyProtectedMember
@@ -50,7 +49,7 @@ class NonlinearityCoefficientsEEPromFeatureOOI(
 class NonlinearityCoefficientsFeatureOBP(SeaBreezeNonlinearityCoefficientsFeature):
     _required_protocol_cls = OBPProtocol
 
-    def get_nonlinearity_coefficients(self) -> List[float]:
+    def get_nonlinearity_coefficients(self) -> list[float]:
         # get number of nonlinearity coefficients
         data = self.protocol.query(0x00181100)
         N = struct.unpack("<B", data)[0]
@@ -65,7 +64,7 @@ class NonlinearityCoefficientsFeatureOBP(SeaBreezeNonlinearityCoefficientsFeatur
 class NonlinearityCoefficientsFeatureOBP2(SeaBreezeNonlinearityCoefficientsFeature):
     _required_protocol_cls = OBP2Protocol
 
-    def get_nonlinearity_coefficients(self) -> List[float]:
+    def get_nonlinearity_coefficients(self) -> list[float]:
         # get nonlinearity coefficients
         data = self.protocol.query(0x000_012_00)
         num_coeffs = len(data) // 4

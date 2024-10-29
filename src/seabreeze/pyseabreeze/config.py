@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Callable
-from typing import Iterator
 from typing import TypeVar
 
 __all__ = [

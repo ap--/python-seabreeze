@@ -8,7 +8,7 @@ requires = [
     ]
 
 [tool.black]
-target-version = ['py38']
+target-version = ['py39']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -27,7 +27,7 @@ exclude = '''
 
 [tool.isort]
 profile = "black"
-py_version = "38"
+py_version = "39"
 force_single_line = true
 
 [tool.cibuildwheel]
@@ -45,7 +45,7 @@ test-command = [
 before-build = "yum install -y libusb-devel"
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true

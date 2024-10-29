@@ -3,9 +3,9 @@ from __future__ import annotations
 import weakref
 from abc import ABC
 from abc import abstractmethod
+from collections.abc import Iterable
 from typing import Any
 from typing import Generic
-from typing import Iterable
 from typing import TypeVar
 
 

@@ -24,7 +24,7 @@ repos:
     hooks:
     -   id: flake8
         additional_dependencies:
-        -    flake8-typing-imports==1.14.0
+        -    flake8-typing-imports==1.16.0
         language_version: python3
         exclude: "^(build|docs|tests|setup.py)"
 -   repo: https://github.com/pre-commit/mirrors-mypy
@@ -37,7 +37,7 @@ repos:
     rev: v3.19.0
     hooks:
     -   id: pyupgrade
-        args: [--py38-plus]
+        args: [--py39-plus]
 -   repo: https://github.com/MarcoGorelli/cython-lint
     rev: v0.16.2
     hooks:

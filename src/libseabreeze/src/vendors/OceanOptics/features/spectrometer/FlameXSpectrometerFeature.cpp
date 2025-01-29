@@ -50,9 +50,9 @@ using namespace std;
 /* This value should have been located in constants file for non-probable */
 /* spectrometer characteristics, not buried here */
 
-const long FlameXSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 1000;
-const long FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 60000000;
-const long FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1000;
+const long FlameXSpectrometerFeature::INTEGRATION_TIME_MINIMUM = 10;
+const long FlameXSpectrometerFeature::INTEGRATION_TIME_MAXIMUM = 10000000;
+const long FlameXSpectrometerFeature::INTEGRATION_TIME_INCREMENT = 1;
 const long FlameXSpectrometerFeature::INTEGRATION_TIME_BASE = 1;
 
 FlameXSpectrometerFeature::FlameXSpectrometerFeature(IntrospectionFeature *introspection, FlameXFastBufferFeature *fastBuffer ) {

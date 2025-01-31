@@ -78,8 +78,8 @@ jobs:
           - 'windows-latest'
           - 'macOS-latest'
         include:
-          - os: 'ubuntu-latest'
-            arch: 'aarch64'
+          # - os: 'ubuntu-latest'
+          #   arch: 'aarch64'
           - os: 'macOS-latest'
             arch: 'arm64'
     steps:

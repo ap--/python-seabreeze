@@ -102,7 +102,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ runner.os }}-${{ matrix.arch }}
           path: ./wheelhouse/*.whl
 
   deploy_pypi:
@@ -117,7 +117,8 @@ jobs:
           path: ./dist
       - uses: actions/download-artifact@v4
         with:
-          name: wheels
+          pattern: wheels-*
+          merge-multiple: true
           path: ./dist
       # push all tagged versions to pypi.org
       - name: Publish package to PyPI

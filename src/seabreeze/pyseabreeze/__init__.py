@@ -1,6 +1,4 @@
-"""This is a wrapper for the pyusb-implementation of the seabreeze-library
-
-"""
+"""This is a wrapper for the pyusb-implementation of the seabreeze-library"""
 
 from seabreeze.pyseabreeze.api import SeaBreezeAPI
 from seabreeze.pyseabreeze.devices import SeaBreezeDevice

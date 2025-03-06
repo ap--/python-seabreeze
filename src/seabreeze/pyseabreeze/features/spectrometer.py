@@ -49,10 +49,10 @@ class SeaBreezeSpectrometerFeature(SeaBreezeFeature):
     def _spectrum_length(self) -> int:
         raise NotImplementedError("implement in derived class")
 
-    def get_wavelengths(self) -> NDArray[np.float_]:
+    def get_wavelengths(self) -> NDArray[np.float64]:
         raise NotImplementedError("implement in derived class")
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         raise NotImplementedError("implement in derived class")
 
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
@@ -138,7 +138,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
     def _spectrum_length(self) -> int:
         return self._spectrum_num_pixel
 
-    def get_wavelengths(self) -> NDArray[np.float_]:
+    def get_wavelengths(self) -> NDArray[np.float64]:
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
         # OOI spectrometers store the wavelength calibration in slots 1,2,3,4
         coeffs = []
@@ -149,7 +149,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
             )
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         ret = tmp[:-1].view(numpy.dtype("<H")).astype(numpy.double)
         return ret * self._normalization_value
@@ -182,7 +182,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
 
 
 class SeaBreezeSpectrometerFeatureOOI2K(SeaBreezeSpectrometerFeatureOOI):
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # The byte order is different for some models
         N_raw = self._spectrum_raw_length - 1
@@ -414,7 +414,7 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
     def _spectrum_length(self) -> int:
         return self._spectrum_num_pixel
 
-    def get_wavelengths(self) -> NDArray[np.float_]:
+    def get_wavelengths(self) -> NDArray[np.float64]:
         # get number of wavelength coefficients
         data = self.protocol.query(0x00180100)
         N = struct.unpack("<B", data)[0]
@@ -427,10 +427,10 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         arr = struct.unpack("<" + "H" * self._spectrum_length, tmp)  # type: ignore
-        return numpy.array(arr, dtype=numpy.float_)
+        return numpy.array(arr, dtype=numpy.float64)
 
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
         timeout = int(
@@ -457,7 +457,7 @@ class SeaBreezeSpectrometerFeatureHR2000(SeaBreezeSpectrometerFeatureOOI2K):
 
 
 class SeaBreezeSpectrometerFeatureHR4000(SeaBreezeSpectrometerFeatureOOIFPGA4K):
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # The HR4000 needs to xor with 0x2000
         ret = tmp[:-1].view(numpy.dtype("<H")) ^ 0x2000
@@ -469,7 +469,7 @@ class SeaBreezeSpectrometerFeatureUSB650(SeaBreezeSpectrometerFeatureOOI2K):
 
 
 class SeaBreezeSpectrometerFeatureHR2000PLUS(SeaBreezeSpectrometerFeatureOOIFPGA):
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # The HR2000PLUS needs to xor with 0x2000
         ret = tmp[:-1].view(numpy.dtype("<H")) ^ 0x2000
@@ -477,7 +477,7 @@ class SeaBreezeSpectrometerFeatureHR2000PLUS(SeaBreezeSpectrometerFeatureOOIFPGA
 
 
 class SeaBreezeSpectrometerFeatureQE65000(SeaBreezeSpectrometerFeatureOOIFPGA):
-    def get_wavelengths(self) -> NDArray[np.float_]:
+    def get_wavelengths(self) -> NDArray[np.float64]:
         # QE65000 specific override
         indices = numpy.arange(-10, self._spectrum_length - 10, dtype=numpy.float64)
         # OOI spectrometers store the wavelength calibration in slots 1,2,3,4
@@ -491,7 +491,7 @@ class SeaBreezeSpectrometerFeatureQE65000(SeaBreezeSpectrometerFeatureOOIFPGA):
             )
         return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # The QE65000 needs to xor with 0x8000
         ret = tmp[:-1].view(numpy.dtype("<H")) ^ 0x8000
@@ -507,7 +507,7 @@ class SeaBreezeSpectrometerFeatureUSB4000(SeaBreezeSpectrometerFeatureOOIFPGA4KG
 
 
 class SeaBreezeSpectrometerFeatureNIRQUEST512(SeaBreezeSpectrometerFeatureOOIGainAlt):
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # The NIRQUEST512 needs to xor with 0x8000
         ret = tmp[:-1].view(numpy.dtype("<H")) ^ 0x8000
@@ -515,7 +515,7 @@ class SeaBreezeSpectrometerFeatureNIRQUEST512(SeaBreezeSpectrometerFeatureOOIGai
 
 
 class SeaBreezeSpectrometerFeatureNIRQUEST256(SeaBreezeSpectrometerFeatureOOIGainAlt):
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # The NIRQUEST256 needs to xor with 0x8000
         ret = tmp[:-1].view(numpy.dtype("<H")) ^ 0x8000
@@ -546,7 +546,7 @@ class SeaBreezeSpectrometerFeatureMAYALSL(SeaBreezeSpectrometerFeatureOOIFPGAGai
 
 
 class SeaBreezeSpectrometerFeatureJAZ(SeaBreezeSpectrometerFeatureOOIGain):
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # XXX: No sync byte for the Jaz
         ret = tmp.view(numpy.dtype("<H")).astype(numpy.double)
@@ -565,7 +565,7 @@ class SeaBreezeSpectrometerFeatureQEPRO(SeaBreezeSpectrometerFeatureOBP):
         datastring = self.protocol.query(0x00100928, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # 32byte metadata block at beginning
         ret = tmp[32:].view(numpy.dtype("<I")).astype(numpy.double)
@@ -595,7 +595,7 @@ class SeaBreezeSpectrometerFeatureADC(SeaBreezeSpectrometerFeatureOOI):
     _required_protocol_cls = ADCProtocol
     _eeprom_cls = SeaBreezeEEPromFeatureADC
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # The byte order is different for some models
         N_raw = self._spectrum_raw_length - 1
@@ -613,7 +613,7 @@ class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
         datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # 32byte metadata block at beginning
         ret = tmp[32:].view(numpy.dtype("<H")).astype(numpy.double)
@@ -635,7 +635,7 @@ class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
         else:
             raise SeaBreezeError(f"Integration not in [{t_min:d}, {t_max:d}]")
 
-    def get_wavelengths(self) -> NDArray[np.float_]:
+    def get_wavelengths(self) -> NDArray[np.float64]:
         data = self.protocol.query(0x000_011_00)
         num_coeffs = len(data) // 4
         assert len(data) % 4 == 0  # ???
@@ -654,7 +654,7 @@ class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
         datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # 32byte metadata block at beginning
         ret = tmp[32:].view(numpy.dtype("<H")).astype(numpy.double)
@@ -676,7 +676,7 @@ class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
         else:
             raise SeaBreezeError(f"Integration not in [{t_min:d}, {t_max:d}]")
 
-    def get_wavelengths(self) -> NDArray[np.float_]:
+    def get_wavelengths(self) -> NDArray[np.float64]:
         data = self.protocol.query(0x000_011_00)
         num_coeffs = len(data) // 4
         assert len(data) % 4 == 0  # ???
@@ -707,7 +707,7 @@ class SeaBreezeSpectrometerFeatureHR2(SeaBreezeSpectrometerFeatureOBP):
         datastring = self.protocol.query(0x000_01C_00, timeout_ms=timeout)
         return numpy.frombuffer(datastring, dtype=numpy.uint8)
 
-    def get_intensities(self) -> NDArray[np.float_]:
+    def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
         # 32byte metadata block at beginning
         ret = tmp[32:].view(numpy.dtype("<H")).astype(numpy.double)
@@ -729,7 +729,7 @@ class SeaBreezeSpectrometerFeatureHR2(SeaBreezeSpectrometerFeatureOBP):
         else:
             raise SeaBreezeError(f"Integration not in [{t_min:d}, {t_max:d}]")
 
-    def get_wavelengths(self) -> NDArray[np.float_]:
+    def get_wavelengths(self) -> NDArray[np.float64]:
         data = self.protocol.query(0x000_011_00)
         num_coeffs = len(data) // 4
         assert len(data) % 4 == 0  # ???

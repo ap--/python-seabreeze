@@ -182,7 +182,7 @@ class Spectrometer:
                 "No device attached with serial number '%s'." % serial
             )
 
-    def wavelengths(self) -> NDArray[numpy.float_]:
+    def wavelengths(self) -> NDArray[numpy.float64]:
         """wavelength array of the spectrometer
 
         wavelengths in (nm) corresponding to each pixel of the spectrometer
@@ -196,7 +196,7 @@ class Spectrometer:
 
     def intensities(
         self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False
-    ) -> NDArray[numpy.float_]:
+    ) -> NDArray[numpy.float64]:
         """measured intensity array in (a.u.)
 
         Measured intensities as numpy array returned by the spectrometer.
@@ -273,7 +273,7 @@ class Spectrometer:
 
     def spectrum(
         self, correct_dark_counts: bool = False, correct_nonlinearity: bool = False
-    ) -> NDArray[numpy.float_]:
+    ) -> NDArray[numpy.float64]:
         """returns wavelengths and intensities as single array
 
         Convenience method to allow:

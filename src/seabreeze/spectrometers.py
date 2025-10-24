@@ -112,7 +112,9 @@ class Spectrometer:
             a SeaBreezeDevice as returned from `list_devices`
         """
         if not isinstance(device, self._backend.SeaBreezeDevice):
-            raise TypeError("device has to be a `SeaBreezeDevice`")
+            raise TypeError(
+                f"`device` has to be a `SeaBreezeDevice` instance, got {device!r}"
+            )
         self._dev = device
         self.open()  # always open the device here to allow caching values
 

@@ -24,14 +24,14 @@ repos:
     hooks:
     -   id: flake8
         additional_dependencies:
-        -    flake8-typing-imports==1.16.0
+        -    flake8-typing-imports==1.17.0
         language_version: python3
         exclude: "^(build|docs|tests|setup.py)"
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: 'v1.18.2'
     hooks:
     -   id: mypy
-        additional_dependencies: [numpy<1.25, pyusb>=1.0]
+        additional_dependencies: [numpy>=2.0, pyusb>=1.0]
         exclude: "^(build|docs|tests|dev|setup.py)"
 -   repo: https://github.com/asottile/pyupgrade
     rev: v3.21.0

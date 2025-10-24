@@ -50,7 +50,6 @@ def _seabreeze_device_factory(
     -------
     dev : SeaBreezeDevice
     """
-    global _seabreeze_device_instance_registry
     if not isinstance(device, (USBTransportHandle, IPv4TransportHandle)):
         raise TypeError(
             f"needs to be instance of USBTransportHandle or IPv4TransportHandle and not '{type(device)}'"

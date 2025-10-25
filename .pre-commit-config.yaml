@@ -4,42 +4,42 @@ default_language_version:
     python: python3.10
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: check-added-large-files
--   repo: https://github.com/psf/black
-    rev: '25.1.0'
+-   repo: https://github.com/psf/black-pre-commit-mirror
+    rev: '25.9.0'
     hooks:
     -   id: black
         language_version: python3
 -   repo: https://github.com/pycqa/isort
-    rev: 6.0.1
+    rev: 7.0.0
     hooks:
     -   id: isort
 -   repo: https://github.com/PyCQA/flake8
-    rev: '7.1.2'
+    rev: '7.3.0'
     hooks:
     -   id: flake8
         additional_dependencies:
-        -    flake8-typing-imports==1.16.0
+        -    flake8-typing-imports==1.17.0
         language_version: python3
         exclude: "^(build|docs|tests|setup.py)"
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.15.0'
+    rev: 'v1.18.2'
     hooks:
     -   id: mypy
-        additional_dependencies: [numpy<1.25, pyusb>=1.0]
+        additional_dependencies: [numpy>=2.0, pyusb>=1.0]
         exclude: "^(build|docs|tests|dev|setup.py)"
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.1
+    rev: v3.21.0
     hooks:
     -   id: pyupgrade
         args: [--py39-plus]
 -   repo: https://github.com/MarcoGorelli/cython-lint
-    rev: v0.16.6
+    rev: v0.18.1
     hooks:
     -   id: cython-lint
     -   id: double-quote-cython-strings

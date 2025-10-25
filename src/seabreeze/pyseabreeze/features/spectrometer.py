@@ -147,7 +147,7 @@ class SeaBreezeSpectrometerFeatureOOI(SeaBreezeSpectrometerFeature):
             coeffs.append(
                 float(self._eeprom_cls._func_eeprom_read_slot(self.protocol, i))
             )
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
 
     def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
@@ -425,11 +425,11 @@ class SeaBreezeSpectrometerFeatureOBP(SeaBreezeSpectrometerFeature):
             coeffs.append(struct.unpack("<f", data)[0])
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
 
     def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
-        arr = struct.unpack("<" + "H" * self._spectrum_length, tmp)  # type: ignore
+        arr = struct.unpack("<" + "H" * self._spectrum_length, tmp)
         return numpy.array(arr, dtype=numpy.float64)
 
     def _get_spectrum_raw(self) -> NDArray[np.uint8]:
@@ -489,7 +489,7 @@ class SeaBreezeSpectrometerFeatureQE65000(SeaBreezeSpectrometerFeatureOOIFPGA):
                     SeaBreezeEEPromFeatureOOI._func_eeprom_read_slot(self.protocol, i)
                 )
             )
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
 
     def get_intensities(self) -> NDArray[np.float64]:
         tmp = self._get_spectrum_raw()
@@ -643,7 +643,7 @@ class SeaBreezeSpectrometerFeatureSR2(SeaBreezeSpectrometerFeatureOBP):
         coeffs = struct.unpack("<" + "f" * num_coeffs, data)[1:]
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
 
 
 class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
@@ -684,7 +684,7 @@ class SeaBreezeSpectrometerFeatureOBP2(SeaBreezeSpectrometerFeatureOBP):
         coeffs = struct.unpack("<" + "f" * num_coeffs, data)[1:]
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
 
 
 class SeaBreezeSpectrometerFeatureSR4(SeaBreezeSpectrometerFeatureOBP2):
@@ -737,7 +737,7 @@ class SeaBreezeSpectrometerFeatureHR2(SeaBreezeSpectrometerFeatureOBP):
         coeffs = struct.unpack("<" + "f" * num_coeffs, data)[1:]
         # and generate the wavelength array
         indices = numpy.arange(self._spectrum_length, dtype=numpy.float64)
-        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))  # type: ignore
+        return sum(wl * (indices**i) for i, wl in enumerate(coeffs))
 
 
 class SeaBreezeSpectrometerFeatureHR4(SeaBreezeSpectrometerFeatureOBP2):

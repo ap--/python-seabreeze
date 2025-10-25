@@ -253,7 +253,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
             unique pyusb devices for each available spectrometer
         """
         # check if a specific pyusb backend is requested
-        _pyusb_backend = kwargs.get("pyusb_backend", None)
+        _pyusb_backend: str | None = kwargs.get("pyusb_backend", None)
         # get all matching devices
         try:
             pyusb_devices = usb.core.find(
@@ -340,7 +340,7 @@ class USBTransport(PySeaBreezeTransport[USBTransportHandle]):
 _pyusb_backend_instances: dict[str, usb.backend.IBackend] = {}
 
 
-def get_pyusb_backend_from_name(name: str) -> usb.backend.IBackend:
+def get_pyusb_backend_from_name(name: str | None) -> usb.backend.IBackend:
     """internal: allow requesting a specific pyusb backend for testing"""
     if name is None:
         # default is pick first that works: ('libusb1', 'libusb0', 'openusb')

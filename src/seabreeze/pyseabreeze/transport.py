@@ -533,28 +533,35 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
         # default values for multicast on HDX devices
         multicast_group = kwargs.get("multicast_group", "239.239.239.239")
         multicast_port = kwargs.get("multicast_port", 57357)
-        # Create the datagram (UDP) socket
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # allow other sockets to bind this port too
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        # Set a timeout so the socket does not block
-        # indefinitely when trying to receive data.
-        sock.settimeout(kwargs.get("multicast_timeout", 1))
-        sock.setsockopt(
-            socket.IPPROTO_IP,
-            socket.IP_MULTICAST_IF,
-            socket.inet_aton(network_adapter) if network_adapter else socket.INADDR_ANY,
-        )
-        mreq = struct.pack(
-            "4sl" if not network_adapter else "4s4s",
-            socket.inet_aton(multicast_group),
-            (
-                socket.INADDR_ANY
-                if not network_adapter
-                else socket.inet_aton(network_adapter)
-            ),
-        )
-        sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        try:
+            # Create the datagram (UDP) socket
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # allow other sockets to bind this port too
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            # Set a timeout so the socket does not block
+            # indefinitely when trying to receive data.
+            sock.settimeout(kwargs.get("multicast_timeout", 1))
+            sock.setsockopt(
+                socket.IPPROTO_IP,
+                socket.IP_MULTICAST_IF,
+                socket.inet_aton(network_adapter) if network_adapter else socket.INADDR_ANY,
+            )
+            mreq = struct.pack(
+                "4sl" if not network_adapter else "4s4s",
+                socket.inet_aton(multicast_group),
+                (
+                    socket.INADDR_ANY
+                    if not network_adapter
+                    else socket.inet_aton(network_adapter)
+                ),
+            )
+            sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        except OSError as e:
+            warnings.warn(
+                f"Received {type(e).__name__} with '{str(e)}'. Skipping IPv4 discovery.",
+                stacklevel=2,
+            )
+            return
         # prepare a message requesting all devices in the multicast group
         # to send their (USB) product id
         transport = IPv4Transport(OBPProtocol)

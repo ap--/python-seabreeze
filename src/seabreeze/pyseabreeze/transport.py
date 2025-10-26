@@ -544,7 +544,11 @@ class IPv4Transport(PySeaBreezeTransport[IPv4TransportHandle]):
             sock.setsockopt(
                 socket.IPPROTO_IP,
                 socket.IP_MULTICAST_IF,
-                socket.inet_aton(network_adapter) if network_adapter else socket.INADDR_ANY,
+                (
+                    socket.inet_aton(network_adapter)
+                    if network_adapter
+                    else socket.INADDR_ANY
+                ),
             )
             mreq = struct.pack(
                 "4sl" if not network_adapter else "4s4s",

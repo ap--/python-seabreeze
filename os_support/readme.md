@@ -20,8 +20,10 @@ That depends on your operating system. Currently only Linux and Windows require
 additional setup. OSX works ootb and is a no-op when running
 `seabreeze_os_setup`
 
-**On Linux** it downloads and copies the `10-oceanoptics.rules` file to
-`/etc/udev/rules.d/` and runs `sudo udevadm control --reload-rules`.
+**On Linux** it downloads the `10-oceanoptics.rules` file, prints its contents
+for review, and, after you confirm, copies it to `/etc/udev/rules.d/` with mode
+`644` and runs `sudo udevadm control --reload-rules`. If you decline, the rules
+are not installed and the commands for installing them manually are printed.
 
 **On Windows** it downloads and extracts the `windows-driver-files.zip` archive
 and runs `pnputil -i -a *.inf` inside the extracted folder in an admin shell.

@@ -13,7 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-...
+### Added
+- `seabreeze_os_setup` preview the udev rules on linux before installing them
+
+### Changed
+- `seabreeze_os_setup` install the udev rules with mode `644` on linux
 
 ## [2.10.1] - 2025-01-29
 ### Fixed

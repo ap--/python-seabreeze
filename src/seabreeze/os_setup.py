@@ -23,6 +23,7 @@ _GITHUB_REPO_URL = (
     "https://raw.githubusercontent.com/ap--/python-seabreeze/master/os_support"
 )
 _UDEV_RULES_PATH = "/etc/udev/rules.d/10-oceanoptics.rules"
+_UDEV_RULES_MODE = "644"
 _DRIVERS_ZIP_FN = "windows-driver-files.zip"
 _log = logging.getLogger(__name__)
 
@@ -33,6 +34,12 @@ def _diff_files(file1, file2):
         return subprocess.check_output(["diff", file1, file2]).decode("utf8")
     except subprocess.CalledProcessError as err:
         return err.output.decode("utf8")
+
+
+def _preview_file(filename):
+    """return an indented preview of a file's contents"""
+    with open(filename, encoding="utf8") as f:
+        return indent(f.read().rstrip(), "  ")
 
 
 def _request_confirmation(question):
@@ -100,12 +107,31 @@ def linux_install_udev_rules():
                 )
                 sys.exit(1)
 
+        # show the rules to the user before installing them
+        _log.info(f"The following udev rules will be installed as {_UDEV_RULES_PATH}:")
+        _log.info(_preview_file(udev_fn))
+
         if not _request_confirmation("Install udev rules?"):
+            _log.info(
+                dedent(
+                    f"""\
+                To install the rules manually, copy the rules shown above to
+                {_UDEV_RULES_PATH} and run:
+
+                  sudo chmod {_UDEV_RULES_MODE} {_UDEV_RULES_PATH}
+                  sudo udevadm control --reload-rules"""
+                )
+            )
             sys.exit(0)
 
         # cp rules and execute
         _log.info(f"Copying udev rules to {_UDEV_RULES_PATH}")
-        subprocess.call(["sudo", "cp", udev_fn, _UDEV_RULES_PATH])
+        return_code = subprocess.call(
+            ["sudo", "install", "-m", _UDEV_RULES_MODE, udev_fn, _UDEV_RULES_PATH]
+        )
+        if return_code != 0:
+            _log.error(f"Copying udev rules failed with return code {return_code}")
+            sys.exit(1)
         _log.info("Calling udevadm control --reload-rules")
         subprocess.call(["sudo", "udevadm", "control", "--reload-rules"])
         _log.info("Success")

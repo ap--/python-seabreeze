@@ -124,7 +124,7 @@ def linux_install_udev_rules():
             )
             sys.exit(0)
 
-        # cp rules and execute
+        # install rules and execute
         _log.info(f"Copying udev rules to {_UDEV_RULES_PATH}")
         return_code = subprocess.call(
             ["sudo", "install", "-m", _UDEV_RULES_MODE, udev_fn, _UDEV_RULES_PATH]

@@ -11,12 +11,12 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
 -   repo: https://github.com/psf/black-pre-commit-mirror
-    rev: '25.9.0'
+    rev: '26.5.1'
     hooks:
     -   id: black
         language_version: python3
 -   repo: https://github.com/pycqa/isort
-    rev: 7.0.0
+    rev: 9.0.0b5
     hooks:
     -   id: isort
 -   repo: https://github.com/PyCQA/flake8
@@ -28,18 +28,18 @@ repos:
         language_version: python3
         exclude: "^(build|docs|tests|setup.py)"
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.18.2'
+    rev: 'v2.3.1'
     hooks:
     -   id: mypy
         additional_dependencies: [numpy>=2.0, pyusb>=1.0]
         exclude: "^(build|docs|tests|dev|setup.py)"
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.0
+    rev: v3.21.2
     hooks:
     -   id: pyupgrade
         args: [--py39-plus]
 -   repo: https://github.com/MarcoGorelli/cython-lint
-    rev: v0.18.1
+    rev: v0.21.0
     hooks:
     -   id: cython-lint
     -   id: double-quote-cython-strings

@@ -3,6 +3,7 @@
 
 author: Andreas Poehlmann
 """
+
 import argparse
 import ctypes
 import logging
@@ -112,16 +113,12 @@ def linux_install_udev_rules():
         _log.info(_preview_file(udev_fn))
 
         if not _request_confirmation("Install udev rules?"):
-            _log.info(
-                dedent(
-                    f"""\
+            _log.info(dedent(f"""\
                 To install the rules manually, copy the rules shown above to
                 {_UDEV_RULES_PATH} and run:
 
                   sudo chmod {_UDEV_RULES_MODE} {_UDEV_RULES_PATH}
-                  sudo udevadm control --reload-rules"""
-                )
-            )
+                  sudo udevadm control --reload-rules"""))
             sys.exit(0)
 
         # install rules and execute
@@ -232,15 +229,11 @@ def windows_install_drivers():
         cmd = [pnputil, "-i", "-a", os.path.join(tmp_dir, "*.inf")]
         return_code = subprocess.call(cmd, shell=True)
 
-        _log.warning(
-            dedent(
-                """\
+        _log.warning(dedent("""\
             Note: Some of the drivers currently don't have valid signatures.
             Look at the output above. If the spectrometer you want to use only
             provides an unsigned driver, you might have to install it manually.
-            If you encounter this issue, please report it on github."""
-            )
-        )
+            If you encounter this issue, please report it on github."""))
 
         if return_code == 0:
             _log.info("Success")

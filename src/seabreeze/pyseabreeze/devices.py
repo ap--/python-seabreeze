@@ -287,6 +287,7 @@ class TriggerMode(enum.IntEnum):
     DISABLED = 0xFF
     OBP_NORMAL = 0x00
     OBP_EXTERNAL = 0x01
+    OBP_EXTERNAL_LEVEL = 0x02
     OBP_INTERNAL = 0x02
     OBP_EDGE = 0x01
     OBP_LEVEL = 0x03
@@ -1231,7 +1232,9 @@ class SR2(SeaBreezeDevice):
     spectrum_num_pixel = 2110
     spectrum_raw_length = (2110 * 2) + 32  # Metadata
     spectrum_max_value = 65535
-    trigger_modes = TriggerMode.supported("OBP_NORMAL")
+    trigger_modes = TriggerMode.supported(
+        "OBP_NORMAL", "OBP_EXTERNAL", "OBP_EXTERNAL_LEVEL"
+    )
 
     # features
     feature_classes = (sbf.spectrometer.SeaBreezeSpectrometerFeatureSR2,)
